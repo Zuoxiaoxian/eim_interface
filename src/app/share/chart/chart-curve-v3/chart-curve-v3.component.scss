@@ -1,0 +1,134 @@
+#chart_curve {
+    width: 100%;
+    height: 100%;
+    // height: 200px;
+    margin-top: 12px;
+    position: relative;
+    z-index: 10;
+    .title {
+        position: absolute;
+        min-width: 24%;
+        height: 22px;
+        // right: 1%;
+        top: -12px;
+        color: wheat;
+        display: flex;
+        z-index: 1;
+        .str {
+            // width: 80px;
+            background-color: #4472c4;
+            padding: 0px 10px;
+        }
+    }
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .li_default {
+        list-style-type: none;
+        overflow: hidden;
+        text-align: center;
+        font-size: xx-small;
+        color: #fff;
+        background-color: #4673fbde;
+        border-right: 1px red solid;
+        padding: 1px;
+        // width: 21px;
+        margin-left: 3px;
+        height: 22px;
+        cursor: pointer;
+    }
+    .li_active {
+        list-style-type: none;
+        overflow: hidden;
+        text-align: center;
+        font-size: xx-small;
+        color: #fff;
+        background-color: #1d2029de;
+        border-right: 1px red solid;
+        padding: 1px;
+        // width: 21px;
+        margin-left: 3px;
+        height: 22px;
+        cursor: pointer;
+    }
+    .box_shadow {
+        box-shadow: 0 0 1.2vh 0.34vh rgba(50, 84, 129, 0.7) inset;
+        // display: flex;
+        width: 100%;
+        height: 100%;
+        // height: 118px;
+        font-size: 12px;
+        color: white;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .chart {
+        width: 100%;
+        height: 50%;
+        // z-index: 10;
+    }
+    .dashboard {
+        // width: 100%;
+        height: 80%;
+        // z-index: 10;
+    }
+    .params {
+        color: white;
+        width: 100%;
+        height: 70%;
+        font-size: 14px;
+        margin-top: 10px;
+        // overflow-x: hidden;
+        .div_background {
+            height: 30px;
+            background: rgb(15, 73, 130);
+            margin-top: 6px;
+            width: 96%;
+            position: relative;
+        }
+        .curve {
+            position: absolute;
+            width: 94px;
+            height: 29px;
+            border-left: 3px solid;
+            border-bottom: 3px solid;
+            border-bottom-left-radius: 161%;
+            bottom: 0;
+        }
+    }
+    .scrollbar {
+        overflow: auto;
+        height: 110px;
+        width: 100%;
+    }
+    .scrollbar::-webkit-scrollbar {
+        // 隐藏滚动条
+        display: none;
+        width: 2px;
+    }
+    .select {
+        position: absolute;
+        width: 100%;
+        height: 100px;
+        top: 23px;
+        z-index: 100;
+        color: white;
+        text-align: left;
+        div {
+            background-color: #4472c4;
+        }
+    }
+    .select_dashboard {
+        position: absolute;
+        width: 33%;
+        height: 100px;
+        top: 134px;
+        z-index: 100;
+        color: white;
+        text-align: left;
+        div {
+            background-color: #4472c4;
+        }
+    }
+}

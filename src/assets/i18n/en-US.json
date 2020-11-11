@@ -5,12 +5,108 @@
     "Cosmic": "Cosmic",
     "Corporate": "Corporate",
 
-    "POSITIONMONITORING":{
-        "TABS":{
+    "POSITIONMONITORING": {
+        "TABS": {
             "EDIT": "Edit",
             "PATH": "Path",
             "TRACE": "Trace",
             "MORE": "More"
+        }
+    },
+    "equipment": {
+        "return": "return",
+        "menu": "menu",
+        "real": "RealTimeExperiment",
+        "realStatus": "RealTimeExperimentStatus",
+        "temperature": "TEMP",
+        "humidity": "RH",
+        "pressDiff": "PressDiff",
+        "setup": "SetUp",
+        "ambient": "Ambient",
+        "realime": "Real",
+        "ExperimentNum": "ExperimentNum",
+        "PLanDuration": "PLanDuration",
+        "schedule": "Schedule",
+        "NextExperiment": "NextExperiment",
+        "contact": "Contact",
+        "BenchPIC": "BenchPIC",
+        "dataChannelList": "DataChannelList",
+        "equipmentStatus": "EquipmentStatus",
+        "SafetyLampStatus": "SafetyLampStatus",
+        "equipIntroduce": "EquipIntroduce",
+        "experimentParams": "ExperimenParameters",
+        "OnlineVideo": "OnlineVideo",
+        "expInfor": "ExperimentalInformation",
+        "OnOff": "On/off",
+        "OilSeparatorOn": "OilSeparatorOn",
+        "HighOilSeparator": "HighOilSeparator",
+        "InternalLock": "Internal lock",
+        "Programlock": "Program lock",
+        "time": "Time",
+        "Loglevel": "LogLevel",
+        "logInfor": "logInfor",
+        "LogWarm": "Log/alarm",
+        "LV1Warm": "FirstLevelAlarm",
+        "stationName": "Station Name",
+        "stationNameCGF": "Station Name(cgf)",
+        "OilSeparator": "OilSeparator",
+        "EmissionAnalyzer": "EmissionAnalyzer",
+        "EnvironBinParam": "EnvironBinParam",
+        "loopFanRate": "loopFanRate",
+        "NewTrendFanRate": "AirFanRate",
+        "AVLSpeed": "AVLSpeed",
+        "param1": "param1",
+        "param2": "param2",
+        "road": {
+            "LeftFront": {
+                "Params": "LeftFrontParams",
+                "Output": "LeftFrontOutput",
+                "tDisplacement": "LeftFrontDisplacement",
+                "DeltaP": "LeftFrontDeltaP",
+                "CommandFrequency": "LeftFrontCommandFrequency",
+                "ActiveFdbk": "LeftFrontActiveFdbk",
+                "DisplacementError": "LeftFrontDisplacementError",
+                "DisplacementAbs": {
+                    "Error": "LeftFrontDisplacementAbs.Error"
+                }
+            },
+            "RightFront": {
+                "Params": "RightFrontParams",
+                "Output": "RightFrontOutput",
+                "Displacement": "RightFrontDisplacement",
+                "DeltaP": "RightFrontDeltaP",
+                "CommandFrequency": "RightFrontCommandFrequency",
+                "ActiveFdbk": "RightFrontActiveFdbk",
+                "DisplacementError": "RightFrontDisplacementError",
+                "DisplacementAbs": {
+                    "Error": "RightFrontDisplacementAbs.Error"
+                }
+            },
+            "LeftRear": {
+                "Params": "LeftRearParams",
+                "Output": "LeftRearOutput",
+                "Displacement": "LeftRearDisplacement",
+                "DeltaP": "LeftRearDeltaP",
+                "CommandFrequency": "LeftRearCommandFrequency",
+                "ActiveFdbk": "LeftRearActiveFdbk",
+                "DisplacementError": "LeftRearDisplacementError",
+                "DisplacementAbs": {
+                    "Error": "LeftRearDisplacementAbs.Error"
+                }
+            },
+            "RightRear": {
+                "Params": "RightRearParams",
+                "Output": "RightRearOutput",
+                "Displacement": "RightRearDisplacement",
+                "DeltaP": "RightRearDeltaP",
+                "CommandFrequency": "RightRearCommandFrequency",
+                "ActiveFdbk": "RightRearActiveFdbk",
+                "DisplacementError": "RightRearDisplacementError",
+                "DisplacementAbs": {
+                    "Error": "RightRearDisplacementAbs.Error"
+                }
+            }
+
         }
     }
 

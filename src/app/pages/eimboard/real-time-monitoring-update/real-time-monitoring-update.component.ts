@@ -18,6 +18,9 @@ import {Util} from "leaflet";
 import falseFn = Util.falseFn;
 import {LayoutService} from "../../../@core/utils";
 import {EmqClientService} from "../../../services/emq-client/emq-client.service";
+import num_to_maxNum from '../board-currency';
+
+
 
 @Component({
   selector: 'ngx-real-time-monitoring-update',
@@ -158,6 +161,10 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
   }
   component_status = true;
 
+  fromRouter: any = {
+    url:'',//从哪个页面跳转过来的
+  }
+
   constructor(private router:Router,public activatedRoute:ActivatedRoute,
               private http: HttpserviceService,private layoutService:LayoutService,
               private mqService:EmqClientService,private activateInfo:ActivatedRoute
@@ -167,11 +174,11 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
     // this.scrollerTable_timer = setInterval(this.timer, 70); // 40ms
 
     $('.zhibiao_table').mouseover(function(e){
-        console.log('鼠标移入')
+        // console.log('鼠标移入')
       this.move = 0;
     });
     $('.zhibiao_table').mouseout(function(e){
-      console.log('鼠标移出')
+      // console.log('鼠标移出')
       this.move = 0;
       // if(!this.scrollerTable_timer)this.scrollerTable_timer = setInterval(this.timer, 70);
     });
@@ -182,8 +189,8 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
     // this.getInitData({});
 
     // 初始化仪表盘
-    rtmjs.gauge2(0);
-    rtmjs.gauge1(0);
+    rtmjs.gauge2({value:0,maxValue:100});
+    rtmjs.gauge1({value:0,maxValue:100});
 
     // 默认折线为当前
     // var element = document.querySelector("#now");
@@ -209,6 +216,12 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
     //   i++;
     //   this.getData(i);
     // },1000)
+
+    //获取路由跳转的参数
+    this.activateInfo.queryParams.subscribe(f =>{
+      if(f.deviceid)this.deviceid = f.deviceid;
+      this.fromRouter = f;
+    })
   }
 
 
@@ -221,12 +234,9 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
       }
       rtmjs.line_date(data);
     })
-    this.activateInfo.queryParams.subscribe(f =>{
-      if(f.deviceid)this.deviceid = f.deviceid;
-    })
-
   }
 
+  //获取实时数据
   getData(i){
     console.log('第'+i+'次获取数据')
     this.http.callRPC('panel_detail','get_device_panel_detail',
@@ -234,6 +244,7 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
       console.log('第'+i+'次获取数据成功');
       let arr = f.result.message[0]
       this.zhibiao_data.data = arr.map(d =>{
+        //判断当前是否需要发送mq消息
         if(d[0].value_min || d[0].value_max){
           if(parseFloat(d[0].value).toFixed(2)>parseFloat(d[0].value_max).toFixed(2)){
             console.log('当前数值超出二档');
@@ -243,15 +254,17 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
             this.mqService.sendMqttMessaege('warm', JSON.stringify(d[0]));
           }
         }
-        return {title:d[0].channelcn,
-        value:(parseFloat(d[0]['value']).toFixed(2)),
-        unit:d[0]['channelunit'], preinstall : [{
-          color:d[0]['color_min']||'',
-          value:d[0]['value_min']
-        },{
-          color:d[0]['color_max']||'',
-          value:d[0]['value_max']
-        }],titleEn:d[0].channelen }
+        return {
+          title:d[0].channelcn,
+          value:(parseFloat(d[0]['value']).toFixed(2)),
+          unit:d[0]['channelunit'], preinstall : [{
+            color:d[0]['color_min']||'',
+            value:d[0]['value_min']
+          },{
+            color:d[0]['color_max']||'',
+            value:d[0]['value_max']
+          }],titleEn:d[0].channelen 
+        }
       });
       // this.zhibiao_data.data[5].unit = '开/关';
       // this.zhibiao_data.data[5].value = '1';
@@ -444,11 +457,11 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
     }
     if (index === '2'){
       document.getElementById('gauge1_title').innerHTML = item.title;
-      rtmjs.gauge1(item.value);
+      rtmjs.gauge1({value:item.value,maxValue:num_to_maxNum(item.value)});
     }
     if (index === '3'){
       document.getElementById('gauge2_title').innerHTML = item.title;
-      rtmjs.gauge2(item.value);
+      rtmjs.gauge2({value:item.value,maxValue:num_to_maxNum(item.value)});
     }
   }
 
@@ -519,6 +532,7 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
   //   document.getElementById('CCRQ').innerHTML = data.CCRQ;
   // };
 
+  //列表获取当前应该显示的颜色
   get_font_color(item:any){
     let color = '';
     if(!item.preinstall )return color;
@@ -537,6 +551,13 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
     this.dialogShow = true;
   }
 
+  //返回之前的路由地址
+  goBack(){
+    this.fromRouter.url?this.router.navigate([this.fromRouter.url],{queryParams:{}}):console.log('跳转路由失败',this.fromRouter.url);
+  }
+
+
+  //弹窗关闭
   preinstall_dialog_close(e:any){
     if(e.sumbit){
       this.zhibiao_data.data.find(f => f.title == e.data.title).preinstall = e.data.preinstall
@@ -544,29 +565,29 @@ export class RealTimeMonitoringUpdateComponent implements OnInit {
     this.dialogShow = false;
   }
 
-
-    timer = ()=>{
-      var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)
-      var nScrollTop = 0; //滚动到的当前位置
-      var nDivHight = $(".zhibiao_table").height(); // div高度
-      var y = 0; //距离顶部距离
-      if (!$(".zhibiao_table")[0]) {
-        return;
-      }
-      nScrollHight = $(".zhibiao_table")[0].scrollHeight;
-      nScrollTop = $(".zhibiao_table")[0].scrollTop;
-      y = nScrollTop;
-      //每次滚动距离
-      y = y + this.move;
-      //   //滚动到底部时 ，回到顶部重新滚
-      if (y+nDivHight >= nScrollHight) {
-        y = 0;
-      }
-      $(".zhibiao_table").scrollTop(y);
+  //定时滚动
+  timer = ()=>{
+    var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)
+    var nScrollTop = 0; //滚动到的当前位置
+    var nDivHight = $(".zhibiao_table").height(); // div高度
+    var y = 0; //距离顶部距离
+    if (!$(".zhibiao_table")[0]) {
+      return;
     }
+    nScrollHight = $(".zhibiao_table")[0].scrollHeight;
+    nScrollTop = $(".zhibiao_table")[0].scrollTop;
+    y = nScrollTop;
+    //每次滚动距离
+    y = y + this.move;
+    //   //滚动到底部时 ，回到顶部重新滚
+    if (y+nDivHight >= nScrollHight) {
+      y = 0;
+    }
+    $(".zhibiao_table").scrollTop(y);
+  }
 
 
-
+  //生命周期 组件销毁
   ngOnDestroy(){
     console.log("声明周期：组件销毁");
     clearInterval(this.scrollerTable_timer); // 销毁组件时，取消定时任务

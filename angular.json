@@ -42,10 +42,6 @@
               "src/app/@theme/styles/styles.scss",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
-
-
-
-              
             ],
             "scripts": [
               "node_modules/pace-js/pace.min.js",
@@ -58,12 +54,8 @@
               "node_modules/echarts/dist/extension/bmap.min.js",
               "node_modules/chart.js/dist/Chart.min.js",
               "node_modules/echarts/map/js/china.js",
-              
-
               "src/assets/pages/home/js/eim-home-iconfont.js",
               "src/assets/pages/home/js/iconfont.js"
-
-              
             ]
           },
           "configurations": {
@@ -196,5 +188,8 @@
     "@schematics/angular:directive": {
       "prefix": "ngx"
     }
+  },
+  "cli": {
+    "analytics": "36770334-20db-4257-bd01-f0cb43808038"
   }
 }

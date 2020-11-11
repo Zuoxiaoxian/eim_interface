@@ -3,6 +3,7 @@ import {  Router } from '@angular/router';
 import * as screenfull from 'screenfull';
 import { Screenfull } from 'screenfull';
 import { LayoutService } from '../../../@core/utils';
+import { HttpserviceService } from '../../../services/http/httpservice.service';
 
 // echart
 let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
@@ -16,7 +17,7 @@ declare var $:any;
   styleUrls: ['./real-time-experiment-layout.component.scss']
 })
 export class RealTimeExperimentLayoutComponent implements OnInit {
-  is_not_fullscreen = false;
+  is_not_fullscreen = true;
 
   //实时数据
   real_time_data = {
@@ -35,7 +36,12 @@ export class RealTimeExperimentLayoutComponent implements OnInit {
       title:'设备健康信息',
       secondrow :'试验任务进度',
     },
-    structure: [{name:'结构1'},{name:'结构3'},{name:'结构2'}]
+    structure: [
+      {name:'结构1'},
+      {name:'结构3'},
+      {name:'结构2'}
+    ],
+    structure_index:0,//实验室选中情况数组下标 0
   };
 
   task_data: any = {
@@ -47,7 +53,7 @@ export class RealTimeExperimentLayoutComponent implements OnInit {
     ],
     data:[
       {taskname:'MTS 329',param:'55',plan:'已完成',report:'无',class:'location_div_1',tipShow:false},
-      {taskname:'MTS HPU',param:'48',plan:'已完成',report:'无',class:'location_div_2',tipShow:false},
+      {taskname:'MTS HPU',param:'48',plan:'已完成',report:'有',class:'location_div_2',tipShow:false},
       {taskname:'MTS MAST',param:'66',plan:'80%',report:'无',class:'location_div_3',tipShow:false},
       {taskname:'TESTLINE',param:'88',plan:'60%',report:'无',class:'location_div_4',tipShow:false},
       {},
@@ -56,36 +62,46 @@ export class RealTimeExperimentLayoutComponent implements OnInit {
       {},
     ]
   }
+  //500s之前上一次点击的是图片的哪个下标
+  tip_last_data ={
+    fisrt:-1,//第一次点击
+    second:-1,//第二次点击
+    time:500
+  }
   messageInterval:any;//定时器
 
-  constructor (private layoutService: LayoutService,private router:Router) { }
+  constructor (private layoutService: LayoutService,private router:Router,private http:HttpserviceService) { }
 
   ngOnInit(): void {
-    // percentage_1
-    // echarts.init(document.getElementById(f)
     let i = 1;
     this.messageInterval = setInterval(f=>{
       this.getMessageData(i);
       i++;
     },1000)
     
-    // this.layoutService.onInitLayoutSize().subscribe(f =>{
-      
-    // })
-    this.layoutService.onChangeLayoutSize().subscribe(f =>{
+    this.layoutService.onInitLayoutSize().subscribe(f =>{
       this.initChart();
-    })
+    });
+    
     this.initChart();
 
   }
 
+  getData(){
+    this.http.callRPC('panel_detail','get_device_panel_detail',
+    {"deviceid":''}).subscribe((f:any) => {
+      console.log('获取数据')
+    })
+  }
+
+  //初始化所有图表
   initChart(){
     if(document.getElementById('percentage_1'))
-        expChart.create_percentage_chart({number:'523',percentage:4,color:'rgb(153,255,255)'},echarts.init(document.getElementById('percentage_1')));
+        expChart.create_percentage_chart({number:'523',percentage:100,color:'rgb(153,255,255)'},echarts.init(document.getElementById('percentage_1')));
       if(document.getElementById('percentage_2'))
-        expChart.create_percentage_chart({number:'298',percentage:36,color:'rgb(255,255,0)'},echarts.init(document.getElementById('percentage_2')));
+        expChart.create_percentage_chart({number:'298',percentage:64,color:'rgb(255,255,0)'},echarts.init(document.getElementById('percentage_2')));
       if(document.getElementById('percentage_3'))
-        expChart.create_percentage_chart({number:'523',percentage:64,color:'rgb(195,255,244)'},echarts.init(document.getElementById('percentage_3')));
+        expChart.create_percentage_chart({number:'523',percentage:0,color:'rgb(195,255,244)'},echarts.init(document.getElementById('percentage_3')));
       // 警告条数
       rtm3.create_third_first({number: '11条', title: '警告条数'}, 'third_first_one');
       rtm3.create_third_first({number: '11条', title: '警告条数'}, 'third_first_two');
@@ -104,6 +120,9 @@ export class RealTimeExperimentLayoutComponent implements OnInit {
       ["9月", 98, 77]]}
       if(document.getElementById('line_chart_1'))
         expChart.cteate_chart(data,echarts.init(document.getElementById('line_chart_1')));
+  }
+
+  ngAfterViewInit(){
   }
 
   /**
@@ -135,53 +154,41 @@ export class RealTimeExperimentLayoutComponent implements OnInit {
       plan_xAxis:plan_xAxis,
       plan_data1:plan_data1,
       plan_data2:plan_data2,
-      seriesData:[
-        {
-          name: '计划完成数',
-          type: 'bar',
-          itemStyle:
-            {
-              normal: {color: color[1]},
-              emphasis: {color: color[2]}
-            },
-          barWidth : 12,
-          data:plan_data1
-        },
-        {
-          name: '实际完成数',
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#F90',
-              label: {
-                show: true,
-                position: 'top',
-                textStyle: {
-                  color: '#CCC',
-                  fontSize:12
-                }
-              },
-              lineStyle:{
-                color:'#F90',
-                width:4
-              }
-            },
-            emphasis: {
-              color: '#FF0'
-            }
-          },
-          symbolSize: 4,
-          data: plan_data2
-        }
-      ],
       legendData:['计划完成数','实际完成数']
     };
 
     rtm3.create_line_chart(gauge_data_3);
   }
 
-  clickTotask(item){
-    console.log('跳转到'+item.taskname)
+
+  //路由跳转二级跳三级
+  clickTotask(e,item,i){
+    // this.tip_last_data.fisrt > -1?this.tip_last_data.second = i:this.tip_last_data.fisrt = i;
+    // setTimeout(() => {
+    //   // this.tip_last_data.index == i;
+    //   if(this.tip_last_data.fisrt == this.tip_last_data.second){
+    //     let queryParams = {
+    //       deviceid:'device_boyang_01',
+    //       is_not_fullscreen:this.is_not_fullscreen,
+    //       url:'pages/board/expLayout',
+    //       goTo:'',
+    //     };
+    //     item.taskname == 'MTS 329'?
+    //     queryParams.goTo = 'pages/board/rtm3':
+    //     item.taskname == 'MTS HPU'?
+    //       queryParams.goTo = 'pages/board/rtm3a':
+    //       item.taskname == 'TESTLINE'?
+    //         queryParams.goTo = 'pages/board/rtm2':
+    //         item.taskname == 'MTS MAST'?
+    //           queryParams.goTo = 'pages/board/rtm':
+    //           '';
+    //     this.router.navigate([queryParams.goTo],{queryParams:queryParams});
+    //     console.log('跳转到'+item.taskname)
+    //   }
+    //   this.tip_last_data.fisrt,this.tip_last_data.second = -1;
+    //   return;
+    // }, 500);
+    // item.tipShow = !item.tipShow;
     let queryParams = {
       deviceid:'device_boyang_01',
       is_not_fullscreen:this.is_not_fullscreen,
@@ -189,20 +196,26 @@ export class RealTimeExperimentLayoutComponent implements OnInit {
       goTo:'',
     };
     item.taskname == 'MTS 329'?
-      queryParams.goTo = 'pages/board/rtm3':
-      item.taskname == 'MTS HPU'?
-        queryParams.goTo = 'pages/board/rtm3a':
-        item.taskname == 'TESTLINE'?
-          queryParams.goTo = 'pages/board/rtm2':
-          item.taskname == 'MTS MAST'?
-            queryParams.goTo = 'pages/board/rtm':
-            '';
-
-    this.router.navigate([queryParams.goTo],{queryParams:queryParams});
+    queryParams.goTo = 'pages/board/rtm3':
+    item.taskname == 'MTS HPU'?
+      queryParams.goTo = 'pages/board/rtm3a':
+      item.taskname == 'TESTLINE'?
+        queryParams.goTo = 'pages/board/rtm2':
+        // item.taskname == 'MTS MAST'?
+        //   queryParams.goTo = 'pages/board/rtm':
+          '';
+    if(queryParams.goTo)this.router.navigate([queryParams.goTo],{queryParams:queryParams});
+    console.log('跳转到'+item.taskname)
   }
 
-  structureChange(){
+  /**
+   * 选择的实验室变化
+   * @param i 
+   * @param item 
+   */
+  structureChange(i,item){
     console.log('当前显示实验室改变')
+    this.real_time_data.structure_index = i;
   }
 
   //移入
@@ -216,10 +229,19 @@ export class RealTimeExperimentLayoutComponent implements OnInit {
     item.tipShow = true; 
   }
 
+  //插入消息
   getMessageData(i){
-    let message = + i + '、插入消息插入消息插入消息插入消息插入消息' ;
+    let message = + i + '、插入消息插入消息插入消息插入消息插入消息插入消息插入消息插入消息插入消息插入消息插入消息插入消息插入消息插入消息' ;
     $('#ul_message').prepend(`<li id="li_${i}" title="${message}"><div>${message}</div></li>`);
     $(`#ul_message li`).attr('class', 'li_c');
+  }
+
+  //获取中间小点的动画样式class
+  get_location_class(item){
+    if(item.report == '有')
+      return  'location_shake';
+    else 
+      return 'location_move';
   }
 
 

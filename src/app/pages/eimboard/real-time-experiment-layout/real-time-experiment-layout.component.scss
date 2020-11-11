@@ -10,6 +10,12 @@
     text-align: center;
     // height: 100px;
     // width: 800px;
+    nb-icon {
+        background: rgba(22, 67, 127, 1);
+        cursor: pointer;
+        width: 34px;
+        height: 34px;
+    }
     .box_shadow {
         box-shadow: 0 0 1.2vh 0.34vh rgba(8, 107, 238, 0.7) inset;
         padding: 10px;
@@ -20,6 +26,12 @@
         position: absolute;
         width: 228px;
         display: flex;
+        .top_left_div {
+            position: relative;
+            height: 300px;
+            width: 300px;
+            z-index: 1;
+        }
     }
     #left_button {
         background: url('/assets/eimdoard/rtm3/images/left.png');
@@ -100,12 +112,28 @@
             background: rgb(91, 155, 213);
         }
     }
+    .table_body {
+        overflow-x: hidden;
+        height: 420px;
+        tr {
+            height: 50px;
+        }
+    }
     .structure {
         border: 1px white solid;
         height: 50px;
         margin-right: 20px;
         width: 20%;
         cursor: pointer;
+    }
+    .second_first {
+        margin-top: 10px;
+        display: flex;
+        .cheek_color {
+            color: green;
+            border: 1px green solid;
+            background: rgba(221, 10, 10, 0.7);
+        }
     }
     #center_img {
         background: url('/assets/eimdoard/rtm3/images/structure.png');
@@ -190,6 +218,22 @@
         display: none;
         width: 2px;
     }
+    .p_color {
+        color: white;
+        margin-top: 12%;
+    }
+    #circle {
+        width: 20px;
+        height: 20px;
+        background: #7fee1d;
+        border-radius: 60px;
+    }
+    //第三列第三行
+    .thrid_thrid_chart {
+        height: 30%;
+        width: 97%;
+        margin-top: 10px;
+    }
 }
 
 @keyframes move {
@@ -240,7 +284,52 @@
     }
 }
 
+//上下移动
 .location_move {
     animation: move 1s;
     animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+    50% {
+        transform: rotate(-30deg);
+    }
+    100% {
+        transform: rotate(30deg);
+    }
+}
+
+@-moz-keyframes shake {
+    50% {
+        transform: rotate(-30deg);
+    }
+    100% {
+        transform: rotate(30deg);
+    }
+}
+
+@-webkit-keyframes shake {
+    50% {
+        transform: rotate(-30deg);
+    }
+    100% {
+        transform: rotate(30deg);
+    }
+}
+
+@-o-keyframes shake {
+    50% {
+        transform: rotate(-30deg);
+    }
+    100% {
+        transform: rotate(30deg);
+    }
+}
+
+//左右晃动
+.location_shake {
+    transform: rotate(30deg);
+    animation: shake 0.1s infinite;
+    -webkit-transform: rotate(30deg);
+    -moz-transform: rotate(30deg);
 }

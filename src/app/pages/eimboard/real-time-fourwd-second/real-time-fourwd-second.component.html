@@ -1,7 +1,7 @@
 <div id="rtmv3a" style="padding-bottom: 5px;">
     <div class="row" style="position: relative;">
         <div class="top_left">
-            <div style="position: relative;height: 300px;width: 300px;z-index: 1;">
+            <div class="top_left_div">
                 <div id="left_button" (click)="top_left_click('left')"></div>
                 <div id="center_button"></div>
                 <div id="right_button" (click)="top_left_click('right')"></div>
@@ -12,7 +12,7 @@
             <div class="font_top_class">
                 <span>当前位置：{{real_time_data.address}}</span>
             </div>
-            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
+            <nb-icon style="cursor: pointer;" [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
         </div>
     </div>
     <div class="row">
@@ -63,17 +63,21 @@
                         </thead>
                     </table>
                 </div>
-                <div class="zhibiao_table" style="background-image: linear-gradient(rgb(23,31,96),rgb(53,105,161));
-             color: lightgoldenrodyellow;">
+                <div class="zhibiao_table">
                     <table class="table is-hoverable is-striped is-fullwidtd">
                         <tbody>
                             <tr *ngFor='let item of equipment_params.data; let i = index'>
                                 <td [ngStyle]="{'color':get_font_color(item)}" style="width: 89px">{{item.title}}</td>
                                 <td [ngStyle]="{'color':get_font_color(item)}">{{item.value}}</td>
                                 <td [ngStyle]="{'color':get_font_color(item)}">{{item.unit}}</td>
+                                <td (click)="preinstall_dialog_show(item)">
+                                    <div style="width: 100%;text-align: center;">
+                                        <span style="cursor:pointer" *ngFor="let p_item of item.preinstall" [ngStyle]="{'color':p_item.color}">{{p_item.value}}&nbsp;</span>
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="tuxian" [ngStyle]="{'display':item.unit == '开/关'?'none':''}">
-                                        <a class="iconfont qushi iconqushi" id="qushi-1-{{i}}" [ngStyle]="{'color': get_button_color('qushi',i)}" (click)="hit_tuxian(item, 'qushi-1-'+i,'click')"></a>
+                                        <a class="iconfont qushi iconqushi" id="qushi-1-{{i}}" [ngStyle]="{'color':button['qushi']['1'] == i?'green':''}" (click)="hit_tuxian(item, 'qushi-1-'+i,'click')"></a>
                                         <a class="iconfont biao2 iconyibiao" id="biao-2-{{i}}" [ngStyle]="{'color':button['biao']['2'] == i?'green':''}" (click)="hit_tuxian(item, 'biao-2-'+i,'click')"></a>
                                         <a class="iconfont biao3 iconyibiao" id="biao-3-{{i}}" [ngStyle]="{'color':button['biao']['3'] == i?'green':''}" (click)="hit_tuxian(item, 'biao-3-'+i,'click')"></a>
                                     </div>
@@ -105,9 +109,9 @@
             <div class="box_shadow" style="margin-top: 3%;height: 40%;">
                 <!-- <div class="panel_chart_name">{{panel.KPI}}</div> -->
                 <div style="height: 90%;">
-                    <div class="row">
-                        <div class="third_first_font" style="margin-left: 26%;">{{button['biaoName'][2]}}</div>
-                        <div class="third_first_font" style="margin-left: 29%;">{{button['biaoName'][3]}}</div>
+                    <div style="display: flex;text-align: left;">
+                        <div class="third_first_font">{{button['biaoName'][2]}}</div>
+                        <div class="third_first_font">{{button['biaoName'][3]}}</div>
                     </div>
                     <div class="third_first">
                         <div id="third_first_1" class="gauge1"></div>
@@ -137,6 +141,11 @@
                     </ul>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="zhezhao" id='zhezhao' *ngIf="dialogShow">
+        <div class="tankuang">
+            <ngx-preinstall-dialog (dialogClose)="preinstall_dialog_close($event)" [aline]="'#rtmv3a'" [dialogData]="dialogData"></ngx-preinstall-dialog>
         </div>
     </div>
 </div>

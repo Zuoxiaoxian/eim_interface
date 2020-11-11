@@ -1,0 +1,33 @@
+<div id="equipment">
+    <div class="row" id="title_img">
+        <div class="col-md-2">
+            <div class="return_button head" (click)="return_btn_click()">
+                <span>{{ 'equipment.return'|translate}}</span>
+            </div>
+            <div class="return_button head" style="margin-left: 10px;" (click)="menu_btn_click()">
+                <span>{{ 'equipment.menu'|translate}}</span>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="title">
+                <span id="head_title">{{ title }}</span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="head">
+                <span>{{date.year}}-{{date.month+1}}-{{date.day}}  {{date.hours}}:{{date.minute}}:{{date.second}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="body">
+        <div id="left_img">
+            <!-- <img style="height: 100%;" src="../../../assets/eimdoard/equipment/images/left.png"> -->
+        </div>
+        <div id="center">
+            <router-outlet></router-outlet>
+        </div>
+        <div id="right_img">
+            <!-- <img style="height: 100%;" src="../../../assets/eimdoard/equipment/images/right.png"> -->
+        </div>
+    </div>
+</div>

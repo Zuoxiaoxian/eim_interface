@@ -4,12 +4,108 @@
     "Dark": "黑暗",
     "Cosmic": "宇宙",
     "Corporate": "企业",
-    "POSITIONMONITORING":{
-        "TABS":{
+    "POSITIONMONITORING": {
+        "TABS": {
             "EDIT": "编辑",
             "PATH": "轨迹",
             "TRACE": "跟踪",
             "MORE": "更多"
+        }
+    },
+    "equipment": {
+        "return": "返回",
+        "menu": "菜单",
+        "real": "实验实时",
+        "realStatus": "实验实时状态",
+        "temperature": "温度",
+        "humidity": "湿度",
+        "pressDiff": "压差",
+        "setup": "设定",
+        "ambient": "环境",
+        "realime": "实时",
+        "ExperimentNum": "实验编号",
+        "PLanDuration": "计划时长",
+        "schedule": "进度",
+        "NextExperiment": "下个实验",
+        "contact": "联系方式",
+        "BenchPIC": "当前台架负责人",
+        "dataChannelList": "数据通道列表",
+        "equipmentStatus": "设备状态",
+        "equipIntroduce": "设备介绍",
+        "OnlineVideo": "在线视频",
+        "experimentParams": "实验参数",
+        "SafetyLampStatus": "安灯状态",
+        "expInfor": "试验信息",
+        "OnOff": "开/关",
+        "OilSeparatorOn": "分油器开",
+        "HighOilSeparator": "分油器高",
+        "InternalLock": "内锁",
+        "LogWarm": "日志/报警",
+        "Programlock": "程序内锁",
+        "time": "时间",
+        "Loglevel": "日志等级",
+        "logInfor": "日志信息",
+        "LV1Warm": "一级警报",
+        "stationName": "Station Name",
+        "stationNameCGF": "Station Name(cgf)",
+        "OilSeparator": "分油器",
+        "EmissionAnalyzer": "排放分析仪",
+        "EnvironBinParam": "环境仓参数",
+        "loopFanRate": "循环风机频率",
+        "NewTrendFanRate": "新风风机频率",
+        "AVLSpeed": "AVL转速",
+        "param1": "参数1",
+        "param2": "参数2",
+        "road": {
+            "LeftFront": {
+                "Params": "左前参数",
+                "Output": "左前输出",
+                "Displacement": "左前位移",
+                "DeltaP": "左前DeltaP",
+                "CommandFrequency": "左前指令频率",
+                "ActiveFdbk": "左前活动Fdbk",
+                "DisplacementError": "左前位移误差",
+                "DisplacementAbs": {
+                    "Error": "左前位移绝对误差"
+                }
+            },
+            "RightFront": {
+                "Params": "右前参数",
+                "Output": "右前输出",
+                "Displacement": "右前位移",
+                "DeltaP": "右前DeltaP",
+                "CommandFrequency": "右前指令频率",
+                "ActiveFdbk": "右前活动Fdbk",
+                "DisplacementError": "右前位移误差",
+                "DisplacementAbs": {
+                    "Error": "右前位移绝对误差"
+                }
+            },
+            "LeftRear": {
+                "Params": "左后参数",
+                "Output": "左后输出",
+                "Displacement": "左后位移",
+                "DeltaP": "左后DeltaP",
+                "CommandFrequency": "左后指令频率",
+                "ActiveFdbk": "左后活动Fdbk",
+                "DisplacementError": "左后位移误差",
+                "DisplacementAbs": {
+                    "Error": "左后位移绝对误差"
+                }
+            },
+            "RightRear": {
+                "Params": "右后参数",
+                "Output": "右后输出",
+                "Displacement": "右后位移",
+                "DeltaP": "右后DeltaP",
+                "CommandFrequency": "右后指令频率",
+                "ActiveFdbk": "右后活动Fdbk",
+                "DisplacementError": "右后位移误差",
+                "DisplacementAbs": {
+                    "Error": "右后位移绝对误差"
+                }
+            }
+
         }
     }
 

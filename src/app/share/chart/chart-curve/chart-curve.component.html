@@ -1,0 +1,39 @@
+<div id="chart_curve">
+    <div class="title" *ngIf="title">
+        <div class="str">
+            {{ title }}
+        </div>
+        <nb-icon style="cursor: pointer;z-index: 1;" [icon]="selectShow?'arrow-ios-downward-outline':'arrow-ios-back-outline'" (click)="select_click()"></nb-icon>
+        <ng-container *ngIf="selectShow">
+            <div class="select">
+                <div style="height:100px;overflow-x: overlay;">
+                    <div *ngFor="let item of attrs">
+                        <label nz-checkbox [(ngModel)]="item.show" (ngModelChange)="radioChange()">{{item.name}}</label>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+
+    <div class="box_shadow">
+        <div class="chart" id="{{chartName}}" *ngIf="chartName"></div>
+        <div style="width: 25%;">
+            <div class="scrollbar">
+                <div class="params">
+                    <ng-container *ngIf="_rightChartShow;else dtemp">
+                        <div style="height: 100%;" id="{{rightChartName}}"></div>
+                    </ng-container>
+                    <ng-template #dtemp>
+                        <ng-container *ngFor="let item of attrs;let i = index">
+                            <div *ngIf="item.show" class="div_background">
+                                <div>{{ item.value[item.value.length - 1] }} {{item.unit}}</div>
+                                <div class="curve" [ngStyle]="{'border-color': item.color[0]}"></div>
+                            </div>
+                        </ng-container>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

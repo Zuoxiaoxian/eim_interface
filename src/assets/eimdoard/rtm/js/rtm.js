@@ -2,7 +2,7 @@
 
 let rtm = {
     // 实例1 参考 https://gallery.echartsjs.com/editor.html?c=xH1vxib94f
-    gauge1(gauge1_data){
+    gauge1(gauge1_data) {
         var myChart = echarts.init(document.querySelector('.gauge1'));
         option = {
             // backgroundColor: "#ffffff",
@@ -28,11 +28,11 @@ let rtm = {
                         ]
                     }
                 },
-                axisLabel:{
+                axisLabel: {
                     distance: 2,
                     fontSize: 5,
                 },
-                itemStyle:{
+                itemStyle: {
                     borderColor: 'rgba(198, 56, 27, 1)',
                     borderWidth: 2
                 },
@@ -40,7 +40,7 @@ let rtm = {
                     length: 9,
                 },
                 // 指针
-                pointer:{
+                pointer: {
                     length: '100%',
                     width: 3,
                 },
@@ -54,11 +54,11 @@ let rtm = {
                     value: 50,
                     name: '完成率',
                 }]
-        
+
             }]
         };
         myChart.setOption(option);
-        window.addEventListener('resize', function(){
+        window.addEventListener('resize', function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         });
@@ -70,10 +70,10 @@ let rtm = {
         //     console.log("-------------定时任务---------", (Math.random() * 100).toFixed(2) - 0);
         //     myChart.setOption(option);
         // }, 2000);
-        
+
     },
     // 实例2 参考 https://gallery.echartsjs.com/editor.html?c=xH1vxib94f
-    gauge2(gauge2_data){
+    gauge2(gauge2_data) {
         var myChart = echarts.init(document.querySelector('.gauge2'));
         option = {
             // backgroundColor: "#ffffff",
@@ -99,11 +99,11 @@ let rtm = {
                         ]
                     }
                 },
-                axisLabel:{
+                axisLabel: {
                     distance: 2,
                     fontSize: 5,
                 },
-                itemStyle:{
+                itemStyle: {
                     borderColor: 'rgba(198, 56, 27, 1)',
                     borderWidth: 2
                 },
@@ -111,7 +111,7 @@ let rtm = {
                     length: 9,
                 },
                 // 指针
-                pointer:{
+                pointer: {
                     length: '100%',
                     width: 3,
                 },
@@ -125,11 +125,11 @@ let rtm = {
                     value: 50,
                     name: '完成率',
                 }]
-        
+
             }]
         };
         myChart.setOption(option);
-        window.addEventListener('resize', function(){
+        window.addEventListener('resize', function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         });
@@ -141,10 +141,10 @@ let rtm = {
         //     console.log("-------------定时任务---------", (Math.random() * 100).toFixed(2) - 0);
         //     myChart.setOption(option);
         // }, 2000);
-        
+
     },
 
-    line_date(){
+    line_date() {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.echart_line'));
         option = {
@@ -160,7 +160,7 @@ let rtm = {
             },
             legend: {
                 // series中的数据有name，那么这个就可以省略data
-                textStyle:{
+                textStyle: {
                     color: '#4c9bfd', // 图例文字颜色
                     fontSize: 6,
                 },
@@ -183,54 +183,49 @@ let rtm = {
                 show: true, // 显示边框
                 borderColor: '#012f4a', // 边框颜色
             },
-            xAxis: [
-                {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: [ "01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","26","28","29","30"],
-                    // 去除x轴的刻度
-                    axisTick: {
-                        show: false
-                    },
-                    // x轴文本颜色
-                    axisLabel: {
-                        color: 'rgba(225, 225, 225, .6)',
-                        fontSize: '12px',
-                    },
-                    // 去除轴线
-                    axisLine: {
-                        show: false
-                    },
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    // 去除x轴的刻度
-                    axisTick: {
-                        show: false
-                    },
-                    // x轴文本颜色
-                    axisLabel: {
-                        color: 'rgba(225, 225, 225, .6)',
-                        fontSize: '12px',
-                    },
-                    // 去除轴线
-                    axisLine: {
-                        show: false
-                    },
-                    // y轴分割线
-                    splitLine: {
-                        lineStyle: {
-                            color: "#012f4a"
-                        }
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "26", "28", "29", "30"],
+                // 去除x轴的刻度
+                axisTick: {
+                    show: false
+                },
+                // x轴文本颜色
+                axisLabel: {
+                    color: 'rgba(225, 225, 225, .6)',
+                    fontSize: '12px',
+                },
+                // 去除轴线
+                axisLine: {
+                    show: false
+                },
+            }],
+            yAxis: [{
+                type: 'value',
+                // 去除x轴的刻度
+                axisTick: {
+                    show: false
+                },
+                // x轴文本颜色
+                axisLabel: {
+                    color: 'rgba(225, 225, 225, .6)',
+                    fontSize: '12px',
+                },
+                // 去除轴线
+                axisLine: {
+                    show: false
+                },
+                // y轴分割线
+                splitLine: {
+                    lineStyle: {
+                        color: "#012f4a"
                     }
                 }
-            ],
+            }],
             // 2 条折现颜色
-            color: ['#57ba196b',  '#65dae24a'],
-            series: [
-                {
+            color: ['#57ba196b', '#65dae24a'],
+            series: [{
                     name: '邮件营销',
                     type: 'line',
                     stack: '总量',
@@ -241,16 +236,14 @@ let rtm = {
                             0,
                             0,
                             0,
-                            1,
-                            [
-                            {
-                                offset: 0,
-                                color: "rgba(1, 132, 213, 0.4)"   // 渐变色的起始颜色
-                            },
-                            {
-                                offset: 0.8,
-                                color: "rgba(1, 132, 213, 0.1)"   // 渐变线的结束颜色
-                            }
+                            1, [{
+                                    offset: 0,
+                                    color: "rgba(1, 132, 213, 0.4)" // 渐变色的起始颜色
+                                },
+                                {
+                                    offset: 0.8,
+                                    color: "rgba(1, 132, 213, 0.1)" // 渐变线的结束颜色
+                                }
                             ],
                             false
                         ),
@@ -270,12 +263,12 @@ let rtm = {
                     // 开始不显示拐点，鼠标经过显示
                     showSymbol: false,
                     // 设置拐点的样式
-                    itemStyle:{
+                    itemStyle: {
                         color: '#0184d5',
                         borderColor: "rgba(221, 220, 107, .1)",
                         borderWidth: 12
                     },
-                    data: [ 30, 40, 30, 40,30, 40, 30,60,20, 40, 30, 40, 30, 40,30, 40, 30,60,20, 40, 30, 40, 30, 40,30, 40, 20,60,50, 40],
+                    data: [30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 30, 40, 30, 40, 30, 40, 20, 60, 50, 40],
 
                 },
                 {
@@ -286,25 +279,23 @@ let rtm = {
                     areaStyle: {
                         normal: {
                             color: new echarts.graphic.LinearGradient(
-                            0,
-                            0,
-                            0,
-                            1,
-                            [
-                                {
-                                offset: 0,
-                                color: "rgba(0, 216, 135, 0.4)"
-                                },
-                                {
-                                offset: 0.8,
-                                color: "rgba(0, 216, 135, 0.1)"
-                                }
-                            ],
-                            false
+                                0,
+                                0,
+                                0,
+                                1, [{
+                                        offset: 0,
+                                        color: "rgba(0, 216, 135, 0.4)"
+                                    },
+                                    {
+                                        offset: 0.8,
+                                        color: "rgba(0, 216, 135, 0.1)"
+                                    }
+                                ],
+                                false
                             ),
                             shadowColor: "rgba(0, 0, 0, 0.1)"
                         }
-                
+
                     },
                     // 设置拐点形状
                     symbol: 'circle',
@@ -313,12 +304,12 @@ let rtm = {
                     // 开始不显示拐点，鼠标经过显示
                     showSymbol: false,
                     // 设置拐点的样式
-                    itemStyle:{
+                    itemStyle: {
                         color: 'green',
                         borderColor: "rgba(221, 220, 107, .1)",
                         borderWidth: 12
                     },
-                    
+
                     // 把折现改为圆滑
                     smooth: true,
                     // 单独修改 当前线条 修改线的样式
@@ -326,7 +317,7 @@ let rtm = {
                         color: '#00d887',
                         width: 3,
                     },
-                    data: [ 130, 10, 20, 40,30, 40, 80,60,20, 40, 90, 40,20, 140,30, 40, 130,20,20, 40, 80, 70, 30, 40,30, 120, 20,99,50, 20],
+                    data: [130, 10, 20, 40, 30, 40, 80, 60, 20, 40, 90, 40, 20, 140, 30, 40, 130, 20, 20, 40, 80, 70, 30, 40, 30, 120, 20, 99, 50, 20],
                 },
 
 
@@ -336,7 +327,7 @@ let rtm = {
         // 配置给实例化对象
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.addEventListener('resize', function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         })

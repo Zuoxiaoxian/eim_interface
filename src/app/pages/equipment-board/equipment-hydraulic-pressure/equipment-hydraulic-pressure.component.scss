@@ -1,0 +1,317 @@
+#four_road {
+    width: 100%;
+    height: 100%;
+    // height: 900px;
+    .first_first,
+    .first_second,
+    .first_third,
+    .sceond_fisrt {
+        height: 33%;
+        width: 100%;
+        display: flex;
+        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        padding: 2%;
+        color: white;
+    }
+    .font_w_too_long {
+        word-break: keep-all;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 86px;
+    }
+    .sceond_third {
+        height: 33%;
+        width: 100%;
+        display: flex;
+        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        padding: 2%;
+        color: white;
+        display: inherit;
+        position: relative;
+        margin-top: 20px;
+    }
+    .thrid {
+        height: 93%;
+        width: 100%;
+        // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        // padding: 2%;
+        color: white;
+    }
+    .part_title {
+        position: absolute;
+        // width: 100px;
+        padding: 0% 2%;
+        height: 20px;
+        color: wheat;
+        background: #4472c4;
+        top: -17px;
+        left: -7px;
+    }
+    .andon_status {
+        width: 14%;
+        position: relative;
+        .andon_color {
+            border: 3px solid rgb(157, 195, 230);
+            border-radius: 21px;
+            height: 74%;
+            .last {
+                border-bottom-left-radius: 17px;
+                border-bottom-right-radius: 17px;
+            }
+            .first {
+                border-top-left-radius: 17px;
+                border-top-right-radius: 17px;
+            }
+        }
+        .andon_status_font {
+            padding: 3px;
+            color: white;
+            font-size: 12px;
+        }
+        .andon_img {
+            background: url('/assets/eimdoard/equipment/images/triangle.png');
+            height: 20%;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+            background-position: center center;
+            margin-left: 10px;
+        }
+    }
+    .andon_status_chart {
+        width: 86%;
+        display: flex;
+        flex-wrap: wrap;
+        #device_status {
+            height: 55%;
+            width: 50%;
+            box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        }
+        #operatingRate {
+            height: 55%;
+            width: 50%;
+            box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        }
+        .chart {
+            height: 112px;
+            padding-left: 21px;
+            width: 100%;
+        }
+    }
+    .yellow {
+        background-color: #faa755;
+        color: white;
+        height: 100%;
+        padding-top: 13%;
+        ;
+    }
+    .blue {
+        background-color: #006ced;
+        color: white;
+        height: 100%;
+        padding-top: 13%;
+        ;
+    }
+    .red {
+        background-color: #d71345;
+        color: white;
+        height: 100%;
+        padding-top: 13%;
+        ;
+    }
+    .green {
+        background-color: rgb(74, 181, 107);
+        color: white;
+        height: 100%;
+        padding-top: 13%;
+        ;
+    }
+    .first_second_font {
+        text-align: left;
+        padding: 5px 0px 0px 10px;
+        display: flex;
+    }
+    .table {
+        // border: 1px solid rgb(68, 114, 196);
+        color: white;
+        table {
+            width: 100%;
+            height: 100%;
+            .header {
+                // height: 10%;
+                background: rgb(68, 114, 196);
+                td {
+                    width: 33%;
+                    padding: 0px 5px;
+                }
+            }
+            .body {
+                font-size: 12px;
+                .progress_o {
+                    border-radius: 3px;
+                    width: 100%;
+                }
+                td {
+                    padding: 5px;
+                    width: 33%;
+                }
+            }
+        }
+        .font_tolong {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    #circular {
+        width: 60%;
+        height: 60%;
+        border-radius: 60px;
+        background: rgb(59, 56, 56);
+        margin: 15%;
+    }
+    .h_46_w_70 {
+        height: 46%;
+        width: 70%;
+    }
+    .h_46_w_30 {
+        height: 46%;
+        width: 30%;
+        display: flex;
+        padding: 2%;
+    }
+    .dis_f_w {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .display_f {
+        display: flex;
+    }
+    .lattice_layout {
+        margin-top: 10px;
+        display: inherit;
+        position: relative;
+    }
+    .table_bo {
+        border: 1px solid #4472c4;
+    }
+    .bo {
+        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        padding: 2%;
+    }
+    .center_img {
+        // height: 100;
+        height: 33%;
+        position: relative;
+        margin-top: 10px;
+        #img {
+            height: 99%;
+            width: 100%;
+            // background: url('/assets/eimdoard/equipment/images/car_2.png');
+            background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+            background-position: center center;
+        }
+    }
+    #strip {
+        width: 23px;
+        height: 6px;
+        background: white;
+        border-radius: 2px;
+        margin: 10% 25%;
+    }
+    #circle {
+        width: 20px;
+        height: 20px;
+        background: #7fee1d;
+        border-radius: 60px;
+        margin: 0% 25%;
+    }
+    #real_temperature_1,
+    #real_temperature_2 {
+        width: 100%;
+        height: 100%;
+    }
+    #third_second {
+        width: 100%;
+        height: 50%;
+    }
+    .p_backgroud_blue {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: white;
+        background: #4472c4;
+    }
+    .width_25 {
+        width: 25%;
+    }
+    .width_30 {
+        width: 30%;
+    }
+    .width_33 {
+        width: 33%;
+    }
+    .width_50 {
+        width: 50%;
+    }
+    .width_70 {
+        width: 70%;
+    }
+    .height_31 {
+        height: 31%;
+    }
+    .height_32 {
+        height: 32%;
+    }
+    .height_33 {
+        height: 33%;
+    }
+    .h_46_w_100 {
+        height: 46%;
+        width: 100%;
+    }
+    .height_50 {
+        height: 50%;
+    }
+    .height_30 {
+        height: 30%
+    }
+    .height_24 {
+        height: 24%;
+    }
+    .height_20 {
+        height: 20%;
+    }
+    .height_15 {
+        height: 15%;
+    }
+    .height_17 {
+        height: 17%;
+    }
+    .height_18 {
+        height: 18%
+    }
+    .height_58 {
+        height: 58%;
+    }
+    .height_48 {
+        height: 48%;
+    }
+    .height_38 {
+        height: 38%;
+    }
+    .height_36 {
+        height: 36%;
+    }
+    .overflow_height_85 {
+        height: 85%;
+        overflow: auto;
+    }
+    ngx-chart-curve {
+        width: 100%;
+        height: 30%;
+    }
+}

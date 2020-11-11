@@ -1,8 +1,13 @@
 <div id="rtmv3" style="padding-bottom: 5px;">
     <div class="row">
-        <div class="col-md-11"></div>
+        <div class="col-md-1">
+            <div class="go_back" (click)="goBack()">
+                <nb-icon icon="arrowhead-left-outline"></nb-icon>
+            </div>
+        </div>
+        <div class="col-md-10"></div>
         <div class="col-md-1" style="text-align: right; padding-left: 0px;">
-            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
+            <nb-icon style="cursor: pointer;" [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
         </div>
     </div>
     <div class="row">
@@ -17,18 +22,19 @@
             <div class="first_row ">
                 <div class="title">标题标题</div>
                 <div class="row box_shadow">
-                    <div class="box3_left height"></div>
+                    <div class="box3_left height_c"></div>
                     <div style="width:60%;">
-                        <div style="display: flex;">
-                            <ng-container *ngFor="let item of first_row_data.equipment">
-                                <div class="data_bg">
-                                    <p style="font-size: 12px;margin: 0px;">{{item.number}}台</p>
-                                    <small style="font-size: 12px;">{{item.title}}</small>
+                        <div style="display: flex;font-size: 12px;">
+                            <ng-container *ngFor="let item of first_row_data.equipment;let i = index">
+                                <div class="data_bg" [ngStyle]="{'margin-left': i == 0?'10%':''}">
+                                    <p style="margin-bottom: 0px;">{{item.number}}台</p>
+                                    <small>{{item.title}}</small>
                                 </div>
                                 <div style="width: 4px;"></div>
                             </ng-container>
                         </div>
-                        <div id="box3_right"></div>
+                        <div id="box3_right" style="width: 100%;
+                        height: 70%;"></div>
                     </div>
                 </div>
 

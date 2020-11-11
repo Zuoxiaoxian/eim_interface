@@ -1,0 +1,65 @@
+<div id="chart_curve">
+    <div class="title">
+        <div class="str">
+            {{ title| translate }}
+        </div>
+        <ul style="overflow-x: overlay;height: 100%;">
+            <li class="li_default" [ngClass]="{'li_active':click_str==item}" *ngFor="let item of list" (click)="click(item)">
+                {{item | translate}}
+                <nb-icon *ngIf="click_str==item" style="cursor: pointer;z-index: 1;min-width: 20px;" [icon]="selectShow?'arrow-ios-downward-outline':'arrow-ios-back-outline'" (click)="select_click()"></nb-icon>
+                <ng-container *ngIf="selectShow && click_str==item">
+                    <div class="select">
+                        <div style="height:100px;overflow-x: overlay;">
+                            <div *ngFor="let item of attrs">
+                                <label nz-checkbox [(ngModel)]="item.show" (ngModelChange)="radioChange()">{{item[this.languageName]}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </li>
+        </ul>
+    </div>
+    <div class="box_shadow">
+        <div style="height: 44%;width: 100%;margin-top: 3%;" *ngIf="!dashboardName">
+            <ng-content></ng-content>
+        </div>
+        <div style="width: 100%;height: 50%;display: flex;flex-wrap: wrap;" *ngIf="dashboardName">
+            <img *ngIf="img" [src]="img" style="width: 40%;">
+            <div [ngStyle]="{'width':img?'60%':'100%'}">
+                <div class="dashboard" id="{{dashboardName}}" [ngStyle]="{'height':true?'80%':'100%'}"></div>
+                <!-- 仪表盘下拉选择  -->
+                <div *ngIf="false" style="display: flex;height: 20%;width: 100%;">
+                    <ul style="width: 100%;">
+                        <li class="li_default" style="width: 33%;" *ngFor="let item of dashboard_cl;let i = index">
+                            {{item}}
+                            <nb-icon style="cursor: pointer;z-index: 1;min-width: 20px;" [icon]="i == dashboard_click_index?'arrow-ios-downward-outline':'arrow-ios-back-outline'" (click)="dashboard_select_click(i)"></nb-icon>
+                            <ng-container *ngIf="  i == dashboard_click_index">
+                                <div class="select_dashboard">
+                                    <div style="height:100px;overflow-x: overlay;">
+                                        <div *ngFor="let item_1 of dashboard_select[i];let j = index">
+                                            <label nz-checkbox [ngModel]="item_1.dashboardShow" (ngModelChange)="dashboard_radioChange(item_1,i,j)">{{item_1.name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="chart" id="{{chartName}}"></div>
+        <!-- <div style="width: 25%;position: relative;">
+            <div class="scrollbar">
+                <div class="params">
+                    <ng-container *ngFor="let item of attrs;let i = index">
+                        <div *ngIf="item.show" class="div_background">
+                            <div>{{ item.value[item.value.length - 1] }} {{item.unit}}</div>
+                            <div class="curve" [ngStyle]="{'border-color': item.color[0]}"></div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>

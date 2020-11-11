@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {EmqClientService} from "../../../services/emq-client/emq-client.service";
 import {HttpserviceService} from "../../../services/http/httpservice.service";
 import {UserInfoService} from "../../../services/user-info/user-info.service";
@@ -19,12 +19,14 @@ export class PreinstallDialogComponent implements OnInit {
       this._dialogData = data;
     }
   };
+  @Input()aline
   @Output()dialogClose = new EventEmitter<any>();
   constructor(private mqserivce:EmqClientService,private http:HttpserviceService,
               private userInfo:UserInfoService) { }
 
   ngOnInit(): void {
   }
+
 
   ngAfterViewInit(): void {
     this.layuiInit();
@@ -46,11 +48,13 @@ export class PreinstallDialogComponent implements OnInit {
         div.append(`<span>${f.color}</span>`);
         //颜色选择器
         colorpicker.render({
-          aline:'#rtmv2',
+          aline:isthis.aline,
           elem: `#select_${i}`,  //绑定元素
           color: f.color,
           position:'fixed',
-          // alpha: true ,//开启透明度
+          predefine: true,
+          // colors: ['#ff8c00','#00ced1','#9d8a0e'],
+          // alpha: true,
           // format: 'rgb',
           size: 'lg', //大号下拉框
           done: function(color){

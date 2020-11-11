@@ -25,11 +25,11 @@ let expLayouteChart = {
                     fontWeight: '400'
                 }
             }],
+            color: [data.color, 'rgb(106,135,214,0.7)', ],
             series: [{
-                name: 'A',
                 type: 'pie',
                 startAngle: 90,
-                radius: [42, 47],
+                radius: [38, 47],
                 hoverAnimation: false,
                 itemStyle: {
                     normal: {
@@ -40,29 +40,22 @@ let expLayouteChart = {
                 },
                 data: [{
                         value: data.percentage,
-                        name: 'A',
                         itemStyle: {
                             normal: {
-                                borderWidth: 5,
-                                shadowBlur: 20,
-                                borderColor: data.color,
-                                shadowColor: data.color
+                                borderWidth: 5
                             }
                         },
                     }, {
-                        value: 100,
-                        name: 'A',
+                        value: 100 - data.percentage,
                         itemStyle: {
                             normal: {
-                                borderWidth: 5,
-                                shadowBlur: 20,
-                                borderColor: 'rgb(106,135,214)',
-                                shadowColor: 'rgb(106,135,214)'
+                                borderWidth: 5
                             }
                         },
                     }
 
-                ]
+                ],
+                roundCap: 1 //可选项为1和2，不填则采用原有拼接方式
             }]
         }
         window.addEventListener('resize', function() {
@@ -99,7 +92,7 @@ let expLayouteChart = {
                 source: data.information
             },
             legend: {
-                show: true,
+                show: false,
                 textStyle: {
                     color: 'white',
                 }
