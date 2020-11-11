@@ -60,12 +60,13 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
 import  { ComponentTModule } from './components/componentT.module'
 import { AgGridModule } from 'ag-grid-angular';
+import { TaskProgressForAggridComponent } from './test-task-manage/task-progress-for-aggrid/task-progress-for-aggrid.component';
 @NgModule({
   declarations: [TongjiComponent, DeviceManageComponent, 
     // MySelectComponent, MySelectGroupComponent, MyTableNg2Component, DateRangeComponent,
     TestTaskManageComponent,  TaskProgressForTableComponent, 
     DeviceKpiReportComponent, KpireportLinkFortableComponent, ManHourKpiReportComponent,
-     ManhourReportLinkFortableComponent, KpiDetailComponent, StatusForTableComponent,],
+     ManhourReportLinkFortableComponent, KpiDetailComponent, StatusForTableComponent, TaskProgressForAggridComponent,],
   imports: [
     CommonModule,
     TongjiRoutingModule,

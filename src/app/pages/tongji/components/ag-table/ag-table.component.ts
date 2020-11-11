@@ -10,6 +10,11 @@ import { EditDelTooltipComponent } from '../../../../pages-popups/prompt-diallog
 import { UserInfoService } from '../../../../services/user-info/user-info.service';
 import { PublicmethodService } from '../../../../services/publicmethod/publicmethod.service';
 
+
+// TaskProgressForAggridComponent
+import { TaskProgressForAggridComponent } from '../../test-task-manage/task-progress-for-aggrid/task-progress-for-aggrid.component';
+
+
 declare let $;
 
 interface Data {
@@ -81,6 +86,7 @@ export class AgTableComponent implements OnInit {
   // kpi_detail
   ngAfterViewInit(){
   }
+
   
   // ---------------
   gridOptions(employee_agGrid){
@@ -89,14 +95,15 @@ export class AgTableComponent implements OnInit {
     this.action =  employee_agGrid["action"]; // 是否操作
     this.alltotalPageNumbers = employee_agGrid["totalPageNumbers"]; // 数据库中的总条数
 
+    
+    
+
     // this.paginationPageSize = 10;
     this.rowSelection = 'multiple';
     this.context = { componentParent: this };
 
     
-    console.log("*****************************************vtableDatas")
-    console.log("***************************************** tableDatas", employee_agGrid)
-    console.log("*****************************************tableDatas");
+    
 
     if (this.action){
       console.log("action===================", this.action);
@@ -359,10 +366,45 @@ export class AgTableComponent implements OnInit {
         // var rowNode  = this.gridApi.getRowNode(String(cell.id));
         // rowNode.setData(cell); // Cannot read property 'setData' of undefined 未能解决
         this.rowData.forEach(row => {
-          // 用户组管理
+          // 设备管理
           if (row.id === value.id && row.id){
             var row_index = this.rowData.indexOf(row);
             value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
+            var type;
+            var devicestatus;
+            switch (value["type"]) {
+              case 1:
+                type = "台架设备";
+                break;
+                case 2:
+                  type = "移动资产";
+                  break;
+                case 3:
+                  type = "举升机";
+                break;
+                case 402:
+                  type = "其它设备";
+                break;
+            };
+            switch (value["devicestatus"]) {
+              case 1:
+                devicestatus = "在用";
+                break;
+                case 2:
+                  devicestatus = "封存";
+                  break;
+                case 3:
+                  devicestatus = "停用";
+                break;
+                case 4:
+                  devicestatus = "闲置";
+                break;
+                case 402:
+                  devicestatus = "其它";
+                break;
+            }
+            value.type = type;
+            value.devicestatus = devicestatus;
             this.rowData[row_index] = value
           }
           // 用户管理

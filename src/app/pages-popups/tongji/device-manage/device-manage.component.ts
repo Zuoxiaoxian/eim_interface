@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
+import { copyFileSync } from 'fs';
 import { from } from 'rxjs';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';
@@ -369,10 +370,28 @@ export class DeviceManageComponent implements OnInit {
         // 注意这里有2个，1[{}],2{}
         // var formdatar = JSON.parse(rowData).length != 1? JSON.parse(rowData): JSON.parse(rowData)[0];
         var formdatar = JSON.parse(rowData)[0];
+        switch (formdatar["devicestatus"]) {
+          case 1:
+            formdatar["devicestatus"] = "在用";
+            break;
+            case 2:
+              formdatar["devicestatus"] = "封存";
+              break;
+            case 3:
+              formdatar["devicestatus"] = "停用";
+            break;
+            case 4:
+              formdatar["devicestatus"] = "闲置";
+            break;
+            case 402:
+              formdatar["devicestatus"] = "其它";
+            break;
+        }
         // 初始化表单
         form.val("device", formdatar); 
         // 初始化createdon（创建时间）、purchaseon (购置日期)
-        console.log('----------------------编辑---------------', formdatar)
+        console.log('----------------------编辑---------------', formdatar);
+
         var createdon = formdatar["createdon"];
         var purchaseon = formdatar["purchaseon"];
         method = "dev_update_device";
@@ -402,6 +421,7 @@ export class DeviceManageComponent implements OnInit {
       form.on('submit(device)', function(data){
         if (content){
           data.field.id = JSON.parse(rowData)[0].id;
+          data.field.deviceid = JSON.parse(rowData)[0].deviceid;
         }
         // layer.alert(JSON.stringify(data.field), {
         //   title: '得到的编辑表单的数据'
@@ -412,8 +432,33 @@ export class DeviceManageComponent implements OnInit {
         }else{
           data.field["active"] = 0;
         }
+        if (data.field["type"] != undefined){
+          data.field["type"] = Number(data.field["type"]);
+        }
+        
+        
         var colums = data.field;
+        switch (colums["devicestatus"]) {
+          case "在用":
+            colums["devicestatus"] = 1;
+            break;
+            case "封存":
+              colums["devicestatus"] = 2;
+              break;
+            case "停用":
+              colums["devicestatus"] = 3;
+            break;
+            case "闲置":
+              colums["devicestatus"] = 4;
+            break;
+            case "其它":
+              colums["devicestatus"] = 402;
+            break;
+        }
+        
 
+        console.log("---data.field--",data.field)
+        
         console.log("---colums--",colums, method)
         const table = "device";
         http.callRPC(table, method, colums).subscribe((result)=>{

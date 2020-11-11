@@ -46,10 +46,10 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
   }
 
 
-  // 下拉框---资产编号
+  // 下拉框---设备编号！
   assetsnumber = {
-    placeholder: "请选择资产编号",
-    name: '资产编号',
+    placeholder: "请选择设备编号",
+    name: '设备编号',
     datas: [
       { name: 'GT1918-1720TM' },
       { name: 'GT1917-1819TM' },
@@ -88,11 +88,6 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getbuttons();
     this.initdate();
-
-    
-
-
-
   }
 
   ngOnDestroy(){
@@ -152,9 +147,6 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
     // 根据menu_item_role得到 该页面对应的 button！
     var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
     if (button_list){
-      // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      // console.log(button_list)
-      // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
       var man_hour_kpi_report2_buttons = localStorage.getItem("device-kpi-report2-buttons") ===null? false: JSON.parse(localStorage.getItem("device-kpi-report2-buttons"))
 
       if (man_hour_kpi_report2_buttons){
@@ -172,7 +164,6 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
             if (currentmenuid === button["parentid"]){
               var method = button["permission"].split(":")[1];
               // 该界面--设备kpi报表！按钮功能 搜索、导出 method === "import"
-              console.log("---->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",method)
               if ( method === "query" ||  method === "download" ){
                 buttons2.push(button)
               }else{
@@ -263,7 +254,8 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
         daterange:daterange_data
       }
     )
-    this.RecordOperation("搜索设备", 1, '');
+    var data = "department:" + String(departmentselect_data) + "," + 'device_tpye:' + String(device_tpye_data) +','+ 'asset_number:' + String(asset_number_data) +',' +'daterange:' + String(daterange_data);
+    this.RecordOperation("搜索设备", 1, data);
     // this.test_task_table_data.source = null;
   }
 

@@ -7,7 +7,7 @@ import { PlatformLocation } from '@angular/common';
 import { Observable } from 'rxjs';
 import { HttpserviceService } from '../http/httpservice.service';
 import { HttpHeaders } from '@angular/common/http';
-import { loginurl,INFO_API,SYSMENU, adminlocalstorage,ssotoken} from '../../appconfig';
+import { loginurl,INFO_API,SYSMENU, adminlocalstorage,ssotoken, menu_button_list} from '../../appconfig';
 import {DatePipe} from '@angular/common';  
 
 import { map } from 'rxjs/operators';
@@ -403,5 +403,62 @@ export class PublicmethodService {
   
   // ==========================================
 
+
+  // -----------------------------------------页面得到 权限buttons
+
+  get_buttons(){
+    return new Observable((observale)=>{
+      this.getMenu().subscribe((data)=>{
+        if (data){
+          const colums = {
+            languageid: this.httpservice.getLanguageID(),
+            roles: data
+          };
+          console.log("---colums--",colums)
+          const table = "menu_item";
+          const method = "get_menu_by_roles";
+          this.httpservice.callRPC(table, method, colums).subscribe((result)=>{
+            const baseData = result['result']['message'][0];
+            // 得到具有的按钮列表 ------------------------------
+            var button_list = [];
+            baseData.forEach(element => {
+              if (element["type"] === 2 ){
+                var method = element["permission"].split(":")[1];
+                // info success warning danger  primary
+                switch (method) {
+                  case 'add':
+                    element['class']="info"
+                  break;
+                  case 'del':
+                    element['class']="danger"
+                    break;
+                  case 'edit':
+                    element['class']="warning"
+                    break;
+                  case 'query':
+                    element['class']="success"
+                    break;
+                  case 'import':
+                    element['class']="primary"
+                    break;
+                  case 'download':
+                    element['class']="primary"
+                    break;
+                }
+                button_list.push(element);
+              }
+            });
+            console.log("按钮=====================", button_list)
+            localStorage.setItem(menu_button_list, JSON.stringify(button_list));
+            observale.next(button_list);
+          })
+        }
+      });
+
+    })
+  }
+
+   
+  // -----------------------------------------页面得到 权限buttons
 
 }

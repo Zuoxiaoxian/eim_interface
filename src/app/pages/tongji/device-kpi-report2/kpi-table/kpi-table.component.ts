@@ -41,7 +41,6 @@ export class KpiTableComponent implements OnInit {
     this.getetabledata();
     // 初始化agGrid==============
 
-    console.log("======导出=====", this.isdownload);
     // 订阅方,得到属性
     this.deviceservice.currentMessage.subscribe(res=>{
       console.log("订阅方：", res);
@@ -92,9 +91,9 @@ export class KpiTableComponent implements OnInit {
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
       { field: 'devicename', headerName: '设备名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true, pinned: 'left'},
       { field: 'deviceid', headerName: '设备id',  resizable: true, minWidth: 10},
-      { field: 'department', headerName: '部门信息', resizable: true, minWidth: 10},
+      { field: 'department', headerName: '试验室', resizable: true, minWidth: 10},
       
-      { field: 'CustomTime', headerName: '自定义统计时间', 
+      { field: 'CustomTime', headerName: '自定义统计时间(默认最近一周)', 
         children:[
           { field: 'starttime', headerName: '开始时间', resizable: true},
           { field: 'endtime', headerName: '结束时间', resizable: true},
@@ -106,7 +105,7 @@ export class KpiTableComponent implements OnInit {
       
       { field: 'avgtime', headerName: '平均运行时长(h)', resizable: true, minWidth: 10},
       { field: 'ratetime', headerName: '开动率(%)', resizable: true, minWidth: 10}, // 自定义设备编号！
-      { field: 'belonged', headerName: '负责人', resizable: true, minWidth: 10},
+      { field: 'belonged', headerName: '实时安灯状态', resizable: true, minWidth: 10},
       // 这个是跳转到详情kpi的 https://www.ag-grid.com/javascript-grid-cell-rendering-components/
       // { field: 'option', headerName: '详情', resizable: true, minWidth: 10, cellRenderer: 'optionCellRenderer'},
       {
@@ -124,7 +123,7 @@ export class KpiTableComponent implements OnInit {
 
     ],
     rowData: [ // data
-      { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
+      // { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
       // { name: 'Ford', loginname: 'Mondeo', role_name: 32000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" },
       // { name: 'Porsche', loginname: 'Boxter', role_name: 72000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" }
     ]
@@ -135,7 +134,6 @@ export class KpiTableComponent implements OnInit {
   getetabledata(event?){
     var offset;
     var limit;
-    console.log("event------------------------------------------------", event);
     if (event != undefined){
       offset = event.offset;
       limit = event.limit;
@@ -192,7 +190,6 @@ export class KpiTableComponent implements OnInit {
     this.http.callRPC('device', 'dev_get_kpi_device_limit', colmun).subscribe((res)=>{
       // console.log("get_menu_role", result)
       var get_employee_limit = res['result']['message'][0]
-      console.log("device---", get_employee_limit);
 
       this.isloding = false;
       // 发布组件，编辑用户的组件
@@ -212,7 +209,6 @@ export class KpiTableComponent implements OnInit {
   updatetabledata(event?){
     var offset;
     var limit;
-    console.log("event------------------------------------------------", event, this.agGrid);
     if (event != undefined){
       offset = event.offset;
       limit = event.limit;
@@ -395,8 +391,6 @@ export class KpiTableComponent implements OnInit {
         exit_td_obj_ch_list.push(td_obj_ch);
       }
     }
-    console.log("----------------->>>>> 部门\t不\t重复的", obj_list);
-    console.log("\n\n\n----------------->>>>> 部门重复的", exit_td_obj_ch_list);
     obj_list.forEach(obj=>{ // 部门节点 + 部门下的子节点
       exit_td_obj_ch_list.forEach(exit_obj=>{  // 部门下的子节点
         if (obj.label === exit_obj.parent_label ){
@@ -405,7 +399,6 @@ export class KpiTableComponent implements OnInit {
         }
       })
     })
-    console.log("----------------->>>>> 部门\t不\t重复的=====处理后的！  ", obj_list);
     return obj_list;
   };
   // 得到选择的树状数据，根据这些数据 得到table 

@@ -1,44 +1,51 @@
 <div class="row">
-    <div class="col-md-2 my-select">
+    <div class="col-md-3 " >
         <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
     </div>
-    <div class="col-md-2 my-select">
+    <div class="col-md-3 my-select" style="padding: 0;">
         <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
     </div>
-    <div class="col-md-2 my-select">
+    <div class="col-md-3 my-select" style="padding: 0;">
         <ngx-my-select #asset_number [selectdatas]="testnumber"></ngx-my-select>
     </div>
 
-    <div class="col-md-6 my-select">
-        <div class="row">
-            <div class="col-md-8 my-button">
-                <div class="layui-form" >
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">日期范围</label>
-                            <div class="layui-input-inline">
-                              <input type="text" name='date-range' class="layui-input" id="test_task_manage" placeholder=" - ">
-                            </div>
-                          </div>
+    <div class="col-md-3 my-select" style="padding: 0;">
+        <div class="layui-form" >
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">日期范围</label>
+                    <div class="layui-input-block" style="margin-left: 81px;">
+                      <input type="text" name='date-range' class="layui-input" id="test_task_manage" placeholder=" - ">
                     </div>
-                </div>
-
-            </div>
-            <div class="col-md-2 my-button">
-                <button nbButton status="info" size="small" (click)="query()">搜索</button>
-            </div>
-            <div class="col-md-2 my-button">
-                <button nbButton status="info" size="small" (click)="download('试验任务管理')">导出</button>
+                  </div>
             </div>
         </div>
     </div>
+
+    <div class="col-md-1 my-button" size="small" style="margin-bottom: 12px;" *ngFor="let button of buttons2">
+        <button nbButton [status]="button.class" size="small" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
+    </div>
+
+    <!-- <div class="row" [nbSpinner]="isloding" nbSpinnerStatus="basic">
+        <div class="col-md-12">
+            <ngx-ag-table #ag_Grid   (nzpageindexchange)="nzpageindexchange_ag($event)"></ngx-ag-table>
+        </div>
+    </div> -->
+
+    <!-- <div class="col-md-1 my-button">
+        <button nbButton status="info" size="small" (click)="query()">搜索</button>
+    </div>
+    <div class="col-md-1 my-button">
+        <button nbButton status="info" size="small" (click)="download('试验任务管理')">导出</button>
+    </div> -->
 </div>
 
 <div class="row">
     <div class="col-md-12" style="margin-top: 20px;">
         <nb-card>
             <nb-card-body>
-                <ngx-my-table-ng2 #mytable  [datas]="test_task_table_data"></ngx-my-table-ng2>
+
+                <ngx-ag-table #ag_Grid   (nzpageindexchange)="nzpageindexchange_ag($event)"></ngx-ag-table>
             </nb-card-body>
         </nb-card>
     </div>

@@ -332,6 +332,7 @@ export class DeviceManageComponent implements OnInit {
     }
   }
   
+  
   // button deit
   edit(){
     console.log("编辑-设备管理", this.rowdata);
@@ -946,11 +947,9 @@ export class DeviceManageComponent implements OnInit {
       { field: 'groups', headerName: '科室', resizable: true, minWidth: 10},
       { field: 'belonged', headerName: '归属人', resizable: true, minWidth: 10},
 
-      { field: 'devicestatus', headerName: '设备状态', resizable: true,minWidth: 50,
+      { field: 'devicestatus', headerName: '资产状态', resizable: true,minWidth: 50,pinned: 'left',
         cellStyle: function(params){
           var value = params.value;
-          console.log("===设备状态====", value)
-          
           switch (value) {
             case '停用':
               return {
@@ -986,7 +985,8 @@ export class DeviceManageComponent implements OnInit {
           }
         }
       
-      },// =================
+      },
+      // =================
 
       { field: 'createdby', headerName: '创建人', resizable: true},
       { field: 'createdon', headerName: '创建时间', resizable: true},
