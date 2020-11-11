@@ -1,23 +1,33 @@
 @import '../../../../assets/eimdoard/rtmv2/css/iconfont_for_rtmv2.css';
-
-#rtmv2{
+#rtmv2 {
     background: url('/assets/eimdoard/rtm/images/bg.png');
     position: relative;
-    .head{
+    .go_back {
+        cursor: pointer;
+        color: white;
+        position: relative;
+        nb-icon {
+            position: absolute;
+        }
+    }
+    .go_back:hover {
+        color: yellow;
+    }
+    .head {
         position: relative;
         height: 50px;
         margin-bottom: 15px;
-        h4{
+        h4 {
             position: absolute;
             top: 9px;
             left: 47%;
             color: #656ca5;
         }
-        img{
+        img {
             width: 100%;
             height: 100%;
         }
-        .home{
+        .home {
             position: absolute;
             top: 38px;
             left: 35px;
@@ -25,39 +35,37 @@
             cursor: pointer;
             font-size: smaller;
         }
-        .home:hover{
+        .home:hover {
             color: rgb(88, 233, 223);
         }
     }
-
-    .zhibiao_table_nav{
+    .zhibiao_table_nav {
         color: white;
         height: 35px;
-        .table{
+        .table {
             margin-bottom: 2px;
         }
-        .table th{
+        .table th {
             text-align: center;
-                color: red;
-                padding: 0.75rem;
-                vertical-align: top;
-                border-top: 1px solid #dee2e600;
-                border-bottom: 1px dotted #dee2e600;
+            color: red;
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e600;
+            border-bottom: 1px dotted #dee2e600;
         }
     }
-
-    .zhibiao_table::-webkit-scrollbar{
+    .zhibiao_table::-webkit-scrollbar {
         // 隐藏滚动条
         display: none;
         width: 2px;
     }
-    .zhibiao_table{
+    .zhibiao_table {
         // 滚动
         overflow-x: hidden;
         height: 710px;
-        .table thead{
+        .table thead {
             background-color: transparent;
-            .header{
+            .header {
                 text-align: center;
                 color: red;
                 padding: 0.75rem;
@@ -66,7 +74,7 @@
                 border-bottom: 1px dotted #dee2e600;
             }
         }
-        .table td{
+        .table td {
             padding: 0.75rem;
             vertical-align: top;
             border-top: 1px dotted #d9dbdd69;
@@ -75,20 +83,19 @@
             font-size: xx-small;
             text-align: center;
         }
-        .tuxian{
+        .tuxian {
             // border: red solid 1px;
-            a{
+            a {
                 margin: 0 2px;
             }
         }
-
     }
-    .zhibiao_table_nav2{
+    .zhibiao_table_nav2 {
         height: 35px;
-        .table{
+        .table {
             margin-bottom: 2px;
         }
-        .table th{
+        .table th {
             text-align: center;
             color: rgb(251, 255, 0);
             padding: 0.75rem;
@@ -98,21 +105,19 @@
             font-size: x-small;
         }
     }
-
-    .zhibiao_table2{
+    .zhibiao_table2 {
         // 滚动
         overflow-y: hidden;
         // height: 710px;
-
-        .no_data{
+        .no_data {
             color: #fff;
             top: 50%;
             left: 38%;
             position: absolute;
         }
-        .table thead{
+        .table thead {
             background-color: transparent;
-            .header{
+            .header {
                 text-align: center;
                 color: rgb(219, 220, 211);
                 padding: 0.75rem;
@@ -122,7 +127,7 @@
                 font-size: xx-small;
             }
         }
-        .table td{
+        .table td {
             padding: 0.75rem;
             vertical-align: top;
             border-top: 1px dotted #d9dbdd69;
@@ -131,64 +136,62 @@
             font-size: xx-small;
             text-align: center;
         }
-
-
     }
-
-    .conent{
+    .conent {
         padding: 0 15px;
-        .left_conent{
-            box-shadow: 0 0 1.2vh 0.34vh rgba(50,84,129,0.7) inset;
-            .left_title{
+        .left_conent {
+            box-shadow: 0 0 1.2vh 0.34vh rgba(50, 84, 129, 0.7) inset;
+            .left_title {
                 top: -11px;
                 left: 1px;
                 position: absolute;
                 width: 100%;
                 text-align: center;
                 padding: 0 40%;
-                p{
+                p {
                     color: rgb(250, 245, 245);
-                    background: rgba(22, 67, 127,1);
+                    background: rgba(22, 67, 127, 1);
                     line-height: 14px;
                     font-size: xx-small;
-                    a{
+                    a {
                         color: rgb(23, 235, 101);
                     }
                 }
-            };
-
-        };
-
-        .right_conent1, .right_conent2, .right_conent3{
-            .right_conent_left{
-                box-shadow: 0 0 1.2vh 0.34vh rgba(50,84,129,0.7) inset;
-                .left_title{
+            }
+            ;
+        }
+        ;
+        .right_conent1,
+        .right_conent2,
+        .right_conent3 {
+            .right_conent_left {
+                box-shadow: 0 0 1.2vh 0.34vh rgba(50, 84, 129, 0.7) inset;
+                .left_title {
                     top: -11px;
                     left: 1px;
                     position: absolute;
                     width: 100%;
                     text-align: center;
                     padding: 0 40%;
-                    p{
+                    p {
                         color: rgb(250, 245, 245);
-                        background: rgba(22, 67, 127,1);
+                        background: rgba(22, 67, 127, 1);
                         line-height: 14px;
                         font-size: xx-small;
-
                     }
                 }
-                .center_title{
+                .center_title {
                     color: #fff;
                     text-align: center;
                     font-size: x-small;
-                    img{
+                    img {
                         width: 100%;
                     }
                 }
-                .equ_info{
+                .equ_info {
                     height: 30%;
                     padding-top: 20%;
-                    .equ-line{
+                    .equ-line {
                         position: absolute;
                         transform: translate(-50%);
                         top: 5%;
@@ -197,7 +200,7 @@
                         font-size: 1.5vh;
                         padding-left: 0.2vh;
                     }
-                    .equ-line ~ span{
+                    .equ-line~span {
                         margin-bottom: 1%;
                         margin-left: 2.5%;
                         color: #fff;
@@ -208,7 +211,8 @@
                         width: 45%;
                         text-align: center;
                     }
-                    #JL, #GL{
+                    #JL,
+                    #GL {
                         color: #fff;
                         display: inline-block;
                         font-size: smaller;
@@ -216,9 +220,8 @@
                         width: 45%;
                         margin-bottom: 0px;
                     }
-
                     // 电流的类
-                    .equ-line2{
+                    .equ-line2 {
                         position: absolute;
                         transform: translate(-50%);
                         top: 5%;
@@ -227,7 +230,7 @@
                         font-size: 1.5vh;
                         padding-left: 0.2vh;
                     }
-                    .dianliu{
+                    .dianliu {
                         color: #fff;
                         font-size: 1.2vh;
                         display: inline-block;
@@ -235,7 +238,9 @@
                         border-radius: 2px;
                         text-align: center;
                     }
-                    #A_I, #B_I, #C_I{
+                    #A_I,
+                    #B_I,
+                    #C_I {
                         color: red;
                         display: inline-block;
                         font-size: smaller;
@@ -245,66 +250,64 @@
                     }
                 }
                 // 设备信息列
-                .device_info{
+                .device_info {
                     height: 100%;
                     color: #fff;
                     font-size: smaller;
                     padding-top: 11px;
                     padding-bottom: 9px;
-                    hr{
+                    hr {
                         margin: 1px;
                         background: #16437f;
                     }
-                    p{
+                    p {
                         display: inline;
                         color: #fff;
                         font-size: xx-small;
                     }
                 }
-                .device_base_info{
+                .device_base_info {
                     position: absolute;
                     top: -11px;
                     left: 40%;
-                    background: rgba(22, 67, 127,1);
+                    background: rgba(22, 67, 127, 1);
                     height: 15px;
                     padding: 0px;
-                    p{
+                    p {
                         color: white;
                         font-size: xx-small;
                         margin: 0px;
                         line-height: 18px;
                         padding: 0 25px;
-
                     }
                 }
-
             }
-            .right_conent_right{
-                box-shadow: 0 0 1.2vh 0.34vh rgba(50,84,129,0.7) inset;
-                .left_title{
+            .right_conent_right {
+                box-shadow: 0 0 1.2vh 0.34vh rgba(50, 84, 129, 0.7) inset;
+                .left_title {
                     top: -11px;
                     left: 1px;
                     position: absolute;
                     width: 100%;
                     text-align: center;
                     padding: 0 30%;
-                    p{
+                    p {
                         color: rgb(250, 245, 245);
-                        background: rgba(22, 67, 127,1);
+                        background: rgba(22, 67, 127, 1);
                         line-height: 14px;
                         font-size: xx-small;
-
                     }
                 }
                 // 仪表盘
-                .gauge1,.gauge2{
+                .gauge1,
+                .gauge2 {
                     min-width: 100%;
                     // min-height: 90px;
                     height: 90%;
                 }
-                .echart_date{
+                .echart_date {
                     height: 19px;
-                    ul{
+                    ul {
                         display: flex;
                         list-style-type: none;
                         left: 50%;
@@ -312,8 +315,8 @@
                         height: 18px;
                         top: 6px;
                     }
-                    .li_default{
-                        list-style-type:none;
+                    .li_default {
+                        list-style-type: none;
                         overflow: hidden;
                         text-align: center;
                         font-size: xx-small;
@@ -324,8 +327,8 @@
                         width: 21px;
                         cursor: pointer;
                     }
-                    .li_active{
-                        list-style-type:none;
+                    .li_active {
+                        list-style-type: none;
                         overflow: hidden;
                         text-align: center;
                         font-size: xx-small;
@@ -337,84 +340,95 @@
                         cursor: pointer;
                     }
                 }
-                .echart_line{
+                .echart_line {
                     height: 300px;
                 }
             }
-
         }
-        .right_conent2{
+        .right_conent2 {
             margin: 10px 0px;
         }
     }
-
-  .zhezhao{
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    background: rgba(0,0,0,0.5);
-    width: 100%;
-    height: 100%;
-  }
-  @keyframes popup_move{
-    from {margin-top:0%;}
-    to {margin-top:20%;}
-  }
-  @-webkit-keyframes popup_move
-  {
-    from {margin-top:0%;}
-    to {margin-top:20%;}
-  }
-  @-moz-keyframes popup_move
-  {
-    from {margin-top:0%;}
-    to {margin-top:20%;}
-  }
-  @-o-keyframes popup_move /* Opera */
-  {
-    from {margin-top:0%;}
-    to {margin-top:20%;}
-  }
-  .tankuang{
-    position: relative;
-    height: 80%;
-    border-radius: 5px;
-    margin: 25% 24%;
-    animation: popup_move 0.5s;
-    animation-fill-mode: forwards;
-    -webkit-animation-fill-mode:forwards;
-    -moz-keyframes-fill-mode :forwards;
-    -o-keyframes-fill-mode :forwards;
-  }
-  #header{
-    height: 40px;
-  }
-  #header-right{
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    border-radius: 5px;
-    background: red;
-    color: #fff;
-    right: 5px;
-    top: 5px;
-    text-align: center;
-  }
-  nb-card{
-    border:rgba(0,0,0,0);
-    background-color:transparent;
-    .div_right{
-      text-align: right;
-      width: 100%;
-      /* padding: 15px; */
-      margin-left: 2%
+    .zhezhao {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        background: rgba(0, 0, 0, 0.5);
+        width: 100%;
+        height: 100%;
     }
-  }
-  nb-icon{
-    background: rgba(22, 67, 127,1);
-    cursor:pointer;
-  }
-
+    @keyframes popup_move {
+        from {
+            margin-top: 0%;
+        }
+        to {
+            margin-top: 20%;
+        }
+    }
+    @-webkit-keyframes popup_move {
+        from {
+            margin-top: 0%;
+        }
+        to {
+            margin-top: 20%;
+        }
+    }
+    @-moz-keyframes popup_move {
+        from {
+            margin-top: 0%;
+        }
+        to {
+            margin-top: 20%;
+        }
+    }
+    @-o-keyframes popup_move/* Opera */
+    {
+        from {
+            margin-top: 0%;
+        }
+        to {
+            margin-top: 20%;
+        }
+    }
+    .tankuang {
+        position: relative;
+        height: 80%;
+        border-radius: 5px;
+        margin: 25% 24%;
+        animation: popup_move 0.5s;
+        animation-fill-mode: forwards;
+        -webkit-animation-fill-mode: forwards;
+        -moz-keyframes-fill-mode: forwards;
+        -o-keyframes-fill-mode: forwards;
+    }
+    #header {
+        height: 40px;
+    }
+    #header-right {
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        border-radius: 5px;
+        background: red;
+        color: #fff;
+        right: 5px;
+        top: 5px;
+        text-align: center;
+    }
+    nb-card {
+        border: rgba(0, 0, 0, 0);
+        background-color: transparent;
+        .div_right {
+            text-align: right;
+            width: 100%;
+            /* padding: 15px; */
+            margin-left: 2%
+        }
+    }
+    nb-icon {
+        background: rgba(22, 67, 127, 1);
+        cursor: pointer;
+        width: 34px;
+        height: 34px;
+    }
 }
-
-

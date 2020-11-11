@@ -1,6 +1,7 @@
 let rtm3a = {
     create_second_chart(data) {
         var dom = document.getElementById("second_chart");
+        if (!dom) return;
         var myChart = echarts.init(dom);
         option = null;
         // var xAxis = data.xAxis.map(f => ({
@@ -187,22 +188,26 @@ let rtm3a = {
         var myChart = echarts.init(document.getElementById(id));
         var color = ['#F35331', '#2499F8', '#3DF098', '#33B734'];
         //订单完成情况螺旋图
-        var yearPlanData = [];
-        var yearOrderData = [];
-        var differenceData = [];
-        var visibityData = [];
-        var xAxisData = [];
-
-        for (var i = 0; i < 12; i++) {
-            yearPlanData.push(Math.round(Math.random() * 900) + 100);
-            yearOrderData.push(Math.round(Math.random() * yearPlanData[i]));
-            differenceData.push(yearPlanData[i] - yearOrderData[i]);
-            visibityData.push(yearOrderData[i]);
-            xAxisData.push((i + 1).toString() + "月");
-        }
+        var yearPlanData = data.yearPlanData;
+        var yearOrderData = data.yearOrderData;
+        var differenceData = data.differenceData;
+        var visibityData = data.visibityData;
+        var xAxisData = data.xAxisData;
 
         option = {
-            title: { show: false },
+            title: {
+                show: data.title ? true : false,
+                text: data.title ? data.title : '',
+                textStyle: {
+                    color: 'white',
+                    fontSize: '12px',
+                },
+                subtextStyle: {
+                    align: 'center'
+                },
+                left: 'center',
+                top: '10%'
+            },
             tooltip: {
                 trigger: 'axis',
                 formatter: function(params) {
@@ -257,11 +262,12 @@ let rtm3a = {
                         color: '#B7E1FF',
                         fontSize: 12,
                         fontFamily: 'Arial',
-                    }
+                    },
+                    color: 'white',
                 },
                 splitLine: {
                     lineStyle: {
-                        color: '#09F'
+                        color: 'white'
                     }
                 }
             },
@@ -269,7 +275,7 @@ let rtm3a = {
                 top: 30,
                 bottom: 20,
                 // left: 100,
-                width: '100%',
+                width: '90%',
             },
             series: [{
                     name: '计划生产',

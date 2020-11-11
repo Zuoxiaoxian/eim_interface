@@ -73,8 +73,8 @@ let rtm3 = {
         myChart.resize();
     },
 
-    create_box3_left(gauge_data) {
-        var myChart = echarts.init(document.querySelector(".box3_left"));
+    create_box3_left(gauge_data, myChart) {
+
         var app = {};
         app.title = '极坐标系下的堆叠柱状图';
 
@@ -108,9 +108,8 @@ let rtm3 = {
         myChart.resize();
     },
 
-    create_box3_right(gauge_data) {
-        var dom = document.getElementById("box3_right");
-        var myChart = echarts.init(dom);
+    create_box3_right(gauge_data, myChart) {
+
         var app = {};
         option = null;
         option = {
@@ -148,7 +147,7 @@ let rtm3 = {
             xAxis: [{
                 type: 'category',
                 boundaryGap: false,
-                data: gauge_data.xAxisData
+                data: gauge_data.xAxisData,
             }],
             yAxis: [{
                 type: 'value'
@@ -159,9 +158,7 @@ let rtm3 = {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         });
-        if (option && typeof option === "object") {
-            myChart.setOption(option, true);
-        }
+        myChart.setOption(option);
         myChart.resize();
     },
 
@@ -171,7 +168,7 @@ let rtm3 = {
         var plan_data1 = gauge_data.plan_data1;
         var plan_data2 = gauge_data.plan_data2;
         var plan_xAxis = gauge_data.plan_xAxis;
-
+        var color = ['#F35331', '#2499F8', '#3DF098', '#33B734'];
         plan_chart_1 = echarts.init(document.getElementById('line_chart_1'));
         plan_chart_2 = echarts.init(document.getElementById('line_chart_2'));
         plan_option = {
@@ -231,7 +228,43 @@ let rtm3 = {
                 },
                 data: gauge_data.legendData
             },
-            series: gauge_data.seriesData
+            series: [{
+                    name: '计划完成数',
+                    type: 'bar',
+                    itemStyle: {
+                        normal: { color: color[1] },
+                        emphasis: { color: color[2] }
+                    },
+                    barWidth: 12,
+                    data: plan_data1
+                },
+                {
+                    name: '实际完成数',
+                    type: 'line',
+                    itemStyle: {
+                        normal: {
+                            color: '#F90',
+                            label: {
+                                show: true,
+                                position: 'top',
+                                textStyle: {
+                                    color: '#CCC',
+                                    fontSize: 12
+                                }
+                            },
+                            lineStyle: {
+                                color: '#F90',
+                                width: 4
+                            }
+                        },
+                        emphasis: {
+                            color: '#FF0'
+                        }
+                    },
+                    symbolSize: 4,
+                    data: plan_data2
+                }
+            ]
         };
 
         window.addEventListener('resize', function() {
@@ -404,8 +437,7 @@ let rtm3 = {
     },
 
     //最下层列表图表
-    create_right_buttom(gauge_data) {
-        var myChart = echarts.init(document.getElementById('echarts_3'));
+    create_right_buttom(gauge_data, myChart) {
         option = {
             tooltip: {
                 trigger: 'axis'
@@ -413,7 +445,7 @@ let rtm3 = {
             grid: {
                 left: '3%',
                 right: '3%',
-                top: '8%',
+                top: '10%',
                 bottom: '5%',
                 containLabel: true
             },

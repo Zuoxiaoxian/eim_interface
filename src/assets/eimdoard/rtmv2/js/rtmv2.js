@@ -12,7 +12,7 @@ let rtmv2 = {
                 type: 'gauge',
                 radius: '100%',
                 detail: {
-                    formatter: '{value}%',
+                    formatter: '{value}',
                     fontSize: 8,
                     offsetCenter: ['0', '70%']
                 },
@@ -62,7 +62,8 @@ let rtmv2 = {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         });
-        option.series[0].data[0].value = gauge1_data;
+        option.series[0].data[0].value = gauge1_data.value;
+        option.series[0].max = gauge1_data.maxValue;
         myChart.setOption(option);
         // 定时任务
         // timer = setInterval(function(){
@@ -84,7 +85,7 @@ let rtmv2 = {
                 type: 'gauge',
                 radius: '90%',
                 detail: {
-                    formatter: '{value}%',
+                    formatter: '{value}',
                     fontSize: 8,
                     offsetCenter: ['0', '70%']
                 },
@@ -134,7 +135,8 @@ let rtmv2 = {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         });
-        option.series[0].data[0].value = gauge2_data;
+        option.series[0].data[0].value = gauge2_data.value;
+        option.series[0].max = gauge2_data.maxValue;
         myChart.setOption(option);
         // 定时任务
         // timer = setInterval(function(){
@@ -148,7 +150,9 @@ let rtmv2 = {
     line_date(data) {
         // 实例化对象
         console.log("-=-=-=-=-=-=line_date:", data)
-        var myChart = echarts.init(document.querySelector('.echart_line'));
+        var doc = document.querySelector('.echart_line');
+        if (!doc) return;
+        var myChart = echarts.init(doc);
         option = {
             tooltip: {
                 trigger: 'axis',

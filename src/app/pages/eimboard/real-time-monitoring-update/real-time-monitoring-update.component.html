@@ -1,9 +1,14 @@
 <div id="rtmv2" style="padding-bottom: 5px;">
 
     <div class="row">
-        <div class="col-md-11"></div>
+        <div class="col-md-1">
+            <div class="go_back" (click)="goBack()">
+                <nb-icon icon="arrowhead-left-outline"></nb-icon>
+            </div>
+        </div>
+        <div class="col-md-10"></div>
         <div class="col-md-1" style="text-align: right; padding-left: 0px;">
-            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
+            <nb-icon style="cursor: pointer;" [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
         </div>
     </div>
 
@@ -52,7 +57,7 @@
                                     <td [ngStyle]="{'color':get_font_color(item)}">{{item.value}}</td>
                                     <td [ngStyle]="{'color':get_font_color(item)}">{{item.unit}}</td>
                                     <td (click)="preinstall_dialog_show(item)">
-                                        <div style="width: 50px;text-align: center;">
+                                        <div style="width: 100%;text-align: center;">
                                             <span style="cursor:pointer" *ngFor="let p_item of item.preinstall" [ngStyle]="{'color':p_item.color}">{{p_item.value}}&nbsp;</span>
                                         </div>
                                     </td>
@@ -169,8 +174,10 @@
                                         <nb-card>
                                             <div class="col-md-12 right_conent_left">
                                                 <span class="left_title">
-                                          <p id="test_title">{{ test_info.test_title }}</p>
-                                      </span>
+                                                    <p id="test_title">
+                                                        {{ test_info.test_title }}
+                                                    </p>
+                                                </span>
                                                 <div class="div_right">
                                                     <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="flipped = !flipped;"></nb-icon>
                                                 </div>
@@ -462,7 +469,7 @@
     </div>
     <div class="zhezhao" id='zhezhao' *ngIf="dialogShow">
         <div class="tankuang">
-            <ngx-preinstall-dialog (dialogClose)="preinstall_dialog_close($event)" [dialogData]="dialogData"></ngx-preinstall-dialog>
+            <ngx-preinstall-dialog (dialogClose)="preinstall_dialog_close($event)" [aline]="'#rtmv2'" [dialogData]="dialogData"></ngx-preinstall-dialog>
         </div>
     </div>
 </div>

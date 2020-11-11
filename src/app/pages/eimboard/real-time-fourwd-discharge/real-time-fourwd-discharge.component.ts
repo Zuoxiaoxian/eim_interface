@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Screenfull} from "screenfull";
 import * as screenfull from "screenfull";
 import {LayoutService} from "../../../@core/utils";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpserviceService } from '../../../services/http/httpservice.service';
 
 // echart
 let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
@@ -54,14 +55,56 @@ export class RealTimeFourwdDischargeComponent implements OnInit {
     url:'',//从哪个页面跳转过来的
   }
 
-  constructor(private layoutService:LayoutService,private activateInfo:ActivatedRoute) { }
+  constructor(private layoutService:LayoutService,private activateInfo:ActivatedRoute,private http:HttpserviceService,
+    private router:Router,
+    ) { }
 
   ngOnInit(): void {
+    let i = 0;//用于判断是 刷新 重新生成
+    this.layoutService.onInitLayoutSize().subscribe(f =>{
+      this.initChart();
+      i++;
+    });
+    
+
+    // this.create_right_buttom();
+    this.activateInfo.queryParams.subscribe(f =>{
+      this.deviceid = f.deviceid;
+      this.fromRouter = f;
+    })
+    
+  }
+
+  ngAfterViewInit(){
+
+  }
+  
+
+  getData(){
+    this.http.callRPC('panel_detail','get_device_panel_detail',
+    {"deviceid":this.deviceid}).subscribe((f:any) => {
+      console.log('获取数据')
+    })
+  }
+
+  //图表初始化
+  initChart(){
+    this.create_right_buttom();
+    this.create_line_chart();
+    this.create_box3_left();
+    // 第三列第一行
+    rtm3.create_third_first({number: '11条', title: '警告条数'}, 'third_first_one');
+    rtm3.create_third_first({number: '14条', title: '警告条数'}, 'third_first_two');
+    rtm3.create_third_first({number: '17条', title: '警告条数'}, 'third_first_three');
     var gauge_data = {
       yAxisData:['text1','text2','text3','text4','text5'],
       seriesData:[100,21, 52,23,42]
     }
     rtm3.create_first_second(gauge_data);
+    this.create_box3_right();
+  }
+
+  create_box3_left(){
     var gauge_data_1 = {
       radiusAxisData: ['周一', '周二', '周三', '周四'],
       seriesData:[{
@@ -85,41 +128,15 @@ export class RealTimeFourwdDischargeComponent implements OnInit {
       }],
       legendData:['A','B','C']
     }
-    rtm3.create_box3_left(gauge_data_1);
-
-    
-    // this.create_right_buttom();
-    this.initChart();
-  }
-
-  ngAfterViewInit(){
-    this.layoutService.onInitLayoutSize().subscribe(f =>{
-      this.initChart();
-    });
-
-    this.activateInfo.queryParams.subscribe(f =>{
-      if(f.deviceid)this.deviceid = f.deviceid;
-      this.fromRouter = f;
-    })
-  }
-
-
-  initChart(){
-    this.create_right_buttom();
-    this.create_box3_right();
-    this.create_box3_right();
-    this.create_line_chart();
-    // 第三列第一行
-    rtm3.create_third_first({number: '11条', title: '警告条数'}, 'third_first_one');
-    rtm3.create_third_first({number: '11条', title: '警告条数'}, 'third_first_two');
-    rtm3.create_third_first({number: '11条', title: '警告条数'}, 'third_first_three');
+    var myChart = echarts.init(document.querySelector(".box3_left"));
+    rtm3.create_box3_left(gauge_data_1,myChart);
   }
 
   /**
    * 第三列第2行
    */
   create_line_chart(){
-    var color = ['#F35331','#2499F8','#3DF098','#33B734'];
+    
     var plan_data1 = [];
     var plan_data2 = [];
     var plan_xAxis = [];
@@ -132,45 +149,6 @@ export class RealTimeFourwdDischargeComponent implements OnInit {
       plan_xAxis:plan_xAxis,
       plan_data1:plan_data1,
       plan_data2:plan_data2,
-      seriesData:[
-        {
-          name: '计划完成数',
-          type: 'bar',
-          itemStyle:
-            {
-              normal: {color: color[1]},
-              emphasis: {color: color[2]}
-            },
-          barWidth : 12,
-          data:plan_data1
-        },
-        {
-          name: '实际完成数',
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#F90',
-              label: {
-                show: true,
-                position: 'top',
-                textStyle: {
-                  color: '#CCC',
-                  fontSize:12
-                }
-              },
-              lineStyle:{
-                color:'#F90',
-                width:4
-              }
-            },
-            emphasis: {
-              color: '#FF0'
-            }
-          },
-          symbolSize: 4,
-          data: plan_data2
-        }
-      ],
       legendData:['计划完成数','实际完成数']
     };
 
@@ -227,7 +205,10 @@ export class RealTimeFourwdDischargeComponent implements OnInit {
         }
       ],
     };
-    rtm3.create_box3_right(gauge_data_2);
+
+    var myChart = echarts.init(document.getElementById("box3_right"));
+    rtm3.create_box3_right(gauge_data_2,myChart);
+    rtm3.create_box3_right(gauge_data_2,myChart);
   }
   /**
    * 第2列第3行
@@ -237,8 +218,18 @@ export class RealTimeFourwdDischargeComponent implements OnInit {
       xAxisData:['0时','1时','2时','3时','4时','5时','6时','7时','8时','9时','10时','11时','12时','13时','14时','15时','16时','17时'
         ,'18时','19时','20时','21时','22时','23时'],
       seriesData:[710, 312, 321,754, 500, 830, 710, 521, 504, 660, 530, 410,710, 312, 321,754, 500, 830, 710, 521, 504, 660, 530, 410],
-    }
-    rtm3.create_right_buttom(gauge_data_4);
+    } 
+    var doc = document.getElementById('echarts_3');
+    if(!doc)return;
+    var myChart = echarts.init(doc);
+    rtm3.create_right_buttom(gauge_data_4,myChart);
+  }
+
+  //返回
+  goBack(){
+    this.fromRouter.url?
+      this.router.navigate([this.fromRouter.url],{queryParams:{}})
+      :console.log('跳转路由失败',this.fromRouter.url);
   }
 
 

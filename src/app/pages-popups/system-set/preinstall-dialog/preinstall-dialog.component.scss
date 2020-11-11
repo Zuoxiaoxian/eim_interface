@@ -1,26 +1,26 @@
-.mylabel{
-  padding-right: 0px;
+.mylabel {
+    padding-right: 0px;
 }
 
 // 必填
-.mulu_title::before{
-  content: "*";
-  color: #ff4949;
-  margin-right: 4px;
+.mulu_title::before {
+    content: "*";
+    color: #ff4949;
+    margin-right: 4px;
 }
-#showDialog{
-  background-color: #fdf6ec;
-  border-color: #faecd8;
-  color: #e6a23c;
-  top: -100px;
-  width: 300px;
-  border-radius: 10px;
-  border-width: 1px;
-  transition: opacity .3s,transform .4s,-webkit-transform .4s;
+
+#showDialog {
+    background-color: #fdf6ec;
+    border-color: #faecd8;
+    color: #e6a23c;
+    top: -100px;
+    width: 300px;
+    border-radius: 10px;
+    border-width: 1px;
+    transition: opacity .3s, transform .4s, -webkit-transform .4s;
 }
 
 dialog:not([open]) {
-  display: block;
-  opacity: 0;
+    display: block;
+    opacity: 0;
 }
-

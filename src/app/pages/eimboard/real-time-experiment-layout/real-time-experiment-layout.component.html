@@ -1,7 +1,7 @@
 <div id='expLayout' style="padding-bottom: 5px;">
     <div class="row" style="position: relative;">
         <div class="top_left">
-            <div style="position: relative;height: 300px;width: 300px;z-index: 1;">
+            <div class="top_left_div">
                 <div id="left_button" (click)="top_left_click('left')"></div>
                 <div id="center_button"></div>
                 <div id="right_button" (click)="top_left_click('right')"></div>
@@ -12,7 +12,7 @@
             <div class="font_top_class">
                 <span>当前位置：{{real_time_data.address}}</span>
             </div>
-            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
+            <nb-icon style="cursor: pointer;" [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
         </div>
     </div>
     <div class="row">
@@ -39,19 +39,19 @@
                     </div>
                 </div>
             </div>
-            <div class="box_shadow" style="margin-top: 100px;">
+            <div class="box_shadow" style="margin-top: 10px;">
                 <table class="table" style="margin-bottom: 0px">
                     <thead class="header">
                         <tr>
-                            <th *ngFor='let item of task_data.title'>{{item.name}}</th>
+                            <th *ngFor='let item of task_data.title' [ngStyle]="{'width':100/task_data.title.length+'%'}">{{item.name}}</th>
                         </tr>
                     </thead>
                 </table>
-                <div style="overflow-x: hidden;height: 350px;">
+                <div class="table_body">
                     <table class="table">
                         <tbody>
-                            <tr *ngFor='let item of task_data.data; let i = index' style="height: 50px;">
-                                <td *ngFor='let header of task_data.title'>{{ item[header.bind] }}</td>
+                            <tr *ngFor='let item of task_data.data; let i = index'>
+                                <td *ngFor='let header of task_data.title' [ngStyle]="{'width':100/task_data.title.length+'%'}">{{ item[header.bind] }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -61,22 +61,22 @@
         <div class="col-md-4">
             <div class="box_shadow" style="height: 200px;">
                 <div class="font_c" style="text-align: left;">{{ real_time_data.secondcol.title }}</div>
-                <div style="margin-top: 10px;display: flex;">
-                    <div *ngFor="let item of real_time_data.structure" class="structure" (click)="structureChange()">
-                        <p style="color: white;margin-top: 12%;">{{item.name}}</p>
+                <div class="second_first">
+                    <div *ngFor="let item of real_time_data.structure;let i = index;" class="structure" [ngClass]="{'cheek_color':real_time_data.structure_index == i }" (click)="structureChange(i,item)">
+                        <p class="p_color">{{item.name}}</p>
                     </div>
                 </div>
             </div>
             <div id='center_img' style="width: 100%;">
-                <ng-container *ngFor="let item of task_data.data">
+                <ng-container *ngFor="let item of task_data.data;let i = index">
                     <div id="{{item.class}}" *ngIf="item.taskname" (mouseover)="location_over(item)" (mousemove)="location_move(item)">
                         <div class="device-box" *ngIf="item.tipShow">
                             <div class="device-title">标题</div>
                             <div class="device-con">
-                                介绍介绍介绍介绍介绍介绍介绍介绍
+                                错误报告：{{ item.report }}<br> 参数：{{ item.param }}<br> 状态: {{ item.plan }}
                             </div>
                         </div>
-                        <div [ngClass]="{'location_move':true}" style="margin-left: 40%;cursor: pointer;" id='location_img' (click)="clickTotask(item)"></div>
+                        <div class="{{get_location_class(item)}}" style="margin-left: 40%;cursor: pointer;" id='location_img' (click)="clickTotask($event,item,i)"></div>
                         <div>{{item.taskname}}</div>
                     </div>
                 </ng-container>
@@ -87,23 +87,23 @@
         <div class="col-md-4">
             <div class="box_shadow">
                 <div class="font_c" style="text-align: left;">{{ real_time_data.thirdcol.title }}</div>
-                <div style="height: 20%;">
+                <div style="height: 18%;">
                     <div id="third_first_one" class="third_first"></div>
                     <div id="third_first_two" class="third_first"></div>
                     <div id="third_first_three" class="third_first"></div>
                 </div>
             </div>
             <div class="box_shadow" style="height: 33%;margin-top: 10px;">
-                <div class="panel_chart_name">
-                    <div id="circle" style="background: green;"></div>
-                    <!-- 标题标题 -->
-                </div>
+                <!-- <div class="panel_chart_name">
+                    <div id="circle" style="background: green;"></div> -->
+                <!-- 标题标题 -->
+                <!-- </div> -->
                 <div class="box5_con_bot">
                     <ul id='ul_message' style="position: absolute;width: 90%;">
                     </ul>
                 </div>
             </div>
-            <div style="height: 30%;width: 97%;margin-top: 10px;" class="box_shadow">
+            <div class="thrid_thrid_chart" class="box_shadow" style="margin-top: 10px;height: 34%;">
                 <div id="line_chart_1" class="line_chart"></div>
             </div>
         </div>

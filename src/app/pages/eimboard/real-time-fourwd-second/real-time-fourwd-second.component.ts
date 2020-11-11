@@ -4,6 +4,8 @@ import * as screenfull from "screenfull";
 import {HttpserviceService} from "../../../services/http/httpservice.service";
 import {LayoutService} from "../../../@core/utils";
 import { ActivatedRoute, Router } from '@angular/router';
+import num_to_maxNum from '../board-currency';
+import { EmqClientService } from '../../../services/emq-client/emq-client.service';
 
 // echart
 let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
@@ -31,7 +33,7 @@ export class RealTimeFourwdSecondComponent implements OnInit {
     health: '健康分析'
   };
   equipment_params: any = {
-      title: ["指标", "值", "单位", "凸显"],//表头
+      title: ["指标", "值", "单位","预设", "凸显"],//表头
       data: [],
   };
   //设备编号
@@ -88,18 +90,26 @@ export class RealTimeFourwdSecondComponent implements OnInit {
     // 'third_first_3', 'third_first_4'
   ];
   messageInterval: any;
+  //弹窗
+  dialogData: any ;
+  dialogShow: boolean = false;
 
   constructor(private http: HttpserviceService,private layoutService: LayoutService,
-    private activateInfo:ActivatedRoute,private router:Router) { }
+    private activateInfo:ActivatedRoute,private router:Router,private mqService:EmqClientService) { }
 
   ngOnInit(): void {
     this.getData();
     //重新生成echart表格
-    this.layoutService.onChangeLayoutSize().subscribe(f =>{
+    this.layoutService.onInitLayoutSize().subscribe(f =>{
       this.initChart();
     })  
     this.initChart();
-    
+
+    //路由跳转
+    this.activateInfo.queryParams.subscribe(f =>{
+      if(f.deviceid)this.deviceid = f.deviceid;
+      this.fromRouter = f
+    })
 
     let i = 1;
     this.messageInterval = setInterval(f =>{
@@ -108,6 +118,7 @@ export class RealTimeFourwdSecondComponent implements OnInit {
     },3000)
   }
 
+  //初始化表格
   initChart(){
     rtm3a.create_second_chart({
       xAxis:this.button.qushiName,
@@ -116,40 +127,63 @@ export class RealTimeFourwdSecondComponent implements OnInit {
     this.kpi_chart_arr.forEach(f =>{
       rtm3a.create_third_chart({}, echarts.init(document.getElementById(f)));
     });
-    rtm3a.create_third_chart_line({}, 'third_second');
-    rtmjs.gauge1(this.button['biaoValue'][2]);
-    rtmjs.gauge1(this.button['biaoValue'][3]);
+    this.create_third_chart_line();
+    rtmjs.gauge1({value:this.button['biaoValue'][2],maxValue:num_to_maxNum(this.button['biaoValue'][2])});
+    rtmjs.gauge1({value:this.button['biaoValue'][3],maxValue:num_to_maxNum(this.button['biaoValue'][3])});
   }
 
   ngAfterViewInit(){
-    //路由跳转
-    this.activateInfo.queryParams.subscribe(f =>{
-      if(f.deviceid)this.deviceid = f.deviceid;
-      this.fromRouter = f
-    })
   }
 
-
+  //获取实时数据
   getData(){
     this.http.callRPC('panel_detail','get_device_panel_detail',
       {"deviceid":this.deviceid}).subscribe((f:any) => {
       let arr = f.result.message[0]
-      this.equipment_params.data = arr.map(d => (
-      {
-        title: d[0].channelcn,
-        value: (parseFloat(d[0]['value']).toFixed(2)),
-        unit: d[0]['channelunit'], preinstall: [{
-          color: d[0]['color_min'] || '',
-          value: d[0]['value_min']
-        }, {
-          color: d[0]['color_max'] || '',
-          value: d[0]['value_max']
-        }], titleEn: d[0].channelen
-      }
-      ));
+      this.equipment_params.data = arr.map(d =>{
+        //判断当前是否需要发送mq消息
+        if(d[0].value_min || d[0].value_max){
+          if(parseFloat(d[0].value).toFixed(2)>parseFloat(d[0].value_max).toFixed(2)){
+            console.log('当前数值超出二档');
+            this.mqService.sendMqttMessaege('error', JSON.stringify(d[0]));
+          }else if(parseFloat(d[0].value).toFixed(2)>parseFloat(d[0].value_min).toFixed(2)){
+            console.log('当前数值超出一档');
+            this.mqService.sendMqttMessaege('warm', JSON.stringify(d[0]));
+          }
+        }
+        return {
+          title:d[0].channelcn,
+          value:(parseFloat(d[0]['value']).toFixed(2)),
+          unit:d[0]['channelunit'], preinstall : [{
+            color:d[0]['color_min']||'',
+            value:d[0]['value_min']
+          },{
+            color:d[0]['color_max']||'',
+            value:d[0]['value_max']
+          }],titleEn:d[0].channelen 
+        }
+      });
       this.hit_tuxian(this.equipment_params.data[0],'biao-2-0','get');
       this.hit_tuxian(this.equipment_params.data[0],'biao-3-0','get');
     });
+  }
+
+  create_third_chart_line(){
+    var yearPlanData=[],yearOrderData = [],differenceData = [],visibityData = [],xAxisData = [];
+    for (var i = 0; i < 12; i++) {
+      yearPlanData.push(Math.round(Math.random() * 900) + 100);
+      yearOrderData.push(Math.round(Math.random() * yearPlanData[i]));
+      differenceData.push(yearPlanData[i] - yearOrderData[i]);
+      visibityData.push(yearOrderData[i]);
+      xAxisData.push((i + 1).toString() + "月");
+    }
+    rtm3a.create_third_chart_line({
+      yearPlanData:yearPlanData,
+      yearOrderData:yearOrderData,
+      differenceData:differenceData,
+      visibityData:visibityData,
+      xAxisData:xAxisData,
+    }, 'third_second');
   }
 
   //插入消息数据
@@ -167,7 +201,9 @@ export class RealTimeFourwdSecondComponent implements OnInit {
     switch (clickName) {
       case 'left':
         console.log('点击向左按钮');
-        this.router.navigate([this.fromRouter.url],{queryParams:{}})
+        this.fromRouter.url?
+          this.router.navigate([this.fromRouter.url],{queryParams:{}})
+          :console.log('跳转路由失败',this.fromRouter.url);
         break;
       case 'right':
         console.log('点击向右按钮');
@@ -218,9 +254,9 @@ export class RealTimeFourwdSecondComponent implements OnInit {
           break;
         case 'biao':
           if(id_list[1] == 2)
-            rtmjs.gauge1(item.value);
+            rtmjs.gauge1({value:item.value,maxValue:num_to_maxNum(item.value)});
           else 
-            rtmjs.gauge2(item.value);
+            rtmjs.gauge2({value:item.value,maxValue:num_to_maxNum(item.value)});
           break;
         case 'guanji':
           break;
@@ -239,12 +275,29 @@ export class RealTimeFourwdSecondComponent implements OnInit {
   //获取文字颜色
   get_font_color(item:any){
     let color = '';
-    // if(!item.preinstall )return color;
-    // for(let i = 0; i < item.preinstall.length; i++ ){
-    //   if(item.preinstall[i].value > parseFloat(item.value))break;
-    //   else color = item.preinstall[i].color
-    // }
+    if(!item.preinstall )return color;
+    for(let i = 0; i < item.preinstall.length; i++ ){
+      if(item.preinstall[i].value > parseFloat(item.value))break;
+      else color = item.preinstall[i].color
+    }
     return color;
+  }
+
+  //打开弹窗
+  preinstall_dialog_show(item){
+    if(item.unit == '开/关')return;
+    this.dialogData = JSON.parse(JSON.stringify(item));
+    this.dialogData.deviceid = this.deviceid;
+    // this.dialogData.channelen = item.titleEn;
+    this.dialogShow = true;
+  }
+
+  //关闭弹窗
+  preinstall_dialog_close(e:any){
+    if(e.sumbit){
+      this.equipment_params.data.find(f => f.title == e.data.title).preinstall = e.data.preinstall
+    }
+    this.dialogShow = false;
   }
 
   //全屏
