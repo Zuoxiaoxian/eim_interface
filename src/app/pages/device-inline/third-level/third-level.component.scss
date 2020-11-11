@@ -1,0 +1,76 @@
+// 主体部分
+.content{
+    border: lawngreen 1px solid;
+    min-height: 995px;
+
+    // 关键指标
+    .key-index{
+        min-height: 400px;
+        min-width: 420px;
+        border: 1px red solid;
+        margin-bottom: 180px;
+    }
+    // 预警信息
+    .warning-information{
+        min-height: 400px;
+        border: 1px green solid;
+        margin-top: 180px;
+    }
+
+    // map地图
+    .chian_map{
+        min-height: 1000px;
+        min-width: 850px;
+        border: 1px rgb(250, 246, 34) solid;
+    }
+
+    // 设备开动率、设备完好率
+    .device-rate{
+        min-height: 400px;
+        min-width: 420px;
+        border: 1px red solid;
+        margin-bottom: 180px;
+    }
+    .rate-select{
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        z-index: 1;
+        ul{
+            list-style-type: none;
+            display: flex;
+            li{
+                width: 50%;
+                text-align: center;
+                color: #fff;
+                font-family: cursive;
+                cursor: pointer;
+                
+                span:hover{
+                    background: #6ac544;
+                }
+
+            }
+        }
+    }
+
+    // 未激活xx率
+    .span_noactive{
+        border-radius: 5px;
+        padding: 5px;
+        background: #2eab7d;
+    }
+    // 激活设备xxlv
+    .span_active{
+        border-radius: 5px;
+        padding: 5px;
+        background: #6ac544;
+    }
+
+    // geely介绍信息
+    .geely-info{
+        min-height: 400px;
+        border: 1px green solid;
+        margin-top: 180px;
+    }
+}

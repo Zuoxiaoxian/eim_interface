@@ -1,0 +1,39 @@
+
+
+
+.buedit{
+    border-color: #00ffff00;
+    background: #ff000000;
+    .edit:hover{
+        cursor: pointer;
+        color: rgb(0, 123, 255) !important;
+    }
+}
+.buremove{
+    border-color: #00ffff00;
+    background: #ff000000;
+    .remove:hover{
+        cursor: pointer;
+        color: rgb(253, 57, 90) !important;
+    }
+}
+
+.disable_edit{
+    cursor: not-allowed;
+    border-color: #00ffff00;
+    background: #ff000000;
+    .edit:hover{
+        cursor: not-allowed;
+        // color: rgb(0, 123, 255) !important;
+    }
+}
+
+.disable_remove{
+    cursor: not-allowed;
+    border-color: #00ffff00;
+    background: #ff000000;
+    .remove:hover{
+        cursor: not-allowed;
+        // color: rgb(0, 123, 255) !important;
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "TITLE": "JiLi Eim",
+    "Light": "Light",
+    "Dark": "Dark",
+    "Cosmic": "Cosmic",
+    "Corporate": "Corporate",
+
+    "POSITIONMONITORING":{
+        "TABS":{
+            "EDIT": "Edit",
+            "PATH": "Path",
+            "TRACE": "Trace",
+            "MORE": "More"
+        }
+    }
+
+
+
+}

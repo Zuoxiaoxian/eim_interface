@@ -1,0 +1,45 @@
+
+
+<div class="row device_manage_table">
+    <div class="col-md-12">
+        <nb-card>
+            <nb-card-body>
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-md-3 my-select" style="padding-left: 0px;">
+                        <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
+                    </div>
+                    <div class="col-md-3 my-select">
+                        <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
+                    </div>
+                    <div class="col-md-3 my-select">
+                        <ngx-my-select #asset_number [selectdatas]="assets"></ngx-my-select>
+                    </div>
+                
+                    <div class="col-md-3 my-select">
+                        <div class="row">
+                            
+                            <div class="col-md-4 my-button" *ngFor="let button of buttons2">
+                                <button nbButton size="small" [status]="button.class" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
+                                <!-- <button nbButton status="info" size="small" (click)="query()">搜索</button> -->
+                                <input type="file" class="import" id="import" (change)="onFileChange($event)" multiple="false" >
+                            </div>
+
+              
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1" style="margin-bottom: 12px;" *ngFor="let button of buttons">
+                        <button nbButton [status]="button.class" size="small" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
+                    </div>
+                </div>
+
+                <div class="row" [nbSpinner]="isloding" nbSpinnerStatus="basic">
+                    <div class="col-md-12">
+                        <ngx-ag-table #ag_Grid   (nzpageindexchange)="nzpageindexchange_ag($event)"></ngx-ag-table>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

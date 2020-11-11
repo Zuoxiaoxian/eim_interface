@@ -1,0 +1,31 @@
+<nb-card>
+    <nb-card-header style="background: rgb(88, 123, 253);"></nb-card-header>
+    <nb-card-body>
+        <div class="row">
+            <div class="col-md-4 devicetitle">{{data[0].col1}}</div>
+            <div class="col-md-4 deviceinfo">{{data[0].col2}}</div>
+            <div class="col-md-4 devicevalue">{{data[0].col3}}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 deviceinfo">
+                <img [src]="data[1].col1" alt="">
+            </div>
+            <div class="col-md-4 deviceinfo">
+                <ul>
+                    <li>{{data[1].col2[0]}}</li>
+                    <li>{{data[1].col2[1]}}</li>
+                    <li>{{data[1].col2[2]}}</li>
+                    <li>{{data[1].col2[3]}}</li>
+                </ul>
+            </div>
+            <div class="col-md-4 devicevalue">
+                <ul>
+                    <li>{{data[1].col3[0]}}</li>
+                    <li>{{data[1].col3[1]}}</li>
+                    <li>{{data[1].col3[2]}}</li>
+                    <li><button>{{data[1].col3[3]}}</button></li>
+                </ul>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>

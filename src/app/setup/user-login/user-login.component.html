@@ -1,0 +1,35 @@
+<!-- form 响应式 (ngSubmit)="onSubmit()" 回调方法添加为 form 标签上的 ngSubmit 事件监听器。-->
+
+
+<!-- <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" [nbSpinner]="loading" nbSpinnerStatus="info" nbSpinnerSize="large">
+                            
+    <label class="label" for="input-username">用户名</label>
+    <nb-form-field>
+        <nb-icon nbPrefix icon="person-outline" pack="eva"></nb-icon>
+        <input type="text"  fullWidth formControlName="username" required  placeholder="用户名" nbInput fieldSize="small">
+    </nb-form-field>
+    <div *ngIf="profileForm.get('username').invalid && profileForm.get('username').touched"
+    class="alert alert-danger">
+    邮件不能为空
+    </div>
+
+    <label class="label" for="input-password">密码</label>
+    <nb-form-field>
+        <nb-icon nbPrefix icon="lock-outline" pack="eva"></nb-icon>
+        <input type="password" fullWidth formControlName="password" required placeholder="密码" nbInput fieldSize="small">
+    </nb-form-field>
+
+    <div *ngIf="profileForm.get('password').invalid && profileForm.get('password').touched"
+    class="alert alert-danger">
+    密码不能为空
+    </div>
+
+    <div >
+        <nb-checkbox status="basic" [checked]="checked" [disabled]="profileForm.get('password').invalid && profileForm.get('username').invalid " (checkedChange)="checkboxchange($event)">记住密码</nb-checkbox>
+    </div>
+
+    <div class="submit">
+        <input type="submit" fullWidth  nbInput fieldSize="small" [disabled]="!profileForm.valid" value="登录">
+    </div>
+
+</form> -->

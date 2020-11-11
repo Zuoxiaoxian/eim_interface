@@ -1,0 +1,171 @@
+<nb-card style="width: 870px;" size="larger" [nbSpinner]="loading"
+    nbSpinnerStatus="danger"
+    nbSpinnerSize="large"
+    nbSpinnerMessage=""
+>
+  <nb-card-header>
+    <div class="row">
+      <div class="col-md-3">{{title}}</div>
+        <div class="col-md-7"></div>
+        <div class="col-md-2" style="text-align: right;">
+            <nb-icon icon="close-outline" style="cursor: pointer;" (click)="closedialog()"></nb-icon>
+        </div>
+    </div>
+  </nb-card-header>
+
+  <nb-card-body>
+      
+    <form class="layui-form" action="" lay-filter="device">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">设备名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="devicename" required  lay-verify="required|devicename" placeholder="设备名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">EIM设备编号</label>
+                <div class="layui-input-block">
+                <input type="text" name="deviceno" required  lay-verify="required|deviceno" placeholder="EIM设备编号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">设备类型</label>
+                <div class="layui-input-block">
+                    <select name="type" lay-verify="">
+                        <option value="">请选择一个设备类型</option>
+                        <option value=1>台架设备</option>
+                        <option value=2>移动资产</option>
+                        <option value=3>举升机</option>
+                    </select>  
+                </div>
+            </div>
+
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">是否启用</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="active" lay-skin="switch" lay-text="是|否" value="1">
+                </div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">资产编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="assetno" required  lay-verify="required|assetno" placeholder="资产编号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">出厂编号</label>
+                <div class="layui-input-block">
+                <input type="text" name="factoryno" required  lay-verify="required|factoryno" placeholder="出厂编号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">购置日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="purchaseon" lay-verify="purchaseon" class="layui-input" id="purchaseon" placeholder="购置日期" disabled>
+                    <!-- <input type="text" name="purchaseon" required  lay-verify="required|purchaseon" placeholder="购置日期" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">供应商</label>
+                <div class="layui-input-block">
+                <input type="text" name="supplier" required  lay-verify="required|supplier" placeholder="供应商" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">存放地点</label>
+                <div class="layui-input-block">
+                    <input type="text" name="location" required  lay-verify="required|location" placeholder="存放地点" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">使用部门</label>
+                <div class="layui-input-block">
+                <input type="text" name="department" required  lay-verify="required|department" placeholder="使用部门" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">科室</label>
+                <div class="layui-input-block">
+                    <input type="text" name="groups" required  lay-verify="required|groups" placeholder="科室" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">归属人</label>
+                <div class="layui-input-block">
+                <input type="text" name="belonged" required  lay-verify="required|belonged" placeholder="归属人" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="width: 93%;">
+            <label class="layui-form-label mylabel mulu_title">设备状态</label>
+            <div class="layui-input-block">
+                <select name="devicestatus" lay-verify="">
+                    <option value="">请选择一个设备状态</option>
+                    <option value=1>在用</option>
+                    <option value=2>封存</option>
+                    <option value=3>停用</option>
+                    <option value=4>闲置</option>
+                </select> 
+                <!-- <input type="text" name="devicestatus" required  lay-verify="required|devicestatus" placeholder="设备状态" autocomplete="off" class="layui-input"> -->
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel mulu_title">创建人</label>
+                <div class="layui-input-block">
+                    <input type="text" name="createdby" required  lay-verify="required|createdby" placeholder="创建人" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="width: 46%;">
+                <label class="layui-form-label mylabel ">创建时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="createdon" lay-verify="createdon" class="layui-input" id="createdon" placeholder="创建时间" disabled>
+                    <!-- <input type="text" name="createdon" required  lay-verify="required|createdon" placeholder="创建时间" autocomplete="off" class="layui-input"> -->
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-row"style="text-align: end;">
+                
+                <div class="layui-inline">
+                  <div class="layui-input-inline">
+                      <!-- (click)="confirm()" -->
+                      <button class="layui-btn layui-btn-primary" (click)="cancel()">取消</button>
+                      <button type="submit" class="layui-btn" lay-submit="" lay-filter="device" >确定</button>
+                  </div>
+                </div>
+                
+            </div>
+        </div>
+    </form>
+    
+  </nb-card-body>
+</nb-card>

@@ -1,0 +1,343 @@
+<div class="row conent">
+    <!-- Left -->
+    <div class="col-md-4">
+        <div class="row" style="padding: 0 15px;">
+            <div class="col-md-12 left_conent">
+                <span class="left_title">
+                    <p>指标列表&nbsp;[<a>{{zhibiao_num}}</a>]</p>
+                </span>
+                <div class="zhibiao_table_nav">
+                    <table class="table is-hoverable is-striped is-fullwidtd">
+                        <thead>
+                            <tr>
+                                <th *ngFor='let item of zhibiao_data.title' class="header">{{item}}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="zhibiao_table">
+                    <table class="table is-hoverable is-striped is-fullwidtd">
+                        <tbody>
+                            <tr *ngFor='let item of zhibiao_data.date; let i = index'>
+                                <td>{{item[0]}}</td>
+                                <td>{{item[1]}}</td>
+                                <td>{{item[2]}}</td>
+                                <td *ngIf="item[2]!='开/关'">
+                                    <div class="tuxian">
+                                        <a class="iconfont qushi iconqushi" id="qushi-1-{{i}}" (click)="hit_tuxian(item, 'qushi-1-'+i)"></a>
+                                        <a class="iconfont biao2 iconyibiao" id="biao-2-{{i}}"  (click)="hit_tuxian(item, 'biao-2-'+i)"></a>
+                                        <a class="iconfont biao3 iconyibiao" id="biao-3-{{i}}"  (click)="hit_tuxian(item, 'biao-3-'+i)"></a>
+                                    </div>
+                                </td>
+                                <td *ngIf="item[2]==='开/关'" >
+                                    <div class="tuxian">
+                                        <a class="iconfont guanji1 iconguanji" id="guanji-1-{{i}}" (click)="hit_tuxian(item, 'guanji-1-'+i)"></a>
+                                        <a class="iconfont guanji2 iconguanji" id="guanji-2-{{i}}"  (click)="hit_tuxian(item, 'guanji-2-'+i)"></a>
+                                        <a class="iconfont guanji3 iconguanji" id="guanji-3-{{i}}"  (click)="hit_tuxian(item, 'guanji-3-'+i)"></a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            
+                         
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ringht -->
+    <div class="col-md-8 ">
+        <!-- 第一行 -->
+        <div class="row">
+            <div class="col-md-12 right_conent1">
+                <div class="row">
+                    <!-- left -->
+                    <div class="col-md-8">
+                        <div class="row " style="padding: 0 15px; height: 150px;">
+                            <div class="col-md-12 right_conent_left">
+                                <span class="left_title">
+                                    <p id="important_kg_title"></p>
+                                </span>
+                                <div class="row" style="height: 100%;">
+                                    <div class="col-md-4 center_title">
+                                      <span id="id_no_run_title1"></span>
+                                      <img id="is_no_run1" [src]="kaiji_url" alt="是否运行">
+                                    </div>
+                                    <div class="col-md-4 center_title">
+                                      <span id="id_no_run_title2"></span>
+                                      <img id="is_no_run2" [src]="alert_url" alt="断电">
+                                      
+                                    </div>
+                                    <div class="col-md-4 center_title">
+                                      <span id="id_no_run_title3"></span>
+                                      <img id="is_no_run3" [src]="alert_url" alt="上电">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- right -->
+                    <div class="col-md-4">
+                        <div class="row" style="height: 150px;">
+                            <div class="col-md-12">
+                                <div class="row" style="height: 100%;">
+                                    <div class="col-md-6 ">
+                                        <div class="row " style="padding: 0 3px 0 15px; height: 100%;">
+                                            <div class="col-md-12 right_conent_right">
+                                                <span class="left_title">
+                                                    <p id="gauge1_title">C项电流</p>
+                                                </span>
+                                                <div class="gauge1"></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="col-md-6 ">
+                                        <div class="row " style="padding: 0 15px 0 0px;  height: 100%;">
+                                            <div class="col-md-12 right_conent_right">
+                                                <span class="left_title">
+                                                    <p id="gauge2_title">D项电流</p>D
+                                                </span>
+                                                <div class="gauge2"></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 第二行 -->
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-md-12 right_conent2" >
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row " style="padding: 0 15px;">
+                            <div class="col-md-12 right_conent_left">
+                                <span class="left_title">
+                                    <p id="test_title"></p>
+                                </span>
+                                <div class="row" style="  height: 350px;">
+                                    <div class="col-md-3 " style="padding: 30px 15px;">
+                                        <div class="row equ_info" style="padding: 30px 0px 30px 15px;">
+                                            <div class="col-md-12 ">
+                                                <div  style="background: rgba(22, 67, 127,1);">
+                                                    <div class="equ-line">&nbsp;</div>
+                                                    <span id="isonline" style="background: rgb(86, 173, 157);"></span>
+                                                    <span id="isrun" style="background: rgb(86, 173, 157);"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="row equ_info" style="padding: 30px 0px 30px 15px;">
+                                            <div class="col-md-12">
+                                                <div  style="background: rgba(22, 67, 127,1);">
+                                                    <div class="equ-line">&nbsp;</div>
+                                                    <span id="JL_name">计&nbsp;&nbsp;&nbsp;量</span>
+                                                    <p id="JL"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <div class="row equ_info" style="padding: 30px 0px 30px 15px;">
+                                            <div class="col-md-12">
+                                            <div  style="background: rgba(22, 67, 127,1);">
+                                                <div class="equ-line">&nbsp;</div>
+                                                <span id="GL_name">功&nbsp;&nbsp;&nbsp;率</span>
+                                                <p id="GL"></p>
+                                            </div>
+                                            </div>
+                                        </div>
+                
+                                    </div>
+            
+                                    <div class="col-md-6" style="padding: 50px 0px 30px 15px;">
+                                      <img id="test_img_url" src="" alt="长沙1号" style="width: 100%;">
+                                    </div>
+            
+                                    <div class="col-md-3" style="padding: 30px 15px;">
+                                      <div class="row equ_info" style="padding: 30px 0px 30px 15px;">
+                                        <div class="col-md-12">
+                                          <div  style="background: rgba(22, 67, 127,1);">
+                                            <div class="equ-line2">&nbsp;</div>
+                                            <span id="A_I_name" class="dianliu"></span>
+                                            <p id="A_I">4.03</p>
+                                          </div>
+                                        </div>
+                                      </div>
+            
+                                      <div class="row equ_info" style="padding: 30px 0px 30px 15px;">
+                                        <div class="col-md-12">
+                                          <div  style="background: rgba(22, 67, 127,1);">
+                                            <div class="equ-line2">&nbsp;</div>
+                                            <span id="B_I_name" class="dianliu"></span>
+                                            <p id="B_I">3.52</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                
+                                      <div class="row equ_info" style="padding: 30px 0px 30px 15px;">
+                                        <div class="col-md-12">
+                                          <div  style="background: rgba(22, 67, 127,1);">
+                                            <div class="equ-line2">&nbsp;</div>
+                                            <span id="C_I_name" class="dianliu"></span>
+                                            <p id="C_I">3.64</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row"  style="padding: 0 15px; height: 100%;">
+                            <div class="col-md-12 right_conent_right">
+                                <div class="echart_date" style="color: #fff;display: inline-flex;line-height: 10px;">
+                                    <ul>
+                                        <li class="li_default" id="now" (click)="get_line_date('now')">当前</li>
+                                        <li class="li_default" id="time" (click)="get_line_date('time')">时</li>
+                                        <li class="li_default" id="day" (click)="get_line_date('day')">日</li>
+                                        <li class="li_default" id="month" (click)="get_line_date('month')">月</li>
+                                        <li class="li_default" id="year" (click)="get_line_date('year')">年</li>
+                                    </ul>
+                                </div>
+                                <div class="echart_line"></div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 第三行 -->
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-12 right_conent3">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row " style="padding: 0 15px; height: 200px;">
+                            
+                            <div class="col-md-12 right_conent_left" style="height: 100%;">
+                                <span class="device_base_info">
+                                    <p>设备基础信息</p>
+                                </span>
+                                <div class="row" style="height: 33.3333%;">
+                                    <div class="col-md-6 device_info" >
+                                      <svg class="icon svg-icon" aria-hidden="true">
+                                        <use xlink:href="#icongongzuoleibie-"></use>
+                                      </svg>
+                                      类别：<p id="LB">XXX</p>
+                                      <hr>
+                                    </div>
+                                    <div class="col-md-6 device_info">
+                                      <svg class="icon svg-icon" aria-hidden="true">
+                                        <use xlink:href="#iconweizhi"></use>
+                                      </svg>
+                                      位置：<p id="WZ">XXX</p>
+                                      <hr>
+                                    </div>
+
+                                </div>
+
+                                <div class="row" style="height: 33.3333%;">
+                                    <div class="col-md-6 device_info">
+                                        <svg class="icon svg-icon" aria-hidden="true">
+                                        <use xlink:href="#iconguigexinghao"></use>
+                                        </svg>
+                                        型号：<p id="XH">XXX</p>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-6 device_info">
+                                        <svg class="icon svg-icon" aria-hidden="true">
+                                        <use xlink:href="#iconjingcha"></use>
+                                        </svg>
+                                        负责人：<p id="FZR">XXX</p>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <div class="row" style="height: 33.3333%;">
+                                    <div class="col-md-6 device_info">
+                                        <svg class="icon svg-icon" aria-hidden="true">
+                                        <use xlink:href="#iconshengchanchangjia"></use>
+                                        </svg>
+                                        厂家：<p id="CJ">XXX</p>
+                                        <hr>
+                                    </div> 
+                                    <div class="col-md-6 device_info">
+                                        <svg class="icon svg-icon" aria-hidden="true">
+                                        <use xlink:href="#iconrili"></use>
+                                        </svg>
+                                        出场日期：<p id="CCRQ">XXXX-xx-xx</p>
+                                        <hr>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row"  style="padding: 0 15px; height: 100%;">
+                            <div class="col-md-12 right_conent_right">
+                                <div class="zhibiao_table_nav2">
+                                    <table class="table is-hoverable is-striped is-fullwidtd">
+                                        <thead>
+                                            <tr>
+                                                <th *ngFor='let item of alert_data.title' class="header">{{item}}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                                <div class="zhibiao_table2">
+                                    <h6 class="no_data" *ngIf="alert_data.date == null">暂无数据</h6>
+                                    <table class="table is-hoverable is-striped is-fullwidtd" *ngIf="alert_data.date != null">
+                                        <tbody>
+                                            <tr *ngFor='let item of alert_data.date; let i = index'>
+                                                <td>{{item[0]}}</td>
+                                                <td>{{item[1]}}</td>
+                                                <td>{{item[2]}}</td>
+                                                <td *ngIf="item[2]!='开/关'">
+                                                    <div class="tuxian">
+                                                        <a class="iconfont qushi iconqushi" id="qushi-1-{{i}}" (click)="hit_tuxian(item, 'qushi-1-'+i)"></a>
+                                                        <a class="iconfont biao2 iconyibiao" id="biao-2-{{i}}"  (click)="hit_tuxian(item, 'biao-2-'+i)"></a>
+                                                        <a class="iconfont biao3 iconyibiao" id="biao-3-{{i}}"  (click)="hit_tuxian(item, 'biao-3-'+i)"></a>
+                                                    </div>
+                                                </td>
+                                                <td *ngIf="item[2]==='开/关'" >
+                                                    <div class="tuxian">
+                                                        <a class="iconfont guanji1 iconguanji" id="guanji-1-{{i}}" (click)="hit_tuxian(item, 'guanji-1-'+i)"></a>
+                                                        <a class="iconfont guanji2 iconguanji" id="guanji-2-{{i}}"  (click)="hit_tuxian(item, 'guanji-2-'+i)"></a>
+                                                        <a class="iconfont guanji3 iconguanji" id="guanji-3-{{i}}"  (click)="hit_tuxian(item, 'guanji-3-'+i)"></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+            
+                                            
+                                         
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

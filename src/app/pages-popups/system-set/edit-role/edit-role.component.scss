@@ -1,0 +1,25 @@
+.mylabel{
+    padding-right: 0px;
+}
+
+// 必填
+.mulu_title::before{
+    content: "*";
+    color: #ff4949;
+    margin-right: 4px;
+}
+
+// lable
+.layui-form-label{
+    float: left;
+    display: block;
+    padding: 9px 15px;
+    width: 105px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+}
+.system_role{
+    width: 800px;
+    overflow-y: auto;   
+}

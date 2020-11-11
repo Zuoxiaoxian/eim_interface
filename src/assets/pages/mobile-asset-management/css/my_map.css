@@ -1,0 +1,145 @@
+/* 这是map地图中，自定义的css */
+#alert_a:hover{
+    background-color: red;
+}
+
+#alert_a{
+    background: green;
+}
+.device_info_li{
+  /* marker 设备信息 */
+  list-style: none;
+  font-size: .011111rem;
+
+}
+
+/* 这是跟踪 样式 */
+#less_div:hover{
+  background-color: blue;
+}
+#less_div_img:hover{
+  background-color: blue;
+
+}
+
+#add_div:hover{
+  background-color: blue;
+}
+
+/* 报警 */
+#my_map_alert:hover{
+  background-color: blue;
+}
+
+
+
+
+/* 这是 菜单中的操作图标！ */
+.buedit{
+  color:#ffffff; 
+  margin-right: 50px; 
+  border-color: #00ffff00;
+  background: #ff000000;
+
+}
+.buedit>a>i:hover{
+  color: #11bdd8;
+  /* background-color: red; */
+}
+
+.disable_edit{
+  cursor: not-allowed;
+  border-color: #00ffff00;
+  background: #ff000000;
+}
+
+.disable_edit>a{
+  cursor: not-allowed;
+}
+
+.disable_edit>a>i{
+  cursor: not-allowed;
+}
+
+/* 删除========================= */
+
+.buremove{
+  border-color: #00ffff00;
+  background: #ff000000;
+}
+
+.buremove>a>i:hover{
+  color: red;
+}
+
+.disable_remove{
+  cursor: not-allowed;
+  border-color: #00ffff00;
+  background: #ff000000;
+  
+}
+
+.disable_remove>a{
+  cursor: not-allowed;
+}
+
+.disable_remove>a>i{
+  cursor: not-allowed;
+}
+
+/* 这是 统计分析-设备报表 */
+
+
+
+/* 这是 菜单中的操作图标！
+.edit>i:hover{
+  color: #11bdd8;
+
+}
+
+.remove>i:hover{
+  color: red;
+
+} */
+
+
+/* board */
+
+/*-------- li_c 看板消息 ---------*/
+
+@keyframes action_scaleOut {
+  0% {
+      transform: scale(0.2);
+      opacity: 0;
+  }
+  100% {
+      transform: scale(1);
+      opacity: 1;
+  }
+}
+
+.li_c {
+  animation: action_scaleOut 1s;
+  -moz-animation: action_scaleOut 1s;
+  -webkit-animation: action_scaleOut 1s;
+  -o-animation: action_scaleOut 1s;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  list-style: none;
+  border-bottom: 1px dashed #dbdbdb;
+  color: #F5F5F5 !important;
+  padding-top: 23px;
+}
+
+.li_c>div {
+  width: 100%;
+  overflow: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.li_c>div::-webkit-scrollbar {
+  display: none;
+  width: 2px;
+}

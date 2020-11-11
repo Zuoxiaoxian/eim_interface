@@ -1,0 +1,28 @@
+@import '../../../../../node_modules/bulma/css/bulma.min.css';
+
+// 隐藏滚动条
+.tabs::-webkit-scrollbar{
+    display: none;
+    width: 2px;
+}
+.tabs{
+    overflow-x: hidden;
+}
+
+.tab-conent{
+    margin-top: 10px;
+    width: 100%;
+}
+
+.all_num{
+    color: #363834;
+    font-size: xx-small;
+    background: #99da9999;
+    border-radius: 5px;
+    padding: 0px 2px;
+}
+
+// 搜索
+.mysearch{
+    width: 100%;
+}

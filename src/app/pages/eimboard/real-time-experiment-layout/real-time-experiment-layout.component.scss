@@ -1,0 +1,246 @@
+#expLayout {
+    background: url('/assets/eimdoard/rtm3/images/bg.png');
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-position: center center;
+    text-align: center;
+    // height: 100px;
+    // width: 800px;
+    .box_shadow {
+        box-shadow: 0 0 1.2vh 0.34vh rgba(8, 107, 238, 0.7) inset;
+        padding: 10px;
+        margin-left: 10px
+    }
+    .top_left {
+        padding-left: 44px;
+        position: absolute;
+        width: 228px;
+        display: flex;
+    }
+    #left_button {
+        background: url('/assets/eimdoard/rtm3/images/left.png');
+        position: absolute;
+        cursor: pointer;
+        height: 28px;
+        width: 49px;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+        background-position: center center;
+        margin-top: 10%;
+    }
+    #center_button {
+        background: url('/assets/eimdoard/rtm3/images/car.png');
+        position: absolute;
+        left: 55px;
+        height: 80px;
+        width: 80px;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+        background-position: center center;
+    }
+    #right_button {
+        background: url('/assets/eimdoard/rtm3/images/right.png');
+        position: absolute;
+        cursor: pointer;
+        left: 150px;
+        height: 28px;
+        width: 49px;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+        background-position: center center;
+        margin-top: 10%;
+    }
+    .head {
+        height: 50px;
+        margin-bottom: 15px;
+        text-align: center;
+        h4 {
+            color: #abdde5;
+            margin-top: 10px;
+            font-family: FZZhongDengXian-Z07S;
+        }
+    }
+    .font_top_class {
+        font-family: FZZhongDengXian-Z07S;
+        font-size: 21px;
+        color: white;
+        position: absolute;
+        width: 283px;
+        right: 70px;
+        top: 10px;
+    }
+    .font_second_class {
+        height: 50px;
+        font-family: FZZhongDengXian-Z07S;
+        font-size: 17px;
+        color: white;
+        display: flex;
+        margin-top: 13px;
+    }
+    .font_c {
+        color: #abdde5;
+        margin-top: 10px;
+        font-family: FZZhongDengXian-Z07S;
+    }
+    .table {
+        height: 100%;
+        width: 100%;
+        color: wheat;
+        text-align: center;
+        .header tr {
+            font-family: FZZhongDengXian-Z07S;
+            height: 50px;
+            background: rgb(91, 155, 213);
+        }
+    }
+    .structure {
+        border: 1px white solid;
+        height: 50px;
+        margin-right: 20px;
+        width: 20%;
+        cursor: pointer;
+    }
+    #center_img {
+        background: url('/assets/eimdoard/rtm3/images/structure.png');
+        position: relative;
+        width: 100%;
+        height: 50%;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+        background-position: center center;
+        text-align: center;
+        color: #f2f7f8;
+        width: 446px;
+        height: 323px;
+        padding-top: 50px;
+        margin-top: 50px;
+        #location_div_1 {
+            position: absolute;
+            width: 100px;
+            top: 48%;
+            left: 7%;
+        }
+        #location_div_2 {
+            position: absolute;
+            width: 100px;
+            top: 29%;
+            left: 28%;
+        }
+        #location_div_3 {
+            position: absolute;
+            width: 100px;
+            top: 35%;
+            left: 69%;
+        }
+        #location_div_4 {
+            position: absolute;
+            width: 100px;
+            left: 47%;
+            top: 18%;
+        }
+        #location_img {
+            background: url('/assets/eimdoard/rtm3/images/location.png');
+            height: 30px;
+            width: 21px;
+        }
+    }
+    .device-box {
+        position: absolute;
+        box-shadow: 0 0 1.2vh 0.34vh rgba(8, 107, 238, 0.7) inset;
+        height: 100px;
+        width: 80px;
+        top: -204%;
+        left: 10%;
+    }
+    .device-title {
+        font-size: 14px;
+        color: white;
+    }
+    .device-con {
+        font-size: 12px;
+    }
+    .third_first {
+        height: 160px;
+        width: 33%;
+        display: inline-flex;
+    }
+    .line_chart {
+        height: 200px;
+        margin-top: 33px;
+    }
+    .box5_con_bot {
+        float: left;
+        height: 100%;
+        width: 100%;
+        max-height: 428px;
+        overflow: auto;
+        text-align: left;
+        position: relative;
+    }
+    .box5_con_bot::-webkit-scrollbar {
+        // 隐藏滚动条
+        display: none;
+        width: 2px;
+    }
+}
+
+@keyframes move {
+    0% {
+        transform: translateY(10px);
+    }
+    50% {
+        transform: translateY(1px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
+
+@-moz-keyframes move {
+    0% {
+        transform: translateY(10px);
+    }
+    50% {
+        transform: translateY(1px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
+
+@-webkit-keyframes move {
+    0% {
+        transform: translateY(10px);
+    }
+    50% {
+        transform: translateY(1px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
+
+@-o-keyframes move {
+    0% {
+        transform: translateY(10px);
+    }
+    50% {
+        transform: translateY(1px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
+
+.location_move {
+    animation: move 1s;
+    animation-iteration-count: infinite;
+}

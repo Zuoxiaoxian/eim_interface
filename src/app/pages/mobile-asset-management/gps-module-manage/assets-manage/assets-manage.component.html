@@ -1,0 +1,42 @@
+<nb-card>
+    <nb-card-body>
+        <div class="row">
+            <div class="col-md-4">
+                <ngx-my-select #device_datas [selectdatas]="deviceDatas"></ngx-my-select>
+            </div>
+            <div class="col-md-4" style="text-align: left;">
+                <button nbButton status="info" size="small"  (click)="query()">筛选</button>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        
+        
+        <div class="row" style="padding: 0px 15px; margin-top: 20px;">
+            <div class="col-md-1 myline"></div>
+            <div class="col-md-1" style="text-align: center;">全部消息</div>
+            <div class="col-md-10 myline"></div>
+        </div>
+        
+
+        <div class="row">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4 my-button" style="text-align: right;" >
+                <button nbButton status="info" size="small" style="margin-right: 20px;" (click)="import()">导入数据</button>
+                <input type="file" class="import" id="import" (change)="onFileChange($event)" multiple="false">
+                <button nbButton status="info" size="small"  (click)="download('资产管理')">导出数据</button>
+            </div>
+        </div>
+
+
+        
+
+    </nb-card-body>
+
+    <div class="row" style="min-height: 680px; margin-top: 10px;" >
+        <div class="col-md-12">
+            <ngx-my-table-ng2 #mytable  [datas]="assets_manage_table_data"></ngx-my-table-ng2>
+        </div>
+    </div>
+</nb-card>
+

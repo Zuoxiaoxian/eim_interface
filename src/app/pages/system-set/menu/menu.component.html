@@ -1,0 +1,24 @@
+
+
+
+
+<!-- <button nbButton status="info" size="small" (click)="addmenu()" *ngFor="let bt of anniu_list"><nb-icon icon="plus-outline"></nb-icon>{{bt.title}}</button> -->
+<nb-card style="margin-top: 10px;">
+    <nb-card-body class="example-items-rows">
+        <div class="row" >
+            <div class="example-items-rows" style="margin-right: 27px; margin-top: 5px;margin-left: 15px;" *ngFor="let bt of buttons">
+                <button nbButton [status]="bt.class" size="small" (click)="action(bt.permission)"  [disabled]="bt.active == 0? true: false"><nb-icon [icon]="bt.icon"></nb-icon>{{bt.title}}</button>
+            </div>
+        </div>
+        
+      </nb-card-body>
+    <nb-card-body>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="menuTable" data-click-to-select="true" data-single-select="true">
+                </table>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>
+

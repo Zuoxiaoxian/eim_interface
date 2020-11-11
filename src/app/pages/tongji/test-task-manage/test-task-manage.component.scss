@@ -1,0 +1,20 @@
+div{
+    .layui-form-label{
+        padding-left: 0px;
+    }
+    font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+
+    input{
+        border-color: #00d68f;
+        line-height: 1.5rem;
+        border-radius: 0.25rem;
+    }
+    input:hover{
+        border-color: #00d68f;
+        border-radius: 0.25rem;
+        line-height: 1.5rem;
+        cursor: pointer;
+        background-color: #edf1f7;
+        
+    }
+}

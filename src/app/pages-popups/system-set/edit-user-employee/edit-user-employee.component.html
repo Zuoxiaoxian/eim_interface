@@ -1,0 +1,103 @@
+<nb-card style="z-index: 1080;" class="setting_employee">
+    <nb-card-header> 
+        <div class="row">
+            <div class="col-md-10" style="text-align: left;"> 编辑用户</div>
+            <div class="col-md-2" style="text-align: right;">
+                <nb-icon icon="close-outline" style="cursor: pointer;" (click)="closedialog()"></nb-icon>
+            </div>
+        </div>
+      </nb-card-header>
+
+    <nb-card-body>
+
+        
+        <form class="layui-form" action="" lay-filter="employee">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label mylabel mulu_title">员工编号</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="employeeno" required   lay-verify="required|employeeno"  placeholder="员工编号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                  <label class="layui-form-label mylabel">是否启用</label>
+                  <div class="layui-input-block">
+                    <input type="checkbox" name="active" lay-skin="switch" lay-filter="filter" lay-text="是|否" checked>
+                  </div>
+                </div>
+
+
+            </div>
+            
+            <div class="layui-form-item">
+
+              <div class="layui-inline">
+                <label class="layui-form-label mylabel mulu_title">姓名</label>
+                <div class="layui-input-block">
+                  <input type="text" name="name" lay-verify="required|name"  placeholder="姓名" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+
+              <div class="layui-inline">
+                <label class="layui-form-label mylabel mulu_title">域账号</label>
+                <div class="layui-input-block">
+                  <input type="text" name="loginname"  lay-verify="required|loginname" placeholder="域账号" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+
+
+              <div class="layui-inline">
+                <label class="layui-form-label mylabel mulu_title">邮箱</label>
+                <div class="layui-input-block">
+                  <input type="text" name="email" lay-verify="required|email"  placeholder="邮箱" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+
+              
+            </div>
+
+
+
+
+            <div class="layui-form-item" >
+              <label class="layui-form-label">角色</label>
+              <div class="layui-input-block roleinput example-items-rows">
+              </div>
+
+            </div>
+
+
+
+
+            <div class="layui-form-item" >
+              <label class="layui-form-label">用户组</label>
+              <div class="layui-input-block example-items-rows" id="employeegroupinput">
+              </div>
+            </div>
+
+            
+            <div class="layui-form-item">
+                <div class="layui-row" style="text-align: end;">
+                    <div class="layui-inline">
+                      <div class="layui-input-inline">
+                      </div>
+                    </div>
+
+
+                    <div class="layui-inline">
+                      <div class="layui-input-inline">
+                          <!-- (click)="confirm()" -->
+                          <button class="layui-btn layui-btn-primary" (click)="cancel()">取消</button>
+                          <button type="submit" class="layui-btn" lay-submit="" lay-filter="employee" >确定</button>
+                      </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+        </form>
+
+    </nb-card-body>
+</nb-card>

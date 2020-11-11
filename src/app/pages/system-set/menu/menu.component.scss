@@ -1,0 +1,14 @@
+
+// .table-hover:hover {
+//     background-color: red;
+
+// }
+
+
+@import '../../../@theme/styles/themes.scss';
+
+@include nb-install-component() {
+  nb-card {
+    transform: translate3d(0, 0, 0);
+  }
+}

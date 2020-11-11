@@ -1,0 +1,64 @@
+<div class="row" style="min-height: 800px">
+    <div class="col-md-2" >
+        <div style="background: #FFF">
+            <div class="tabs is-centered" >
+                <ul>
+                    <li class="is-active" id="all" (click)="active('#all')">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+                            全部
+                            <span class="all_num">1</span>
+                        </a>
+                    </li>
+                  <li id="inline" (click)="active('#inline')"><a>在线 <span class="all_num">23</span></a></li>
+                  <li id="noinline" (click)="active('#noinline')"><a>离线 <span class="all_num">33</span></a></li>
+                </ul>
+            </div>
+    
+    
+            <div class="mysearch" >
+                <div class="row" style="padding: 0px 21px;">
+                    <!-- <input nbInput placeholder="这是搜索" fullWidth (keyup)="projectNameChanged($event)"> -->
+                    <input 
+                    [(formControl)]="inputFormControl"
+                    nbInput
+                    fullWidth
+                    type="text"
+                    
+                    placeholder="请选择设备"
+                    [nbAutocomplete]="auto" />
+    
+                    <nb-autocomplete #auto>
+    
+                        <nb-option-group *ngFor="let group of filteredGroups$ | async; trackBy: trackByFn"  [title]="group.name" >
+                            <nb-option *ngFor="let option of group.children" [value]="option">
+                            {{ option }}
+                            </nb-option>
+                        </nb-option-group>
+                
+                    </nb-autocomplete>
+                </div>
+                
+            </div>
+            <div class="tab-conent" *ngIf="selectid == '#all'">
+                <ngx-all #all [datas]="datas" (send_user_deviceInfo)="get_device_for_show_mapinfo($event)"></ngx-all>
+            </div>
+            <div class="tab-conent" *ngIf="selectid == '#inline'">
+                <ngx-inline #inline [datas]="datas" (send_user_deviceInfo)="get_device_for_show_mapinfo($event)"></ngx-inline>
+            </div>
+            <div class="tab-conent" *ngIf="selectid == '#noinline'">
+                <ngx-noinline #noinline [datas]="datas"  (send_user_deviceInfo)="get_device_for_show_mapinfo($event)"></ngx-noinline>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-md-10" style=" padding: 0px;">
+        <nb-card>
+            <nb-card-body style="padding: 4px; height: 835px;">
+                <!-- 这是map -->
+                <ngx-map #map ></ngx-map>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

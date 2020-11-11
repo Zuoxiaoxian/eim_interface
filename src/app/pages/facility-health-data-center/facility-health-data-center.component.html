@@ -1,0 +1,60 @@
+<nb-card>
+    <nb-card-body>
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2" style="text-align: center;">
+                <button status="info" nbButton style="margin-right: 30px;">实时报警</button>
+                <button status="info" nbButton>历史报警</button>
+            </div>
+        </div>
+        
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-2 statusinfo">
+                <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
+            </div>
+        
+            <div class="col-md-2 statusinfo">
+                <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
+            </div>
+        
+            <div class="col-md-2 statusinfo">
+                <ngx-my-select #asset_number [selectdatas]="assetnumber"></ngx-my-select>
+            </div>
+        
+            <div class="col-md-2 statusinfo">
+                <ngx-date-range #daterange></ngx-date-range>
+            </div>
+        
+            <div class="col-md-2 statusinfo">
+                <button nbButton status="info" (click)="query()">筛选</button>
+            </div>
+            <div class="col-md-2 statusinfo"></div>
+        </div>
+
+        <div class="row" style="padding: 0px 15px; margin-top: 10px;">
+            <div class="col-md-1 myline"></div>
+            <div class="col-md-1" style="text-align: center;">全部消息</div>
+            <div class="col-md-10 myline"></div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10"></div>
+            <div class="col-md-2" style="text-align: right;">
+                <button nbButton status="info" (click)="download('设备报警')">导出</button>
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 10px; height: 636px;">
+            <div class="col-md-12">
+                <ngx-my-table-ng2 #mytable  [datas]="table_data"></ngx-my-table-ng2>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+
+
+<!-- <router-outlet>
+    <h3>111111111111111</h3>
+</router-outlet> -->

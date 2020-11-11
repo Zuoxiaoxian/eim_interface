@@ -1,0 +1,309 @@
+.statusinfo{
+    height: 55px;
+    background: #e5e5e5bd;
+
+    .zong-title{
+        position: absolute;
+        top: 18px;
+        left: 17%;
+        font-size: x-large;
+    }
+    .zong-value{
+        position: absolute;
+        top: 20px;
+        left: 46%;
+        font-size: x-small;
+        span{
+            font-weight: 600;
+        }
+    }
+}
+
+.layoutdatas{
+    .onetitlle{
+        position: absolute;
+        width: 52px;
+        top: 8%;
+        left: 4%;
+        font-size: xx-large;
+    };
+    .twotitlle{
+        position: absolute;
+        width: 52px;
+        bottom: 32%;
+        left: 4%;
+        font-size: xx-large;
+    };
+    .row1-col1{
+        position: absolute;
+        top: 4%;
+        left: 17.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+
+        // 下面 row-col
+        // img{
+        //     width: 102%;
+        // }
+
+        // 下面 row-col-time
+        // .time{
+        //     position: relative;
+        //     left: 26px;
+        // }
+
+        // 下面 row-col-title
+        // .title{
+        //     position: absolute;
+        //     bottom: -29px;
+        //     width: 100px;
+        //     left: -11px;
+        //     font-weight: 600;
+        // }
+    }
+    .row1-col2{
+        position: absolute;
+        top: 4%;
+        left: 26.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row1-col3{
+        position: absolute;
+        top: 4%;
+        left: 32.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row1-col4{
+        position: absolute;
+        top: 4%;
+        left: 40.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row1-col5{
+        position: absolute;
+        top: 4%;
+        left: 46.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row1-col6{
+        position: absolute;
+        top: 4%;
+        left: 60.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+        img{
+            transform: rotate(-90deg);
+            top: 25px;
+        }
+    }
+
+    // ===========================
+    .row2-col1{
+        position: absolute;
+        bottom: 38%;
+        left: 11.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row2-col2{
+        position: absolute;
+        bottom: 38%;
+        left: 17.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row2-col3{
+        position: absolute;
+        bottom: 38%;
+        left: 26.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row2-col4{
+        position: absolute;
+        bottom: 38%;
+        left: 32.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row2-col5{
+        position: absolute;
+        bottom: 38%;
+        left: 40.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row2-col6{
+        position: absolute;
+        bottom: 38%;
+        left: 46.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+
+
+    .row3-col1{
+        position: absolute;
+        bottom: 16%;
+        left: 11.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row3-col2{
+        position: absolute;
+        bottom: 16%;
+        left: 17.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row3-col3{
+        position: absolute;
+        bottom: 16%;
+        left: 26.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row3-col4{
+        position: absolute;
+        bottom: 16%;
+        left: 32.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row3-col5{
+        position: absolute;
+        bottom: 16%;
+        left: 40.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row3-col6{
+        position: absolute;
+        bottom: 16%;
+        left: 46.5%;
+        border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+
+
+
+    .row3-col7{
+        position: absolute;
+        bottom: 29%;
+        left: 60.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+    .row3-col8{
+        position: absolute;
+        bottom: 29%;
+        left: 66.5%;
+        // border: 1px red solid;
+        height: 125px;
+        width: 60px;
+    }
+
+    // 右下
+    .description{
+        position: absolute;
+        bottom: 10px;
+        left: 984px;
+        width: 310px;
+        .description-bg{
+            position: relative;
+        }
+        .description-col1{
+            position: absolute;
+            height: 101px;
+            width: 60px;
+            top: 5px;
+            left: 23px;
+            
+        }
+        .description-col2{
+            position: absolute;
+            // border: springgreen 1px solid;
+            height: 101px;
+            width: 60px;
+            top: 5px;
+            left: 126px;
+            
+        }
+        .description-col3{
+            position: absolute;
+            // border: springgreen 1px solid;
+            height: 101px;
+            width: 60px;
+            top: 5px;
+            left: 226px;
+            
+        }
+    }
+
+}
+
+
+
+// ===============================公共属性
+.row-col{
+    width: 102%;
+    position: absolute;
+}
+.row-col-time{
+    position: relative;
+    left: 26px;
+    top: 102px;
+    color: #30b230;
+}
+.row-col-time2{
+    position: relative;
+    left: 26px;
+    top: 102px;
+    color: #b29430;
+}
+.row-col-title{
+    position: absolute;
+    bottom: -29px;
+    width: 100px;
+    left: -11px;
+    font-weight: 600;
+}
+.row-col-title-top{
+    position: absolute;
+    top: -25px;
+    width: 100px;
+    left: -11px;
+    font-weight: 600;
+}
+
+
+.description-car{
+    width: 100%;
+}
+.description-title{
+    margin-left: 14px;
+}
+// ===============================公共属性

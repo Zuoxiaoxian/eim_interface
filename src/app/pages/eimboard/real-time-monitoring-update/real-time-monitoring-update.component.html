@@ -1,0 +1,468 @@
+<div id="rtmv2" style="padding-bottom: 5px;">
+
+    <div class="row">
+        <div class="col-md-11"></div>
+        <div class="col-md-1" style="text-align: right; padding-left: 0px;">
+            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
+        </div>
+    </div>
+
+    <div class="row ">
+        <div class="col-md-12 head">
+            <h4>实时监控</h4>
+            <img src="assets/eimdoard/rtm/images/header2.png" alt="header">
+            <span class="home" (click)="gotoHome()">
+                <svg class="icon svg-icon" aria-hidden="true">
+                    <use xlink:href="#iconshouye"></use>
+                </svg>
+                首页
+            </span>
+        </div>
+    </div>
+
+    <div class="row conent">
+        <!-- Left -->
+        <div class="col-md-4">
+            <div class="row" style="padding: 0 15px;">
+                <div class="col-md-12 left_conent">
+                    <span class="left_title">
+                        <p>指标列表&nbsp;[<a>{{zhibiao_data.data.length}}</a>]</p>
+                    </span>
+                    <div class="zhibiao_table_nav">
+                        <table class="table is-hoverable is-striped is-fullwidtd">
+                            <thead>
+                                <tr>
+                                    <th *ngFor='let item of zhibiao_data.title' class="header">{{item}}</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="zhibiao_table">
+                        <table class="table is-hoverable is-striped is-fullwidtd">
+                            <!--
+                            <thead>
+                                <tr>
+                                    <th *ngFor='let item of zhibiao_data.title' class="header">{{item}}</th>
+                                </tr>
+                            </thead>
+                        -->
+                            <tbody>
+                                <tr *ngFor='let item of zhibiao_data.data; let i = index'>
+                                    <td [ngStyle]="{'color':get_font_color(item)}" style="width: 89px">{{item.title}}</td>
+                                    <td [ngStyle]="{'color':get_font_color(item)}">{{item.value}}</td>
+                                    <td [ngStyle]="{'color':get_font_color(item)}">{{item.unit}}</td>
+                                    <td (click)="preinstall_dialog_show(item)">
+                                        <div style="width: 50px;text-align: center;">
+                                            <span style="cursor:pointer" *ngFor="let p_item of item.preinstall" [ngStyle]="{'color':p_item.color}">{{p_item.value}}&nbsp;</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="tuxian" [ngStyle]="{'display':item.unit == '开/关'?'none':''}">
+                                            <a class="iconfont qushi iconqushi" id="qushi-1-{{i}}" [ngStyle]="{'color':button['qushi']['1'] == i?'green':''}" (click)="hit_tuxian(item, 'qushi-1-'+i,'click')"></a>
+                                            <a class="iconfont biao2 iconyibiao" id="biao-2-{{i}}" [ngStyle]="{'color':button['biao']['2'] == i?'green':''}" (click)="hit_tuxian(item, 'biao-2-'+i,'click')"></a>
+                                            <a class="iconfont biao3 iconyibiao" id="biao-3-{{i}}" [ngStyle]="{'color':button['biao']['3'] == i?'green':''}" (click)="hit_tuxian(item, 'biao-3-'+i,'click')"></a>
+                                        </div>
+                                        <div class="tuxian" [ngStyle]="{'display':item.unit != '开/关'?'none':''}">
+                                            <a class="iconfont guanji1 iconguanji" id="guanji-1-{{i}}" [ngStyle]="{'color':button['guanji']['1'] == i?'green':''}" (click)="hit_tuxian(item, 'guanji-1-'+i,'click')"></a>
+                                            <a class="iconfont guanji2 iconguanji" id="guanji-2-{{i}}" [ngStyle]="{'color':button['guanji']['2'] == i?'green':''}" (click)="hit_tuxian(item, 'guanji-2-'+i,'click')"></a>
+                                            <a class="iconfont guanji3 iconguanji" id="guanji-3-{{i}}" [ngStyle]="{'color':button['guanji']['3'] == i?'green':''}" (click)="hit_tuxian(item, 'guanji-3-'+i,'click')"></a>
+                                        </div>
+                                    </td>
+                                    <!--                                    <ng-template #onOff>-->
+                                    <!--                                      <td >-->
+                                    <!--                                        <div class="tuxian">-->
+                                    <!--                                          <a class="iconfont guanji1 iconguanji" id="guanji-1-{{i}}" (click)="hit_tuxian(item, 'guanji-1-'+i)"></a>-->
+                                    <!--                                          <a class="iconfont guanji2 iconguanji" id="guanji-2-{{i}}"  (click)="hit_tuxian(item, 'guanji-2-'+i)"></a>-->
+                                    <!--                                          <a class="iconfont guanji3 iconguanji" id="guanji-3-{{i}}"  (click)="hit_tuxian(item, 'guanji-3-'+i)"></a>-->
+                                    <!--                                        </div>-->
+                                    <!--                                      </td>-->
+                                    <!--                                    </ng-template>-->
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ringht -->
+        <div class="col-md-8 ">
+            <!-- 第一行 -->
+            <div class="row">
+                <div class="col-md-12 right_conent1">
+                    <div class="row">
+                        <!-- left -->
+                        <div class="col-md-8">
+                            <div class="row " style="padding: 0 15px; height: 150px;">
+                                <div class="col-md-12 right_conent_left">
+                                    <span class="left_title">
+                                        <p id="important_kg_title">{{important_kg_data.important_kg_title}}</p>
+                                    </span>
+                                    <div class="row" style="height: 100%;">
+                                        <div class="col-md-4 center_title" *ngFor="let lamp of important_kg_data.lampArr;let i =index">
+                                            <span id="id_no_run_title{{i+1}}">{{lamp.name}}</span>
+                                            <img id="is_no_run{{i+1}}" [src]="lamp.url" [alt]="lamp.name">
+                                        </div>
+                                        <!--                                        <div class="col-md-4 center_title">-->
+                                        <!--                                          <span id="id_no_run_title2"></span>-->
+                                        <!--                                          <img id="is_no_run2" src="assets/eimdoard/rtm/images/light_c.png" alt="断电">-->
+
+                                        <!--                                        </div>-->
+                                        <!--                                        <div class="col-md-4 center_title">-->
+                                        <!--                                          <span id="id_no_run_title3"></span>-->
+                                        <!--                                          <img id="is_no_run3" src="assets/eimdoard/rtm/images/light_a.png" alt="上电">-->
+                                        <!--                                        </div>-->
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- right -->
+                        <div class="col-md-4">
+                            <div class="row" style="height: 150px;">
+                                <div class="col-md-12">
+                                    <div class="row" style="height: 100%;">
+                                        <div class="col-md-6 ">
+                                            <div class="row " style="padding: 0 10px 0 15px; height: 100%;">
+                                                <div class="col-md-12 right_conent_right">
+                                                    <span class="left_title">
+                                                        <p id="gauge1_title">C项电流</p>
+                                                    </span>
+                                                    <div class="gauge1"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6 ">
+                                            <div class="row " style="padding: 0 15px 0 0px;  height: 100%;">
+                                                <div class="col-md-12 right_conent_right">
+                                                    <span class="left_title">
+                                                        <p id="gauge2_title">D项电流</p>D
+                                                    </span>
+                                                    <div class="gauge2"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 第二行 -->
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12 right_conent2">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row " style="padding: 0 15px;">
+                                <nb-flip-card [showToggleButton]="false" [flipped]="flipped">
+                                    <nb-card-front>
+                                        <nb-card>
+                                            <div class="col-md-12 right_conent_left">
+                                                <span class="left_title">
+                                          <p id="test_title">{{ test_info.test_title }}</p>
+                                      </span>
+                                                <div class="div_right">
+                                                    <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="flipped = !flipped;"></nb-icon>
+                                                </div>
+                                                <div class="row" style="  height: 350px;">
+                                                    <div class="col-md-4 " style="padding: 30px 15px;">
+                                                        <div class="row equ_info">
+                                                            <div class="col-md-12 ">
+                                                                <div style="background: rgba(22, 67, 127,1);">
+                                                                    <div class="equ-line">&nbsp;</div>
+                                                                    <span id="isonline" style="background: rgb(86, 173, 157);">{{ test_info.is_not_line.isonline }}</span>
+                                                                    <span id="isrun" style="background: rgb(86, 173, 157);">{{ test_info.is_not_line.isrun }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row equ_info">
+                                                            <div class="col-md-12">
+                                                                <div style="background: rgba(22, 67, 127,1);">
+                                                                    <div class="equ-line">&nbsp;</div>
+                                                                    <span id="JL_name">{{test_info.ji_liang.name}}</span>
+                                                                    <p id="JL">{{test_info.ji_liang.value}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row equ_info">
+                                                            <div class="col-md-12">
+                                                                <div style="background: rgba(22, 67, 127,1);">
+                                                                    <div class="equ-line">&nbsp;</div>
+                                                                    <span id="GL_name">{{test_info.gong_lv.name}}</span>
+                                                                    <p id="GL">{{test_info.gong_lv.value}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col-md-4" style="padding: 50px 0px 30px 15px;">
+                                                        <img [src]="test_info.test_img_url" id="test_img_url" src="" alt="长沙1号" style="width: 100%;">
+                                                    </div>
+
+                                                    <div class="col-md-4" style="padding: 30px 15px;">
+                                                        <div *ngFor="let item of test_info.dian_liu_arr" class="row equ_info" style="padding: 30px 0px 30px 15px;">
+                                                            <div class="col-md-12">
+                                                                <div style="background: rgba(22, 67, 127,1);">
+                                                                    <div class="equ-line2">&nbsp;</div>
+                                                                    <span id="A_I_name" class="dianliu">{{ item.name }}</span>
+                                                                    <p id="A_I">{{item.value}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!--                                          <div class="row equ_info" style="padding: 30px 0px 30px 15px;">-->
+                                                        <!--                                            <div class="col-md-12">-->
+                                                        <!--                                              <div  style="background: rgba(22, 67, 127,1);">-->
+                                                        <!--                                                <div class="equ-line2">&nbsp;</div>-->
+                                                        <!--                                                <span id="B_I_name" class="dianliu"></span>-->
+                                                        <!--                                                <p id="B_I">3.52</p>-->
+                                                        <!--                                              </div>-->
+                                                        <!--                                            </div>-->
+                                                        <!--                                          </div>-->
+
+                                                        <!--                                          <div class="row equ_info" style="padding: 30px 0px 30px 15px;">-->
+                                                        <!--                                            <div class="col-md-12">-->
+                                                        <!--                                              <div  style="background: rgba(22, 67, 127,1);">-->
+                                                        <!--                                                <div class="equ-line2">&nbsp;</div>-->
+                                                        <!--                                                <span id="C_I_name" class="dianliu"></span>-->
+                                                        <!--                                                <p id="C_I">3.64</p>-->
+                                                        <!--                                              </div>-->
+                                                        <!--                                            </div>-->
+                                                        <!--                                          </div>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </nb-card>
+                                    </nb-card-front>
+                                    <nb-card-back>
+                                        <nb-card>
+
+                                            <div class="row " style="padding: 0 15px; height: 200px;">
+
+                                                <div class="col-md-12 right_conent_left" style="height: 100%;">
+                                                    <span class="device_base_info">
+                                            <p>设备基础信息</p>
+                                        </span>
+                                                    <div class="div_right">
+                                                        <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="flipped = !flipped;"></nb-icon>
+                                                    </div>
+                                                    <div class="row" style="height: 33.3333%;">
+                                                        <div class="col-md-6 device_info">
+                                                            <svg class="icon svg-icon" aria-hidden="true">
+                                              <use xlink:href="#icongongzuoleibie-"></use>
+                                            </svg> 类别：
+                                                            <p id="LB">{{ device_base_info.LB}}</p>
+                                                            <hr>
+                                                        </div>
+                                                        <div class="col-md-6 device_info">
+                                                            <svg class="icon svg-icon" aria-hidden="true">
+                                              <use xlink:href="#iconweizhi"></use>
+                                            </svg> 位置：
+                                                            <p id="WZ">{{ device_base_info.WZ}}</p>
+                                                            <hr>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="row" style="height: 33.3333%;">
+                                                        <div class="col-md-6 device_info">
+                                                            <svg class="icon svg-icon" aria-hidden="true">
+                                              <use xlink:href="#iconguigexinghao"></use>
+                                            </svg> 型号：
+                                                            <p id="XH">{{ device_base_info.XH }}</p>
+                                                            <hr>
+                                                        </div>
+                                                        <div class="col-md-6 device_info">
+                                                            <svg class="icon svg-icon" aria-hidden="true">
+                                              <use xlink:href="#iconjingcha"></use>
+                                            </svg> 负责人：
+                                                            <p id="FZR">{{ device_base_info.FZR }}</p>
+                                                            <hr>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="height: 33.3333%;">
+                                                        <div class="col-md-6 device_info">
+                                                            <svg class="icon svg-icon" aria-hidden="true">
+                                              <use xlink:href="#iconshengchanchangjia"></use>
+                                            </svg> 厂家：
+                                                            <p id="CJ">{{ device_base_info.CJ }}</p>
+                                                            <hr>
+                                                        </div>
+                                                        <div class="col-md-6 device_info">
+                                                            <svg class="icon svg-icon" aria-hidden="true">
+                                              <use xlink:href="#iconrili"></use>
+                                            </svg> 出场日期：
+                                                            <p id="CCRQ">{{ device_base_info.CCRQ }}</p>
+                                                            <hr>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </nb-card>
+                                    </nb-card-back>
+
+                                </nb-flip-card>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row" style="padding: 0 15px; height: 100%;">
+                                <div class="col-md-12 right_conent_right">
+                                    <div class="echart_date" style="color: #fff;display: inline-flex;line-height: 10px;">
+                                        <ul>
+                                            <li class="li_default" id="now" [ngClass]="{'li_active':line_chart=='now'}" (click)="get_line_date('now')">当前</li>
+                                            <li class="li_default" id="time" [ngClass]="{'li_active':line_chart=='time'}" (click)="get_line_date('time')">时</li>
+                                            <li class="li_default" id="day" [ngClass]="{'li_active':line_chart=='day'}" (click)="get_line_date('day')">日</li>
+                                            <li class="li_default" id="month" [ngClass]="{'li_active':line_chart=='month'}" (click)="get_line_date('month')">月</li>
+                                            <li class="li_default" id="year" [ngClass]="{'li_active':line_chart=='year'}" (click)="get_line_date('year')">年</li>
+                                        </ul>
+                                    </div>
+                                    <div class="echart_line"></div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 第三行 -->
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12 right_conent3">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row " style="padding: 0 15px; height: 200px;">
+
+                                <!--                                <div class="col-md-12 right_conent_left" style="height: 100%;">-->
+                                <!--                                    <span class="device_base_info">-->
+                                <!--                                        <p>设备基础信息</p>-->
+                                <!--                                    </span>-->
+                                <!--                                    <div class="row" style="height: 33.3333%;">-->
+                                <!--                                        <div class="col-md-6 device_info" >-->
+                                <!--                                          <svg class="icon svg-icon" aria-hidden="true">-->
+                                <!--                                            <use xlink:href="#icongongzuoleibie-"></use>-->
+                                <!--                                          </svg>-->
+                                <!--                                          类别：<p id="LB">{{ device_base_info.LB}}</p>-->
+                                <!--                                          <hr>-->
+                                <!--                                        </div>-->
+                                <!--                                        <div class="col-md-6 device_info">-->
+                                <!--                                          <svg class="icon svg-icon" aria-hidden="true">-->
+                                <!--                                            <use xlink:href="#iconweizhi"></use>-->
+                                <!--                                          </svg>-->
+                                <!--                                          位置：<p id="WZ">{{ device_base_info.WZ}}</p>-->
+                                <!--                                          <hr>-->
+                                <!--                                        </div>-->
+
+                                <!--                                    </div>-->
+
+                                <!--                                    <div class="row" style="height: 33.3333%;">-->
+                                <!--                                        <div class="col-md-6 device_info">-->
+                                <!--                                            <svg class="icon svg-icon" aria-hidden="true">-->
+                                <!--                                            <use xlink:href="#iconguigexinghao"></use>-->
+                                <!--                                            </svg>-->
+                                <!--                                            型号：<p id="XH">{{ device_base_info.XH }}</p>-->
+                                <!--                                            <hr>-->
+                                <!--                                        </div>-->
+                                <!--                                        <div class="col-md-6 device_info">-->
+                                <!--                                            <svg class="icon svg-icon" aria-hidden="true">-->
+                                <!--                                            <use xlink:href="#iconjingcha"></use>-->
+                                <!--                                            </svg>-->
+                                <!--                                            负责人：<p id="FZR">{{ device_base_info.FZR }}</p>-->
+                                <!--                                            <hr>-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
+                                <!--                                    <div class="row" style="height: 33.3333%;">-->
+                                <!--                                        <div class="col-md-6 device_info">-->
+                                <!--                                            <svg class="icon svg-icon" aria-hidden="true">-->
+                                <!--                                            <use xlink:href="#iconshengchanchangjia"></use>-->
+                                <!--                                            </svg>-->
+                                <!--                                            厂家：<p id="CJ">{{ device_base_info.CJ }}</p>-->
+                                <!--                                            <hr>-->
+                                <!--                                        </div>-->
+                                <!--                                        <div class="col-md-6 device_info">-->
+                                <!--                                            <svg class="icon svg-icon" aria-hidden="true">-->
+                                <!--                                            <use xlink:href="#iconrili"></use>-->
+                                <!--                                            </svg>-->
+                                <!--                                            出场日期：<p id="CCRQ">{{ device_base_info.CCRQ }}</p>-->
+                                <!--                                            <hr>-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
+
+                                <!--                                </div>-->
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row" style="padding: 0 15px; height: 100%;">
+                                <div class="col-md-12 right_conent_right">
+                                    <div class="zhibiao_table_nav2">
+                                        <table class="table is-hoverable is-striped is-fullwidtd">
+                                            <thead>
+                                                <tr>
+                                                    <th *ngFor='let item of alert_data.title' class="header">{{item}}</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+
+                                    <div class="zhibiao_table2">
+                                        <h6 class="no_data" *ngIf="alert_data.data == null">暂无数据</h6>
+                                        <table class="table is-hoverable is-striped is-fullwidtd" *ngIf="alert_data.data != null">
+                                            <tbody>
+                                                <tr *ngFor='let item of alert_data.data; let i = index'>
+                                                    <td>{{item.target}}</td>
+                                                    <td>{{item.rule}}</td>
+                                                    <td>{{item.urgency}}</td>
+                                                    <td>{{item.time}}</td>
+                                                    <!-- <td *ngIf="item[2]!='开/关'">
+                                                        <div class="tuxianown">
+                                                            <a class="iconfont qushi iconqushi" id="qushi-1-{{i}}" (click)="hit_tuxian(item, 'qushi-1-'+i,'click')"></a>
+                                                            <a class="iconfont biao2 iconyibiao" id="biao-2-{{i}}"  (click)="hit_tuxian(item, 'biao-2-'+i,'click')"></a>
+                                                            <a class="iconfont biao3 iconyibiao" id="biao-3-{{i}}"  (click)="hit_tuxian(item, 'biao-3-'+i,'click')"></a>
+                                                        </div>
+                                                    </td>
+                                                    <td *ngIf="item[2]==='开/关'" >
+                                                        <div class="tuxian">
+                                                            <a class="iconfont guanji1 iconguanji" id="guanji-1-{{i}}" (click)="hit_tuxian(item, 'guanji-1-'+i,'click')"></a>
+                                                            <a class="iconfont guanji2 iconguanji" id="guanji-2-{{i}}"  (click)="hit_tuxian(item, 'guanji-2-'+i,'click')"></a>
+                                                            <a class="iconfont guanji3 iconguanji" id="guanji-3-{{i}}"  (click)="hit_tuxian(item, 'guanji-3-'+i,'click')"></a>
+                                                        </div>
+                                                    </td> -->
+                                                </tr>
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="zhezhao" id='zhezhao' *ngIf="dialogShow">
+        <div class="tankuang">
+            <ngx-preinstall-dialog (dialogClose)="preinstall_dialog_close($event)" [dialogData]="dialogData"></ngx-preinstall-dialog>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+<div class="my-select">
+    <span>{{ selectdatas.name }}</span>
+    <nb-select status="success" style="width: 60%;" [placeholder]="selectdatas.placeholder" [(ngModel)]="selectdata">
+        <nb-option [value]="data.name" *ngFor="let data of selectdatas.datas">{{data.name}}</nb-option>
+    </nb-select>
+</div>

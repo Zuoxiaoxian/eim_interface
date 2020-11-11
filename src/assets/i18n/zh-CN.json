@@ -1,0 +1,17 @@
+{
+    "TITLE": "吉利智慧实验室管理系统",
+    "Light": "明亮",
+    "Dark": "黑暗",
+    "Cosmic": "宇宙",
+    "Corporate": "企业",
+    "POSITIONMONITORING":{
+        "TABS":{
+            "EDIT": "编辑",
+            "PATH": "轨迹",
+            "TRACE": "跟踪",
+            "MORE": "更多"
+        }
+    }
+
+
+}

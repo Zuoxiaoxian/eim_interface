@@ -1,0 +1,99 @@
+// 表头
+:host /deep/ .ng2-smart-th { text-align: center; padding-left: 1px; padding-right: 1px; }
+
+// cell 所有的
+:host /deep/ .ng2-smart-row  { text-align: center;  padding-left: 1px; padding-right: 1px; }
+
+// 设备状态==运行
+:host /deep/ .ng2-smart-row .run{
+    border: green 1px solid;
+    background: rgb(48, 248, 48);
+}
+// 设备状态==停止
+:host /deep/ .ng2-smart-row .stop{
+    border: rgb(238, 240, 238) 1px solid;
+    background: rgb(199, 199, 199);
+}
+// 设备状态==维护
+:host /deep/ .ng2-smart-row .assert{
+    border: rgb(216, 236, 162) 1px solid;
+    background: rgb(171, 250, 92);
+}
+// 设备状态==故障
+:host /deep/ .ng2-smart-row .fault{
+    border: rgb(228, 144, 129) 1px solid;
+    background: rgb(247, 115, 39);
+}
+
+// 所有单元格
+:host /deep/ .ng2-smart-row .ng-star-inserted{
+  // color: green;
+  // font-family: cursive;
+  font-size: small;
+}
+:host /deep/ .ng2-smart-row .ng-star-inserted[span='运行'] {
+  color: rgb(172, 230, 39);
+}
+ 
+// 设备名称 列 样式
+:host /deep/ .ng2-smart-row .wide{
+  word-wrap:break-word;  
+  word-break:break-all;  
+  overflow: hidden;
+}
+ 
+// 设备名称 列 样式  设备kpi报表
+:host /deep/ .ng2-smart-row .device_kpi_device_name{
+  padding: 1.25rem 0;
+  word-wrap:break-word;  
+  word-break:break-all;  
+  overflow: hidden;
+}
+
+
+
+
+
+
+
+// @import '../../../../@theme/styles/themes.scss';
+
+// @include nb-install-component() {
+//   nb-card {
+//     transform: translate3d(0, 0, 0);
+//   }
+//   ::ng-deep {
+//     ng2-smart-table {
+//       table {
+//         thead{
+//           tr.ng2-smart-titles.ng-star-inserted th{
+//             padding-right: 1.2rem !important;
+//           }
+//         }
+//         tbody {
+//           /* Alternating row colour */
+//           tr:nth-child(2n) {
+//             background-color: nb-theme(color-primary-100);
+//           }
+//           tr:hover {
+//             background: #62a0fca3 !important;
+//             // background-color: nb-theme(color-primary-100) !important;
+//           }
+//           tr.selected {
+//             background: #62a0fca3 !important;
+//           }
+//           tr{
+//             td{
+//               box-shadow: none !important;
+//               padding: 0.275rem 1.25rem !important;
+//             }
+//             td input:focus{
+//               box-shadow:0 0 0 0.2rem rgba(0, 123, 255, 0);
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+
+// }

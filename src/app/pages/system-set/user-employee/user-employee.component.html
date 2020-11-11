@@ -1,0 +1,40 @@
+
+
+<nb-card>
+    <nb-card-header>
+        用户管理
+    </nb-card-header>
+
+    <nb-card-body>
+        <div class="row" style="margin-bottom: 20px; padding: 0 15px;">
+            
+            
+            
+            <div class="example-items-rows" style=" margin-top: 5px; ">
+                <label for="" style="margin-right: 20px;">账号</label>
+                <input nbInput shape="rectangle" placeholder="Rectangle" status="success" type="text" id="employeenumber">
+            </div>
+            <div class="example-items-rows my-button" style="text-align: right;margin-left: 27px;margin-top: 5px; " *ngFor="let button of buttons2">
+                <button nbButton [status]="button.class"  size="small" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
+                <input type="file" class="import" id="import" (change)="onFileChange($event)" multiple="false" >
+            </div>
+
+        </div>
+
+        <div class="row" style="padding: 0 15px;">
+            <div class="example-items-rows" style="margin-bottom: 12px; margin-right: 27px;" *ngFor="let button of buttons">
+                <!-- active:表示是否可见， permission:表示具有那些权限-->
+                <button nbButton [status]="button.class" size="small" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <ngx-ag-table #ag_Grid   (nzpageindexchange)="nzpageindexchange($event)" [children_call_for_updata_table]="children_call_for_updata_table"></ngx-ag-table>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+

@@ -1,0 +1,40 @@
+
+@import '../../../assets/pages/device-inline/css/eim-device-inline-iconfont.css';
+
+#rtmv2{
+    background: url('/assets/pages/device-inline/images/bg.png');
+    // 头部
+    .head{
+        position: relative;
+        height: 50px;
+        margin-bottom: 15px;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+        h4{
+            position: absolute;
+            top: 9px;
+            left: 42%;
+            color: #656ca5;
+        }
+        // 首页==时间
+        .home-time{
+            height: 10px;
+            line-height: 10px;
+            color: rgb(238, 227, 227);
+        }
+    }
+    .home{
+        cursor: pointer;
+    }
+    .home:hover{
+        background: #6ac544;
+    }
+
+    .currenttime{
+        font-family: cursive;
+    }
+
+
+}

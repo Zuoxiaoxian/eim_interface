@@ -1,0 +1,104 @@
+<div >
+    <nz-radio-group [(ngModel)]="nzTabPosition">
+          <label nz-radio-button [nzValue]="'task'">任务管理</label>
+          <label nz-radio-button [nzValue]="'tasknode'">任务节点</label>
+    </nz-radio-group>
+    <br>
+    <br>
+    <div *ngIf="nzTabPosition == 'task'">
+      <button  nz-button nzType="primary" (click)="formToggletask()" >新增定时任务</button>
+
+      <ngx-gocron-form *ngIf="is_show_form"
+                   (isback)="formToggletask()"
+                   [task_item]="attributeRow"
+                   [task_list]="rowData"
+                   [type]="buttonName">
+     </ngx-gocron-form>
+      <br>
+      <br>
+      <nz-table *ngIf="formstatus"
+        #rowProexecTable
+        nzBordered
+        nzShowPagination
+        nzShowSizeChanger
+        nzShowQuickJumper
+        [nzData]="listTaskData"
+        (nzCurrentPageDataChange)="currentPageDataChange($event)"
+      >
+        <tr>
+          <th
+            nzSortKey="name">任务名称
+          </th>
+          <th
+            nzSortKey="spec">cron表达式
+          </th>
+          <th
+            nzSortKey="next_run_time">下次执行时间
+          </th>
+          <th
+            nzSortKey="status">状态
+          </th>
+          <th
+            nzSortKey="id">操作
+          </th>
+        </tr>
+        <tbody>
+        <tr *ngFor="let data of rowProexecTable.data;let id = index">
+          <td>{{ data.name }}</td>
+          <td>{{ data.spec }}</td>
+          <td>{{ data.next_run_time }}</td>
+          <td>{{ data.status?"√":"×" }}</td>
+          <td>
+<!--            <button nz-button nzType="primary" (click)="enable(data.id)">启用</button>-->
+<!--             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--            <button nz-button nzType="primary" (click)="disable(data.id)">禁止</button>-->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button nz-button nzType="primary" (click)="deletetask(data.id)">删除</button>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </div>
+   <div *ngIf="nzTabPosition == 'tasknode'">
+      <button nz-button nzType="primary" (click)="formToggletasknode()" >新增任务节点</button>
+      <ngx-gocron-form-node *ngIf="is_show_form"
+                   (isback)="formToggletasknode()"
+                   [task_item]="attributeRow"
+                   [task_list]="rowData"
+                   [type]="buttonName">
+     </ngx-gocron-form-node>
+     <br>
+     <br>
+      <nz-table *ngIf="formstatus"
+        #rowProexecTable
+        nzShowPagination
+        nzShowSizeChanger
+        nzShowQuickJumper
+        [nzData]="listTaskNodeData"
+        (nzCurrentPageDataChange)="currentPageDataChange($event)"
+      >
+        <tr>
+          <th
+            nzSortKey="alias">节点名称
+          </th>
+          <th
+            nzSortKey="name">主机名
+          </th>
+          <th
+            nzSortKey="port">端口
+          </th>
+          <th
+            nzSortKey="operation ">操作
+          </th>
+        </tr>
+        <tbody>
+        <tr *ngFor="let data of rowProexecTable.data;let id = index">
+          <td>{{ data.alias }}</td>
+          <td>{{ data.name }}</td>
+          <td>{{ data.port }}</td>
+          <td><button nz-button nzType="primary" (click)="deletetasknode(data.id )" >删除</button></td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </div>
+</div>

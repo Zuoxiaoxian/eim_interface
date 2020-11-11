@@ -1,0 +1,142 @@
+<div id="rtmv3a" style="padding-bottom: 5px;">
+    <div class="row" style="position: relative;">
+        <div class="top_left">
+            <div style="position: relative;height: 300px;width: 300px;z-index: 1;">
+                <div id="left_button" (click)="top_left_click('left')"></div>
+                <div id="center_button"></div>
+                <div id="right_button" (click)="top_left_click('right')"></div>
+            </div>
+        </div>
+        <div class="col-md-11"></div>
+        <div class="col-md-1 " style="text-align: right; padding-left: 0px;">
+            <div class="font_top_class">
+                <span>当前位置：{{real_time_data.address}}</span>
+            </div>
+            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 head">
+            <h4>{{real_time_data.title}}</h4>
+        </div>
+    </div>
+    <div class="font_second_class">
+        <div class="bo">
+            <div class="pad" style="display: flex">
+                设备运行状态：{{real_time_data.second_data.running_state.text}}
+                <div id="circle" [ngStyle]="{'background':real_time_data.second_data.running_state.color}"></div>
+            </div>
+        </div>
+        <div class="bo">
+            <div class="pad">实验任务名称：{{real_time_data.second_data.task_name}}</div>
+        </div>
+        <div class="bo">
+            <div class="pad">任务单号：{{real_time_data.second_data.task_number}}</div>
+        </div>
+        <div class="bo">
+            <div class="pad">进度：{{real_time_data.second_data.task_pace}}</div>
+        </div>
+        <div class="bo">
+            <div class="pad">
+                工程师：{{real_time_data.second_data.user_name}} {{real_time_data.second_data.user_phone}}
+            </div>
+        </div>
+        <div class="col-md-1 ">
+            <div class="pad">
+                <img style="width: 50px;height: 50px;" [src]="img.head.src" [alt]="img.head.name" />
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 20px 0px 20px;text-align: center;">
+        <div class="col-md-4">
+            <div class="col-md-12 left_conent">
+                <div class="panel_chart_name">{{ panel.equipment_params }}</div>
+                <span class="left_title">
+                <p>指标列表&nbsp;[<a>{{equipment_params.data.length}}</a>]</p>
+                </span>
+                <div class="zhibiao_table_nav" style="background: rgb(23,31,96);">
+                    <table class="table is-hoverable is-striped is-fullwidtd" style="margin-bottom: 0px;color: white;">
+                        <thead>
+                            <tr>
+                                <th *ngFor='let item of equipment_params.title' class="header">{{item}}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="zhibiao_table" style="background-image: linear-gradient(rgb(23,31,96),rgb(53,105,161));
+             color: lightgoldenrodyellow;">
+                    <table class="table is-hoverable is-striped is-fullwidtd">
+                        <tbody>
+                            <tr *ngFor='let item of equipment_params.data; let i = index'>
+                                <td [ngStyle]="{'color':get_font_color(item)}" style="width: 89px">{{item.title}}</td>
+                                <td [ngStyle]="{'color':get_font_color(item)}">{{item.value}}</td>
+                                <td [ngStyle]="{'color':get_font_color(item)}">{{item.unit}}</td>
+                                <td>
+                                    <div class="tuxian" [ngStyle]="{'display':item.unit == '开/关'?'none':''}">
+                                        <a class="iconfont qushi iconqushi" id="qushi-1-{{i}}" [ngStyle]="{'color': get_button_color('qushi',i)}" (click)="hit_tuxian(item, 'qushi-1-'+i,'click')"></a>
+                                        <a class="iconfont biao2 iconyibiao" id="biao-2-{{i}}" [ngStyle]="{'color':button['biao']['2'] == i?'green':''}" (click)="hit_tuxian(item, 'biao-2-'+i,'click')"></a>
+                                        <a class="iconfont biao3 iconyibiao" id="biao-3-{{i}}" [ngStyle]="{'color':button['biao']['3'] == i?'green':''}" (click)="hit_tuxian(item, 'biao-3-'+i,'click')"></a>
+                                    </div>
+                                    <div class="tuxian" [ngStyle]="{'display':item.unit != '开/关'?'none':''}">
+                                        <a class="iconfont guanji1 iconguanji" id="guanji-1-{{i}}" [ngStyle]="{'color':button['guanji']['1'] == i?'green':''}" (click)="hit_tuxian(item, 'guanji-1-'+i,'click')"></a>
+                                        <a class="iconfont guanji2 iconguanji" id="guanji-2-{{i}}" [ngStyle]="{'color':button['guanji']['2'] == i?'green':''}" (click)="hit_tuxian(item, 'guanji-2-'+i,'click')"></a>
+                                        <a class="iconfont guanji3 iconguanji" id="guanji-3-{{i}}" [ngStyle]="{'color':button['guanji']['3'] == i?'green':''}" (click)="hit_tuxian(item, 'guanji-3-'+i,'click')"></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel_chart_name"></div>
+            <div id="center_image" style="height: 38%;">
+                <img style="width: 100%" [src]="img.car.src" [name]="img.car.name" />
+            </div>
+            <div class="box_shadow" style="height: 50%">
+                <div class="panel_chart_name">{{panel.equipment_curve}}</div>
+                <div class="second_charts">
+                    <div id="second_chart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box_shadow" style="margin-top: 3%;height: 40%;">
+                <!-- <div class="panel_chart_name">{{panel.KPI}}</div> -->
+                <div style="height: 90%;">
+                    <div class="row">
+                        <div class="third_first_font" style="margin-left: 26%;">{{button['biaoName'][2]}}</div>
+                        <div class="third_first_font" style="margin-left: 29%;">{{button['biaoName'][3]}}</div>
+                    </div>
+                    <div class="third_first">
+                        <div id="third_first_1" class="gauge1"></div>
+                        <div id="third_first_2" class="gauge2"></div>
+                        <!-- <div id="third_first_3"></div> -->
+                        <!-- <div id="third_first_4"></div> -->
+                    </div>
+                    <div style="height: 59%;">
+                        <div id="third_second"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="box_shadow" style="height: 48%;margin-top: 9px;">
+                <div class="panel_chart_name">
+                    <div id="circle" style="background: green;"></div>
+                    {{panel.health}}
+                </div>
+                <div class="box5_con_bot">
+                    <ul id='ul_message' style="position: absolute;width: 90%;">
+                        <!--                <li *ngFor="let item of messageList;let i = index" title = '{{item.message}}'>-->
+                        <!--                  <div >-->
+                        <!--                    {{ i+1}}、{{item.message}}-->
+                        <!--                  </div>-->
+                        <!--                </li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

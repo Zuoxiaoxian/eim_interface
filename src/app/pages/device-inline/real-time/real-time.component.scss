@@ -1,0 +1,322 @@
+@import '../../../../assets/pages/device-inline/css/eim-real-time-iconfont.css';
+
+.zhibiao_table_nav{
+    height: 35px;
+    .table{
+        margin-bottom: 2px;
+    }
+    .table th{
+        text-align: center;
+            color: red;
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e600;
+            border-bottom: 1px dotted #dee2e600;
+    }
+}
+
+.zhibiao_table::-webkit-scrollbar{
+    // 隐藏滚动条
+    display: none;
+    width: 2px;
+}
+.zhibiao_table{
+    // 滚动
+    overflow-x: hidden;
+    height: 710px;
+    .table thead{
+        background-color: transparent;
+        .header{
+            text-align: center;
+            color: red;
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e600;
+            border-bottom: 1px dotted #dee2e600;
+        }
+    }
+    .table td{
+        padding: 0.75rem;
+        vertical-align: top;
+        border-top: 1px dotted #d9dbdd69;
+        border-bottom: 1px dotted #d9dbdd69;
+        color: #fff;
+        font-size: xx-small;
+        text-align: center;
+    }
+    .tuxian{
+        // border: red solid 1px;
+        a{
+            margin: 0 2px;
+        }
+    }
+
+}
+.zhibiao_table_nav2{
+    height: 35px;
+    .table{
+        margin-bottom: 2px;
+    }
+    .table th{
+        text-align: center;
+        color: rgb(251, 255, 0);
+        padding: 0.75rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e600;
+        border-bottom: 1px dotted #dee2e600;
+        font-size: x-small;
+    }
+}
+
+.zhibiao_table2{
+    // 滚动
+    overflow-y: hidden;
+    // height: 710px;
+
+    .no_data{
+        color: #fff;
+        top: 50%;
+        left: 38%;
+        position: absolute;
+    }
+    .table thead{
+        background-color: transparent;
+        .header{
+            text-align: center;
+            color: rgb(219, 220, 211);
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e600;
+            border-bottom: 1px dotted #dee2e600;
+            font-size: xx-small;
+        }
+    }
+    .table td{
+        padding: 0.75rem;
+        vertical-align: top;
+        border-top: 1px dotted #d9dbdd69;
+        border-bottom: 1px dotted #d9dbdd69;
+        color: #fff;
+        font-size: xx-small;
+        text-align: center;
+    }
+
+
+}
+
+.conent{
+    padding: 0 15px;
+    margin-top: 15px;
+
+    .left_conent{
+        box-shadow: 0 0 1.2vh 0.34vh rgba(50,84,129,0.7) inset;
+        .left_title{ 
+            top: -11px;
+            left: 1px;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            padding: 0 40%;
+            p{
+                color: rgb(250, 245, 245);
+                background: rgba(22, 67, 127,1);
+                line-height: 14px;
+                font-size: xx-small;
+                a{
+                    color: rgb(23, 235, 101);
+                }
+            }
+        };
+        
+    };
+
+    .right_conent1, .right_conent2, .right_conent3{
+        .right_conent_left{
+            box-shadow: 0 0 1.2vh 0.34vh rgba(50,84,129,0.7) inset;
+            .left_title{ 
+                top: -11px;
+                left: 1px;
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                padding: 0 40%;
+                p{
+                    color: rgb(250, 245, 245);
+                    background: rgba(22, 67, 127,1);
+                    line-height: 14px;
+                    font-size: xx-small;
+
+                }
+            }
+            .center_title{
+                color: #fff;
+                text-align: center;
+                font-size: x-small;
+                img{
+                    width: 100%;
+                }
+            }
+            .equ_info{
+                height: 30%;
+                padding-top: 20%;
+                .equ-line{
+                    position: absolute;
+                    transform: translate(-50%);
+                    top: 5%;
+                    left: 16%;
+                    border-left: #cad328 0.3vh solid;
+                    font-size: 1.5vh;
+                    padding-left: 0.2vh;
+                }
+                .equ-line ~ span{
+                    margin-bottom: 1%;
+                    margin-left: 2.5%;
+                    color: #fff;
+                    font-size: 1.2vh;
+                    display: inline-block;
+                    padding: 0px 5px;
+                    border-radius: 2px;
+                    width: 45%;
+                    text-align: center;
+                }
+                #JL, #GL{
+                    color: #fff;
+                    display: inline-block;
+                    font-size: smaller;
+                    text-align: center;
+                    width: 45%;
+                    margin-bottom: 0px;
+                }
+            
+                // 电流的类
+                .equ-line2{
+                    position: absolute;
+                    transform: translate(-50%);
+                    top: 5%;
+                    left: 13%;
+                    border-left: #cad328 0.3vh solid;
+                    font-size: 1.5vh;
+                    padding-left: 0.2vh;
+                }
+                .dianliu{
+                    color: #fff;
+                    font-size: 1.2vh;
+                    display: inline-block;
+                    padding: 0px 11px;
+                    border-radius: 2px;
+                    text-align: center;
+                }
+                #A_I, #B_I, #C_I{
+                    color: red;
+                    display: inline-block;
+                    font-size: smaller;
+                    text-align: center;
+                    margin-bottom: 0px;
+                    width: 45%;
+                } 
+            }
+            // 设备信息列
+            .device_info{
+                height: 100%;
+                color: #fff;
+                font-size: smaller;
+                padding-top: 11px;
+                padding-bottom: 9px;
+                hr{
+                    margin: 1px;
+                    background: #16437f;
+                }
+                p{
+                    display: inline;
+                    color: #fff;
+                    font-size: xx-small;
+                }
+            }
+            .device_base_info{
+                position: absolute;
+                top: -11px;
+                left: 40%;
+                background: rgba(22, 67, 127,1);
+                height: 15px;
+                padding: 0px;
+                p{
+                    color: white;
+                    font-size: xx-small;
+                    margin: 0px;
+                    line-height: 18px;
+                    padding: 0 25px;
+
+                }
+            }
+
+        }
+        .right_conent_right{
+            box-shadow: 0 0 1.2vh 0.34vh rgba(50,84,129,0.7) inset;
+            .left_title{ 
+                top: -11px;
+                left: 1px;
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                padding: 0 30%;
+                p{
+                    color: rgb(250, 245, 245);
+                    background: rgba(22, 67, 127,1);
+                    line-height: 14px;
+                    font-size: xx-small;
+
+                }
+            }
+            // 仪表盘
+            .gauge1,.gauge2{
+                // min-width: 100%;
+                min-width: 140px;
+                padding-top: 10%;
+                height: 90%;
+            }
+            .echart_date{
+                height: 19px;
+                ul{
+                    display: flex;
+                    list-style-type: none;
+                    left: 50%;
+                    position: relative;
+                    height: 18px;
+                    top: 6px;
+                }
+                .li_default{
+                    list-style-type:none;
+                    overflow: hidden;
+                    text-align: center;
+                    font-size: xx-small;
+                    color: #fff;
+                    background-color: #4673fbde;
+                    border-right: 1px red solid;
+                    padding: 1px;
+                    width: 21px;
+                    cursor: pointer;
+                }
+                .li_active{
+                    list-style-type:none;
+                    overflow: hidden;
+                    text-align: center;
+                    font-size: xx-small;
+                    color: #fff;
+                    background-color: #1d2029de;
+                    border-right: 1px red solid;
+                    padding: 1px;
+                    width: 21px;
+                    cursor: pointer;
+                }
+            }
+            .echart_line{
+                height: 300px;
+                width: 336px;
+            }
+        }
+        
+    }
+    .right_conent2{
+        margin: 10px 0px;
+    }
+}

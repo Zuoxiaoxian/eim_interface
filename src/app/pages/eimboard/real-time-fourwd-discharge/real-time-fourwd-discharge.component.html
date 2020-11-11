@@ -1,0 +1,101 @@
+<div id="rtmv3" style="padding-bottom: 5px;">
+    <div class="row">
+        <div class="col-md-11"></div>
+        <div class="col-md-1" style="text-align: right; padding-left: 0px;">
+            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 head">
+            <h4>{{real_time_data.title}}</h4>
+        </div>
+    </div>
+    <div class="row conent">
+        <!--  第一列  -->
+        <div class="col-md-4" style="display: grid;">
+            <!--  第一列第一行  -->
+            <div class="first_row ">
+                <div class="title">标题标题</div>
+                <div class="row box_shadow">
+                    <div class="box3_left height"></div>
+                    <div style="width:60%;">
+                        <div style="display: flex;">
+                            <ng-container *ngFor="let item of first_row_data.equipment">
+                                <div class="data_bg">
+                                    <p style="font-size: 12px;margin: 0px;">{{item.number}}台</p>
+                                    <small style="font-size: 12px;">{{item.title}}</small>
+                                </div>
+                                <div style="width: 4px;"></div>
+                            </ng-container>
+                        </div>
+                        <div id="box3_right"></div>
+                    </div>
+                </div>
+
+            </div>
+            <!--  第一列第二行  -->
+            <div class="first_row">
+                <div class="first_second box_shadow"></div>
+            </div>
+            <!--  第一列第三行  -->
+            <div class="first_row ">
+                <div class="box_shadow">
+                    <table class="table" style="margin-bottom: 0px">
+                        <thead class="header">
+                            <tr>
+                                <th *ngFor='let item of task_data.title' class="header">{{item.name}}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div style="overflow-x: hidden;height: 180px;">
+                        <table class="table">
+                            <tbody>
+                                <tr *ngFor='let item of task_data.data; let i = index'>
+                                    <td *ngFor='let header of task_data.title'>{{ item[header.bind] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div style="height: 62%;margin-top: 3%;display: flex;">
+                <div style="height: 100%;width: 50%;">
+                    <div style="height: 10%; "></div>
+                    <!--    第二列第一行      -->
+                    <div class="box_shadow" style="height: 20%; ">
+                        <p style="text-align: right;color: white;font-size: 1.35rem;">结构试验结构试验结构试验结构试验</p>
+                        <p style="text-align: left;color: white;font-size: 1.35rem;">结构试验结构试验结构试验</p>
+                    </div>
+                    <!--    第二列第二行中间图片      -->
+                    <div style="height: 70%;padding: 10px;">
+                        <img id="img_center" [src]="img.url" [alt]="img.name">
+                    </div>
+                </div>
+                <!--    第三列     -->
+                <div style="height: 100%;width: 50%;">
+                    <!--    第三列第一行      -->
+                    <div class="box_shadow" style="height: 30%;">
+                        <div id="third_first_one" class="third_first"></div>
+                        <div id="third_first_two" class="third_first"></div>
+                        <div id="third_first_three" class="third_first"></div>
+                    </div>
+                    <!--    第三列第二行      -->
+                    <div class="box_shadow" style="height: 66%;margin-top: 10px;">
+                        <div style="height: 50%;width: 100%;position: relative;">
+                            <div id="line_chart_1" class="line_chart"></div>
+                        </div>
+                        <!--    第三列第三行      -->
+                        <div style="height: 50%;width: 100%;position: relative;">
+                            <div id="line_chart_2" class="line_chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 box_shadow" style="height: 34%;">
+                <div id="echarts_3"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<nb-card >
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-4">
+            <ngx-my-select #device_datas [selectdatas]="deviceDatas"></ngx-my-select>
+        </div>
+        <div class="col-md-4">
+            <ngx-date-range #daterange></ngx-date-range>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-4">
+            
+        </div>
+        <div class="col-md-4">
+            <button nbButton status="info" size="small" style=" margin-right: 10px;" (click)="query()">筛选</button>
+            <!-- <button nbButton status="warning" size="small">重置</button> -->
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    
+    
+    <div class="row" style="padding: 0px 15px;">
+        <div class="col-md-1 myline"></div>
+        <div class="col-md-1" style="text-align: center;">全部消息</div>
+        <div class="col-md-10 myline"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10"></div>
+        <div class="col-md-2"  style="text-align: right;">
+            <button nbButton status="info" size="small" style=" margin-right: 10px;" (click)="download('报警报表')">导出数据</button>
+        </div>
+    </div>
+
+    <div class="row" style="min-height: 690px;">
+        <div class="col-md-12">
+        </div>
+    </div>
+
+
+</nb-card>

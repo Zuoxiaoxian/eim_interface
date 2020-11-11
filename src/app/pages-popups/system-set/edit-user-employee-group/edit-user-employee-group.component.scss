@@ -1,0 +1,19 @@
+// 必填
+.mulu_title::before{
+    content: "*";
+    color: #ff4949;
+    margin-right: 4px;
+}
+
+.mylabel{
+    padding: 9px 0px;
+}
+
+.mylabel2{
+    padding:  0px;
+}
+
+.setting_employee_group{
+    width: 800px;
+    overflow-y: auto;
+}

@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col-md-3 my-select">
+        <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
+    </div>
+    <div class="col-md-3 my-select">
+        <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
+    </div>
+    <div class="col-md-3 my-select">
+        <ngx-my-select #asset_number [selectdatas]="assetsnumber"></ngx-my-select>
+    </div>
+
+    <div class="col-md-3 my-select">
+        <div class="row">
+            <div class="col-md-4 my-button">
+            </div>
+            <div class="col-md-4 my-button">
+                <button nbButton status="info" size="small" (click)="query()">搜索</button>
+            </div>
+            <div class="col-md-4 my-button">
+                <button nbButton status="info" size="small" (click)="download('边缘网关管理')">导出</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row"  style="margin-top: 20px;">
+    <div class="col-md-12">
+        <nb-card>
+            <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="info">
+                <ngx-my-table-ng2 #mytable  [datas]="border_gateway_table_data"></ngx-my-table-ng2>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

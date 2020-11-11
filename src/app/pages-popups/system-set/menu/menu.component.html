@@ -1,0 +1,336 @@
+<nb-card style="width: 800px; overflow-y: auto;" size="large" [nbSpinner]="loading"
+    nbSpinnerStatus="danger"
+    nbSpinnerSize="large"
+    nbSpinnerMessage=""
+>
+  <nb-card-header>
+    <div class="row">
+        <div class="col-md-3">添加目录</div>
+        <div class="col-md-7"></div>
+        <div class="col-md-2" style="text-align: right;">
+            <nb-icon icon="close-outline" style="cursor: pointer;" (click)="closedialog()"></nb-icon>
+        </div>
+    </div>
+  </nb-card-header>
+
+  <nb-card-body>
+    <!-- <form class="layui-form" action=""> -->
+      <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title" style="text-align: center;">
+          <li class="layui-this mululi">
+              <div style="position: absolute;top: 1px;left: 22px;">
+                  目录 
+              </div>
+          </li>
+          <li class="caidanli">
+              <div style="position: absolute;top: 1px;left: 22px;">
+                  菜单 
+              </div>
+          </li>
+          <li class="anniuli">
+              <div style="position: absolute;top: 1px;left: 22px;">
+                  按钮 
+              </div>
+          </li>
+        </ul>
+        <div class="layui-tab-content">
+            <!-- layui-show  layui-show -->
+            <div class="layui-tab-item layui-show mulu_tab">
+              <form class="layui-form" action="">
+                <div class="layui-form-item">
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel mulu_title">目录名称</label>
+                    <div class="layui-input-inline">
+                      <input type="text" name="muluname" lay-verify="required|muluname" placeholder="目录名称" autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel mulu_title">英文目录</label>
+                    <div class="layui-input-inline">
+                      <input type="text" name="muluname_en" lay-verify="required|muluname_en" placeholder="英文目录" autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+                </div>
+   
+                <div class="layui-form-item">
+                  <label class="layui-form-label mylabel">上级目录</label>
+                  <div class="layui-input-block" style="height: 38px; overflow: hidden;">
+                      <select id="parenttitle" name="parenttitle" lay-verify="" class="caidantype">
+                        <option *ngFor="let item of muluselects" [value]="item.id">{{item.title}}</option>
+                      </select>    
+                  </div>
+                </div>
+
+  
+                <div class="layui-form-item">
+                  <div class="layui-inline">
+                    <label class="layui-form-label">路由</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="mulumenuurl"   lay-verify="mulumenuurl" placeholder="路由" autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+
+                  <div class="layui-inline">
+                    <label class="layui-form-label">是否启用</label>
+                    <div class="layui-input-block">
+                      <input type="checkbox" name="mulu_visible" lay-skin="switch" lay-filter="filter" lay-text="是|否" checked>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+                <div class="layui-form-item">
+                  <label class="layui-form-label">目录图标</label>
+                  <div class="layui-input-block">
+                    <input #autoInput
+                      name="muluicon"
+                      type="text"
+                      class="layui-input"
+                      (input)="onChange()"
+                      placeholder="图标"
+                      [nbAutocomplete]="muluauto" />
+  
+                    <nb-autocomplete #muluauto (selectedChange)="onSelectionChange($event)">
+  
+                      <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.icon">
+                        <!-- <nb-icon icon= {{option.icon}} ></nb-icon> -->
+                        <nb-icon icon={{option.icon}} *ngIf="option.title != 'null'"></nb-icon>
+                        {{ option.icon }}
+                      </nb-option>
+  
+                    </nb-autocomplete>
+
+                  </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序号</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="mululevel" placeholder="0" aria-label="排序号" max="Infinity" min="0"  class="layui-input">
+                        
+                    </div>
+                </div>
+
+                <div class="layui-form-item"style="text-align: end;">
+                  <div class="layui-inline">
+                    <div class="layui-input-inline">
+                    </div>
+                  </div>
+                  <div class="layui-inline"style="text-align: end;">
+                    <div class="layui-input-inline">
+                      <button class="layui-btn layui-btn-primary" (click)="cancel()">取消</button>
+                      <button type="submit" class="layui-btn" lay-submit="" lay-filter="mulu" >确定</button>
+                    </div>
+                  </div>
+  
+                </div>
+
+              </form>
+            </div>
+
+            <div class="layui-tab-item caidan_tab">
+              <form class="layui-form" action="">
+                <div class="layui-form-item">
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel mulu_title">菜单名称</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="caidanname"   lay-verify="required|caidanname" placeholder="菜单名称" autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+                  
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel mulu_title">英文名称</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="caidanname_en"   lay-verify="required|caidanname_en" placeholder="英文名称" autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layui-form-item">
+
+                  <label class="layui-form-label mylabel">上级目录</label>
+                  <div class="layui-input-block"  style="height: 38px; overflow: hidden;">
+                      <select id="caidanparentname" name="caidanparentname" lay-verify="" class="caidantype">
+                        <option *ngFor="let item of muluselects" [value]="item.id">{{item.title}}</option>
+                      </select>    
+                  </div>
+                </div>
+    
+                <div class="layui-form-item">
+                  <div class="layui-inline">
+                    <label class="layui-form-label">路由</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="caidanmenuurl"   lay-verify="" placeholder="路由" autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+
+                  <div class="layui-inline">
+                    <label class="layui-form-label">是否启用</label>
+                    <div class="layui-input-block">
+                      <input type="checkbox" name="caidan_visible" lay-skin="switch" lay-filter="filter" lay-text="是|否" checked>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="layui-form-item">
+                  <label class="layui-form-label">目录图标</label>
+                  <div class="layui-input-block">
+                    <input #autoInput
+                      name="caidanicon"
+                      type="text"
+                      class="layui-input"
+                      (input)="onChange()"
+                      placeholder="图标"
+                      [nbAutocomplete]="auto" />
+  
+                    <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
+  
+                      <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.icon">
+                        <nb-icon icon={{option.icon}} *ngIf="option.title != 'null'"></nb-icon>
+                        {{ option.icon }}
+                      </nb-option>
+  
+                    </nb-autocomplete>
+
+                  </div>
+                </div>
+                
+    
+
+                
+                <div class="layui-form-item">
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel">授权标识</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="caidanpermissionValue"   lay-verify="" placeholder="授权标识" autocomplete="off" class="layui-input">
+                    </div>
+
+                  </div>
+                  <div class="layui-inline">
+                    <label class="layui-form-label">排序号</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="caidanlevel" placeholder="0" aria-label="排序号" max="Infinity" min="0"  class="layui-input">
+                    </div>
+                  </div>
+                </div>
+
+
+                <!-- 菜单按钮 -->
+                <div class="layui-form-item"style="text-align: end;">
+                  <div class="layui-inline">
+                    <div class="layui-input-inline">
+                    </div>
+                  </div>
+                  <div class="layui-inline"style="text-align: end;">
+                    <div class="layui-input-inline">
+                      <button class="layui-btn layui-btn-primary" (click)="cancel()">取消</button>
+                      <button type="submit" class="layui-btn" lay-submit="" lay-filter="caidan" >确定</button>
+                    </div>
+                  </div>
+
+                </div>
+
+              </form>
+  
+    
+            </div>
+
+            <div class="layui-tab-item anniu_tab">
+              <form class="layui-form" action="">
+                <div class="layui-form-item">
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel mulu_title">按钮名称</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="anniuname" lay-verify="required|anniuname" placeholder="按钮名称" autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel mulu_title">英文名称</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="anniuname_en" lay-verify="required|anniuname_en" placeholder="英文名称" autocomplete="off" class="layui-input">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="layui-form-item">
+
+                  
+                  
+
+                  <!-- 按钮上级目录 -->
+                  <div class="layui-inline">
+                    <label class="layui-form-label">上级目录</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="anniunparentname" required="" lay-verify="required" placeholder="请输入标题" readonly="" autocomplete="off" class="layui-input">
+                        <div class="eleTree ele5" lay-filter="data5"></div>
+                    </div>
+                  </div>
+
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel">授权标识</label>
+                    <div class="layui-input-block">
+                        <!-- <input type="text" name="anniupermissionValue"   lay-verify="" placeholder="授权标识" autocomplete="off" class="layui-input"> -->
+                        <select name="anniupermissionValue" lay-filter="anniupermissionValue|required">
+                          <option value='add'>增加</option>
+                          <option value='del'>删除</option>
+                          <option value='edit'>修改</option>
+                          <option value='query'>搜索</option>
+                          <option value='import'>导入</option>
+                          <option value='download'>导出</option>
+                        </select>
+                    </div>
+                  </div>
+
+
+ 
+
+                </div>
+
+                
+              
+
+
+
+                <div class="layui-form-item">
+                  <div class="layui-inline">
+                    <label class="layui-form-label">排序号</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="anniulevel" placeholder="0" aria-label="排序号" max="Infinity" min="0"  class="layui-input">
+                    </div>
+                  </div>
+
+                  <div class="layui-inline">
+                    <label class="layui-form-label mylabel">是否启用</label>
+                    <div class="layui-input-block">
+                      <input type="checkbox" name="anniu_visible" lay-skin="switch" lay-filter="filter" lay-text="是|否"checked >
+                    </div>
+                  </div>
+                </div>
+
+
+                <!-- button按钮 -->
+                <div class="layui-form-item" style="text-align: end;">
+                  <div class="layui-inline">
+                    <div class="layui-input-inline">
+                    </div>
+                  </div>
+                  <div class="layui-inline"style="text-align: end;">
+                    <div class="layui-input-inline" >
+                      <button class="layui-btn layui-btn-primary" (click)="cancel()">取消</button>
+                      <button type="submit" class="layui-btn" lay-submit="" lay-filter="anniu" >确定</button>
+                    </div>
+                  </div>
+                  
+                </div>
+
+              </form>
+            </div>
+        </div>
+      </div>
+  </nb-card-body>
+</nb-card>

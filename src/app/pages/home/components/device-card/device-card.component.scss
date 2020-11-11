@@ -1,0 +1,35 @@
+div{
+    font-family: cursive;
+}
+.deviceinfo{
+    // text-align: center;
+    img{
+        width: 100%;
+    }
+}
+.devicetitle{
+    color: #0024d4;
+    // text-align: center;
+}
+.devicevalue{
+    // text-align: center;
+    color: #637eff;
+    ul li{
+        color: #637eff;
+    }
+}
+ul{
+    list-style-type: none;
+    // text-align: center;
+    padding: 0px;
+    li{
+        font-size: small;
+        button{
+            line-height: 10px;
+            background: #98aced;
+            border: 1px #98aced solid;
+            border-radius: 5px;
+            font-size: xx-small;
+        }
+    }
+}

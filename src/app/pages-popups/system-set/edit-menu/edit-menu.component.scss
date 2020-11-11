@@ -1,0 +1,24 @@
+.mylabel{
+    padding-right: 0px;
+    padding-left: 9px;
+    margin-right: 29px;
+}
+
+// 必填
+.mulu_title::before{
+    content: "*";
+    color: #ff4949;
+    margin-right: 4px;
+}
+
+
+// // regular style toast
+// @import '~ngx-toastr/toastr';
+
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~ngx-toastr/toastr-bs4-alert';
+
+

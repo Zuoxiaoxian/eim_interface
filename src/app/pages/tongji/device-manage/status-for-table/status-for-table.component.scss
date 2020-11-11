@@ -1,0 +1,29 @@
+// 运行
+.run{
+    border: green 1px solid;
+    background: rgb(48, 248, 48);
+}
+
+// 停止
+.stop{
+    border: rgb(238, 240, 238) 1px solid;
+    background: rgb(199, 199, 199);
+}
+
+// 维护
+.assert{
+    border: rgb(216, 236, 162) 1px solid;
+    background: rgb(171, 250, 92);
+}
+
+// 故障
+.fault{
+    border: rgb(228, 144, 129) 1px solid;
+    background: rgb(247, 115, 39);
+}
+
+// 其它
+.other{
+    border: rgb(203, 238, 164) 1px solid;
+    background: rgb(203, 238, 164);
+}

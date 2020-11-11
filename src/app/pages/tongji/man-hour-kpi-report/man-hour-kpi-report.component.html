@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-2 my-select">
+        <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
+    </div>
+    <div class="col-md-2 my-select">
+        <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
+    </div>
+    <div class="col-md-2 my-select">
+        <ngx-my-select #asset_number [selectdatas]="assetsnumber"></ngx-my-select>
+    </div>
+
+    <div class="col-md-6 my-select">
+        <div class="row">
+            <div class="col-md-6 my-button">
+                <!-- <ngx-date-range #daterange></ngx-date-range> -->
+            </div>
+
+            
+            <div class="col-md-2 my-button"  *ngFor="let button of buttons2">
+                <button nbButton size="small" [status]="button.class" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="margin-top: 20px;">
+        <nb-card>
+            <nb-card-body>
+                <ngx-my-table-ng2 #mytable  [datas]="man_hour_kpi_table_data"></ngx-my-table-ng2>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

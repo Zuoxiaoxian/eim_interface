@@ -1,0 +1,21 @@
+<nb-card style="min-width: 600px" accent="danger" size="large" [nbSpinner]="loading"
+    nbSpinnerStatus="danger"
+    nbSpinnerSize="large"
+    nbSpinnerMessage="" id = "editcar">
+
+    <nb-card-header style="padding: 2px 13px;">
+        <div class="row">
+            <div class="col-md-10">设备跟踪</div>
+            <div class="col-md-1" style="padding: 0px; text-align: right;">
+                <nb-icon icon="close-outline" style="cursor: pointer;" (click)="closedialog()"></nb-icon>
+            </div>
+            <div class="col-md-1" style="padding: 0px 6px 0px 0px; text-align: right;">
+                <nb-icon [icon]="isnot_fullscreen ? 'expand-outline' : 'collapse-outline' "  style="cursor: pointer;" (click)="showAllTemplate()"></nb-icon>
+            </div>
+        </div>
+    </nb-card-header>
+
+    <nb-card-body style="padding: 0px;">
+        <div id="map_trace" class="map_trace"></div>
+    </nb-card-body>
+</nb-card>

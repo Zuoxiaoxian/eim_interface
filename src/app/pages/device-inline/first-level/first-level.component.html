@@ -1,0 +1,72 @@
+<div id="rtmv2"  style="padding-bottom: 5px;">
+    <div class="row">
+        <div class="col-md-11"></div>
+        <div class="col-md-1" style="text-align: right; padding-left: 0px;">
+            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
+        </div>
+    </div>
+
+
+    <div class="row ">
+        <div class="col-md-12 head">
+            <h4>吉利智慧试验室项目看板</h4>
+            <img src="assets/pages/device-inline/images/one/one_title.png" alt="header">
+        </div>
+    </div>
+
+    
+    
+    <div class="row content">
+        <div class="col-md-3">
+            
+            <div class="row gotohome_father">
+                <div class="gotohome chunk" (click)="gohome()">
+                    <span class="device_inline_title">返回首页</span>
+                </div>
+            </div>
+            <div class="one_left_border"></div>
+            <div class="key-index chunk"></div>
+            <div class="warning-information chunk">
+                <span class="warning-title">预警信息</span>
+                <div class="table_div">
+                    <ul >
+                        <li class="warning_info" style="color: rgb(220, 207, 96);">指标1</li>
+                        <li class="warning_info2" style="color: rgb(220, 207, 96);">指标2</li>
+                        <li class="warning_info" style="color: rgb(220, 207, 96);">指标3</li>
+                        <li class="warning_info2" style="color: rgb(220, 207, 96);">指标4</li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+        
+        <div class="col-md-6">
+            <div class="chian_map">
+                
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row date_father">
+                <div class="date chunk">
+                    <span class="currenttime device_inline_title"></span>
+                </div>
+            </div>
+            
+            <div class="rate-select ">
+                <ul>
+                    <li><span id="kaidogn" class="span_active" (click)="kaidong()">设备开动率</span></li>
+                    <li><span id="wanhao" class="span_noactive" (click)="wanhao()">设备完好率</span></li>
+                </ul>
+            </div>
+            <div class="device-rate chunk">
+    
+            </div>
+            <div class="geely-info chunk"></div>
+            <div class="one_right_border"></div>
+
+        </div>
+    </div>
+    
+</div>
+

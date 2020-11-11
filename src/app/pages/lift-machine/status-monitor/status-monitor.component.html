@@ -1,0 +1,187 @@
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-md-2 statusinfo">
+        <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
+    </div>
+
+    <div class="col-md-2 statusinfo">
+        <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
+    </div>
+
+    <div class="col-md-2 statusinfo">
+        <ngx-my-select #asset_number [selectdatas]="assetnumber"></ngx-my-select>
+    </div>
+
+    <div class="col-md-2 statusinfo">
+        <ngx-date-range #daterange></ngx-date-range>
+    </div>
+
+    <div class="col-md-2 statusinfo">
+        <button nbButton status="info" (click)="query()">筛选</button>
+    </div>
+    <div class="col-md-2 statusinfo"></div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-2 statusinfo">
+        <img src="assets/pages/lift-machine/images/无标题1.png" alt="" style="width: 100%; height: 100%;">
+        <span class="zong-title">总</span>
+        <span class="zong-value">举升机总数：<span>{{datas.number[0]}}</span>个</span>
+    </div>
+    <div class="col-md-2 statusinfo">
+        <img src="assets/pages/lift-machine/images/无标题2.png" alt="" style="width: 100%; height: 100%;">
+        <span class="zong-title">空</span>
+        <span class="zong-value">举升机空位：<span>{{datas.number[1]}}</span>个</span>
+    </div>
+    <div class="col-md-2 statusinfo">
+        <h3 style="margin-bottom: 0px;margin-top: 5px;text-align: center;">维修车间</h3>
+    </div>
+    <div class="col-md-6 statusinfo"></div>
+</div>
+
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12 layoutdatas" style="min-height: 660px; ">
+       <div style="width: 1796px; position: relative;">
+            <img src="assets/pages/lift-machine/images/u.png" alt="" style=" width: 72%; height: 100%;">
+            <!-- 1号数据 -->
+            <h5 class="onetitlle">{{datas.row_col_title}}</h5>
+            <div class="row1-col1">
+                <img class="row-col" [src]="datas.row_col[0].src" alt="">
+                <span [class]="datas.row_col[0].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row_col[0].time}}h</span>
+                <span class="row-col-title">{{datas.row_col[0].title}}</span>
+            </div>
+            <div class="row1-col2">
+                <img class="row-col" [src]="datas.row_col[1].src" alt="">
+                <span [class]="datas.row_col[1].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row_col[1].time}}h</span>
+                <span class="row-col-title">{{datas.row_col[1].title}}</span>
+            </div>
+            <div class="row1-col3">
+                <img class="row-col" [src]="datas.row_col[2].src" alt="">
+                <span [class]="datas.row_col[2].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row_col[2].time}}h</span>
+                <span class="row-col-title">{{datas.row_col[2].title}}</span>
+            </div>
+            <div class="row1-col4">
+                <img class="row-col" [src]="datas.row_col[3].src" alt="">
+                <span [class]="datas.row_col[3].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row_col[3].time}}h</span>
+                <span class="row-col-title">{{datas.row_col[3].title}}</span>
+            </div>
+            <div class="row1-col5">
+                <img class="row-col" [src]="datas.row_col[4].src" alt="">
+                <span [class]="datas.row_col[4].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row_col[4].time}}h</span>
+                <span class="row-col-title">{{datas.row_col[4].title}}</span>
+            </div>
+            <div class="row1-col6">
+                <img class="row-col" [src]="datas.row_col[5].src" alt="">
+                <span [class]="datas.row_col[5].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row_col[5].time}}h</span>
+                <span class="row-col-title">{{datas.row_col[5].title}}</span>
+            </div>
+
+
+            <h5 class="twotitlle">{{datas.row2_col_title}}</h5>
+            <div class="row2-col1">
+                <img class="row-col" [src]="datas.row2_col[0].src" alt="">
+                <span [class]="datas.row2_col[0].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row2_col[0].time}}h</span>
+                <span class="row-col-title-top">{{datas.row2_col[0].title}}</span>
+            </div>
+            <div class="row2-col2">
+                <img class="row-col" [src]="datas.row2_col[1].src" alt="">
+                <span [class]="datas.row2_col[1].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row2_col[1].time}}h</span>
+                <span class="row-col-title-top">{{datas.row2_col[1].title}}</span>
+            </div>
+            <div class="row2-col3">
+                <img class="row-col" [src]="datas.row2_col[2].src" alt="">
+                <span [class]="datas.row2_col[2].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row2_col[2].time}}h</span>
+                <span class="row-col-title-top">{{datas.row2_col[2].title}}</span>
+            </div>
+            <div class="row2-col4">
+                <img class="row-col" [src]="datas.row2_col[3].src" alt="">
+                <span [class]="datas.row2_col[3].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row2_col[3].time}}h</span>
+                <span class="row-col-title-top">{{datas.row2_col[3].title}}</span>
+            </div>
+            <div class="row2-col5">
+                <img class="row-col" [src]="datas.row2_col[4].src" alt="">
+                <span [class]="datas.row2_col[4].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row2_col[4].time}}h</span>
+                <span class="row-col-title-top">{{datas.row2_col[4].title}}</span>
+            </div>
+            <div class="row2-col6">
+                <img class="row-col" [src]="datas.row2_col[5].src" alt="">
+                <span [class]="datas.row2_col[5].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row2_col[5].time}}h</span>
+                <span class="row-col-title-top">{{datas.row2_col[5].title}}</span>
+            </div>
+
+
+
+            <div class="row3-col1">
+                <img class="row-col" [src]="datas.row3_col[0].src" alt="">
+                <span [class]="datas.row3_col[0].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row3_col[0].time}}h</span>
+                <span class="row-col-title">{{datas.row3_col[0].title}}</span>
+            </div>
+            <div class="row3-col2">
+                <img class="row-col" [src]="datas.row3_col[1].src" alt="">
+                <span [class]="datas.row3_col[1].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row3_col[1].time}}h</span>
+                <span class="row-col-title">{{datas.row3_col[1].title}}</span>
+            </div>
+            <div class="row3-col3">
+                <img class="row-col" [src]="datas.row3_col[2].src" alt="">
+                <span [class]="datas.row3_col[2].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row3_col[2].time}}h</span>
+                <span class="row-col-title">{{datas.row3_col[2].title}}</span>
+            </div>
+            <div class="row3-col4">
+                <img class="row-col" [src]="datas.row3_col[3].src" alt="">
+                <span [class]="datas.row3_col[3].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row3_col[3].time}}h</span>
+                <span class="row-col-title">{{datas.row3_col[3].title}}</span>
+            </div>
+            <div class="row3-col5">
+                <img class="row-col" [src]="datas.row3_col[4].src" alt="">
+                <span [class]="datas.row3_col[4].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row3_col[4].time}}h</span>
+                <span class="row-col-title">{{datas.row3_col[4].title}}</span>
+            </div>
+            <div class="row3-col6">
+                <img class="row-col" [src]="datas.row3_col[5].src" alt="">
+                <span [class]="datas.row3_col[5].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row3_col[5].time}}h</span>
+                <span class="row-col-title">{{datas.row3_col[5].title}}</span>
+            </div>
+            
+            
+            
+            <div class="row3-col7">
+                <img class="row-col" [src]="datas.row3_col[6].src" alt="">
+                <span [class]="datas.row3_col[6].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row3_col[6].time}}h</span>
+                <span class="row-col-title-top">{{datas.row3_col[6].title}}</span>
+            </div>
+            <div class="row3-col8">
+                <img class="row-col" [src]="datas.row3_col[7].src" alt="">
+                <span [class]="datas.row3_col[7].src == '' ? 'row-col-time2' : 'row-col-time'">{{datas.row3_col[7].time}}h</span>
+                <span class="row-col-title-top" style="left: -22px;">{{datas.row3_col[7].title}}</span>
+            </div>
+
+
+        </div>
+        <div class="description">
+            <img class="description-bg" src="assets/pages/lift-machine/images/u_bg.png" alt="">
+            <div class="description-col1">
+                <div style="width: 58px; height: 96px;">
+                    <img class="description-car" src="assets/pages/lift-machine/images/ico_car_green.png" alt="">
+                </div>
+                <span class="description-title">有车</span>
+            </div>
+
+            <div class="description-col2">
+                <div style="width: 58px; height: 96px;">
+                    <img class="description-car" src="" alt="">
+                </div>
+                <span class="description-title">无车</span>
+            </div>
+
+            <div class="description-col3">
+                <div style="width: 58px; height: 96px;">
+                    <img class="description-car" src="assets/pages/lift-machine/images/ico_car_red.png" alt="">
+                </div>
+                <span class="description-title">故障</span>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
