@@ -22,6 +22,7 @@ declare let layui;
 
 import * as XLSX from 'xlsx';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
+import { ActionComponent } from './action/action.component';
 type AOA = any[][];
 
 @Component({
@@ -36,142 +37,26 @@ export class UserEmployeeComponent implements OnInit {
   constructor(private http: HttpserviceService, private dialogService: NbDialogService, 
     private publicmethod: PublicmethodService, private userinfo: UserInfoService) { 
 
-      // 得到用户组和角色 get_groupname get_rolename
+      // 得到用户组和角色  get_groupname get_rolename get_group
       this.http.callRPC("role", "get_rolename",{}).subscribe(roles=>{
+        console.log("get_rolename-------------------->>>>","得到用户组和角色" )
         this.get_rolename = roles["result"]["message"][0];
         localStorage.setItem("employee_rolename", JSON.stringify(this.get_rolename))
       });
       this.http.callRPC("role", "get_groupname",{}).subscribe(roles=>{
+        console.log("get_groupname-------------------->>>>","得到用户组和角色" )
         this.get_groupname = roles["result"]["message"][0];
         localStorage.setItem("employee_groupname", JSON.stringify(this.get_groupname))
       });
+      // get_group
+      this.http.callRPC('groups', 'get_group', {}).subscribe(result=>{
+        console.log("get_group-------------------->>>>","得到用户组和角色" )
+        var employee_result =  result['result']['message'][0];
+        localStorage.setItem("employee_group_all_", JSON.stringify(employee_result))
 
-
-      console.log("&&&&&&&&&&&&&&&&&&-------------------&&&&&&&&&", this.agGrid)
-      this.http.callRPC('emeployee', 'get_employee_limit', {offset: 0, limit: 50}).subscribe((res)=>{
-        // console.log("get_menu_role", result)
-        var get_employee_limit = res['result']['message'][0]
-        console.log("get_employee_limit", get_employee_limit);
-  
-        this.isloding = false;
-        // 发布组件，编辑用户的组件 和删除所需要的 plv8 函数 delete_employee
-        this.publicmethod.getcomponent(EditUserEmployeeComponent);
-        this.publicmethod.getmethod("delete_employee");
-  
-        var message = res["result"]["message"][0];
-        if( message.code === 0){
-          // 表示token过期了，跳转到 / 
-        }
-        // 处理data
-        var result_data = message.message.reverse();
-        if (result_data[0] && result_data[0][0]["numbers"]){
-          var other_result_data = result_data.splice(1, result_data.length);
-        }else{
-          var other_result_data = result_data;
-        }
-        var other_result_data_after = [];
-        other_result_data.forEach(result => {
-          other_result_data_after = other_result_data_after.concat(result);
-        });
-        console.log("-------other_result_data_after-----------",other_result_data_after);
-        // -----------------------
-        var result = other_result_data_after;
-        var employee_list = [];
-        for (let item of result){
-          var rids = [];
-          var items_dict = {};
-          var role_name_lists = []; 
-          var groups_name_lists = []; 
-          for (let element of result){
-            var rid_name = {}
-            if (item["employeeid"] === element["employeeid"]){
-              // items_dict["active"] = element["active"] == 1?'是': "否";
-              items_dict["active"] = element["active"] == 1?'是': "否";
-              items_dict["company"] = element["company"];
-              items_dict["department"] = element["department"];
-              items_dict["email"] = element["email"];
-              items_dict["employeeid"] = element["employeeid"];
-              items_dict["employeeno"] = element["employeeno"];
-              items_dict["facility"] = element["facility"];
-              items_dict["loginname"] = element["loginname"];
-              items_dict["name"] = element["name"];
-              items_dict["phoneno"] = element["phoneno"];
-              items_dict["pictureurl"] = element["pictureurl"];
-              items_dict["rid"] = element["rid"];
-              items_dict["groupid"] = element["groupid"];
-              
-              items_dict["role"] = element["role"];
-              items_dict["lastsignondate"] = element["lastsignondate"];
-              
-              items_dict["role_name"] = element["role_name"];
-  
-              rid_name["role"] = element["role"];
-              rid_name["rid"] = element["rid"];
-              var role_name_str: string | null = element["role_name"] ? element["role_name"]: null;
-              var groups_name_str: string | null = element["groups"] ? element["groups"]: null;
-              // rid_name["role_name"] =  role_name_str.replace(/\s/g, "");
-              role_name_lists.push(role_name_str)
-              groups_name_lists.push(groups_name_str)
-              rids.push(rid_name)
-              items_dict["rids"] = rids;
-              items_dict["role_name"] = role_name_lists;
-              items_dict["groups_name"] = groups_name_lists;
-              continue
-            }else{
-              
-            }
-          }
-          // 处理 role_names，将以第一， 去掉！
-          employee_list.push(items_dict)
-        }
-  
-        // 列表去重！
-        var unique_result = unique(employee_list, "employeeid")
-  
-        unique_group_role(unique_result, "groups_name");
-        unique_group_role(unique_result, "role_name");
-  
-        console.log("***************************************************")
-        console.log("*******************unique_result****************", unique_result)
-        this.gridData = []
-
-        this.gridData.push(...unique_result)
-        this.tableDatas.rowData = this.gridData;
-        var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';
-        this.tableDatas.totalPageNumbers = totalpagenumbers;
-
-        localStorage.setItem("employee_agGrid", JSON.stringify(this.tableDatas))
-
-        console.log("*******************this.tableDatas****************\n\n\n", this.tableDatas)
-        
-        function unique(arr, field) { // 根据employeeid去重
-          const map = {};
-          const res = [];
-          for (let i = 0; i < arr.length; i++) {
-            if (!map[arr[i][field]]) {
-              map[arr[i][field]] = 1;
-              res.push(arr[i]);
-            }
-          }
-          return res;
-        };
-  
-        // groups_name、role_name去重
-        function unique_group_role(arr, fild){
-          arr.forEach(element => {
-            var arr_list = [];
-            var groups_name_list = element[fild];
-            groups_name_list.forEach(groups => {
-              if(arr_list.indexOf(groups) === -1){
-                arr_list.push(groups)
-              }
-            });
-            // arr_list [] 改为 str
-            element[fild] = arr_list.join(";")
-          });
-        }
-  
       })
+
+
     }
 
 
@@ -197,7 +82,7 @@ export class UserEmployeeComponent implements OnInit {
   employee_data = [];
 
   // isloding 加载agGrid
-  isloding = true;
+  isloding = false;
 
   employee_agGrid;
   
@@ -207,38 +92,37 @@ export class UserEmployeeComponent implements OnInit {
 
   importdata: AOA = [[1,2], [3,4]];
   
+  active; // 操作！
   
   ngOnInit(): void {
 
     // ====================================agGrid
-      // 初始化table
-      setTimeout(() => {
-        this.employee_agGrid = JSON.parse(localStorage.getItem("employee_agGrid"))
-      }, );
-
-      // this.getemployee();
-      // ====================================agGrid
-      // 得到员工，并在table中展示！
-      // this.getsecurity('employee', 'get_employee', {});
-      // this.getsecurity('employee', 'get_employee_limit', {offset:0,limit:10,numbers:0});
       // 得到该页面下的button
       this.getbuttons();
-      this.init_employee_group();
+      var that = this;
+      this.active = { field: 'action', headerName: '操作', cellRendererFramework: ActionComponent, pinned: 'right',
+        cellRendererParams: {
+          clicked: function(data: any) {
+            if (data["active"]==='edit'){
+              that.edit([data["data"]]);
+            }else{
+              that.del(data["data"]);
+            }
+          }
+        },
+      }
       
-    }
+  }
     
 
   ngAfterViewInit(){
-      console.log("&&&&&&&&&&&&&&&&&&&&&&&this.employee_agGrid&&&&&&&&&&&&&&&&", this.employee_agGrid);
-      if (this.employee_agGrid == null){
-        this.pagemployee()
-      }else{
-        setTimeout(() => {
-          this.agGrid.init_agGrid(this.employee_agGrid);
-        },);
 
-      }
-      
+    // 初始化table
+    this.tableDatas.columnDefs.push(
+      this.active
+    )
+    this.getemployee();
+   
     
   }
   ngOnDestroy(){
@@ -251,8 +135,9 @@ export class UserEmployeeComponent implements OnInit {
 
   // =================================================agGrid
 
+  
   tableDatas = {
-    action: true,
+    action: false,
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection
       { field: 'name', headerName: '姓名', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,},
@@ -265,6 +150,15 @@ export class UserEmployeeComponent implements OnInit {
 
       { field: 'department', headerName: '部门', },
       { field: 'lastsignondate', headerName: '最后登录时间', },
+      // { field: 'action', headerName: '操作', cellRendererFramework: ActionComponent, pinned: 'right',
+      //   cellRendererParams: {
+      //     clicked: function(data: any) {
+      //       var that = this;
+      //       console.log("00000000000000000", data);
+            
+      //     }
+      //   },
+      // }
       
     ],
     rowData: [ // data
@@ -545,8 +439,10 @@ export class UserEmployeeComponent implements OnInit {
 
 
   updategetemployee(event?){
-    this.agGrid.methodFromParent(event);
-    
+    // this.agGrid.methodFromParent(event);
+
+    this.isloding = true
+    this.pagemployee();
 
   }
 
@@ -650,20 +546,7 @@ export class UserEmployeeComponent implements OnInit {
 
  
 
-  // 初始化用户组表！
-  init_employee_group(){
-    this.getsecurity_edit("group_", "get_group", {}).subscribe(res=>{
-      var result =  res;
-      if (result){
-        
-        console.log("初始化用户组表！", result);
-        localStorage.setItem("employee_group_all_", JSON.stringify(result))
-      }else{
-        // 获取用户组失败！
-        localStorage.setItem("employee_group_all_", JSON.stringify([]))
-      }
-    })
-  }
+ 
 
   // 请求得到 表get_employee中的数据！
   getsecurity_edit(table: string, method: string, colums: object){
@@ -895,12 +778,19 @@ export class UserEmployeeComponent implements OnInit {
         })
       }
     });
+    
   }
 
   // button按钮执行！ 编辑
-  edit(){
+  edit(active_data?){
+    var rowdata
+    // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
+    if (active_data){
+      rowdata = active_data;
+    }else{
+      rowdata = this.agGrid.getselectedrows();
+    }
     // 得到选中的aggrid rowdatas
-    var rowdata = this.agGrid.getselectedrows();
     console.log("------------rowdata--------------", rowdata)
     console.log("------------得到选中的aggrid rowdatas--------------", rowdata)
     if (rowdata.length === 0){
@@ -917,9 +807,6 @@ export class UserEmployeeComponent implements OnInit {
         name=>{console.log("----name-----", name)}
       );
     }else{
-
-     
-
       var rowData = rowdata[0]
       this.getsecurity_edit('employee', 'get_rolename', {}).subscribe((res)=>{
         console.log("employee_result-------------->", res);
@@ -935,20 +822,30 @@ export class UserEmployeeComponent implements OnInit {
               if (name){
                 // 更新table
                 this.isloding = true
-                // this.updategetemployee();
-                this.updategetemployee({value: name, action: "edit"});
+                // this.updategetemployee({value: name, action: "edit"});
+                this.updategetemployee();
               };
             }
           );
         });
+
       });
+
+
 
     }
   }
 
   // button按钮执行删除！
-  del(){
-    var rowdata = this.agGrid.getselectedrows();;
+  del(active_data?){
+    var rowdata
+    // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
+    
+    if (active_data){
+      rowdata = active_data;
+    }else{
+      rowdata = this.agGrid.getselectedrows();
+    }
     var getsecurity_edit2 = this.getsecurity_edit2;
     var publicservice = this.publicmethod;
     var success = this.success;
@@ -1423,14 +1320,7 @@ export class UserEmployeeComponent implements OnInit {
 
  
 
-  // 该方法是让agGrid子组件调用的！
-  children_call_for_updata_table(){
-    console.log("=========================")
-    console.log("=========================该方法是让agGrid子组件调用的！",);
-    console.log("=========================");
-    // 更新table
-
-  }
+ 
 
 
 

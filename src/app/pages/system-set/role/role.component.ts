@@ -1,6 +1,5 @@
 import { Component, OnInit,TemplateRef, ViewChild } from '@angular/core';
 
-import { ROLE_SETTINGS, ROLE_TABLE } from '../table_setting';
 
 import { DatePipe } from '@angular/common';
 
@@ -135,98 +134,6 @@ export class RoleComponent implements OnInit {
 
   
   ngOnInit(): void {
-    
-    // 初始化table
-    var data =  [
-      {
-        'roleid': 0,
-        'role': 'Item 0',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$0',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 1,
-        'role': 'Item 1',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$1',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 2,
-        'role': 'Item 2',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$2',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 3,
-        'role': 'Item 3',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$3',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 4,
-        'role': 'Item 4',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$4',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 5,
-        'role': 'Item 5',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$5',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 6,
-        'role': 'Item 6',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$5',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 7,
-        'role': 'Item 7',
-        'createdby': 'Item 0 en',
-        'createdonion': "全部",
-        'lastupdatedby': '$5',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 8,
-        'role': 'Item 8',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$5',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 9,
-        'role': 'Item 9',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$5',
-        'lastupdateon': '2020-9-15 16:22'
-      },
-      {
-        'roleid': 10,
-        'role': 'Item 10',
-        'createdby': 'Item 0 en',
-        'createdon': "全部",
-        'lastupdatedby': '$5',
-        'lastupdateon': '2020-9-15 16:22'
-      }
-    ]
     // 加载树状menu  初始化
     this.loadMenu().subscribe((treedata)=>{
       // this.showTreedata(treedata)
@@ -579,9 +486,6 @@ export class RoleComponent implements OnInit {
 
 
   ngOnDestroy(){
-    ROLE_SETTINGS.columns.pop();
-    console.log("销毁： ", ROLE_SETTINGS.columns);
-
     localStorage.removeItem(SYSROLEMENU); // 销毁菜单分配
   }
 
@@ -1259,9 +1163,14 @@ export class RoleComponent implements OnInit {
 
   // 更新table  update_agGrid
   updategetemployee(event?){
+    // 加载树状menu  初始化
+    this.loadMenu().subscribe((treedata)=>{
+      // this.showTreedata(treedata)
+      this.showTreedata_v2(treedata);
+    });
 
-    this.agGrid.methodFromParent(event);
-
+    this.agGrid.methodFromParent(event, true);
+    // 在更table的同时，也更新 树状结构
     
   }
 
@@ -1287,6 +1196,18 @@ export class RoleComponent implements OnInit {
       this.publicservice.option_record(employeeid, result,transactiontype,info,createdby);
     }
 
+  }
+
+
+  // children_call_for_updata_roleTree 子组件调用，刷新tree
+  children_call_for_updata_roleTree(){
+      // console.log("children_call_for_updata_roleTree 子组件调用，刷新tree")
+    // aggrid-action ----》aggrid ---》调用的次数太多！！！！！！！！！！
+    // this.loadMenu().subscribe((treedata)=>{
+    //   // this.showTreedata(treedata);
+    //   console.log("children_call_for_updata_roleTree 子组件调用，刷新tree")
+    //   this.showTreedata_v2(treedata);
+    // });
   }
 
 }

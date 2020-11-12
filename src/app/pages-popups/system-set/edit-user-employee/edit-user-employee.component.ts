@@ -42,19 +42,27 @@ export class EditUserEmployeeComponent implements OnInit {
     console.log("---------------------------------title---->", JSON.parse(this.rowdata));
     console.log("---------------------------------res---->", JSON.parse(this.res));
     console.log("---------------------------------goups---->", JSON.parse(this.goups));
-    this.layuiform();
+    if (this.rowdata){
+      this.isshow = true
+    }else{
+    }
   }
 
+  // 是否展示弹出窗！
+  isshow = false;
+
+
+  ngAfterViewInit(){
+    
+    this.layuiform();
+  }
 
   layuiform(){
     // 得到的编辑数据
     var rowdata = JSON.parse(this.rowdata);
     // 得到all角色---
     var res = JSON.parse(this.res);
-
     var rids = rowdata["rids"];
-
-
     var select_goups = JSON.parse(this.goups);
 
     var dialogRef = this.dialogRef;
@@ -236,11 +244,6 @@ export class EditUserEmployeeComponent implements OnInit {
         send_data["phoneno"] = data.field["phoneno"];
         send_data["employeeno"] = data.field["employeeno"];
         send_data["loginname"] = data.field["loginname"];
-        
-
-
-
-        
         send_data_list.push(send_data);
         
         var send_data_item = {};

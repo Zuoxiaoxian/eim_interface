@@ -51,10 +51,6 @@ export class UserEmployeeGroupComponent implements OnInit {
       // 验证 表单
       form.verify({
         group_: function(value, item){
-          console.log("验证、表单: AddEmployee",EmployeeGroup);
-          console.log("验证、表单: employeeno",EmployeeGroup["group_"]);
-          console.log("验证、表单: value",value);
-          console.log("验证、表单: item",item);
           // sql注入和特殊字符 special_str
           var special_sql = EmployeeGroup['special_sql']["special_sql"];
           var special_str = EmployeeGroup['special_sql']["special_str"];
@@ -106,11 +102,9 @@ export class UserEmployeeGroupComponent implements OnInit {
       form.on("submit(submit)", function(data){
         //获取表单区域所有值
         console.log("v======获取表单区域所有值",data.field) //当前容器的全部表单字段，名值对形式：{name: value}
-        console.log(data.field) //被执行事件的元素DOM对象，一般为button对象
         var send_data = data.field;
         send_data["active"] = send_data["active"] === "on"? 1: 0;
         send_data["createdby"] = userinfo.getLoginName();
-        console.log("提交修改的",  send_data) //被执行事件的元素DOM对象，一般为button对象
         // 更新修改的数据！ insert_group 
         getsecurity("employee", "insert_group",send_data,http).subscribe((res)=>{
           console.log("KKKKKKKKKKK", res);
@@ -150,7 +144,6 @@ export class UserEmployeeGroupComponent implements OnInit {
   getsecurity(table: string, method: string, colums: object, http){
     return new Observable((res)=>{
       http.callRPC(table, method, colums).subscribe((result)=>{
-        console.log("更新用户信息！", result)
         var result =  result['result']['message'][0];
         res.next(result)
       })
@@ -169,8 +162,6 @@ export class UserEmployeeGroupComponent implements OnInit {
   // option_record
   RecordOperation(result,transactiontype, infodata){
     console.warn("==============>", this.userinfo.getLoginName())
-    console.warn("infodata==============>", infodata)
-    console.warn("==============>")
     if(this.userinfo.getLoginName()){
       var employeeid = this.userinfo.getEmployeeID();
       var result = result; // 1:成功 0 失败

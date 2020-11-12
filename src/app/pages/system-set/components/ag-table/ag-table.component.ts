@@ -28,7 +28,7 @@ export class AgTableComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;   // 实例在组件可访问
   @Output() private nzpageindexchange = new EventEmitter<any>(); // 分页
   @Output() private clickrow = new EventEmitter<any>(); // 分页
-  @Input() private children_call_for_updata_table:any;
+  @Input() private updategetemployee:any;
 
 
   gridApi;
@@ -113,7 +113,7 @@ export class AgTableComponent implements OnInit {
     console.log("*****************************************tableDatas");
 
     if (this.action){
-      console.log("action===================", this.action);
+      console.log("action===========222222222222222========", this.action);
       console.log("this.tableDatas.columnDefs======this.tableDatas.columnDefs", this.columnDefs, "index: ",this.columnDefs.indexOf(action));
       // user-employee
       var action = { field: 'action', headerName: '操作', cellRendererFramework: AgGridActionComponent, pinned: 'right'};
@@ -384,95 +384,102 @@ export class AgTableComponent implements OnInit {
     this.gridColumnApi = params.columnApi;
   }
 
-  // ============================== 渲染组件调用的方法 这是ag-grid中的 操作！
-  methodFromParent(rowdata){
-    console.log("============================== 渲染组件调用的方法 这是ag-grid中的 操作！\n\n")
-    // {value: name, action: "edit"}
-    var action = rowdata.action;
-    var value = rowdata.value;
-    switch (action) {
-      case "edit":
-        console.log("edit--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-        // this.children_call_for_updata_table(); // 调用父组件，没用到
-        // true 表示编辑、删除成功
-        // var rowNode  = this.gridApi.getRowNode(String(cell.id));
-        // rowNode.setData(cell); // Cannot read property 'setData' of undefined 未能解决
-        this.rowData.forEach(row => {
-          // 用户组管理
-          if (row.id === value.id && row.id){
-            var row_index = this.rowData.indexOf(row);
-            value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-            this.rowData[row_index] = value
-          }
-          // 用户管理
-          if (row.employeeid === value.employeeid && row.employeeid){
-            var row_index = this.rowData.indexOf(row);
-            value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-            this.rowData[row_index] = value
-          }
-          // 角色管理 roleid
-          if (row.roleid === value.roleid && row.roleid){
-            var row_index = this.rowData.indexOf(row);
-            value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-            this.rowData[row_index] = value
-          }
-
-        });
+  // ============================== 渲染组件\和他的父组件都  调用的方法 这是ag-grid中的 操作！
+  // methodFromParent(rowdata){ // parent： 是否是父组件调用！
     
-        this.totalPageNumbers = this.rowData.length
-        this.gridApi.setRowData(this.rowData)
-        // 调用父组件方法，告诉父组件 编辑、删除成功
-        // this.children_call_for_updata_table(cell);
-        
-        break;
-      case "remove":
-        console.log("remove--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-        this.rowData.forEach(row => {
-          // 用户组管理
-          if (row.id === value.id && row.id){
-            // console.log("remove--------------row》》》》》》》》》》》》》》》》》》》》》》》",row);
-            var row_index = this.rowData.indexOf(row);
-            this.rowData.splice(row_index, 1);
-            var operationdata = "组名称:" + value["group"] + "," + "组名称(en):" + value["group_name"];
-            var option = '删除用户组'; 
-            this.RecordOperation(option, 1, operationdata);
-            this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-          }
-          // 用户管理
-          if (row.employeeid === value.employeeid && row.employeeid){
-            var row_index = this.rowData.indexOf(row);
-            this.rowData.splice(row_index, 1);
-            var operationdata = "姓名:" + value["name"] + "," + "域账号:" + value["loginname"];
-            var option = '删除用户'; 
-            this.RecordOperation(option, 1, operationdata);
-            this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-          }
-          // 角色管理 roleid
-          if (row.roleid === value.roleid && row.roleid){
-            var row_index = this.rowData.indexOf(row);
-            this.rowData.splice(row_index, 1);
-            var operationdata = "姓名:" + value["name"] + "," + "域账号:" + value["loginname"];
-            var option = '删除角色';
-            var operationdata = '角色名称(en):' + value["role"] + ',' + '角色名称:' + value["role_name"];
-            this.RecordOperation(option, 1, operationdata);
-            this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-          }
-        });
-        this.totalPageNumbers = this.rowData.length
-        this.gridApi.setRowData(this.rowData)
-        break;
-      case "add":
-        console.log("--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-        // value.active = value.active === 1?"是":"否";
-        this.rowData = value
-        this.totalPageNumbers = this.rowData.length
-        this.gridApi.setRowData(this.rowData);
-        this.alltotalPageNumbers = this.alltotalPageNumbers +1;
-        break;
+  //   // {value: name, action: "edit"}
+  //   var action = rowdata.action;
+  //   var value = rowdata.value;
+  //   switch (action) {
+      
+  //     case "edit":
+  //       console.log("edit--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
+  //       // this.children_call_for_updata_table(); // 调用父组件，没用到
+  //       // true 表示编辑、删除成功
+  //       // var rowNode  = this.gridApi.getRowNode(String(cell.id));
+  //       // rowNode.setData(cell); // Cannot read property 'setData' of undefined 未能解决
+  //       this.rowData.forEach(row => {
+  //         // 用户组管理
+  //         if (row.id === value.id && row.id){
+  //           var row_index = this.rowData.indexOf(row);
+  //           value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
+  //           this.rowData[row_index] = value
+  //         }
+  //         // 用户管理
+  //         if (row.employeeid === value.employeeid && row.employeeid){
+  //           var row_index = this.rowData.indexOf(row);
+  //           value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
+  //           this.rowData[row_index] = value
+  //         }
+  //         // 角色管理 roleid
+  //         if (row.roleid === value.roleid && row.roleid){
+  //           var row_index = this.rowData.indexOf(row);
+  //           value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
+  //           this.rowData[row_index] = value;
 
-    }
+            
+  //         }
+
+  //       });
+    
+  //       this.totalPageNumbers = this.rowData.length
+  //       this.gridApi.setRowData(this.rowData);
+  //       // 清空选择的！
+  //       this.selectedRows = [];
+        
+        
+  //       break;
+  //     case "remove":
+  //       console.log("remove--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
+  //       this.rowData.forEach(row => {
+  //         // 用户组管理
+  //         if (row.id === value.id && row.id){
+  //           // console.log("remove--------------row》》》》》》》》》》》》》》》》》》》》》》》",row);
+  //           var row_index = this.rowData.indexOf(row);
+  //           this.rowData.splice(row_index, 1);
+  //           var operationdata = "组名称:" + value["group"] + "," + "组名称(en):" + value["group_name"];
+  //           var option = '删除用户组'; 
+  //           this.RecordOperation(option, 1, operationdata);
+  //           this.alltotalPageNumbers = this.alltotalPageNumbers -1;
+  //         }
+  //         // 用户管理
+  //         if (row.employeeid === value.employeeid && row.employeeid){
+  //           var row_index = this.rowData.indexOf(row);
+  //           this.rowData.splice(row_index, 1);
+  //           var operationdata = "姓名:" + value["name"] + "," + "域账号:" + value["loginname"];
+  //           var option = '删除用户'; 
+  //           this.RecordOperation(option, 1, operationdata);
+  //           this.alltotalPageNumbers = this.alltotalPageNumbers -1;
+  //         }
+  //         // 角色管理 roleid
+  //         if (row.roleid === value.roleid && row.roleid){
+  //           var row_index = this.rowData.indexOf(row);
+  //           this.rowData.splice(row_index, 1);
+  //           var operationdata = "姓名:" + value["name"] + "," + "域账号:" + value["loginname"];
+  //           var option = '删除角色';
+  //           var operationdata = '角色名称(en):' + value["role"] + ',' + '角色名称:' + value["role_name"];
+  //           this.RecordOperation(option, 1, operationdata);
+  //           this.alltotalPageNumbers = this.alltotalPageNumbers -1;
+  //         }
+  //       });
+  //       this.totalPageNumbers = this.rowData.length
+  //       this.gridApi.setRowData(this.rowData)
+  //       break;
+  //     case "add":
+  //       console.log("--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
+  //       // value.active = value.active === 1?"是":"否";
+  //       this.rowData = value
+  //       this.totalPageNumbers = this.rowData.length
+  //       this.gridApi.setRowData(this.rowData);
+  //       this.alltotalPageNumbers = this.alltotalPageNumbers +1;
+  //       break;
+
+  //   };
+
+    
+    
  
-  };
+  // };
 
   
 

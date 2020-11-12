@@ -106,31 +106,20 @@ export class AgTableComponent implements OnInit {
     
 
     if (this.action){
-      console.log("action===================", this.action);
       console.log("this.tableDatas.columnDefs======this.tableDatas.columnDefs", this.columnDefs, "index: ",this.columnDefs.indexOf(action));
       // user-employee
       var action = { field: 'action', headerName: '操作', cellRendererFramework: AgGridActionComponent, pinned: 'right'};
       this.columnDefs.forEach(column => {
         if (column["field"] === "action"){
+          console.log("action===================", this.action);
           var index = this.columnDefs.indexOf(column);
           this.columnDefs.splice(index, 1);
         }
       });
       this.columnDefs.push(action);
     }
-
-    // 详细  设备报表kpi详情
-    
-
-    // this.rowData = this.tableDatas.rowData;
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-    console.log("^^^^^^^^^^^^^^this.rowData^^^^^^^^^^^^^^",this.rowData)
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     this.totalPageNumbers = this.rowData.length
     // this.columnDefs = this.columnDefs;
-    console.log("------------------->>>>>>>>>>>>>>>>>>>>",this.columnDefs,"this.totalPageNumbers",this.totalPageNumbers)
-
-    console.log("tableDatas===================", this.tableDatas)
   };
 
   

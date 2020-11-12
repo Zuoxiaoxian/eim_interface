@@ -24,10 +24,6 @@ import { TestTaskManageComponent } from './test-task-manage/test-task-manage.com
 // datetime
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE,OwlDateTimeIntl } from 'ng-pick-datetime';
 import { TaskProgressForTableComponent } from './test-task-manage/task-progress-for-table/task-progress-for-table.component';
-import { DeviceKpiReportComponent } from './device-kpi-report/device-kpi-report.component';
-import { KpireportLinkFortableComponent } from './device-kpi-report/kpireport-link-fortable/kpireport-link-fortable.component';
-import { ManHourKpiReportComponent } from './man-hour-kpi-report/man-hour-kpi-report.component';
-import { ManhourReportLinkFortableComponent } from './man-hour-kpi-report/manhour-report-link-fortable/manhour-report-link-fortable.component';
 import { KpiDetailComponent } from './kpi-detail/kpi-detail.component';
 import { StatusForTableComponent } from './device-manage/status-for-table/status-for-table.component';
 // datetime 本地化标签 
@@ -65,8 +61,7 @@ import { TaskProgressForAggridComponent } from './test-task-manage/task-progress
   declarations: [TongjiComponent, DeviceManageComponent, 
     // MySelectComponent, MySelectGroupComponent, MyTableNg2Component, DateRangeComponent,
     TestTaskManageComponent,  TaskProgressForTableComponent, 
-    DeviceKpiReportComponent, KpireportLinkFortableComponent, ManHourKpiReportComponent,
-     ManhourReportLinkFortableComponent, KpiDetailComponent, StatusForTableComponent, TaskProgressForAggridComponent,],
+    KpiDetailComponent, StatusForTableComponent, TaskProgressForAggridComponent,],
   imports: [
     CommonModule,
     TongjiRoutingModule,

@@ -55,6 +55,7 @@ export class AgGridActionComponent implements OnInit, ICellRendererAngularComp {
   }
 
   ngOnInit(): void {
+    console.log("接受编辑的组件！")
     // 接受编辑的组件！
     this.publicservice.currentcomponent.subscribe(currentcomponent=>{
       // {component: EditUserEmployeeComponent, plv8: "delete_employee"}
@@ -82,7 +83,6 @@ export class AgGridActionComponent implements OnInit, ICellRendererAngularComp {
     this.getsecurity("groups", "get_groups", column).subscribe((goups:any[])=>{
       this.goups = goups
     });
-    console.log("根据用户角色得到res，用户对应的组goups:", this.goups, "res", this.res);
 
   }
  
@@ -90,7 +90,6 @@ export class AgGridActionComponent implements OnInit, ICellRendererAngularComp {
   // 调用父方法
   public device_info(item) {
     console.log("-----------------item-------------------", item)
-    console.log("-----------------this.params.node.data 点击的数据！-------------------", this.params.node.data);
     var rowData = this.params.node.data
     console.log("-----------------params-------------------", this.params)
     switch (item) {
@@ -114,8 +113,6 @@ export class AgGridActionComponent implements OnInit, ICellRendererAngularComp {
 
   ngAfterViewInit(){
     this.isactive();
-    console.log("**********************************************")
-    
     // this.publicservice.get_current_pathname().subscribe(res=>{console.log(res)});
     
   }
@@ -244,10 +241,8 @@ export class AgGridActionComponent implements OnInit, ICellRendererAngularComp {
   // 请求得到 表get_employee中的数据！
   getsecurity(table: string, method: string, colums: object){
     return new Observable((res)=>{
-
       this.http.callRPC(table, method, colums).subscribe((result)=>{
         var employee_result =  result['result']['message'][0];
-        console.log("employee_result", employee_result);
         res.next(employee_result)
       })
     })
@@ -258,7 +253,6 @@ export class AgGridActionComponent implements OnInit, ICellRendererAngularComp {
 
       http.callRPC(table, method, colums).subscribe((result)=>{
         var employee_result =  result['result']['message'][0];
-        console.log("employee_result", employee_result);
         res.next(employee_result)
       })
     })

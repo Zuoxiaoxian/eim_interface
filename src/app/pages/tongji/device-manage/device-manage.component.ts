@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { DEVICE_MANAGE_SETTINGS } from '../tongji_tablesettings';
 
 import { menu_button_list, device_action } from '../../../appconfig';
 
@@ -11,7 +10,6 @@ import { EditDelTooltipComponent } from '../../../pages-popups/prompt-diallog/ed
 import * as XLSX from 'xlsx';
 type AOA = any[][];
 
-import {LocalDataSource} from "@mykeels/ng2-smart-table";
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';
 import { NbDialogService } from '@nebular/theme';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
@@ -20,7 +18,6 @@ import { Observable } from 'rxjs';
 
 // 引入 设备管理 表单的验证
 import { Device } from '../../../pages-popups/tongji/form_verification';
-import { UserInfo } from 'os';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 @Component({
   selector: 'ngx-device-manage',
@@ -32,7 +29,6 @@ export class DeviceManageComponent implements OnInit {
   @ViewChild("departmentselect") departmentselect:any;
   @ViewChild("device_tpye") device_tpye:any;
   @ViewChild("asset_number") asset_number:any;
-  @ViewChild("mytable") mytable:any;
   @ViewChild("ag_Grid") agGrid:any;
 
   constructor(private publicservice: PublicmethodService, private dialogService: NbDialogService, private http: HttpserviceService, private userinfo: UserInfoService) { 
@@ -84,13 +80,8 @@ export class DeviceManageComponent implements OnInit {
     ]
   }
 
-  source:LocalDataSource
 
-  // 设备监控table数据
-  device_manage_table_data = {
-    settings: DEVICE_MANAGE_SETTINGS,
-    source: new LocalDataSource(),
-  }
+
 
   // 前端要展示的button 主要是：增、删、改
   buttons;
@@ -904,25 +895,7 @@ export class DeviceManageComponent implements OnInit {
   deldanger(){
     this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"删除失败!"});
   }
-  // 分页
-  nzpageindexchange(event){
-    console.log("用户--分页：", event);
-    var offset = (event.current - 1) * event.nzPageSize; 
-    console.log("offset: limit", offset, event.nzPageSize)
-    // this.getsecurity('employee', 'get_employee_limit', {offset:offset,limit:event.nzPageSize});
   
-    // this.querst(table, methond, colmun).subscribe(res=>{
-    //   console.log("-----------------res", res)
-    //   const rowData = res['result']['message'][0];
-    //   if (rowData.length > 0){
-    //     var after_datas = this.show_table_before(rowData);
-    //     // 根据id排序
-    //     after_datas.sort(function(data1,data2){return data1.id - data2.id});
-    //     this.device_manage_table_data.source.load(after_datas);
-    //   }
-    // })
-    // this.getsecurity('employee', 'get_employee_limit', {offset:0,limit:this.nzPageSize,numbers:0});
-  }
 
 
 

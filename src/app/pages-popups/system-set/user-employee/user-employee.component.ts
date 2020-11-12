@@ -31,20 +31,17 @@ export class UserEmployeeComponent implements OnInit {
   constructor(protected dialogRef: NbDialogRef<UserEmployeeComponent>, private http: HttpserviceService,private userinfo: UserInfoService, 
     private publicservice: PublicmethodService, ) { 
 
-    this.getsecurity('employee', 'get_rolename', {}, this.http).subscribe((res: any[])=>{
-      // 初始化角色名
-      localStorage.setItem("employee_role_all_", JSON.stringify(res));
-    });
+    // this.getsecurity('employee', 'get_rolename', {}, this.http).subscribe((res: any[])=>{
+    //   // 初始化角色名
+    //   localStorage.setItem("employee_role_all_", JSON.stringify(res));
+    // });
 
-    this.getsecurity('groups', 'get_group', {}, this.http).subscribe((res: any[])=>{
-      // 初始化用户组
-      localStorage.setItem("employee_group_all_", JSON.stringify(res));
-      
-    });
+    // this.getsecurity('groups', 'get_group', {}, this.http).subscribe((res: any[])=>{
+    //   // 初始化用户组
+    //   localStorage.setItem("employee_group_all_", JSON.stringify(res));
+    // });
     
     this.login_name = this.userinfo.getName();
-    console.log("LLLLLLLLLLLLLLLLLLL", this.login_name);
-
   }
 
   // 登录用户名
@@ -59,6 +56,7 @@ export class UserEmployeeComponent implements OnInit {
   ngAfterViewInit(){
     this.layuiform();
   }
+
 
 
   ngOnDestroy(){
@@ -174,12 +172,12 @@ export class UserEmployeeComponent implements OnInit {
       var groups;
 
       
-      var res = JSON.parse(localStorage.getItem("employee_role_all_"));
+      var res = JSON.parse(localStorage.getItem("employee_rolename"));
       var groups = JSON.parse(localStorage.getItem("employee_group_all_"))["message"];
 
       
-
-      console.log("----------初始化角色名",res,"\n\n", localStorage.getItem("employee_role_all_"))
+    // 在用户的初始化时，得到，放到缓存中！
+      console.log("----------初始化角色名",res,"\n\n", localStorage.getItem("employee_rolename"))
       console.log("----------初始化角色名",groups,"\n\n", localStorage.getItem("employee_group_all_"))
       // 初始化角色名
       for (let r of res){
@@ -312,10 +310,10 @@ export class UserEmployeeComponent implements OnInit {
 
 
 
+
   // 请求得到 表get_employee中的数据！
   getsecurity(table: string, method: string, colums: object, http){
     return new Observable((res)=>{
-
       http.callRPC(table, method, colums).subscribe((result)=>{
         console.log("*************---------------------****************", result)
         var employee_result =  result['result']['message'][0];
