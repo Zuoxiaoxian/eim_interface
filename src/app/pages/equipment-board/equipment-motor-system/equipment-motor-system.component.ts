@@ -152,7 +152,9 @@ export class EquipmentMotorSystemComponent implements OnInit {
       this[`attrs_3`][f] = JSON.parse(JSON.stringify(this.attrs));
     })
     this.getData();
-    
+    setTimeout(() => {
+    this.initChart();
+    }, 1000);
   }
   
 
@@ -187,6 +189,10 @@ export class EquipmentMotorSystemComponent implements OnInit {
       })
       
     },1000)
+
+  }
+
+  ngAfterViewInit(){
   }
   
 

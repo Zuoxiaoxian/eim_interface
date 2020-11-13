@@ -22,13 +22,13 @@
         width: 86px;
     }
     .sceond_third {
-        height: 33%;
+        height: 30%;
         width: 100%;
         display: flex;
         box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
         padding: 2%;
         color: white;
-        display: inherit;
+        display: flex;
         position: relative;
         margin-top: 20px;
     }
@@ -48,6 +48,7 @@
         background: #4472c4;
         top: -17px;
         left: -7px;
+        min-width: 80px;
     }
     .andon_status {
         width: 14%;
@@ -165,12 +166,32 @@
             text-overflow: ellipsis;
         }
     }
+    #oilseparator {
+        height: 80%;
+        .btn {
+            width: 27%;
+            margin-right: 3%;
+            height: 65%;
+            background: #EEEEEE;
+            cursor: pointer;
+            border: 1px solid red;
+            padding: 2% 2% 2% 2%;
+            .rectangle {
+                height: 20%;
+                width: 100%;
+                margin-top: 5%;
+            }
+        }
+    }
     #circular {
         width: 60%;
         height: 60%;
         border-radius: 60px;
         background: rgb(59, 56, 56);
         margin: 15%;
+    }
+    .box_bo_click {
+        background: black !important;
     }
     .h_46_w_70 {
         height: 46%;

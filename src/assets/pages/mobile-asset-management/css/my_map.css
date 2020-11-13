@@ -172,3 +172,7 @@
     -webkit-filter: brightness(1.7);
     filter: brightness(1.7);
 }
+
+.ant-progress-bg{
+    height: 12px !important;
+}

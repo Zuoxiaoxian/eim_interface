@@ -230,6 +230,10 @@ export class EquipmentCouplingPathComponent implements OnInit {
     //   this[`attrs_3`][f] = JSON.parse(JSON.stringify(this.attrs));
     // })
     this.getData();
+    setTimeout(() => {
+      this.initChart();
+      this.in();
+    }, 1000);
   }
 
 
@@ -263,6 +267,23 @@ export class EquipmentCouplingPathComponent implements OnInit {
         this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:this.xData,index:g});
       })
     },1000)
+    
+  }
+  timer1;
+  timer2;
+  in(){
+    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
+    equipment_four_road.create_real_temperature({value:55.33},myChart_4);
+
+    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
+    equipment_four_road.create_real_temperature({value:55.33},myChart_5);
+
+    this.timer1 = setInterval(f=>{
+      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
+    },3000)
+    this.timer2 = setInterval(f=>{
+      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
+    },3000)
   }
   
   //初始化表格
@@ -320,12 +341,6 @@ export class EquipmentCouplingPathComponent implements OnInit {
     let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
     equipment_four_road.create_real_temperature({value:55.33},myChart_5);
 
-    setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
-    },3000)
-    setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
-    },3000)
 
     let operatingRate = echarts.init(document.getElementById('operatingRate'));
     var gauge_data_4 = {

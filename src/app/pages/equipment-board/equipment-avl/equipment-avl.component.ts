@@ -154,6 +154,10 @@ export class EquipmentAvlComponent implements OnInit {
     this.attrs_2 = JSON.parse(JSON.stringify(this.attrs));
     this.attrs_3 = JSON.parse(JSON.stringify(this.attrs));
     this.getData();
+    setTimeout(() => {
+      this.initChart();
+    }, 1000);
+    this.in()
   }
   
 
@@ -189,7 +193,35 @@ export class EquipmentAvlComponent implements OnInit {
       let myChart_9 = echarts.init(document.getElementById('discharge_chart_1'));;
       equipment_four_road.create_real_discharge({attrs:this.attrs_3,xData:this.xData},myChart_9);
 
-    },1000)
+    },2000)
+    
+  }
+
+  timer1;
+
+  in(){
+    let myChart_7 = [];
+    this.outRenturnWind.forEach((f:any,i:number) => {
+      myChart_7.push(echarts.init(document.getElementById('electric_chart_'+i)));
+      equipment_four_road.create_real_electric({text:f.text,title:this.language?f.titleEn:f.title},myChart_7[i]);
+    });
+    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
+    equipment_four_road.create_real_disk({value:55,text:this.language?'RealTEMP':'实时温度',unit:'℃'},myChart_4);
+
+    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
+    equipment_four_road.create_real_disk({value:55,text:this.language?'RealRH':'实时湿度',unit:'%RH'},myChart_5);
+
+    let myChart_6 = echarts.init(document.getElementById('real_temperature_3'));
+    equipment_four_road.create_real_disk({value:55,text:this.language?'CabinPA':'舱内压差',unit:'pa'},myChart_6);
+    this.timer1 = setInterval(f=>{
+      equipment_four_road.create_real_disk({value:parseInt((Math.random()*100).toString()),text:this.language?'RealTEMP':'实时温度',unit:'%RH'},myChart_5);
+      equipment_four_road.create_real_disk({value:parseInt((Math.random()*100).toString()),text:this.language?'RealRH':'实时湿度',unit:'℃'},myChart_4);
+      equipment_four_road.create_real_disk({value:parseInt((Math.random()*100).toString()),text:this.language?'CabinPA':'舱内压差',unit:'pa'},myChart_6);
+      this.outRenturnWind.forEach((f:any,i:number) => {
+        myChart_7.push(echarts.init(document.getElementById('electric_chart_'+i)));
+        equipment_four_road.create_real_electric({text:parseInt((Math.random()*100).toString()),title:this.language?f.titleEn:f.title},myChart_7[i]);
+      });
+    },3000)
   }
 
   initChart(){
@@ -252,11 +284,7 @@ export class EquipmentAvlComponent implements OnInit {
     equipment_four_road.create_real_disk({value:55,text:this.language?'CabinPA':'舱内压差',unit:'pa'},myChart_6);
     
 
-    let myChart_7 = [];
-    this.outRenturnWind.forEach((f:any,i:number) => {
-      myChart_7.push(echarts.init(document.getElementById('electric_chart_'+i)));
-      equipment_four_road.create_real_electric({text:f.text,title:this.language?f.titleEn:f.title},myChart_7[i]);
-    });
+    
 
     // let myChart_8 = echarts.init(document.getElementById('discharge_chart'));;
     // equipment_four_road.create_real_discharge({attrs:this.attrs,xData:this.xData},myChart_8);
@@ -268,6 +296,12 @@ export class EquipmentAvlComponent implements OnInit {
     //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.list[0]],xData:this.xData});
     // })
 
+    let myChart_7 = [];
+    this.outRenturnWind.forEach((f:any,i:number) => {
+      myChart_7.push(echarts.init(document.getElementById('electric_chart_'+i)));
+      equipment_four_road.create_real_electric({text:f.text,title:this.language?f.titleEn:f.title},myChart_7[i]);
+    });
+
 
     let operatingRate = echarts.init(document.getElementById('operatingRate'));
     var gauge_data_4 = {
@@ -277,15 +311,7 @@ export class EquipmentAvlComponent implements OnInit {
     } 
     rtm3.create_right_buttom(gauge_data_4,operatingRate);
 
-    setInterval(f=>{
-      equipment_four_road.create_real_disk({value:parseInt((Math.random()*100).toString()),text:this.language?'RealTEMP':'实时温度',unit:'%RH'},myChart_5);
-      equipment_four_road.create_real_disk({value:parseInt((Math.random()*100).toString()),text:this.language?'RealRH':'实时湿度',unit:'℃'},myChart_4);
-      equipment_four_road.create_real_disk({value:parseInt((Math.random()*100).toString()),text:this.language?'CabinPA':'舱内压差',unit:'pa'},myChart_6);
-      this.outRenturnWind.forEach((f:any,i:number) => {
-        myChart_7.push(echarts.init(document.getElementById('electric_chart_'+i)));
-        equipment_four_road.create_real_electric({text:parseInt((Math.random()*100).toString()),title:this.language?f.titleEn:f.title},myChart_7[i]);
-      });
-    },3000)
+    
   }
 
   getleft(item){
@@ -308,7 +334,10 @@ export class EquipmentAvlComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    clearInterval(this.timer)
+    clearInterval(this.timer);
+    clearInterval(this.timer1)
+
+    
   }
 
 }

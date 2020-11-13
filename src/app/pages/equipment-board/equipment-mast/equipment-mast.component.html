@@ -1,13 +1,14 @@
-<div id="mast">
+<div id="mast" style="display: block;">
     <div class="row height_100">
         <div class="col-md-4">
-            <div class="box_border height_25">
-                <div class="box_title">集成亮点</div>
+            <div class="box_border height_25" style="box-shadow: 7px -6px 4px 7px rgba(65,105,225,0.3)">
+                <!--            <div class="box_border height_25" style="outline:13px solid rgba(65,105,225,0.1)">-->
+                <div class="box_title">设备简介</div>
                 <div class="article margin_t_20" [innerHTML]="integrate.str">
                     <!-- {{integrate.str | to_trusted}} -->
                 </div>
             </div>
-            <div class="box_border height_71 margin_t_20">
+            <div class="box_border height_71 margin_t_20" style="box-shadow: 7px -6px 4px 7px rgba(65,105,225,0.3)">
                 <div class="box_title" style="top: -3%;">实验信息</div>
                 <div style="text-align: left;padding: 5% 10%;">
                     <div class="dis_flex">
@@ -45,7 +46,8 @@
                                         <div style="margin-left: 10%;">
                                             {{item}}%
                                         </div>
-                                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" nzStatus="{{item<70?'active':'exception'}}"></nz-progress>
+                                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" [nzStrokeColor]="'#5cb85c'"></nz-progress>
+                                        <!--                                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" nzStatus="{{item<70?'active':'exception'}}"></nz-progress>-->
                                     </div>
                                     <ng-template #fontTemp>
                                         <div class="font_tolong">{{item}}</div>
@@ -73,20 +75,27 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="height_27 dis_flex">
+            <div class="height_27 dis_flex" style="box-shadow: -3px -2px 4px 11px rgba(65,105,225,0.2)">
                 <div class="dis_flex width_100">
-                    <div class="box_border width_50" *ngFor="let item of runningS" style="margin-right: 10px;">
+                    <div class="box_border width_50" *ngFor="let item of runningS; let i = index" style="margin-right: 10px;">
                         <div>{{item.name}}：
-                            <span [ngStyle]="{'color':item.status == 1?'green':'red'}">
+                            <span *ngIf="i==0;else spantemp" [ngStyle]="{'color':item.status == 1?'green':'red'}" style="font-size: 25px">
                                 {{item.status == 1?'开':'停'}}
                             </span>
+                            <ng-template #spantemp>
+                                <span [ngStyle]="{'color':item.status == 1?'color':'red'}" style="font-size: 25px">
+                                    {{item.status == 1?'高压':'低压'}}
+                                </span>
+                            </ng-template>
                         </div>
                         <div id="circle" [ngStyle]="{'background':item.status == 1?'green':'red'}"></div>
                     </div>
                 </div>
             </div>
-            <div class="margin_t_20" style="height: 33%;">
-                <img class="height_100 width_100" src="../../../../assets/eimdoard/equipment/images/center.png">
+            <div style="height: 33%;width: 100%;box-shadow: 0px -2px 4px 11px rgba(65,105,225,0.2)" class="margin_t_20">
+                <iframe src="http://localhost:8668/applications/my_awesome_app/my_awesome_app.html" style="width: 1005;height: 100%;margin-top: -5px;"></iframe>
+                <!--                <iframe src="http://localhost:8668/applications/my_awesome_app/my_awesome_app.html" style="width: 435px;height: 240px"></iframe>-->
+                <!--                <img class="height_100 width_100" src="../../../../assets/eimdoard/equipment/images/center.png">-->
             </div>
             <div class="box_border height_33  margin_t_20 dis_flex" style="padding-top: 10%;">
                 <div class="box_title">设备利用率</div>
@@ -98,22 +107,17 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="box_border height_27">
+            <div class="box_border height_27" style="height: 174px">
                 <div class="box_title">信息安全</div>
-                <div class="information red_backgroud">今日已点检</div>
-                <div class="information green_backgroud">人员闯入</div>
-                <!-- <div class="dis_flex" style="flex-wrap: wrap;">
-                    <div *ngFor="let item of hudHighPressure" class="width_50 dis_flex" style="padding-top:3%;">
-                        <div style="width: 50%;">{{item.name}}:</div>
-                        <div style="width: 98px;height: 30px;background: green;">
-                            {{item.value == 1?'高压':item.value == -1?'离线':'自动'}}
-                        </div>
-                    </div>
-                </div> -->
+                <!--                <div class="information red_backgroud">今日已点检</div>-->
+                <!--                <div class="information green_backgroud">人员闯入</div>-->
+                <div class="alert alert-info" style="border: #008B8B;color: white;background-color:#5cb85c;width:72%;height:43%;margin-top: 11px;font-size: 35px;margin-left: 52px;text-align:center;line-height:45px;">今日已点检</div>
+                <div class="alert alert-danger" style="border: #008B8B;color: white;background-color:#d9534f;width:72%;height:43%;margin-top: -6px;font-size: 35px;margin-left: 52px;text-align:center;line-height:45px">人员闯入</div>
             </div>
-            <div class="box_border height_39 margin_t_20" style="display: flex;flex-wrap: wrap;">
-                <div class="box_title ">动力参数</div>
+            <div class="box_border height_39 margin_t_20" style="display: flex;flex-wrap: wrap;margin-top: 30px">
+                <div class="box_title">动力参数</div>
                 <div class="height_50" *ngFor="let item of dashboardList" [ngStyle]="{'width':getWidth(3)}">
                     <div class="height_80" id="{{item.id}}"></div>
                     <div class="height_20">

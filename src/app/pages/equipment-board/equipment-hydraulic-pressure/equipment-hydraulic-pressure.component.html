@@ -71,18 +71,18 @@
 
                 </div>
             </div>
-            <div class="dis_f_w first_third lattice_layout height_32" style="display: flex;">
+            <div class="dis_f_w first_third lattice_layout height_31" style="display: flex;">
                 <div class="part_title" style="top: -8px;left: 2px;">{{'equipment.LogWarm' | translate}}</div>
                 <div class="h_46_w_30">
                     <div style="width: 10%;">{{'equipment.LV1Warm'|translate}}</div>
                     <div id="circular"></div>
                 </div>
                 <div class="h_46_w_70" id="warning"></div>
-                <div class="table height_50">
+                <div class="table height_50" style="margin-top: 10px;">
                     <div class="table_bo" style="height: 21%;">
                         <table>
                             <tr class="header">
-                                <td *ngFor="let title of log_warm.title">
+                                <td *ngFor="let title of log_warm.title;let i = index" [ngStyle]="{'width':i == 0?'20%':i == 1?'25%':'60%'}">
                                     {{'equipment.'+title | translate }}
                                 </td>
                             </tr>
@@ -90,10 +90,15 @@
                     </div>
                     <div class="table_bo overflow_height_85">
                         <table>
-                            <tr class="body" *ngFor="let items of log_warm.data" [ngStyle]="{'color':items[1] == 'error'?'red':items[1]=='warning'?'':'yellow'}">
-                                <td *ngFor="let item of items;let i = index">
-                                    <div>{{item}}</div>
+                            <tr class="body" *ngFor="let items of log_warm.data;let i =index" [ngStyle]="{'color':items[3] == 1?'red':items[3]==3?'':'yellow'}">
+                                <td *ngFor="let item of items;let i = index" style="padding: 0%;height: 20%;" [ngStyle]="{'width':i == 0?'20%':i == 1?'20%':'60%'}">
+                                    <div class="font_w_too_long" *ngIf="i == 0;else logTemp">{{item | date:'yyyy-MM-dd'}}</div>
+                                    <ng-template #logTemp>
+                                        <div class="font_w_too_long" style="width: 100%;" *ngIf="i != 3;else nullTemp">{{item}}</div>
+                                        <ng-template #nullTemp></ng-template>
+                                    </ng-template>
                                 </td>
+
                             </tr>
                         </table>
                     </div>
@@ -102,7 +107,7 @@
         </div>
         <div class="col-md-4">
             <div class="sceond_fisrt height_24">
-                <div class="part_title" style="top: -8px;left: 18px;">{{ 'equipment.equipIntroduce'|translate}}</div>
+                <div class="part_title" style="top: -8px;left: 18px;overflow: auto;">{{ 'equipment.equipIntroduce'|translate}}</div>
                 <div style="padding: 20px;text-align: left;font-size: 12px;" [innerHTML]="str">
                 </div>
             </div>
@@ -110,11 +115,11 @@
                 <div class="part_title" style="top: -8px;left: 12px;">{{'equipment.OnlineVideo'|translate}}</div>
                 <img id="img" [src]="img.url" [alt]="img.name">
             </div>
-            <div class="sceond_third height_31">
+            <div class="sceond_third">
                 <div class="part_title" style="top: -8px;left: 12px;">{{'equipment.realStatus'|translate}}</div>
-                <div style="width: 100%;display: flex;margin-top: 7px;">
-                    <div class="table height_38" style="width: 100%;margin-bottom: 0px;">
-                        <div class="table_bo height_48">
+                <div style="width: 70%;display: flex;margin-top: 7px;">
+                    <div class="table height_100" style="width: 100%;margin-bottom: 0px;">
+                        <div class="table_bo height_21">
                             <table>
                                 <tr class="header">
                                     <td *ngFor="let title of switchStatus.title;let i = index" style="word-break: break-all;" [ngStyle]="{'width':get_td_width(switchStatus.title.length,i)}">
@@ -123,7 +128,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="table_bo height_58" style="overflow: auto;max-height: 210px;">
+                        <div class="table_bo height_78" style="overflow: auto;max-height: 210px;">
                             <table>
                                 <tr class="body" *ngFor="let items of switchStatus.data">
                                     <td *ngFor="let item of items;let i = index" style="height: 30px;" [ngStyle]="{'width':get_td_width(switchStatus.title.length,i)}">
@@ -137,18 +142,33 @@
                             </table>
                         </div>
                     </div>
-                    <!-- <div class="width_33 height_38">
-                        <div class="height_30" style="margin-top: 10px;" *ngFor="let item of real_list">
-                            {{item.name}}：
-                            <span [ngStyle]="{'color':item.color}">
-                                {{item.value}}
-                            </span>
-                        </div>
-                    </div> -->
                 </div>
-                <!-- <div class="table" style="height: 57%;">
-                    <ngx-chart-curve [attrs]="attrs_4" title='角度/力' [xData]="xData" [chartName]="'chart_5'"></ngx-chart-curve>
-                </div> -->
+                <div style="height: 100%;width: 30%;">
+                    <div *ngFor="let item of real_list" [ngStyle]="{'height': 100/real_list.length+'%'}">
+                        {{'equipment.OilSeparator'|translate}}{{item.name}}：
+                        <!-- <br> -->
+                        <!-- <div class="display_f" id="oilseparator"> -->
+                        <!-- 关 -->
+                        <!-- <div [ngClass]="{'box_bo_click':getbtnStatus(item,1) }" class="btn">
+                                <div *ngFor="let item of [1,2,3]" class="rectangle" [ngStyle]="{'background':[3].includes(item) && item.on == 0?'red':'white'}">
+                                </div>
+                            </div> -->
+                        <!-- 低 -->
+                        <!-- <div [ngClass]="{'box_bo_click':getbtnStatus(item,2) }" class="btn">
+                                <div *ngFor="let item of [1,2,3]" class="rectangle" [ngStyle]="{'background':[2,3].includes(item)?'white':''}">
+                                </div>
+                            </div> -->
+                        <!-- 高 -->
+                        <!-- <div [ngClass]="{'box_bo_click':getbtnStatus(item,3) }" class="btn">
+                                <div *ngFor="let item of [1,2,3]" class="rectangle" style="background: white;">
+                                </div>
+                            </div> -->
+                        <!-- </div> -->
+                        <span [ngStyle]="{'color':item.on == 0?'red':item.high == 0?'white':'yellow'}">
+                            {{item.on == 0?'关':item.high == 0?'低':'高'}}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -179,10 +199,10 @@
                     <div id="third_second">
                     </div>
                 </div>
-                <div class="height_33 ">
+                <div class="height_32 ">
                     <ngx-chart-curve-v3 #chart_2 [chartName]=" 'chart_2' " (clicEvent)="clicEvent($event,2) " dashboardName='dashboard_2' [list]="list_2 "></ngx-chart-curve-v3>
                 </div>
-                <div class="height_33 ">
+                <div class="height_32">
                     <ngx-chart-curve-v3 #chart_1 [chartName]=" 'chart_1' " chartVivid='brokenline' (clicEvent)="clicEvent($event,1) " dashboardName='dashboard_1' [list]="list_1 "></ngx-chart-curve-v3>
                 </div>
             </div>

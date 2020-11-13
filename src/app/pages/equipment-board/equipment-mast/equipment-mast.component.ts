@@ -41,7 +41,7 @@ export class EquipmentMastComponent implements OnInit {
   //运行状态
   runningS = [
     {name:'设备运行状态',status:1},
-    {name:'设备压力状态',status:0}
+    {name:'设备压力状态',status:0},
   ]
 
   // 1 高压 0 自动 -1离线
@@ -56,11 +56,12 @@ export class EquipmentMastComponent implements OnInit {
 
   //动力参数
   dashboardList = [
-    {id:'dashboard_1',name:'平均油压',value:12,percentage:'6.15',lampcolor:'green',s:1},
-    {id:'dashboard_2',name:'平均油温',value:12,percentage:'6.15',lampcolor:'green',s:1},
-    {id:'dashboard_3',name:'冷却进水压',value:12,percentage:'6.15',lampcolor:'green',s:1},
-    {id:'dashboard_4',name:'冷却出水压',value:12,percentage:'6.15',lampcolor:'yellow',s:0},
-    {id:'dashboard_5',name:'冷却水温',value:12,percentage:'6.15',lampcolor:'green',s:1},
+    // {id:'dashboard_1',name:'平均油压',value:12,percentage:'6.15',lampcolor:'green',s:1,title:'平均油压'},
+    {id:'dashboard_1',name:'',value:12,percentage:'',lampcolor:'green',s:1,title:'平均油压'},
+    {id:'dashboard_2',name:'',value:12,percentage:'',lampcolor:'green',s:1,title:'平均油温'},
+    {id:'dashboard_3',name:'',value:12,percentage:'',lampcolor:'green',s:1,title:'冷却进水压'},
+    {id:'dashboard_4',name:'',value:12,percentage:'',lampcolor:'yellow',s:0,title:'冷却出水压'},
+    {id:'dashboard_5',name:'',value:12,percentage:'',lampcolor:'green',s:1,title:'冷却水温'},
   ];
 
   //传感器状态
@@ -74,6 +75,7 @@ export class EquipmentMastComponent implements OnInit {
     {name:'环境噪声1',type:'number',value:45,},
     {name:'环境噪声2',type:'number',value:47,},
   ]
+
 
   constructor(private layoutService: LayoutService,private activateInfo:ActivatedRoute) { }
 
@@ -130,6 +132,7 @@ export class EquipmentMastComponent implements OnInit {
           record:{value:f.value,name:f.name},percentage:f.percentage,
           max:325,//仪表盘最大值
           splitNumber:5,//刻度平均分的份数
+          title:f.title,
         }
         ,myChart_1[f.id]);
     })

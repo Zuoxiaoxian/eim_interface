@@ -14,6 +14,14 @@
         padding: 2%;
         color: white;
     }
+    .font_w_too_long {
+        word-break: keep-all;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 86px;
+    }
     .thrid {
         height: 30%;
         width: 100%;
@@ -43,6 +51,7 @@
         background: #4472c4;
         top: -17px;
         left: -7px;
+        min-width: 80px;
     }
     .andon_status {
         width: 14%;

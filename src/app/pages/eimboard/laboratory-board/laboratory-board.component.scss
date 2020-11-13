@@ -1,0 +1,28 @@
+#laboratory {
+    background: url('/assets/eimdoard/rtm3/images/bg.png');
+    position: relative;
+    width: 100%;
+    height: 1080px;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-position: center center;
+    text-align: center;
+    .head {
+        height: 10%;
+    }
+    .body {
+        height: 90%;
+    }
+    #appearance {
+        background: url('/assets/eimdoard/rtm3/images/structure_1.png');
+        position: relative;
+        width: 100%;
+        height: 50%;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+        background-position: center center;
+        text-align: center;
+    }
+}

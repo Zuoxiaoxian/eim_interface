@@ -79,10 +79,10 @@
                 </div>
                 <div class="h_46_w_70" id="warning"></div>
                 <div class="table height_50">
-                    <div class="table_bo height_30">
+                    <div class="table_bo height_30" style="height: 26%;">
                         <table>
                             <tr class="header">
-                                <td *ngFor="let title of log_warm.title">
+                                <td *ngFor="let title of log_warm.title;let i =index" [ngStyle]="{'width':i == 0?'20%':i == 1?'20%':'60%'}">
                                     {{"equipment."+title | translate}}
                                 </td>
                             </tr>
@@ -90,9 +90,13 @@
                     </div>
                     <div class="table_bo overflow_height_85">
                         <table>
-                            <tr class="body" *ngFor="let items of log_warm.data" [ngStyle]="{'color':items[1] == 'error'?'red':items[1]=='warning'?'':'yellow'}">
-                                <td *ngFor="let item of items;let i = index">
-                                    <div>{{item}}</div>
+                            <tr class="body" *ngFor="let items of log_warm.data;" style="height: 12px;" [ngStyle]="{'color':items[3] == 1?'red':items[3]==3?'':'yellow'}">
+                                <td *ngFor="let item of items;let i = index" style="padding: 0%;height: 20%;" [ngStyle]="{'width':i == 0?'20%':i == 1?'25%':'60%'}">
+                                    <div class="font_w_too_long" *ngIf="i == 0;else logTemp">{{item | date:'yyyy-MM-dd'}}</div>
+                                    <ng-template #logTemp>
+                                        <div class="font_w_too_long" style="width: 100%;" *ngIf="i != 3;else nullTemp">{{item}}</div>
+                                        <ng-template #nullTemp></ng-template>
+                                    </ng-template>
                                 </td>
                             </tr>
                         </table>
@@ -102,7 +106,7 @@
         </div>
         <div class="col-md-4">
             <div class="sceond_fisrt height_24">
-                <div class="part_title" style="top: -8px;left: 18px;">{{ 'equipment.equipIntroduce'|translate}}</div>
+                <div class="part_title" style="top: -8px;left: 18px;overflow: auto;">{{ 'equipment.equipIntroduce'|translate}}</div>
                 <div style="padding: 20px;text-align: left;font-size: 12px;" [innerHTML]="str">>
 
                 </div>
@@ -132,7 +136,7 @@
                             <table>
                                 <tr class="body" *ngFor="let items of switchStatus.data">
                                     <td *ngFor="let item of items;let i = index" [ngStyle]="{'width':get_td_width(switchStatus.title.length)}">
-                                        <div *ngIf="i == 0;else graphical">{{item}}</div>
+                                        <div class="font_w_too_long" title="{{item}}" *ngIf="i == 0;else graphical">{{item}}</div>
                                         <ng-template #graphical>
                                             <div id="{{item.id}}" [ngStyle]="{'background': item.color}">
                                             </div>

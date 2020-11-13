@@ -1008,6 +1008,7 @@ let equipment_four_road = {
             myChart.resize()
         });
         myChart.setOption(optionInterval);
+        myChart.resize()
     },
     //avl 出风回风温湿度
     create_real_electric(data, myChart) {
@@ -1604,7 +1605,7 @@ let equipment_four_road = {
         };
 
 
-        option_r = {
+        option_rg = {
             // backgroundColor: '#fff',
             title: [{
                 text: data.text,
@@ -1689,7 +1690,7 @@ let equipment_four_road = {
         window.addEventListener('resize', f => {
             myChart.resize();
         })
-        myChart.setOption(option_r);
+        myChart.setOption(option_rg);
     },
 
 

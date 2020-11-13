@@ -336,6 +336,101 @@ let rtm3a = {
         myChart.setOption(option);
         myChart.resize();
     },
+
+    //半圆加百分比
+    create_semicircle(data, myChart) {
+        var colorSet = [
+            [data / 100, 'green'],
+            [1, '#15337C']
+        ];
+
+        option = {
+            backgroundColor: '#0E1327',
+            series: [{ //内圆
+                    type: 'pie',
+                    radius: '85%',
+                    center: ['50%', '50%'],
+                    z: 0,
+                    itemStyle: {
+                        normal: {
+                            color: new echarts.graphic.RadialGradient(.5, .5, 1, [{
+                                offset: 0,
+                                color: 'rgba(17,24,43,0)'
+                            }, ], false),
+                            label: {
+                                show: false
+                            },
+                            labelLine: {
+                                show: false
+                            }
+                        },
+                    },
+                    hoverAnimation: false,
+                    label: {
+                        show: false,
+                    },
+                    tooltip: {
+                        show: false
+                    },
+                    data: [100],
+                },
+
+                {
+                    type: 'gauge',
+                    radius: '40%',
+                    startAngle: '180',
+                    endAngle: '0',
+                    pointer: {
+                        show: false
+                    },
+
+                    data: [{ value: data }],
+                    title: {
+                        show: false,
+                    },
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: colorSet,
+                            width: 25,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            opacity: 1
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    detail: {
+                        color: 'green',
+                        offsetCenter: ['0%', '0%'],
+                        formatter: "{value}%",
+                        fontWeight: 'bold',
+
+                    },
+                    splitLine: {
+                        show: false,
+                        length: 25,
+                        lineStyle: {
+                            color: '#00377a',
+                            width: 2,
+                            type: 'solid',
+                        },
+                    },
+                }
+
+            ]
+        };
+
+        window.addEventListener('resize', f => {
+            myChart.resize();
+        })
+        myChart.setOption(option);
+        myChart.resize();
+    }
 }
 
 module.exports = rtm3a;

@@ -158,6 +158,10 @@ export class EquipmentDetailsComponent implements OnInit {
       this[`attrs_3`][f] = JSON.parse(JSON.stringify(this.attrs));
     })
     this.getData();
+    setTimeout(() => {
+      this.initChart();
+    this.in();
+    }, 1000);
   }
   
   getData(){
@@ -189,6 +193,21 @@ export class EquipmentDetailsComponent implements OnInit {
         this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:this.xData,index:g});
       })
     },1000)
+    
+  }
+timer1;
+timer2;
+  in(){
+    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
+    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
+    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
+    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
+    this.timer1 = setInterval(f=>{
+      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
+    },3000)
+    this.timer2 = setInterval(f=>{
+      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
+    },3000)
   }
 
   initChart(){
@@ -249,16 +268,7 @@ export class EquipmentDetailsComponent implements OnInit {
     let myChart_3 = echarts.init(document.getElementById('warning'));
     equipment_four_road.create_warning_chart(data,myChart_3);
     
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
-    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
-    setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
-    },3000)
-    setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
-    },3000)
+    
     // this.list.forEach((f,i)=>{
     //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.list[0]],xData:this.xData});
     // })
@@ -306,6 +316,8 @@ export class EquipmentDetailsComponent implements OnInit {
 
   ngOnDestroy(){
     clearInterval(this.timer)
+    clearInterval(this.timer1)
+    clearInterval(this.timer2)
   }
 
 }

@@ -1,14 +1,15 @@
 #equipment {
     background: url('/assets/eimdoard/equipment/images/beijing.png');
     position: relative;
-    // width: 100%;
-    // height: 100%;
+    width: 100%;
+    height: 100%;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
     background-position: center center;
     text-align: center;
-    height: 864px;
+    font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu;
+    // height: 864px;
     // width: 1920px;
     #title_img {
         background: url('/assets/eimdoard/equipment/images/title.png');
@@ -66,9 +67,9 @@
         // }
         #center {
             width: 94%;
-            height: 87%;
-            margin: 2% 3%;
-            // background-color: #007BEE;
+            height: 96%;
+            margin: 2% 3% 0% 3%;
+            display: flex;
         }
     }
 }
