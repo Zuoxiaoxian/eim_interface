@@ -23,6 +23,7 @@ import { EditMenuComponent } from '../../../pages-popups/system-set/edit-menu/ed
 import { NbToastrService,  } from '@nebular/theme';
 import { Router } from '@angular/router';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'ngx-menu',
@@ -75,6 +76,9 @@ export class MenuComponent implements OnInit {
   getbuttons(){
     // 根据menu_item_role得到 该页面对应的 button！
     var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
+    // this.publicservice.get_buttons().subscribe((button_list:any)=>{
+
+    // })
     if (button_list){
       console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
       console.log(button_list)
@@ -135,22 +139,31 @@ export class MenuComponent implements OnInit {
     console.log("--------------->method", method)
     switch (method) {
       case 'add':
-        this.updatabutton_list();
-        setTimeout(() => {
-          this.addmenu()
-        }, 1000);
+        this.updatabutton_list().subscribe(res=>{
+          if (res){
+            this.addmenu()
+            setTimeout(() => {
+            }, 1000);
+
+          }
+        });
         break;
       case 'del':
-        this.updatabutton_list();
-        setTimeout(() => {
-          this.delmenu();
-        }, 1000);
+        this.updatabutton_list().subscribe(res=>{
+          if (res){
+            this.delmenu();
+          }
+        });;
         break;
       case 'edit':
-        this.updatabutton_list();
-        setTimeout(() => {
-          this.editmenu();
-        }, 1000);
+        this.updatabutton_list().subscribe(res=>{
+          if (res){
+            this.editmenu();
+          }else{
+          }
+        });
+
+
         break;
       // case 'query':
       //   this.query();
@@ -174,12 +187,13 @@ export class MenuComponent implements OnInit {
     var dialogService = this.dialogService;
     var $table = $('#menuTable');
     console.log("根据id得到行数据  ",$table.bootstrapTable('getData'));
-    open();
+    var method = 'add';
+    open(method);
     
     // 弹出函数
-    function open() {
+    function open(method) {
       // dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
-      dialogService.open(MenuComponent2, {closeOnBackdropClick: false,}).onClose.subscribe(name=>{
+      dialogService.open(MenuComponent2, {closeOnBackdropClick: false,context: { rowdata: JSON.stringify(method)}}).onClose.subscribe(name=>{
         if (name){
           that.updatetable();
         }
@@ -303,8 +317,8 @@ export class MenuComponent implements OnInit {
 
   // 修改button弹出
   open() {
-    // dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
-    this.dialogService.open(EditMenuComponent,{ closeOnBackdropClick: false,context: { } }).onClose.subscribe(name=>{
+    // this.dialogService.open(MenuComponent2,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify('') } }).onClose.subscribe(name=>{
+    this.dialogService.open(EditMenuComponent,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify('edit') } }).onClose.subscribe(name=>{
       console.log("-------------name----------------", name);
       if (name){
         // 更新table！
@@ -428,10 +442,8 @@ export class MenuComponent implements OnInit {
                         }
                       }
                     );
-
                     // 删除之后 应该需要更新table
                     // getdata_for_table();
-                    
                 }
               },
               formatter: actionFormatter,
@@ -453,7 +465,6 @@ export class MenuComponent implements OnInit {
             if($table.treegrid('getRootNodes').length != 0){
               // $table.treegrid('getRootNodes').treegrid('expand'); // 只展开树形的第一级节点
               $table.treegrid('getRootNodes').treegrid('collapseAll'); // 不展开
-
             }
 
             
@@ -739,39 +750,39 @@ export class MenuComponent implements OnInit {
     console.log("这是 系统设置的菜单界面！")
     var sysmenu = localStorage.getItem(SYSMENU) == null ? [] : JSON.parse(localStorage.getItem(SYSMENU));
     var mulu_language = localStorage.getItem('mulu_language') == null ? 'zh_CN' : localStorage.getItem('mulu_language');
-    if(sysmenu.length == 0 || mulu_language != localStorage.getItem('currentLanguage')){
-      this.publicservice.getMenu().subscribe((data:any[])=>{
-        if (data.length === 0){
-          // 表示token 过期，返回登录界面
-          this.router.navigate([loginurl]);
-        }else{
-          const colums = {
-            languageid: this.http.getLanguageID(),
-            roles: data
-          };
-          console.log("---colums--",colums)
-          const table = "menu_item";
-          // const method = "get_systemset_menu";
-          const method = "get_systemset_menu_all";
-          this.http.callRPC(table, method, colums).subscribe((result)=>{
-            console.log("---------------->>>>",result)
-            const baseData = result['result']['message'][0];
-            if (baseData != "T"){
-              var menu = this.dataTranslation(baseData);
-              localStorage.setItem(SYSMENU, JSON.stringify(menu));
-              // 按钮
-              this.RanderTable(menu);
-            }
-          })
-        }
+    this.publicservice.getMenu().subscribe((data:any[])=>{
+      if (data.length === 0){
+        // 表示token 过期，返回登录界面
+        this.router.navigate([loginurl]);
+      }else{
+        const colums = {
+          languageid: this.http.getLanguageID(),
+          roles: data
+        };
+        console.log("---colums--",colums)
+        const table = "menu_item";
+        // const method = "get_systemset_menu";
+        const method = "get_systemset_menu_all";
+        this.http.callRPC(table, method, colums).subscribe((result)=>{
+          console.log("---------------->>>>",result)
+          const baseData = result['result']['message'][0];
+          if (baseData != "T"){
+            var menu = this.dataTranslation(baseData);
+            localStorage.setItem(SYSMENU, JSON.stringify(menu));
+            // 按钮
+            this.RanderTable(menu);
+          }
+        })
+      }
 
-      });
-    }else{
-      var menu = this.dataTranslation(sysmenu);
+    });
+    // if(sysmenu.length == 0 || mulu_language != localStorage.getItem('currentLanguage')){
+    // }else{
+    //   var menu = this.dataTranslation(sysmenu);
 
-      console.log("------menu--目录：", sysmenu);
-      this.RanderTable(menu);
-    }
+    //   console.log("------menu--目录：", sysmenu);
+    //   this.RanderTable(menu);
+    // }
     
   }
 
@@ -807,51 +818,61 @@ export class MenuComponent implements OnInit {
 
   // 更新button_list，在修改、新增、删除后！
   updatabutton_list(){
-    this.publicservice.getMenu().subscribe((data)=>{
-      const colums = {
-        languageid: this.http.getLanguageID(),
-        roles: data
-      };
-      console.log("---更新button_list！--",colums)
-      const table = "menu_item";
-      const method = "get_menu_by_roles";
-      this.http.callRPC(table, method, colums).subscribe((result)=>{
-        console.log("---更新button_list！--",result)
+    return new Observable((observe)=>{
+      this.publicservice.getMenu().subscribe((data)=>{
+        console.log("更新button_list，在修改、新增、删除后！", data);
+        if (data){
+          // 
+          const colums = {
+            languageid: this.http.getLanguageID(),
+            roles: data
+          };
+          console.log("---更新button_list！--",colums)
+          const table = "menu_item";
+          const method = "get_menu_by_roles";
+          this.http.callRPC(table, method, colums).subscribe((result)=>{
+            console.log("---更新button_list！--",result)
+            const baseData = result['result']['message'][0];
+            var button_list = [];
+            baseData.forEach(element => {
+              if (element["type"] === 2 ){
+                var method = element["permission"].split(":")[1];
+                // info success warning danger  primary
+                switch (method) {
+                  case 'add':
+                    element['class']="info"
+                  break;
+                  case 'del':
+                    element['class']="danger"
+                    break;
+                  case 'edit':
+                    element['class']="warning"
+                    break;
+                  case 'query':
+                    element['class']="success"
+                    break;
+                  case 'import':
+                    element['class']="primary"
+                    break;
+                  case 'download':
+                    element['class']="primary"
+                    break;
+                }
+                button_list.push(element);
+              }
+            });
+            localStorage.setItem(menu_button_list, JSON.stringify(button_list));
+            observe.next(true)
+          })
+        }else{
+          // else
+          observe.next(false)
+        }
+  
+  
+      });
 
-        const baseData = result['result']['message'][0];
-        var button_list = [];
-        baseData.forEach(element => {
-          if (element["type"] === 2 ){
-            var method = element["permission"].split(":")[1];
-            // info success warning danger  primary
-            switch (method) {
-              case 'add':
-                element['class']="info"
-              break;
-              case 'del':
-                element['class']="danger"
-                break;
-              case 'edit':
-                element['class']="warning"
-                break;
-              case 'query':
-                element['class']="success"
-                break;
-              case 'import':
-                element['class']="primary"
-                break;
-              case 'download':
-                element['class']="primary"
-                break;
-            }
-            button_list.push(element);
-          }
-        });
-        localStorage.setItem(menu_button_list, JSON.stringify(button_list));
-      })
-
-
-    });
+    })
     
   }
   

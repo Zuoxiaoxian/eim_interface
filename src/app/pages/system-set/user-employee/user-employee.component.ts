@@ -6,7 +6,6 @@ import { HttpserviceService } from '../../../services/http/httpservice.service';
 import { NbDialogService } from '@nebular/theme';
 import { UserEmployeeComponent as AddUserEmployeeComponent } from '../../../pages-popups/system-set/user-employee/user-employee.component';
 
-import { EditUserEmployeeComponent } from '../../../pages-popups/system-set/edit-user-employee/edit-user-employee.component';
 
 import { EditDelTooltipComponent } from '../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component';
 
@@ -81,8 +80,8 @@ export class UserEmployeeComponent implements OnInit {
   // 分页
   employee_data = [];
 
-  // isloding 加载agGrid
-  isloding = false;
+  // loading 加载agGrid
+  loading = false;
 
   employee_agGrid;
   
@@ -186,11 +185,6 @@ export class UserEmployeeComponent implements OnInit {
       // console.log("get_menu_role", result)
       var get_employee_limit = res['result']['message'][0]
       console.log("get_employee_limit", get_employee_limit);
-
-      this.isloding = false;
-      // 发布组件，编辑用户的组件 和删除所需要的 plv8 函数 delete_employee
-      this.publicmethod.getcomponent(EditUserEmployeeComponent);
-      this.publicmethod.getmethod("delete_employee");
 
       var message = res["result"]["message"][0];
       if( message.code === 0){
@@ -308,7 +302,6 @@ export class UserEmployeeComponent implements OnInit {
   pagemployee(event?){
     var offset;
     var limit;
-    console.log("event------------------------------------------------", event, this.agGrid);
     if (event != undefined){
       offset = event.offset;
       limit = event.limit;
@@ -320,12 +313,6 @@ export class UserEmployeeComponent implements OnInit {
     this.http.callRPC('emeployee', 'get_employee_limit', {offset: offset, limit: limit}).subscribe((res)=>{
       // console.log("get_menu_role", result)
       var get_employee_limit = res['result']['message'][0]
-      console.log("get_employee_limit", get_employee_limit);
-
-      this.isloding = false;
-      // 发布组件，编辑用户的组件 和删除所需要的 plv8 函数 delete_employee
-      this.publicmethod.getcomponent(EditUserEmployeeComponent);
-      this.publicmethod.getmethod("delete_employee");
 
       var message = res["result"]["message"][0];
       if( message.code === 0){
@@ -405,6 +392,7 @@ export class UserEmployeeComponent implements OnInit {
       this.tableDatas.rowData = this.gridData;
       var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';
       this.tableDatas.totalPageNumbers = totalpagenumbers;
+      // this.agGrid.update_agGrid(this.tableDatas);
       this.agGrid.init_agGrid(this.tableDatas);
       
       function unique(arr, field) { // 根据employeeid去重
@@ -440,10 +428,9 @@ export class UserEmployeeComponent implements OnInit {
 
   updategetemployee(event?){
     // this.agGrid.methodFromParent(event);
-
-    this.isloding = true
+    
     this.pagemployee();
-
+    
   }
 
 
@@ -457,14 +444,11 @@ export class UserEmployeeComponent implements OnInit {
 
   // =================================================agGrid
  
+
   // 得到buttons----------------------------------------------------------
   getbuttons(){
     // 根据menu_item_role得到 该页面对应的 button！
-    var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
-    if (button_list){
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      console.log(button_list)
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    this.publicmethod.get_buttons().subscribe((button_list: any[])=>{
       this.publicmethod.get_current_pathname().subscribe(res=>{
         console.log("get_current_pathname   ", res);
         var currentmenuid = res["id"];
@@ -480,7 +464,6 @@ export class UserEmployeeComponent implements OnInit {
             }else{
               buttons.push(button);
             }
-            
           }
         });
         // 对button进行排序 根据 title(导入、导出), 或者是 permission(menu:import)
@@ -495,25 +478,18 @@ export class UserEmployeeComponent implements OnInit {
             case "download":
               b["order_"] = 2;
               break;
-
+  
           }
         })
-
         // -----排序
         buttons2.sort(function(item1, item2){
           return item1["order_"] - item2["order_"]
         });
-
+  
         this.buttons = buttons;
         this.buttons2 = buttons2;
-
         console.log("-----------buttons--------",buttons);
         console.log("-----------buttons2--------",buttons2);
-
-
-        
-
-        
         // =======================================================
         var isactions = {};
         buttons.forEach(button=>{
@@ -531,7 +507,7 @@ export class UserEmployeeComponent implements OnInit {
             }
           }
         })
-
+  
         if (!isactions["edit"]){
           isactions["edit"] = false
         }
@@ -539,9 +515,10 @@ export class UserEmployeeComponent implements OnInit {
           isactions["del"] = false
         }
         localStorage.setItem(employee_action, JSON.stringify(isactions));
-        console.log("_________________________________-isactions---------________________",isactions)
       })
-    }
+
+    })
+    
   }
 
  
@@ -664,14 +641,15 @@ export class UserEmployeeComponent implements OnInit {
 
   // button按钮执行！新增
   add(){
-    this.dialogService.open(AddUserEmployeeComponent,{closeOnBackdropClick: false}).onClose.subscribe(name=>{
+    this.dialogService.open(AddUserEmployeeComponent,{closeOnBackdropClick: false,context: { rowdata: JSON.stringify('add'), res: JSON.stringify(''), goups: JSON.stringify('')}}).onClose.subscribe(name=>{
+    // this.dialogService.open(AddUserEmployeeComponent,{closeOnBackdropClick: false}).onClose.subscribe(name=>{
       if (name){
-        this.isloding = true
+        this.loading = true
 
         // 得到员工信息！
         this.http.callRPC('emeployee', 'get_employee_limit', {offset: 0, limit: 50}).subscribe((res)=>{
           console.log("get_menu_role", result)
-          this.isloding = false;
+          this.loading = false;
           var message = res["result"]["message"][0];
           if( message.code === 0){
             // 表示token过期了，跳转到 / 
@@ -744,9 +722,9 @@ export class UserEmployeeComponent implements OnInit {
     
           unique_group_role(unique_result, "groups_name");
           unique_group_role(unique_result, "role_name");
-          
-          this.updategetemployee({value: unique_result, action: "add"});
-
+          // this.loading = true
+          this.updategetemployee();
+          // this.loading = false
           
           
           function unique(arr, field) { // 根据employeeid去重
@@ -786,7 +764,7 @@ export class UserEmployeeComponent implements OnInit {
     var rowdata
     // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
     if (active_data){
-      rowdata = active_data;
+      rowdata = [active_data];
     }else{
       rowdata = this.agGrid.getselectedrows();
     }
@@ -799,7 +777,6 @@ export class UserEmployeeComponent implements OnInit {
       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content: "请选择一行数据！"}} ).onClose.subscribe(
         name=>{console.log("----name-----", name)}
       );
-
       
     }else if (rowdata.length > 1){
       console.log("button按钮执行222！ 编辑", rowdata);
@@ -808,29 +785,31 @@ export class UserEmployeeComponent implements OnInit {
       );
     }else{
       var rowData = rowdata[0]
-      this.getsecurity_edit('employee', 'get_rolename', {}).subscribe((res)=>{
-        console.log("employee_result-------------->", res);
-        // 根据用户角色得到，用户对应的组
-        var column = {
-          employeeid:  rowData["employeeid"] // 用户id
-        }
-        this.getsecurity_edit("groups", "get_groups", column).subscribe((goups:any[])=>{
-          console.log("根据用户角色得到，用户对应的组:", goups, "res", res);
-          this.dialogService.open(EditUserEmployeeComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowData), res: JSON.stringify(res), goups: JSON.stringify(goups)} }).onClose.subscribe(
-            name=>{
-              console.log("----编辑-----", name);
-              if (name){
-                // 更新table
-                this.isloding = true
-                // this.updategetemployee({value: name, action: "edit"});
-                this.updategetemployee();
-              };
-            }
-          );
-        });
-
+      var res = JSON.parse(localStorage.getItem("employee_rolename"));
+      var column = {
+        employeeid:  rowData["employeeid"] // 用户id
+      }
+      this.getsecurity_edit("groups", "get_groups", column).subscribe((goups:any[])=>{
+        console.log("根据用户角色得到，用户对应的组:", goups, "res", res);
+        this.dialogService.open(AddUserEmployeeComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowData), res: JSON.stringify(res), goups: JSON.stringify(goups)} }).onClose.subscribe(
+        // this.dialogService.open(EditUserEmployeeComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowData), res: JSON.stringify(res), goups: JSON.stringify(goups)} }).onClose.subscribe(
+          name=>{
+            console.log("----编辑-----", name);
+            if (name){
+              // 更新table
+              // this.loading = true
+              // this.updategetemployee({value: name, action: "edit"});
+              this.updategetemployee();
+              // this.loading = false;
+              
+            };
+          }
+        );
       });
-
+      // this.getsecurity_edit('employee', 'get_rolename', {}).subscribe((res)=>{
+      //   console.log("employee_result-------------->", res);
+      //   // 根据用户角色得到，用户对应的组
+      // });
 
 
     }
@@ -842,7 +821,7 @@ export class UserEmployeeComponent implements OnInit {
     // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
     
     if (active_data){
-      rowdata = active_data;
+      rowdata = [active_data];
     }else{
       rowdata = this.agGrid.getselectedrows();
     }
@@ -870,6 +849,8 @@ export class UserEmployeeComponent implements OnInit {
           console.log("----name-----", name);
           if (name){
             try {
+              // 更新table
+              // this.loading = true
               rowData.forEach(rd => {
                 getsecurity_edit2('employee', 'delete_employee', rd, http).subscribe((res)=>{
                   console.log("delete_employee", res);
@@ -883,15 +864,9 @@ export class UserEmployeeComponent implements OnInit {
                   }
                 });
               });
-              this.isloding = true;
-              // this.updategetemployee();
-              // setTimeout(() => {
-              //   location.reload();
-              // }, 1000);
+              
               success(publicservice)
-              // layer.close(index);
             }catch(err){
-              // publicservice.toastr(DelDanger);
               danger(publicservice)
               
             }

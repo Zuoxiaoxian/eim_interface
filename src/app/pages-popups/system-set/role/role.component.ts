@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
 
 import { NbDialogRef } from '@nebular/theme';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 
 
-import { SYSROLE, AddSuccess,  AddDanger} from '../../../appconfig';
+import { SYSROLE } from '../../../appconfig';
 
 // 验证表单！
 import { AddRole } from '../form_verification';
@@ -21,7 +21,7 @@ declare let $;
   styleUrls: ['./role.component.scss']
 })
 export class RoleComponent implements OnInit {
-
+  @Input() rowdata: string;
   constructor(protected dialogRef: NbDialogRef<RoleComponent>, private http: HttpserviceService, private userinfo: UserInfoService,
     private publicservice: PublicmethodService) { }
 
@@ -32,12 +32,36 @@ export class RoleComponent implements OnInit {
     var http = this.http;
     var success = this.success;
     var danger = this.danger;
+    var editsuccess = this.editsuccess;
+    var editdanger = this.editdanger;
     var publicservice = this.publicservice;
+
+    var isnot_edit = JSON.parse(this.rowdata);
+    var rowdata = JSON.parse(this.rowdata);
+    var formdatar = {};
+    // 编辑
+    if (isnot_edit != 'add'){
+
+    }else{}
+
     
     var that = this;
     layui.use(['layer','form','layedit'], function(){
       var layer = layui.layer;
       var form = layui.form;
+
+      // 编辑
+      if (isnot_edit != 'add'){
+        // 初始化表单
+        formdatar["role"] = rowdata["role"];
+        formdatar["role_name"] = rowdata["role_name"];
+        // formdatar["roleid"] = rowdata["roleid"]; 
+        formdatar["visible"] = rowdata["active"] === 1|| rowdata["active"]==='是'||rowdata["active"]===true? true: false;
+        formdatar["remark"] = rowdata["roledetail"];
+
+        form.val("role", formdatar); 
+      }else{}
+
       // 验证 表单
       form.verify({
         role: function(value, item){
@@ -89,19 +113,58 @@ export class RoleComponent implements OnInit {
       //监听提交
       form.on('submit(role)', function(data){
         
-        // 调用确认！
-        var is_success = confirm(data.field, userinfo,http,that);
-        if (is_success){
-          dialogRef.close(true);
-          // 刷新界面
-          localStorage.removeItem(SYSROLE);
-          success(publicservice);
-          
+        // 编辑
+        if (isnot_edit != 'add'){
+          var colums = {
+            role: data.field["role"],
+            role_name: data.field["role_name"],
+            active: data.field["visible"] === "on"? 1: 0,
+            roledetail: data.field["remark"],
+            roleid: rowdata["roleid"],
+            lastupdatedby: userinfo.getName(),
+  
+            createdon: rowdata["createdon"],
+            lastupdateon: rowdata["lastupdateon"],
+            createdby: rowdata["createdby"],
+          };
+  
+          console.log("---colums--",colums)
+          const table = "role";
+          const method = 'update_role';
+          http.callRPC(table, method, colums).subscribe((result)=>{
+            console.log("更新角色数据：", result)
+            const status = result['result']['message'][0];
+            console.log("更新角色数据：status", status)
+            if (status["code"] === 1){
+              localStorage.removeItem(SYSROLE);
+              dialogRef.close(true)
+              editsuccess(publicservice);
+              var option = '编辑角色';
+              var infodata = '角色名称(en):' + colums["role"] + ',' + '角色名称:' + colums["role_name"];
+              that.RecordOperation(option, 1,infodata);
+            }else{
+              editdanger(publicservice, status["message"]);
+              var option = '编辑角色';
+              that.RecordOperation(option, 0,String(status["message"]));
+              dialogRef.close(false)
+            }
+          })
           return false;
         }else{
-          danger(publicservice);
-
+          // 新增
+          var is_success = confirm(data.field, userinfo,http,that);
+          if (is_success){
+            dialogRef.close(true);
+            // 刷新界面
+            localStorage.removeItem(SYSROLE);
+            success(publicservice);
+            
+            return false;
+          }else{
+            danger(publicservice);
+          }
         }
+
       });
 
       // 监听 switch开关！
@@ -162,6 +225,13 @@ export class RoleComponent implements OnInit {
   }
   danger(publicservice){
     publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"添加失败!"});
+  }
+
+  editsuccess(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"修改成功!"});
+  }
+  editdanger(publicservice,message){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"修改失败!" + message });
   }
 
   // option_record  

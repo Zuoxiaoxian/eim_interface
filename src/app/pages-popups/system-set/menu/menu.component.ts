@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { NbDialogRef } from '@nebular/theme';
 
@@ -29,6 +29,7 @@ interface ICON {
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+  @Input("rowdata") rowdata: any;
 
   // ----icon
 
@@ -91,6 +92,7 @@ export class MenuComponent implements OnInit {
     this.initicon(); // 初始化icon
 
     var confirm = this.confirm;
+    var confirm2 = this.confirm2; // 编辑
     var dialogRef = this.dialogRef;
     var  publicmethod = this.publicmethod;
     var  newrowdata = this.newrowdata;
@@ -108,15 +110,24 @@ export class MenuComponent implements OnInit {
     // 按钮上级目录data
     var data = this.anniuparentmenuselects;
 
-    //  加载 eleTree 模块
-    // layui.config({
-    //   base: "./assets/pages/system-set/layui/module/"
-    //   // base: "../../../../assets/pages/system-set/layui/module/"
-    //   // base: "assets/pages/system-set/layui/module/"
-    // }).extend({
-    //     eleTree: "eleTree/eleTree"
-    // });
- 
+    // 编辑-----
+    // 获取用户名
+    var username = this.userinfoservice.getName();
+    // 更新到数据库
+    var upmenu = this.upmenu;
+    var show = this.show;
+
+    var isnot_edit = JSON.parse(this.rowdata);
+    var systemsetting = JSON.parse(localStorage.getItem(SYSMENUEDIT));
+    if (isnot_edit != 'add'){
+      // 编辑
+      console.log("编辑-----!----------------------\t\t\t\t\t\t\t\t\t", systemsetting, isnot_edit);
+      this.formselect()
+      
+    }else{
+      console.log("新增-----!----------------------\t\t\t\t\t\t\t\t\t");
+    }
+
 
     var anniuparentmenu_treeSelect = this.anniuparentmenu_treeSelect;
     layui.use(['layer','form', 'element', 'layedit', 'eleTree', 'jquery'], function(){
@@ -125,7 +136,6 @@ export class MenuComponent implements OnInit {
       var form = layui.form;
       var element = layui.element;
       var eleTree = layui.eleTree
-
 
 
       // 按钮上级目录
@@ -159,9 +169,6 @@ export class MenuComponent implements OnInit {
       $(document).on("click",function() {
           $(".ele5").hide();
       })
-      
-
-
 
       $("#mulu").prop('checked', true);
       form.render(); // //这句一定要加，占坑
@@ -294,57 +301,167 @@ export class MenuComponent implements OnInit {
           }
         },
       })
-      //监听提交
-      form.on('submit(mulu)', function(data){
-        // layer.alert(JSON.stringify(data.field), {
-        //   title: '最终的提交信息'
-        // })
-        confirm(publicmethod, newrowdata,userinfoservice,oldrowdata,addmenu,httpservice,success,danger, updatabutton_list).subscribe((res)=>{
-          if (res){
-            dialogRef.close(true);
-            that.RecordOperation(1,'新增', '菜单管理, 目录');
+      
+      if (isnot_edit != 'add'){
+        console.log("-------------muluselects--------------------", that.muluselects)
+        // 编辑
+        that.getmenuname_with_menitemid(systemsetting).subscribe((res)=>{
+          console.log("------菜单--目录：", res,systemsetting);
+          var textid = res["textid"];
+          //监听提交 --- 目录
+          form.on('submit(mulu)', function(data){
+            // layer.alert(JSON.stringify(data.field), {
+            //   title: '目录'
+            // });
+            data.field["type"] = 0;
+            data.field["id"] = systemsetting["id"];
+            data.field["username"] = username;
+            data.field["textid"] = textid;
+            confirm2(data.field, upmenu, dialogRef,publicmethod, httpservice, show).subscribe(res=>{
+              if (res){
+                that.RecordOperation(1,'编辑', '菜单管理, 目录');
+              }else{
+                that.RecordOperation(0,'编辑', '菜单管理, 目录');
+              }
+            });
             return false;
-          }else{
-            // dialogRef.close()
-            that.RecordOperation(0,'新增', '菜单管理, 目录');
+          });
+          //监听提交--菜单
+          form.on('submit(caidan)', function(data){
+            // layer.alert(JSON.stringify(data.field), {
+            //   title: '菜单'
+            // })
+            data.field["type"] = 1;
+            data.field["id"] = systemsetting["id"];
+            data.field["username"] = username;
+            data.field["textid"] = textid;
+            confirm2(data.field, upmenu, dialogRef,publicmethod, httpservice,show).subscribe(res=>{
+              if (res){
+                that.RecordOperation(1,'编辑', '菜单管理, 菜单');
+              }else{
+                that.RecordOperation(0,'编辑', '菜单管理, 菜单');
+              }
+            });
             return false;
-          }
+          });
+          //监听提交---按钮
+          form.on('submit(anniu)', function(data){
+            // layer.alert(JSON.stringify(data.field), {
+            //   title: '按钮'
+            // })
+            data.field["type"] = 2;
+            data.field["id"] = systemsetting["id"];
+            data.field["icon"] = systemsetting["icon"];
+            data.field["username"] = username;
+            data.field["textid"] = textid;
+            data.field["permission"] = "menu:" + data.field["permission"]
+            // data.field["visible"] = data.field["visible"] == 1? 'on': 'off';
+            confirm2(data.field, upmenu, dialogRef,publicmethod, httpservice, show).subscribe(res=>{
+              if (res){
+                that.RecordOperation(1,'编辑', '菜单管理, 按钮');
+              }else{
+                that.RecordOperation(0,'编辑', '菜单管理, 按钮');
+              }
+            });
+            return false;
+          });
+          form.render('checkbox'); // 刷新checkbox选择框渲染
+          form.render('select'); // 刷新select    
+          form.render();
+          // 表单赋值--目录
+
+          form.val("editmulu", { 
+            "muluname": systemsetting["title"] // 目录名称
+            ,"muluname_en": res["en"] // 是目录名称en
+            ,"mulumenuurl": systemsetting["link"] // 路由
+            ,"parenttitle": systemsetting["parentid"] // 上级目录
+            ,"mulu_visible": systemsetting["active"]===1? true: false // 是否启用
+            ,"orderindex": systemsetting["orderindex"] // 排序号
+            ,"muluicon":systemsetting["icon"] === null? '暂无' : systemsetting["icon"]
+            ,"mululevel": systemsetting["orderindex"] // 排序
+          }); 
+          // 表单赋值--菜单
+          form.val("editcaidan", { 
+            "caidanname": systemsetting["title"] // 菜单名称
+            ,"caidanname_en": res["en"] // 菜单名称en
+            ,"caidanmenuurl": systemsetting["link"] // 路由
+            ,"caidanparentname": systemsetting["parentid"] // 上目录
+            ,"caidan_visible": systemsetting["active"]===1? true: false // 是否启用
+            ,"caidanicon":systemsetting["icon"] === null? '暂无' : systemsetting["icon"]
+            ,"caidanpermissionValue": systemsetting["permission"] === null? null : systemsetting["permission"] // 权限标识
+            ,"caidanlevel": systemsetting["orderindex"] // 排序
+          }); 
+          // 表单赋值--按钮
+          form.val("editanniu", { 
+            "anniuname": systemsetting["title"] // 按钮名称
+            ,"anniuname_en": res["en"] // 按钮名称en
+            ,"link": systemsetting["link"] // 路由
+            ,"anniunparentname": systemsetting["parentid"] // 上级目录
+            // ,"visible": systemsetting["active"] // 是否可见
+            ,"anniu_visible": systemsetting["active"]===1? true: false // 是否启用
+            ,"anniupermissionValue": systemsetting["permission"] === null? "null" : systemsetting["permission"].split(":")[1]// 权限标识.replace(/\s/g, "") 
+            ,"anniulevel": systemsetting["orderindex"] // 排序
+          });
+          
+          
+        })
+
+      }else{
+        // 新增
+        //监听提交
+        form.on('submit(mulu)', function(data){
+          // layer.alert(JSON.stringify(data.field), {
+          //   title: '最终的提交信息'
+          // })
+          confirm(publicmethod, newrowdata,userinfoservice,oldrowdata,addmenu,httpservice,success,danger, updatabutton_list).subscribe((res)=>{
+            if (res){
+              dialogRef.close(true);
+              that.RecordOperation(1,'新增', '菜单管理, 目录');
+              return false;
+            }else{
+              // dialogRef.close()
+              that.RecordOperation(0,'新增', '菜单管理, 目录');
+              return false;
+            }
+          });
+          
         });
-        
-      });
-      //监听提交
-      form.on('submit(caidan)', function(data){
-        confirm(publicmethod, newrowdata,userinfoservice,oldrowdata,addmenu,httpservice,success,danger, updatabutton_list).subscribe((res)=>{
-          if (res){
-            dialogRef.close(true);
-            that.RecordOperation(1,'新增', '菜单管理, 菜单');
-            return false;
-          }else{
-            // dialogRef.close()
-            that.RecordOperation(0,'新增', '菜单管理, 菜单');
-            return false;
-          }
+        //监听提交
+        form.on('submit(caidan)', function(data){
+          confirm(publicmethod, newrowdata,userinfoservice,oldrowdata,addmenu,httpservice,success,danger, updatabutton_list).subscribe((res)=>{
+            if (res){
+              dialogRef.close(true);
+              that.RecordOperation(1,'新增', '菜单管理, 菜单');
+              return false;
+            }else{
+              // dialogRef.close()
+              that.RecordOperation(0,'新增', '菜单管理, 菜单');
+              return false;
+            }
+          });
+          
         });
-        
-      });
-      //监听提交
-      form.on('submit(anniu)', function(data){
-        confirm(publicmethod, newrowdata,userinfoservice,oldrowdata,addmenu,httpservice,success,danger,updatabutton_list).subscribe((res)=>{
-          if (res){
-            dialogRef.close(true);
-            that.RecordOperation(1,'新增', '菜单管理, 按钮');
-            return false;
-          }else{
-            // dialogRef.close()
-            that.RecordOperation(0,'新增', '菜单管理, 按钮');
-            return false;
-          }
+        //监听提交
+        form.on('submit(anniu)', function(data){
+          confirm(publicmethod, newrowdata,userinfoservice,oldrowdata,addmenu,httpservice,success,danger,updatabutton_list).subscribe((res)=>{
+            if (res){
+              dialogRef.close(true);
+              that.RecordOperation(1,'新增', '菜单管理, 按钮');
+              return false;
+            }else{
+              // dialogRef.close()
+              that.RecordOperation(0,'新增', '菜单管理, 按钮');
+              return false;
+            }
+          });
+          
         });
-        
-      });
-      form.render('checkbox'); // 刷新checkbox选择框渲染
-      form.render(); // 刷新select
-      // form.render('select'); // 刷新select
+        form.render('checkbox'); // 刷新checkbox选择框渲染
+        form.render(); // 刷新select
+        // form.render('select'); // 刷新select
+ 
+      }
+
 
       // 监听 switch开关！
       form.on('switch(filter)', function(data){
@@ -379,12 +496,39 @@ export class MenuComponent implements OnInit {
     // this.initeditform();
     // var $html = $('.cdk-global-scrollblock');
     // $html.addClass("nb-global-scrollblock");
+    var isnot_edit = JSON.parse(this.rowdata);
+    if (isnot_edit != 'add'){
+      // 编辑
+      // 选测icon图标时，防止html样式改变
+      var $html = $('.cdk-global-scrollblock');
+      $html.addClass("nb-global-scrollblock");
+      
+      var systemsetting = JSON.parse(localStorage.getItem(SYSMENUEDIT));
+      console.log("得到 编辑的row数据", systemsetting,"this.muluselects",this.muluselects);
+      var optionId = systemsetting["parentid"];
 
-    // 设置默认的 icon值
-    var $muluicon = $("input[name='muluicon']");
-    var $caidanicon = $("input[name='caidanicon']");
-    $muluicon.val('globe-2-outline');
-    $caidanicon.val('globe-2-outline');
+
+      // 初始化目录tab 中的上级菜单！
+      var mulu = "#parenttitle option:eq("+ optionId +")";
+      $(mulu).attr("selected", "selected");
+      // this.selectdata = systemsetting["title"]
+
+      // 初始化菜单tab 中的上级菜单！
+      var caidan = "#caidanparentname option:eq("+ optionId +")";
+      $(caidan).attr("selected", "selected");
+      
+    }else{
+      console.log("新增-----!----------------------\t\t\t\t\t\t\t\t\t");
+      // 设置默认的 icon值
+      var $muluicon = $("input[name='muluicon']");
+      var $caidanicon = $("input[name='caidanicon']");
+      $muluicon.val('globe-2-outline');
+      $caidanicon.val('globe-2-outline');
+    }
+
+
+
+
   }
 
   // × 关闭diallog   及关闭弹框
@@ -400,7 +544,7 @@ export class MenuComponent implements OnInit {
   }
 
 
-  // 保存--确定
+  // 保存--确定=== add
   confirm(publicmethod, newrowdata,userinfoservice,oldrowdata,addmenu,httpservice,success,danger,updatabutton_list){
     return new Observable((observe)=>{
 
@@ -537,6 +681,256 @@ export class MenuComponent implements OnInit {
   }
 
 
+  // 保存--确定===edit
+  confirm2(formdata, upmenu, dialogRef, publicmethod, httpservice,show){
+    return new Observable((observa)=>{
+      // 得到formdata
+      var is_mulu = Number(localStorage.getItem(EDIT_MENU_ISMENU));
+      console.log("初始化编辑表单", is_mulu, 'formdata', formdata)
+      var item = {};
+      if (is_mulu === 0){// 目录 mulu_visible
+        var $muluname = $("input[name='muluname']");
+        var $muluname_en = $("input[name='muluname_en']");
+        var $muluparentname = $("select[name='parenttitle'] option:selected");
+        var $mulumenuurl = $("input[name='mulumenuurl']");
+        var $muluicon = $("input[name='muluicon']");
+        var $mululevel = $("input[name='mululevel']");
+        var $mulupermissionValue = $("input[name='mulupermissionValue']");
+        var $mulu_visible = $("input[name='mulu_visible']");
+  
+        item["title"] = $muluname.val();
+        item["title_en"] = $muluname_en.val();
+        item["type"] = 0;
+        item["parentName"] = $muluparentname.val();
+        item["link"] = $mulumenuurl.val();
+        item["permissionValue"] = $mulupermissionValue.val();
+        item["icon"] = $muluicon.val()==='null'?null:$muluicon.val();
+        item["orderindex"] = $mululevel.val();
+        item["visible"] = $mulu_visible.prop('checked');
+        
+      }else if (is_mulu === 1){// 菜单 caidanparentname
+        var $caidanname = $("input[name='caidanname']");
+        var $caidanname_en = $("input[name='caidanname_en']");
+        var $caidanparentname = $("select[name='caidanparentname'] option:selected");
+        var $caidanmenuurl = $("input[name='caidanmenuurl']");
+        var $caidanicon = $("input[name='caidanicon']");
+        var $caidanlevel = $("input[name='caidanlevel']");
+        var $caidanpermissionValue = $("input[name='caidanpermissionValue']");
+        var $caidan_visible = $("input[name='caidan_visible']");
+  
+        item["title"] = $caidanname.val();
+        item["title_en"] = $caidanname_en.val();
+        item["type"] = 1;
+        item["parentName"] = $caidanparentname.val();
+        item["link"] = $caidanmenuurl.val();
+        item["permissionValue"] = $caidanpermissionValue.val();
+        item["icon"] = $caidanicon.val()==='null'? null: $caidanicon.val();
+        item["orderindex"] = $caidanlevel.val();
+        item["visible"] = $caidan_visible.prop('checked');
+      }else{ // 按钮 caidan_visible
+        var $anniuname = $("input[name='anniuname']");
+        var $anniuname_en = $("input[name='anniuname_en']");
+        // var $anniupermissionValue = $("input[name='anniupermissionValue']");
+        var $anniuactive = $("select[name='anniuactive'] option:selected");
+        var $anniupermissionValue = $("select[name='anniupermissionValue'] option:selected");
+        // var $anniunparentname = $("select[name='anniunparentname'] option:selected");
+        // var $anniunparentname = $("input[name='anniunparentname']");
+
+        var $anniu_visible = $("input[name='anniu_visible']");
+        var $anniulevel = $("input[name='anniulevel']");
+        item["visible"] = $anniu_visible.prop('checked');
+        item["title"] = $anniuname.val();
+        item["title_en"] = $anniuname_en.val();
+
+        var method = $anniupermissionValue.val();
+        switch (method) {
+          case "add":
+            item['icon'] = 'plus-outline';
+            break;
+          case "del":
+            item['icon'] = 'minus-outline';
+            break;
+          case "edit":
+            item['icon'] = 'edit-outline';
+            break;
+          case "query":
+            item["icon"] = "search-outline"
+            break;
+          case "import":
+            item["icon"] = "cloud-upload-outline"
+            break;
+          case "download":
+            item["icon"] = "cloud-download-outline"
+            break;
+        
+
+        }
+
+
+        // 根据上级目录 定制权限！
+        item["permissionValue"] = "menu:" + $anniupermissionValue.val();
+        // item["visible"] =  $anniu_visible.val()==1? false: true;
+        // item["visible"] =  1;
+        item["parentName"] = localStorage.getItem("anniunparentname")? Number(localStorage.getItem("anniunparentname")): localStorage.getItem("anniunparentname");
+        
+        console.log("根据上级目录 定制权限！",item["parentName"])
+
+        localStorage.removeItem("anniunparentname")
+        item["orderindex"] = $anniulevel.val();
+        item["type"] = 2;
+      }
+  
+      // var hour_mon_sec = this.publicmethod.getcurdate()
+      var hour_mon_sec = publicmethod.getcurdate();
+  
+      item["textid"] = hour_mon_sec[0] * 10000 + hour_mon_sec[1] * 100 + hour_mon_sec[2];
+      
+      console.log("confirm《《《《《《《《《《《《 ", item)
+
+
+      console.log("编辑菜单得到form表单", formdata)
+
+
+      console.log("===item===", item)
+  
+      // 保存数据，success 1
+      // 保存数据库后-需要删除缓存菜单、树状菜单
+      localStorage.removeItem(MULU);
+      // localStorage.removeItem(SYSMENU);
+      // this.dialogRef.close();
+  
+      // 更新token SYSMENU
+      var sysmenu = JSON.parse(localStorage.getItem(SYSMENU));
+      sysmenu.forEach(m => {
+        if (m["id"] ===  item["id"]){
+          m["active"] = item["active"];
+          m["id"] = item["id"];
+          m["link"] = item["link"];
+          m["parentid"] = item["parentid"];
+          m["permission"] = item["permission"];
+          m["textid"] = item["textid"];
+          m["title"] = item["name"];
+          m["title_en"] = item["name_en"];
+          m["type"] = item["type"];
+          m["icon"] = item["icon"];
+          
+        }
+      });
+      console.log("-----sysmenu----", sysmenu, item);
+     
+      localStorage.setItem(SYSMENU, JSON.stringify(sysmenu));
+  
+  
+  
+      upmenu(item, httpservice).subscribe((res)=>{
+        console.log("更新数据到数据库", res);
+        // {en: 1, menu: 1, zh: 1}
+        if (res["en"] === 1 && res["menu"] === 1 && res["zh"] === 1){
+          // 关闭弹窗
+          
+          // 删除 
+          localStorage.removeItem(SYSMENUEDIT);
+          localStorage.removeItem(SYSMENU);
+          dialogRef.close(true);
+          // 提示
+          show(publicmethod,)
+          observa.next(true)
+          // 刷新界面
+          // setTimeout(() => {
+          //   location.reload();
+          // }, 2000);
+        }else{
+          show(publicmethod,);
+          observa.next(false)
+        }
+      });
+
+    })
+
+
+  }
+
+  // 更新数据
+  upmenu(updata, httpservice){
+
+    console.log("--保存编辑的数据到数据库--",updata)
+    const table = "text_translation";
+    const method = "update_menu_with_textid";
+    return new Observable((observe)=>{
+      httpservice.callRPC(table, method, updata).subscribe((result)=>{
+        const baseData = result['result']['message'][0];
+        
+        observe.next(baseData)
+      })
+
+    })
+  }
+
+  show(publicmethod){
+    publicmethod.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"修改成功!"});
+  }
+
+  // 编辑
+  formselect(){
+    // this.muluselects = this.parentmenu();
+    var parentmenu = this.parentmenu();
+    
+    var systemsetting = JSON.parse(localStorage.getItem(SYSMENUEDIT));
+    console.log("得到 编辑的row数据", systemsetting,"this.muluselects",this.muluselects);
+    this.anniuparentmenuselects = this.anniuparentmenu();
+
+    // 赋值目录中的上级菜单  .parentmulu
+    var $parentmulu = $(".parentmulu");
+    console.log("赋值目录中的上级菜单>>>>>>>>>>>", parentmenu)
+    for (let r of parentmenu){
+      var r_str
+      if (r["id"] === systemsetting["parentid"]){
+        r_str = `<option  value="${r["id"]}" selected>${r["title"]}</option>`;
+      }else{
+        r_str = `<option  value="${r["id"]}" >${r["title"]}</option>`;
+      }
+      $parentmulu.append(r_str);
+    }
+    var parentmenu_select;
+    if(systemsetting["parentid"] === 0){
+      parentmenu_select = 0
+    }else{
+      parentmenu_select = systemsetting['parentid']
+    }
+    console.log("parentmenu_select<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",parentmenu_select)
+
+
+    if (systemsetting["type"] === 0){
+      // 目录
+      $(".mululi").attr("class", "layui-this mululi");
+      $(".caidanli").attr("class", "caidanli");
+      $(".anniuli").attr("class", "anniuli");
+      
+
+      $(".mulu_tab").attr("class", "layui-tab-item layui-show mulu_tab");
+      $(".caidan_tab").attr("class", "layui-tab-item caidan_tab");
+      $(".anniu_tab").attr("class", "layui-tab-item anniu_tab");
+
+    }else if(systemsetting["type"] === 1){
+      // 菜单 
+      $(".mululi").attr("class", "mululi");
+      $(".caidanli").attr("class", "layui-this caidanli");
+      $(".anniuli").attr("class", "anniuli");
+      
+      $(".mulu_tab").attr("class", "layui-tab-item  mulu_tab");
+      $(".caidan_tab").attr("class", "layui-tab-item layui-show caidan_tab");
+      $(".anniu_tab").attr("class", "layui-tab-item anniu_tab");
+    }else{
+      $(".mululi").attr("class", "mululi");
+      $(".caidanli").attr("class", "caidanli");
+      $(".anniuli").attr("class", "layui-this anniuli");
+
+      $(".mulu_tab").attr("class", "layui-tab-item  mulu_tab");
+      $(".caidan_tab").attr("class", "layui-tab-item caidan_tab");
+      $(".anniu_tab").attr("class", "layui-tab-item layui-show anniu_tab");
+    }
+
+  }
   
 
 
@@ -720,6 +1114,7 @@ export class MenuComponent implements OnInit {
 
 
 
+
   // ---icon
   // 初始化icon的
   initicon(){
@@ -868,11 +1263,11 @@ export class MenuComponent implements OnInit {
 
 
   // 展示状态
-  success(publicservice){
-    publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"添加成功!"});
+  success(publicmethod){
+    publicmethod.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"添加成功!"});
   }
-  danger(publicservice){
-    publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"添加失败!"});
+  danger(publicmethod){
+    publicmethod.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"添加失败!"});
   }
 
 

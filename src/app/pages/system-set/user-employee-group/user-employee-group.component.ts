@@ -9,10 +9,10 @@ import { Observable } from 'rxjs';
 import { NbDialogService } from '@nebular/theme';
 
 
-import { EditUserEmployeeGroupComponent } from '../../../pages-popups/system-set/edit-user-employee-group/edit-user-employee-group.component';
 import { UserEmployeeGroupComponent as AddUserEmployeeGroupComponent} from '../../../pages-popups/system-set/user-employee-group/user-employee-group.component';
 import { EditDelTooltipComponent } from '../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
+import { ActionComponent } from './action/action.component';
 
 
 
@@ -40,9 +40,11 @@ export class UserEmployeeGroupComponent implements OnInit {
   rowdata;
 
   // 加载table
-  isloding = false;
+  loading = false;
   employee_group_agGrid;
  
+  // 操作
+  active; 
 
 
   DelSuccess :any = {position: 'bottom-right', status: 'success', conent:"删除成功!"};
@@ -52,7 +54,6 @@ export class UserEmployeeGroupComponent implements OnInit {
 
   constructor(private publicmethod: PublicmethodService, private http: HttpserviceService, 
     private dialogService: NbDialogService, private userinfo: UserInfoService) { 
-    // this.updatabutton_list();
     // 改界面具有的button
     this.getbuttons();
 
@@ -65,10 +66,8 @@ export class UserEmployeeGroupComponent implements OnInit {
       var get_employee_limit = res['result']['message'][0]
       console.log("get_employee_limit", get_employee_limit);
 
-      this.isloding = false;
+      this.loading = false;
       // 发布组件，编辑用户的组件
-      this.publicmethod.getcomponent(EditUserEmployeeGroupComponent);
-      this.publicmethod.getmethod("delete_group");
 
       var message = res["result"]["message"][0]["message"];
       if (message.length>0){
@@ -96,16 +95,27 @@ export class UserEmployeeGroupComponent implements OnInit {
       // 初始化table
       // this.getetabledata();
 
-      setTimeout(() => {
-        this.employee_group_agGrid = JSON.parse(localStorage.getItem("employee_group_agGrid"))
-        
-      }, );
+      var that = this;
+      this.active = { field: 'action', headerName: '操作', cellRendererFramework: ActionComponent, pinned: 'right',
+        cellRendererParams: {
+          clicked: function(data: any) {
+            if (data["active"]==='edit'){
+              that.edit([data["data"]]);
+            }else{
+              that.del(data["data"]);
+            }
+          }
+        },
+      }
 
     // ====================================agGrid
     
   }
   ngAfterViewInit(){
-    // this.employee_group_agGrid = JSON.parse(localStorage.getItem("employee_group_agGrid"))
+    // 初始化table
+    this.tableDatas.columnDefs.push(
+      this.active
+    )
     if (this.employee_group_agGrid == null){
       this.pageabledata()
     }else{
@@ -152,11 +162,7 @@ ngOnDestroy(){
   
   getbuttons(){
     // 根据menu_item_role得到 该页面对应的 button！
-    var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
-    if (button_list){
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      console.log(button_list)
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    this.publicmethod.get_buttons().subscribe((button_list: any[])=>{
       this.publicmethod.get_current_pathname().subscribe(res=>{
         console.log("get_current_pathname   ", res);
         var currentmenuid = res["id"];
@@ -175,7 +181,7 @@ ngOnDestroy(){
             
           }
         });
-
+  
         // 对button进行排序 根据 title(导入、导出), 或者是 permission(menu:import)
         buttons2.forEach(b=>{
           switch (b["permission"].split(":")[1]) {
@@ -188,20 +194,20 @@ ngOnDestroy(){
             case "download":
               b["order_"] = 2;
               break;
-
+  
           }
         })
-
+  
         // -----排序
         buttons2.sort(function(item1, item2){
           return item1["order_"] - item2["order_"]
         });
-
+  
         this.buttons = buttons;
         this.buttons2 = buttons2;
-
+  
         console.log("-----------buttons2--------",buttons2)
-
+  
         // ====================================================
         var isactions = {};
         buttons.forEach(button=>{
@@ -219,7 +225,7 @@ ngOnDestroy(){
             }
           }
         })
-
+  
         if (!isactions["edit"]){
           isactions["edit"] = false
         }
@@ -229,7 +235,9 @@ ngOnDestroy(){
         localStorage.setItem(employeegroup_action, JSON.stringify(isactions));
         console.log("_________________________________-isactions---------________________",isactions)
       })
-    }
+
+    })
+   
   }
 
 
@@ -263,10 +271,11 @@ ngOnDestroy(){
 
   // button 新增用户组
   add(){
-    this.dialogService.open(AddUserEmployeeGroupComponent, {closeOnBackdropClick: false,}).onClose.subscribe(
+    this.dialogService.open(AddUserEmployeeGroupComponent, {closeOnBackdropClick: false,context: { rowdata: JSON.stringify('add')}}).onClose.subscribe(
+    // this.dialogService.open(AddUserEmployeeGroupComponent, {closeOnBackdropClick: false,}).onClose.subscribe(
       name=>{
         if (name){
-          this.isloding = true;
+          this.loading = true;
           // 成功之后，重新请求
           this.http.callRPC('group_', 'get_group', {}).subscribe((res)=>{
             var get_employee_limit = res['result']['message'][0]["message"];
@@ -287,10 +296,15 @@ ngOnDestroy(){
   }
 
   // button 编辑用户组
-  edit(){
-    // var rowdata = this.rowdata;
-    // 得到选中的aggrid rowdatas
-    var rowdata = this.agGrid.getselectedrows();
+  edit(active_data?){
+    var rowdata
+    // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
+    if (active_data){
+      rowdata = active_data;
+    }else{
+      rowdata = this.agGrid.getselectedrows();
+    }
+    // var rowdata = this.agGrid.getselectedrows();
     
     console.log("=====this.rowdata",rowdata);
     if ( rowdata.length === 0){
@@ -311,22 +325,19 @@ ngOnDestroy(){
       console.log("---------------------rowdata_===",rowdata_)
       rowdata_["active"] = rowdata_["active"] === "是" || rowdata_["active"] === 1|| rowdata_["active"] === true? 1 :0;
       console.log("---------------------rowdata_===",rowdata_)
-      this.dialogService.open(EditUserEmployeeGroupComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowdata_)} }).onClose.subscribe(name=>{
+      this.dialogService.open(AddUserEmployeeGroupComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowdata_)} }).onClose.subscribe(name=>{
+      // this.dialogService.open(EditUserEmployeeGroupComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowdata_)} }).onClose.subscribe(name=>{
         if (name){
+          this.loading = true;
           // 更新table
           console.log("更新用户组！", name)
-          this.isloding = true;
           // 重新请求！
           this.http.callRPC('group_', 'get_group', {}).subscribe((res)=>{
             // console.log("get_menu_role", result)
             var get_employee_limit = res['result']['message'][0]
             console.log("get_employee_limit", get_employee_limit);
       
-            this.isloding = false;
-            // 发布组件，编辑用户的组件
-            this.publicmethod.getcomponent(EditUserEmployeeGroupComponent);
-            this.publicmethod.getmethod("delete_group");
-      
+            
             var message = res["result"]["message"][0]["message"];
             if (message){
               message.forEach(r => {
@@ -348,8 +359,17 @@ ngOnDestroy(){
   }
 
   // button删除用户组
-  del(){
-    var rowdata = this.agGrid.getselectedrows();
+  del(active_data?){
+    var rowdata
+    // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
+    
+    if (active_data){
+      rowdata = [active_data];
+    }else{
+      rowdata = this.agGrid.getselectedrows();
+    }
+
+    // var rowdata = this.agGrid.getselectedrows();
 
     if (rowdata.length === 0){
       console.log("没有选中行数据", rowdata);
@@ -385,7 +405,7 @@ ngOnDestroy(){
                   }
                 });
               });
-              this.isloding = true;
+              this.loading = true;
               // this.updatetabledata();
               
               success(publicservice)
@@ -449,35 +469,7 @@ ngOnDestroy(){
 
 
 
-  // 更新button_list！
-  updatabutton_list(){
-    this.publicmethod.getMenu().subscribe((data)=>{
-      const colums = {
-        languageid: this.http.getLanguageID(),
-        roles: data
-      };
-      console.log("---更新button_list！--",colums)
-      const table = "menu_item";
-      const method = "get_menu_by_roles";
-      this.http.callRPC(table, method, colums).subscribe((result)=>{
-        console.log("---更新button_list！--",result)
 
-        const baseData = result['result']['message'][0];
-        var button_list = [];
-        baseData.forEach(element => {
-          if (element["type"] === 2 ){
-            button_list.push(element);
-          }
-        });
-        localStorage.setItem(menu_button_list, JSON.stringify(button_list));
-      })
-
-      
-
-
-    });
-    
-  }
 
   // 展示状态
   success(publicservice){
@@ -488,7 +480,7 @@ ngOnDestroy(){
   }
   // =================================================agGrid
   tableDatas = {
-    action: true,
+    action: false,
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
       { field: 'group', headerName: '组名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true},
@@ -499,7 +491,7 @@ ngOnDestroy(){
       // { field: 'options', headerName: '操作', resizable: true, flex: 1},
     ],
     rowData: [ // data
-      { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
+      // { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
       // { name: 'Ford', loginname: 'Mondeo', role_name: 32000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" },
       // { name: 'Porsche', loginname: 'Boxter', role_name: 72000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" }
     ]
@@ -526,10 +518,8 @@ ngOnDestroy(){
       var get_employee_limit = res['result']['message'][0]
       console.log("get_employee_limit", get_employee_limit);
 
-      this.isloding = false;
+      this.loading = false;
       // 发布组件，编辑用户的组件
-      this.publicmethod.getcomponent(EditUserEmployeeGroupComponent);
-      this.publicmethod.getmethod("delete_group");
 
 
       var message = res["result"]["message"][0]["message"];
@@ -565,10 +555,8 @@ ngOnDestroy(){
       var get_employee_limit = res['result']['message'][0]
       console.log("get_employee_limit", get_employee_limit);
 
-      this.isloding = false;
+      this.loading = false;
       // 发布组件，编辑用户的组件
-      this.publicmethod.getcomponent(EditUserEmployeeGroupComponent);
-      this.publicmethod.getmethod("delete_group");
 
 
       var message = res["result"]["message"][0]["message"];
@@ -589,9 +577,8 @@ ngOnDestroy(){
 
   updatetabledata(event?){
     // {value: name, action: "edit"}
-
-    this.agGrid.methodFromParent(event);
-    // this.agGrid.parent_call_edit_rome(event);
+    // this.agGrid.methodFromParent(event);
+    this.pageabledata();
     
   }
       

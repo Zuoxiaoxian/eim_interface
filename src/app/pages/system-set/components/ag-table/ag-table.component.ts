@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild,Output, EventEmitter } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 
-import { AgGridActionComponent } from './ag-grid-action/ag-grid-action.component';
 
 import { EditDelTooltipComponent } from '../../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component';
 
@@ -114,19 +113,7 @@ export class AgTableComponent implements OnInit {
 
     if (this.action){
       console.log("action===========222222222222222========", this.action);
-      console.log("this.tableDatas.columnDefs======this.tableDatas.columnDefs", this.columnDefs, "index: ",this.columnDefs.indexOf(action));
-      // user-employee
-      var action = { field: 'action', headerName: '操作', cellRendererFramework: AgGridActionComponent, pinned: 'right'};
-      this.columnDefs.forEach(column => {
-        if (column["field"] === "action"){
-          var index = this.columnDefs.indexOf(column);
-          this.columnDefs.splice(index, 1);
-        }
-      });
-      this.columnDefs.push(action);
-        
-  
-
+      console.log("this.tableDatas.columnDefs======this.tableDatas.columnDefs", this.columnDefs, "index: ");
       // this.tableDatas.columnDefs.push(this.action)
       // 表示具有操作功能
       // this.frameworkComponents = {

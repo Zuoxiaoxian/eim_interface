@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 
 import { SYSMENUEDIT, MULU,SYSMENU, EDIT_MENU_ISMENU, ANNIU_PARTENT_MULU, UpSuccess, UpDanger } from "../../../appconfig";
 
@@ -41,6 +41,8 @@ export class EditMenuComponent implements OnInit {
   @ViewChild('autoInput') input;
   @ViewChild('device_tpye') device_tpye;
   @ViewChild('caidan_parent') caidan_parent;
+
+  @Input("rowdata") rowdata: any;
   // options: string[];
   options: ICON[];
   // filteredOptions$: Observable<string[]>;

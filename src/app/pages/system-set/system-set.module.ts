@@ -23,7 +23,6 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { LayuiTableComponent } from './components/layui-table/layui-table.component';
 import { AgTableComponent } from './components/ag-table/ag-table.component';
 import { AgGridModule } from 'ag-grid-angular';
-import { AgGridActionComponent } from './components/ag-table/ag-grid-action/ag-grid-action.component';
 import { OperationLogComponent } from './operation-log/operation-log.component';
 import { GocronComponent } from './gocron/gocron.component';
 import { GocronFormComponent } from './gocron/gocron-form/gocron-form.component';
@@ -31,7 +30,7 @@ import { GocronFormNodeComponent } from './gocron/gocron-form-node/gocron-form-n
 import { ActionComponent } from './user-employee/action/action.component';
 @NgModule({
   declarations: [SystemSetComponent, RoleComponent, MenuComponent, EmployeeComponent, MyTableNg2Component, SecurityLogComponent, UserEmployeeComponent, 
-    UserEmployeeGroupComponent, LayuiTableComponent, AgTableComponent, AgGridActionComponent, OperationLogComponent, GocronComponent, GocronFormComponent, GocronFormNodeComponent, ActionComponent, ],
+    UserEmployeeGroupComponent, LayuiTableComponent, AgTableComponent,  OperationLogComponent, GocronComponent, GocronFormComponent, GocronFormNodeComponent, ActionComponent, ],
   imports: [
     CommonModule,
     SystemSetRoutingModule,

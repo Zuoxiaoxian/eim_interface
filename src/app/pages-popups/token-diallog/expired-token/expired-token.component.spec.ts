@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditRoleComponent } from './edit-role.component';
+import { ExpiredTokenComponent } from './expired-token.component';
 
-describe('EditRoleComponent', () => {
-  let component: EditRoleComponent;
-  let fixture: ComponentFixture<EditRoleComponent>;
+describe('ExpiredTokenComponent', () => {
+  let component: ExpiredTokenComponent;
+  let fixture: ComponentFixture<ExpiredTokenComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditRoleComponent ]
+      declarations: [ ExpiredTokenComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditRoleComponent);
+    fixture = TestBed.createComponent(ExpiredTokenComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
