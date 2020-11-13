@@ -156,8 +156,8 @@ export class EquipmentAvlComponent implements OnInit {
     this.getData();
     setTimeout(() => {
       this.initChart();
+      this.in()
     }, 1000);
-    this.in()
   }
   
 
