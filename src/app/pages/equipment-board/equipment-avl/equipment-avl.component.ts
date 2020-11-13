@@ -202,16 +202,17 @@ export class EquipmentAvlComponent implements OnInit {
   in(){
     let myChart_7 = [];
     this.outRenturnWind.forEach((f:any,i:number) => {
+      if(!document.getElementById('electric_chart_'+i))return;
       myChart_7.push(echarts.init(document.getElementById('electric_chart_'+i)));
       equipment_four_road.create_real_electric({text:f.text,title:this.language?f.titleEn:f.title},myChart_7[i]);
     });
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
+    let myChart_4 = echarts.init(document.getElementById('real_temperature_4'));
     equipment_four_road.create_real_disk({value:55,text:this.language?'RealTEMP':'实时温度',unit:'℃'},myChart_4);
 
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
+    let myChart_5 = echarts.init(document.getElementById('real_temperature_5'));
     equipment_four_road.create_real_disk({value:55,text:this.language?'RealRH':'实时湿度',unit:'%RH'},myChart_5);
 
-    let myChart_6 = echarts.init(document.getElementById('real_temperature_3'));
+    let myChart_6 = echarts.init(document.getElementById('real_temperature_6'));
     equipment_four_road.create_real_disk({value:55,text:this.language?'CabinPA':'舱内压差',unit:'pa'},myChart_6);
     this.timer1 = setInterval(f=>{
       equipment_four_road.create_real_disk({value:parseInt((Math.random()*100).toString()),text:this.language?'RealTEMP':'实时温度',unit:'%RH'},myChart_5);
@@ -274,13 +275,13 @@ export class EquipmentAvlComponent implements OnInit {
     let myChart_3 = echarts.init(document.getElementById('warning'));
     equipment_four_road.create_warning_chart(data,myChart_3);
 
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
+    let myChart_4 = echarts.init(document.getElementById('real_temperature_4'));
     equipment_four_road.create_real_disk({value:55,text:this.language?'RealTEMP':'实时温度',unit:'℃'},myChart_4);
 
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
+    let myChart_5 = echarts.init(document.getElementById('real_temperature_5'));
     equipment_four_road.create_real_disk({value:55,text:this.language?'RealRH':'实时湿度',unit:'%RH'},myChart_5);
 
-    let myChart_6 = echarts.init(document.getElementById('real_temperature_3'));
+    let myChart_6 = echarts.init(document.getElementById('real_temperature_6'));
     equipment_four_road.create_real_disk({value:55,text:this.language?'CabinPA':'舱内压差',unit:'pa'},myChart_6);
     
 
