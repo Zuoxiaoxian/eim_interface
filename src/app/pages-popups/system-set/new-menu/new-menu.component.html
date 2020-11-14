@@ -5,7 +5,7 @@
 >
   <nb-card-header>
     <div class="row">
-      <div class="col-md-3">编辑目录</div>
+        <div class="col-md-3">{{title}}</div>
         <div class="col-md-7"></div>
         <div class="col-md-2" style="text-align: right;">
             <nb-icon icon="close-outline" style="cursor: pointer;" (click)="closedialog()"></nb-icon>
@@ -36,7 +36,7 @@
         <div class="layui-tab-content">
             <!-- layui-show  layui-show -->
             <div class="layui-tab-item layui-show mulu_tab">
-              <form class="layui-form" action=""  lay-filter="editmulu">
+              <form class="layui-form" action="" lay-filter="editmulu">
                 <div class="layui-form-item">
                   <div class="layui-inline">
                     <label class="layui-form-label mylabel mulu_title">目录名称</label>
@@ -51,27 +51,27 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="layui-form-item" >
-                  <label class="layui-form-label mylabel mulu_title">上级目录</label>
-                  <div class="layui-input-block ">
-                    <select  name="parentid" lay-verify="required" class="parentmulu">
-                    </select>
+   
+                <div class="layui-form-item">
+                  <label class="layui-form-label mylabel">上级目录</label>
+                  <div class="layui-input-block" style="height: 38px; overflow: hidden;">
+                      <select id="parenttitle" name="parenttitle" lay-verify="" class="caidantype">
+                        <option *ngFor="let item of muluselects" [value]="item.id">{{item.title}}</option>
+                      </select>    
                   </div>
-    
                 </div>
+
   
                 <div class="layui-form-item">
                   <div class="layui-inline">
                     <label class="layui-form-label">路由</label>
                     <div class="layui-input-block">
-                      <!-- readonly -->
-                      <input type="text" name="link"   lay-verify="" placeholder="路由" autocomplete="off" class="layui-input">
+                        <input type="text" name="link"   lay-verify="link" placeholder="路由" autocomplete="off" class="layui-input">
                     </div>
                   </div>
 
                   <div class="layui-inline">
-                    <label class="layui-form-label mylabel">是否启用</label>
+                    <label class="layui-form-label">是否启用</label>
                     <div class="layui-input-block">
                       <input type="checkbox" name="visible" lay-skin="switch" lay-filter="filter" lay-text="是|否" checked>
                     </div>
@@ -83,7 +83,7 @@
 
 
                 <div class="layui-form-item">
-                  <label class="layui-form-label mylabel mulu_title">目录图标</label>
+                  <label class="layui-form-label">目录图标</label>
                   <div class="layui-input-block">
                     <input #autoInput
                       name="icon"
@@ -96,7 +96,7 @@
                     <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
   
                       <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.icon">
-                        <!-- <nb-icon icon={{option.icon}} ></nb-icon> -->
+                        <!-- <nb-icon icon= {{option.icon}} ></nb-icon> -->
                         <nb-icon icon={{option.icon}} *ngIf="option.title != 'null'"></nb-icon>
                         {{ option.icon }}
                       </nb-option>
@@ -111,23 +111,21 @@
                     <label class="layui-form-label">排序号</label>
                     <div class="layui-input-block">
                         <input type="number" name="orderindex" placeholder="0" aria-label="排序号" max="Infinity" min="0"  class="layui-input">
-                        
                     </div>
                 </div>
 
-                <div class="layui-form-item" style="text-align: end;">
+                <div class="layui-form-item"style="text-align: end;">
                   <div class="layui-inline">
                     <div class="layui-input-inline">
                     </div>
                   </div>
-                  <div class="layui-inline" style="text-align: end;">
+                  <div class="layui-inline"style="text-align: end;">
                     <div class="layui-input-inline">
                       <button class="layui-btn layui-btn-primary" (click)="cancel()">取消</button>
-                      
                       <button type="submit" class="layui-btn" lay-submit="" lay-filter="mulu" >确定</button>
                     </div>
                   </div>
-                  
+  
                 </div>
 
               </form>
@@ -139,25 +137,26 @@
                   <div class="layui-inline">
                     <label class="layui-form-label mylabel mulu_title">菜单名称</label>
                     <div class="layui-input-block">
-                      <input type="text" name="title"   lay-verify="required|caidanname" placeholder="菜单名称" autocomplete="off" class="layui-input">
+                        <input type="text" name="title"   lay-verify="required|caidanname" placeholder="菜单名称" autocomplete="off" class="layui-input">
                     </div>
                   </div>
                   
                   <div class="layui-inline">
                     <label class="layui-form-label mylabel mulu_title">英文名称</label>
                     <div class="layui-input-block">
-                      <input type="text" name="title_en"   lay-verify="required|caidanname_en" placeholder="英文名称" autocomplete="off" class="layui-input">
+                        <input type="text" name="title_en"   lay-verify="required|caidanname_en" placeholder="英文名称" autocomplete="off" class="layui-input">
                     </div>
                   </div>
                 </div>
 
-                <div class="layui-form-item" >
-                  <label class="layui-form-label mylabel mulu_title">上级目录</label>
-                  <div class="layui-input-block ">
-                    <select  name="parentid" lay-verify="required" class="parentmulu">
-                    </select>
+                <div class="layui-form-item">
+
+                  <label class="layui-form-label mylabel">上级目录</label>
+                  <div class="layui-input-block"  style="height: 38px; overflow: hidden;">
+                      <select id="parenttitle" name="parenttitle" lay-verify="" class="caidantype">
+                        <option *ngFor="let item of muluselects" [value]="item.id">{{item.title}}</option>
+                      </select>   
                   </div>
-    
                 </div>
     
                 <div class="layui-form-item">
@@ -169,16 +168,16 @@
                   </div>
 
                   <div class="layui-inline">
-                    <label class="layui-form-label mylabel">是否启用</label>
+                    <label class="layui-form-label">是否启用</label>
                     <div class="layui-input-block">
-                      <input type="checkbox" name="visible" lay-skin="switch" lay-filter="filter" lay-text="是|否" >
+                      <input type="checkbox" name="visible" lay-skin="switch" lay-filter="filter" lay-text="是|否" checked>
                     </div>
                   </div>
 
                 </div>
 
                 <div class="layui-form-item">
-                  <label class="layui-form-label mylabel mulu_title">目录图标</label>
+                  <label class="layui-form-label">目录图标</label>
                   <div class="layui-input-block">
                     <input #autoInput
                       name="icon"
@@ -191,7 +190,6 @@
                     <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
   
                       <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.icon">
-                        <!-- <nb-icon icon={{option.icon}} ></nb-icon> -->
                         <nb-icon icon={{option.icon}} *ngIf="option.title != 'null'"></nb-icon>
                         {{ option.icon }}
                       </nb-option>
@@ -227,7 +225,7 @@
                     <div class="layui-input-inline">
                     </div>
                   </div>
-                  <div class="layui-inline" style="text-align: end;">
+                  <div class="layui-inline"style="text-align: end;">
                     <div class="layui-input-inline">
                       <button class="layui-btn layui-btn-primary" (click)="cancel()">取消</button>
                       <button type="submit" class="layui-btn" lay-submit="" lay-filter="caidan" >确定</button>
@@ -258,8 +256,19 @@
                   </div>
                 </div>
 
-
                 <div class="layui-form-item">
+
+                  
+                  
+
+                  <!-- 按钮上级目录 -->
+                  <div class="layui-inline">
+                    <label class="layui-form-label">上级目录</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="parentid" required="" lay-verify="required" placeholder="请输入标题" readonly="" autocomplete="off" class="layui-input">
+                        <div class="eleTree ele5" lay-filter="data5"></div>
+                    </div>
+                  </div>
 
                   <div class="layui-inline">
                     <label class="layui-form-label mylabel">授权标识</label>
@@ -275,26 +284,14 @@
                         </select>
                     </div>
                   </div>
-                  
-                  <!-- <input type="text" name="permission"   lay-verify="" placeholder="授权标识" autocomplete="off" class="layui-input"> -->
 
-                  <div class="layui-inline">
-                    <label class="layui-form-label mylabel">上级目录</label>
-                    <div class="layui-input-inline">
-                      <!-- <select name="anniunparentname" lay-verify="" class="anniu_select" lay-search> -->
-                      <select name="parentid" lay-verify="" class="anniu_select" lay-search>
-                        <option [value]="option.gpid" *ngFor="let option of anniuparentmenuselects.options">{{option.gptitle}}</option>
-                        <optgroup [label]="item.gptitle" *ngFor="let item of anniuparentmenuselects.gpgroup">
-                          <option [value]="gpbalue.value" *ngFor="let gpbalue of item.gpvalue">{{gpbalue.title}}</option>
-                        </optgroup>
-                        
-                      </select>
-                
-                    </div>
 
-                  </div>
+ 
 
                 </div>
+
+                
+              
 
 
 
@@ -309,21 +306,20 @@
                   <div class="layui-inline">
                     <label class="layui-form-label mylabel">是否启用</label>
                     <div class="layui-input-block">
-                      <input type="checkbox" name="visible" lay-skin="switch" lay-filter="filter" lay-text="是|否" >
+                      <input type="checkbox" name="visible" lay-skin="switch" lay-filter="filter" lay-text="是|否" checked>
                     </div>
                   </div>
-
                 </div>
 
 
                 <!-- button按钮 -->
-                <div class="layui-form-item"style="text-align: end;">
+                <div class="layui-form-item" style="text-align: end;">
                   <div class="layui-inline">
                     <div class="layui-input-inline">
                     </div>
                   </div>
                   <div class="layui-inline"style="text-align: end;">
-                    <div class="layui-input-inline">
+                    <div class="layui-input-inline" >
                       <button class="layui-btn layui-btn-primary" (click)="cancel()">取消</button>
                       <button type="submit" class="layui-btn" lay-submit="" lay-filter="anniu" >确定</button>
                     </div>
@@ -335,8 +331,5 @@
             </div>
         </div>
       </div>
-
-
-    <!-- </form> -->
   </nb-card-body>
 </nb-card>

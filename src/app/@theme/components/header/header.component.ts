@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../setup/auth/auth.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
-import { localstorage, adminlocalstorage, ssotoken, loginurl, USERINFO, MULU, SYSMENU, SYSMENUEDIT, SSOUSERINFO, SYSROLE, SYSROLEMENU,menu_button_list,employee_action, LOGIN_INFO, ECHARTS_RESIZE } from '../../../appconfig'; 
+import { ssotoken,  loginurl, MULU, SYSMENU, SYSMENUEDIT, SSOUSERINFO, SYSROLE, SYSROLEMENU,menu_button_list,employee_action, LOGIN_INFO, ECHARTS_RESIZE } from '../../../appconfig'; 
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 
 import { HttpHeaders,HttpClient,  } from '@angular/common/http';
@@ -111,13 +111,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((users: any) => {
         // this.user = users.nick
-        var admintoken = this.localStorageService.get(adminlocalstorage)? this.localStorageService.get(adminlocalstorage): false;
         var token = this.localStorageService.get(ssotoken)? this.localStorageService.get(ssotoken): false;
-        if(admintoken){
-          this.user = {name: admintoken.name, picture: admintoken.picture};
-        }else{
-          // this.user = {name: admintoken.name, picture: admintoken.picture};
-          console.log("登录用户信息- header components")
+        if(token){
           this.user = {name: token.name, picture: token.picture};
         }
       });
@@ -208,7 +203,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       localStorage.removeItem(SYSMENU);
 
       
-      // localStorage.removeItem(adminlocalstorage);
+      // localStorage.removeItem(ssotoken);
 
       // this.router.navigate([loginurl]);
       
@@ -216,15 +211,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       
       // 获取用户名
       var username = this.userinfoservice.getName();
-      // var admintoken = localStorage.getItem(adminlocalstorage);
       var login_info = localStorage.getItem(LOGIN_INFO);
       if (login_info && login_info["username"] === "admin"){
         console.log("退出，获取用户名, 应该是admin")
         localStorage.removeItem(MULU);
         localStorage.removeItem(SYSMENU);
-        localStorage.removeItem(adminlocalstorage);
+        localStorage.removeItem(ssotoken);
 
-        localStorage.removeItem(USERINFO);
+        localStorage.removeItem(SSOUSERINFO);
         localStorage.removeItem(SYSROLE);
         localStorage.removeItem(SYSROLEMENU);
         
@@ -262,9 +256,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
         localStorage.removeItem(MULU);
         localStorage.removeItem(SYSMENU);
-        localStorage.removeItem(adminlocalstorage);
+        localStorage.removeItem(ssotoken);
 
-        localStorage.removeItem(USERINFO);
+        localStorage.removeItem(SSOUSERINFO);
         localStorage.removeItem(SYSROLE);
         localStorage.removeItem(SYSROLEMENU);
       }

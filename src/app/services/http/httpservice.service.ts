@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { localstorage, PLV8_URL, adminlocalstorage, ssotoken, loginurl} from '../../appconfig';
+import {  PLV8_URL, ssotoken, loginurl} from '../../appconfig';
 
 import {retry} from "rxjs/operators";
 import { Router } from '@angular/router';
@@ -67,15 +67,14 @@ export class HttpserviceService {
 
   // plv8 调用plv8
   public callRPC(table: string, method: string, colums: object): Observable<{}> {
-    var get_jili_app_token = localStorage.getItem(localstorage);
-    var admintoken = localStorage.getItem(adminlocalstorage)? localStorage.getItem(adminlocalstorage): false;
-    var token = localStorage.getItem(ssotoken)? localStorage.getItem(ssotoken): false;
-    if(admintoken){
-      const hearder = {
-        headers: new HttpHeaders({
-          'Authorization': 'Bearer ' + JSON.parse(admintoken).token  // tslint:disable-line:object-literal-key-quotes
-        })
-      };
+    var token = localStorage.getItem(ssotoken)? JSON.parse(localStorage.getItem(ssotoken)).token: '';
+    const hearder = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + token  // tslint:disable-line:object-literal-key-quotes
+      })
+    }; 
+    if (method === 'get_default_role'){
+      console.warn("token is ‘’", token)
       return this.http.post(PLV8_URL, {
           "jsonrpc": "2.0",
           "method": "callrpc",
@@ -88,10 +87,10 @@ export class HttpserviceService {
           },
           "id": "1"
       },
-      hearder).pipe(retry(3));
-    }else{
-      console.log("得到用户菜单：这个是从统一认证平添登录的");
-      return this.http.post(PLV8_URL, {
+      ).pipe(retry(3));
+
+    }
+    return this.http.post(PLV8_URL, {
         "jsonrpc": "2.0",
         "method": "callrpc",
         "params": {
@@ -102,9 +101,8 @@ export class HttpserviceService {
             "pkey": "identifier"
         },
         "id": "1"
-    },).pipe(retry(3));
-    
-    }
+    },
+    hearder).pipe(retry(3));
   }
 
   // 得到语言
@@ -119,10 +117,6 @@ export class HttpserviceService {
     let currentLang = localStorage.getItem('currentLanguage')? localStorage.getItem('currentLanguage'): 'zh-CN';
     return language_map_id[currentLang];
   }
-
-
-
-
 
   get_gocron_token() {
     const url = `/api/user/login`;

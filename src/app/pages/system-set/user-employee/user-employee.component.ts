@@ -103,7 +103,7 @@ export class UserEmployeeComponent implements OnInit {
         cellRendererParams: {
           clicked: function(data: any) {
             if (data["active"]==='edit'){
-              that.edit([data["data"]]);
+              that.edit(data["data"]);
             }else{
               that.del(data["data"]);
             }
@@ -182,7 +182,7 @@ export class UserEmployeeComponent implements OnInit {
     }
     // 得到员工信息！
     this.http.callRPC('emeployee', 'get_employee_limit', {offset: offset, limit: limit}).subscribe((res)=>{
-      // console.log("get_menu_role", result)
+      console.log("get_menu_role", result)
       var get_employee_limit = res['result']['message'][0]
       console.log("get_employee_limit", get_employee_limit);
 
@@ -529,6 +529,7 @@ export class UserEmployeeComponent implements OnInit {
   getsecurity_edit(table: string, method: string, colums: object){
     return new Observable((res)=>{
       this.http.callRPC(table, method, colums).subscribe((result)=>{
+        console.log("===================================!!!!!!!!!!!!!!!!!!!!!!!!!! 用户组",employee_result)
         var employee_result =  result['result']['message'][0];
         res.next(employee_result)
       })
@@ -764,7 +765,7 @@ export class UserEmployeeComponent implements OnInit {
     var rowdata
     // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
     if (active_data){
-      rowdata = [active_data];
+      rowdata = active_data;
     }else{
       rowdata = this.agGrid.getselectedrows();
     }
@@ -820,8 +821,8 @@ export class UserEmployeeComponent implements OnInit {
     var rowdata
     // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
     
-    if (active_data){
-      rowdata = [active_data];
+    if (active_data["active"]){
+      rowdata = active_data;
     }else{
       rowdata = this.agGrid.getselectedrows();
     }

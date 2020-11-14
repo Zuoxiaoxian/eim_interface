@@ -13,7 +13,7 @@ var store = require('store');
 
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 
-import { url, adminlocalstorage,ssotoken} from '../../../appconfig';
+
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import { NbDialogService } from '@nebular/theme';
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';

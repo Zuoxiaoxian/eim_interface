@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { PublicmethodService } from '../publicmethod/publicmethod.service';
 
 
-import { USERINFO } from '../../appconfig';
+import { SSOUSERINFO } from '../../appconfig';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +13,7 @@ export class UserInfoService {
 
   // 获取登录后的用户信息
   private getUserInfo() {
-    const userInfo = localStorage.getItem(USERINFO);
+    const userInfo = localStorage.getItem(SSOUSERINFO);
     return userInfo ? this.cryto.uncompileStr(userInfo) : null;
   }
 

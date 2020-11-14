@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { tap, delay } from 'rxjs/operators';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 
-import { redirectUrl, localstorage, adminlocalstorage } from '../../../app/appconfig';
+import { redirectUrl,  ssotoken } from '../../../app/appconfig';
 @Injectable({
   providedIn: 'root'
 })
@@ -30,18 +30,10 @@ export class AuthService {
   };
 
   alertisLoggeIn(){
-    var mabo_app_token = this.localstorage.get(localstorage);
-    // if (mabo_app_token != null){ // 登录
-    //   this.isLoggedIn = true;
-    //   return true
-    // }else{
-    //   this.isLoggedIn = false;
-    //   return false;
-    // }
-    // admin 
-    var admin_app_token = this.localstorage.get(adminlocalstorage);
+
+    var app_token = this.localstorage.get(ssotoken);
     var token = this.localstorage.get('SSO');
-    if (admin_app_token != null){// 登录
+    if (app_token != null){// 登录
       this.isLoggedIn = true;
       return true
     }
@@ -50,13 +42,9 @@ export class AuthService {
       return true
     }
     else{
-      if (mabo_app_token != null){ // 登录
-        this.isLoggedIn = true;
-        return true
-      }else{
-        this.isLoggedIn = false;
-        return false;
-      }
+
+      this.isLoggedIn = false;
+      return false;
     }
   }
   

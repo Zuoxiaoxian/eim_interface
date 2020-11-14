@@ -84,12 +84,15 @@ export class UserEmployeeComponent implements OnInit {
     var isnot_edit = JSON.parse(this.rowdata)
     if ( isnot_edit != 'add'){
       // 编辑！
+      console.log("LLLLLLLLLLLLLLLLLLLLLL\n")
+      console.log("LLLLLLLLLLLLLLLLLLLLLL\n",JSON.parse(this.rowdata),"groups",JSON.parse(this.goups))
+      console.log("LLLLLLLLLLLLLLLLLLLLLL\n")
       // 填充from的对象
       var formdata = {}
       var rowdata = JSON.parse(this.rowdata);
-      var res = JSON.parse(this.res);
-      var rids = rowdata["rids"];
-      var select_goups = JSON.parse(this.goups);
+      var res:any[] = JSON.parse(this.res);
+      var rids:any[] = rowdata["rids"];
+      var select_goups:any[] = JSON.parse(this.goups);
       formdata["employeeno"] = rowdata["employeeno"] // 账号
       // formdata["active"] = rowdata["active"]=== '是'? 0: 1 // 是否有效
       formdata["active"] = rowdata["active"]=== '是'? true: false // 是否启用
@@ -108,6 +111,9 @@ export class UserEmployeeComponent implements OnInit {
 
       formdata[res["rid"]] = true
       // res 所以的角色，rids选择的角色
+      console.log("================================\n")
+      console.log("===============res=================\n",res, rids)
+      console.log("================================\n")
       res.forEach(re => {
         rids.forEach(element => {
           if (element["rid"] === re["rid"]){
@@ -220,8 +226,8 @@ export class UserEmployeeComponent implements OnInit {
       var res_list;
 
 
-      var res;
-      var groups;
+      // var res;
+      // var groups;
 
       
       var res = JSON.parse(localStorage.getItem("employee_rolename"));

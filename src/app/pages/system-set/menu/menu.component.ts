@@ -12,18 +12,17 @@ declare let $;
 
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 
-import { url, adminlocalstorage, ssotoken, SYSMENU, SYSMENUEDIT,MULU, menu_button_list, Data, loginurl } from '../../../appconfig';
+import { url, ssotoken,  SYSMENU, SYSMENUEDIT,MULU, menu_button_list, Data, loginurl } from '../../../appconfig';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';
 
 // 弹出的组件 -- 添加组件
-import { MenuComponent as  MenuComponent2 } from '../../../pages-popups/system-set/menu/menu.component';
 
-import { EditMenuComponent } from '../../../pages-popups/system-set/edit-menu/edit-menu.component';
 import { NbToastrService,  } from '@nebular/theme';
 import { Router } from '@angular/router';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 import { Observable } from 'rxjs';
+import { NewMenuComponent } from '../../../pages-popups/system-set/new-menu/new-menu.component';
 
 @Component({
   selector: 'ngx-menu',
@@ -46,7 +45,7 @@ export class MenuComponent implements OnInit {
     private publicservice: PublicmethodService, private dialogService: NbDialogService,
     private toastrService: NbToastrService, private router: Router, private userinfo: UserInfoService) { 
     // local store 得到token id 
-    var admintoken = JSON.parse(localStorage.getItem(adminlocalstorage))? JSON.parse(localStorage.getItem(adminlocalstorage)): false;
+    var admintoken = JSON.parse(localStorage.getItem(ssotoken))? JSON.parse(localStorage.getItem(ssotoken)): false;
     var token = localStorage.getItem(ssotoken)? localStorage.getItem(ssotoken): false;
     if (admintoken){
       this.headers = { "Content-Type": "application/json", "indent": "4", "Authorization": "Bearer " + admintoken.token}
@@ -70,6 +69,7 @@ export class MenuComponent implements OnInit {
   
 
   }
+
 
 
   // 得到当前界面的buttons
@@ -193,7 +193,8 @@ export class MenuComponent implements OnInit {
     // 弹出函数
     function open(method) {
       // dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
-      dialogService.open(MenuComponent2, {closeOnBackdropClick: false,context: { rowdata: JSON.stringify(method)}}).onClose.subscribe(name=>{
+      dialogService.open(NewMenuComponent, {closeOnBackdropClick: false,context: { rowdata: JSON.stringify(method), title: '添加目录' }}).onClose.subscribe(name=>{
+      // dialogService.open(MenuComponent2, {closeOnBackdropClick: false,context: { rowdata: JSON.stringify(method)}}).onClose.subscribe(name=>{
         if (name){
           that.updatetable();
         }
@@ -305,7 +306,7 @@ export class MenuComponent implements OnInit {
     if (rowmenu.length != 0){
       var row = rowmenu[0];
       localStorage.setItem(SYSMENUEDIT, JSON.stringify(row));
-      this.open();
+      this.open(row);
     }else{
       // 提示选择行数据
       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `请选择一行数据！`}} ).onClose.subscribe(
@@ -316,9 +317,10 @@ export class MenuComponent implements OnInit {
   }
 
   // 修改button弹出
-  open() {
+  open(row) {
     // this.dialogService.open(MenuComponent2,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify('') } }).onClose.subscribe(name=>{
-    this.dialogService.open(EditMenuComponent,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify('edit') } }).onClose.subscribe(name=>{
+    this.dialogService.open(NewMenuComponent,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify(row), title: '编辑目录'  } }).onClose.subscribe(name=>{
+    // this.dialogService.open(EditMenuComponent,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify('edit') } }).onClose.subscribe(name=>{
       console.log("-------------name----------------", name);
       if (name){
         // 更新table！
@@ -421,9 +423,9 @@ export class MenuComponent implements OnInit {
                 'click .edit': function (e, value, row, index) {
                     // alert('You click like action, row: ' + JSON.stringify(row));
                     // 将行数据保存在local storage中！
-                    localStorage.setItem(SYSMENUEDIT, JSON.stringify(row));
+                    // localStorage.setItem(SYSMENUEDIT, JSON.stringify(row));
                     // 弹出
-                    open();
+                    open(row);
                     
                 },
                 'click .remove': function (e, value, row, index) {
@@ -693,8 +695,9 @@ export class MenuComponent implements OnInit {
     }
 
     // 弹出函数
-    function open() {
-      dialogService.open(EditMenuComponent,{closeOnBackdropClick: false,}).onClose.subscribe(name=>{
+    function open(row) {
+      dialogService.open(NewMenuComponent,{closeOnBackdropClick: false,context: { rowdata: JSON.stringify(row), title: '编辑目录' }}).onClose.subscribe(name=>{
+      // dialogService.open(EditMenuComponent,{closeOnBackdropClick: false,}).onClose.subscribe(name=>{
         if(name){
           that.updatetable();
         }

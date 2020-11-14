@@ -10,7 +10,7 @@ import { LocalStorageService } from '../../services/local-storage/local-storage.
 
 
 // config
-import { url, salt, localstorage, ssotoken, afterloginurl, LOGIN_API, INFO_API, USERINFO, ssopassword, loginurl, SSOUSERINFO, LOGIN_INFO } from '../../appconfig';
+import { url, salt, ssotoken, afterloginurl, LOGIN_API, INFO_API, ssopassword, loginurl, SSOUSERINFO, LOGIN_INFO } from '../../appconfig';
 import { HttpserviceService } from '../../services/http/httpservice.service';
 import { HttpHeaders,HttpClient,  } from '@angular/common/http';
 // Md5 加密
@@ -93,7 +93,7 @@ export class UserLoginComponent implements OnInit {
     this.httpserviceService.post(LOGIN_API, {"username": this.username, "password": this.passwordmd5_salt}).subscribe((res)=>{
       if (res["accessToken"]) {
         this.localStorageService.set(
-          localstorage,
+          ssotoken,
           {
             username: this.profileForm.value.username,
             password: this.passwordmd5_salt,
@@ -111,7 +111,7 @@ export class UserLoginComponent implements OnInit {
         // ============= 存入登录日志并得到菜单
         const opts = {
           headers: new HttpHeaders({
-            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem(localstorage))['token'] // tslint:disable-line:object-literal-key-quotes
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem(ssotoken))['token'] // tslint:disable-line:object-literal-key-quotes
           })
         };
         // console.log("同步， userInfo", userInfo)
@@ -119,8 +119,8 @@ export class UserLoginComponent implements OnInit {
           console.log("============= 存入登录日志并得到菜单", userInfo)
           if (userInfo['userInfo']['roles']) {
             const userinfo = JSON.stringify(userInfo['userInfo']);
-            localStorage.removeItem(USERINFO);
-            localStorage.setItem(USERINFO, userInfo ? this.publicmethodService.compileStr(userinfo) : null);
+            localStorage.removeItem(SSOUSERINFO);
+            localStorage.setItem(SSOUSERINFO, userInfo ? this.publicmethodService.compileStr(userinfo) : null);
             this.RecordLogin();
           } else {
             this.publicmethodService.toastr({position: 'top-right', status: 'danger', conent:"当前用户菜单权限不足，请联系管理员添加权限！"});
@@ -141,7 +141,6 @@ export class UserLoginComponent implements OnInit {
   // 初始化界面时，检查是否记住密码？
   initLogin(){
     var get_jili_app_token = this.localStorageService.get(LOGIN_INFO);
-    // var get_jili_app_token = this.localStorageService.get(localstorage);
     if (get_jili_app_token == null){
       this.username = "";
       this.passwordmd5_salt = "";
@@ -170,7 +169,6 @@ export class UserLoginComponent implements OnInit {
     var currenturl = this.publicmethodService.get_current_search();
     var appKey = "6d38d93e-ed9d-406f-a728-86b1a3f0fb47";
     var redirectUrl = "http://10.190.69.78/setup/login"
-    // var nossotoken = localStorage.getItem(localstorage);
     var token = localStorage.getItem(ssotoken)? localStorage.getItem(ssotoken): false;
     if (token){
       // console.log("非单点登录（因为jili_app_token存在）：", nossotoken)
@@ -190,7 +188,7 @@ export class UserLoginComponent implements OnInit {
         localStorage.setItem("SSO", "true");  // important notice
 
         window.location.href = url;  // 重定向到外部的url
-        // console.log("SSO登录的url：", url);
+        console.log("SSO登录的url：", url);
       }else{
         // console.log("currenturl+++++++++++++", currenturl)
         var ticket_1 = this.getTicket(currenturl, '?');
@@ -231,8 +229,9 @@ export class UserLoginComponent implements OnInit {
 
             // 默认角色
             this.createDefaultRole(ssouserinfo_list).subscribe((roleid: any[])=>{
+              console.log("得到默认角色", roleid);
               roleid.forEach(role_id => {
-                ssouserinfo_default["rids"] = role_id["id"]; // [{id: 12}]
+                ssouserinfo_default["rids"] = role_id["id"]; // roleid = [{id: 12}]
               });
               ssouserinfo_list.push(ssouserinfo_default);
               // 将数据存入数据库中！
@@ -311,6 +310,7 @@ export class UserLoginComponent implements OnInit {
                 // token: "flask给的 accessToken ",
                 token: res["accessToken"],
                 password: ssouserinfo[0]["password"],
+                username: ssouserinfo[0]["name"],      //'登录的用户',
                 name: ssouserinfo[0]["name"],      //'登录的用户',
                 picture: "assets/images/man3.png",
                 ticket: ssouserinfo[0]["ticket"]
@@ -344,11 +344,9 @@ export class UserLoginComponent implements OnInit {
       this.httpserviceService.callRPC(table, method, colums).subscribe((res)=>{
         console.log("创建默认角色，得到存在角色的id", res)
         var roleid = res['result']['message'][0];
-        if (roleid){
-          observe.next(roleid)
-        }else{
-          observe.next(false)
-        }
+        console.log("创建默认角色，得到存在角色的id", roleid)
+        observe.next(roleid)
+        
       })
 
     })

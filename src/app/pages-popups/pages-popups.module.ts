@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { PagesPopupsRoutingModule } from './pages-popups-routing.module';
 import { PagesPopupsComponent } from './pages-popups.component';
-import { MenuComponent } from './system-set/menu/menu.component';
 
 import { NbLayoutModule, NbCardModule, NbTabsetModule, NbCheckboxModule, NbFormFieldModule, NbIconModule, NbInputModule, NbSpinnerModule, NbAutocompleteModule, NbSelectModule } from '@nebular/theme';
-import { EditMenuComponent } from './system-set/edit-menu/edit-menu.component';
 import { RoleComponent } from './system-set/role/role.component';
 import { FormsModule } from '@angular/forms';
 import { MySelectComponent } from './components/my-select/my-select.component';
@@ -21,13 +19,14 @@ import { DeviceManageComponent } from './tongji/device-manage/device-manage.comp
 import { PreinstallDialogComponent } from './system-set/preinstall-dialog/preinstall-dialog.component';
 import { AndonComponent } from './andon-manage/andon/andon.component';
 import { ExpiredTokenComponent } from './token-diallog/expired-token/expired-token.component';
+import { NewMenuComponent } from './system-set/new-menu/new-menu.component';
 
 
 // DateComponent
 @NgModule({
-  declarations: [PagesPopupsComponent, MenuComponent, EditMenuComponent,  RoleComponent, 
+  declarations: [PagesPopupsComponent, RoleComponent, 
     MySelectComponent, UserEmployeeComponent,  
-    UserEmployeeGroupComponent, EditDelTooltipComponent, DeviceManageComponent, PreinstallDialogComponent, AndonComponent, ExpiredTokenComponent],
+    UserEmployeeGroupComponent, EditDelTooltipComponent, DeviceManageComponent, PreinstallDialogComponent, AndonComponent, ExpiredTokenComponent, NewMenuComponent],
   imports: [
     CommonModule,
     PagesPopupsRoutingModule,

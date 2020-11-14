@@ -6,19 +6,15 @@ export const redirectUrl: string = "http://localhost:4200/pages";
 
 export const salt:string = "YzcmCZNvbXocrsz9dm8e";
 
-export const localstorage: string = "jili_app_token";
-export const USERINFO: string = "userinfo";
 export const MULU: string = "mulu";
 
-// admin login
-export const adminlocalstorage: string = "admin_app_token";
 
 // 记住用户登录信息
 export const LOGIN_INFO: string = "login_info";
 
 
 // 统一认证login
-export const ssotoken: string = "token";
+export const ssotoken: string = "app_token";
 
 export const SSOUSERINFO: string = "ssouserinfo";
 
@@ -131,18 +127,18 @@ export interface Group {
 // 结合唐山的 --------------------------------
 
     // login 
-    export let LOGIN_API = 'http://192.168.8.105/api/v1/auth/login';   
-    export let INFO_API = 'http://192.168.8.105/api/v1/auth/info';   
-
-    // plv8 url
-    export let PLV8_URL = "http://192.168.8.105/rpc/v1"
-
-
-    // export let LOGIN_API = '/api/v1/auth/login';   
-    // export let INFO_API = '/api/v1/auth/info';   
+    // export let LOGIN_API = 'http://192.168.8.105/api/v1/auth/login';   
+    // export let INFO_API = 'http://192.168.8.105/api/v1/auth/info';   
 
     // // plv8 url
-    // export let PLV8_URL = "/rpc/v1"
+    // export let PLV8_URL = "http://192.168.8.105/rpc/v1"
+
+
+    export let LOGIN_API = '/api/v1/auth/login';   
+    export let INFO_API = '/api/v1/auth/info';   
+
+    // plv8 url
+    export let PLV8_URL = "/rpc/v1"
 
 
     // login  mydocker

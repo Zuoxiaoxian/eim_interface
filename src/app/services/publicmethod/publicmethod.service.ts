@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 
 import { NbDialogService, NbToastrService } from '@nebular/theme';
-import { Data, localstorage } from '../../appconfig';
+import { Data } from '../../appconfig';
 
 import { PlatformLocation } from '@angular/common';
 import { Observable } from 'rxjs';
 import { HttpserviceService } from '../http/httpservice.service';
 import { HttpHeaders } from '@angular/common/http';
-import { loginurl,INFO_API,SYSMENU, adminlocalstorage,ssotoken, menu_button_list} from '../../appconfig';
+import { loginurl,INFO_API,SYSMENU, ssotoken, menu_button_list} from '../../appconfig';
 import {DatePipe} from '@angular/common';  
 
 
@@ -242,77 +242,64 @@ export class PublicmethodService {
   getMenu(){
     // ============= 存入登录日志并得到菜单
     /*
-    * 这个是管理员的路的，应该是根据用户名对应的roleid
+    * 应该是根据用户名对应的roleid
     */
-    var admintoken = JSON.parse(localStorage.getItem(adminlocalstorage))? JSON.parse(localStorage.getItem(adminlocalstorage)): false;
     var token = JSON.parse(localStorage.getItem(ssotoken))? JSON.parse(localStorage.getItem(ssotoken)): false;
     var opts;
-    if (admintoken){
-      opts = {
-        headers: new HttpHeaders({
-          // 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem(localstorage))['token'] // tslint:disable-line:object-literal-key-quotes
-          'Authorization': 'Bearer ' + admintoken.token  // tslint:disable-line:object-literal-key-quotes
-        })
-      };
-      
-      
-    }
     if (token){
       console.log("public 得到getmenu-  返回的是用户角色！", token);
       opts = {
         headers: new HttpHeaders({
-          // 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem(localstorage))['token'] // tslint:disable-line:object-literal-key-quotes
           'Authorization': 'Bearer ' + token.token  // tslint:disable-line:object-literal-key-quotes
         })
       };
-      
-
+      return new Observable((observe)=>{
+        this.httpservice.get(INFO_API, opts)
+        .subscribe(
+          userInfo=>{
+          var roles_list = [];
+          console.log("userInfo  =======================", userInfo)
+          if (userInfo["status"] === 401){
+            // 提示token已过期，是否重新登录
+            this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `您的登录已失效，请重新登录`}} ).onClose.subscribe(
+              name=>{
+                console.log("token已过期，是否重新登录？",name)
+                if(name){
+                  //  observe.next(false);
+                  localStorage.removeItem(ssotoken);
+                  // this.router.navigate([loginurl]);
+                  location.href = loginurl;
+                  observe.next(false);
+                }else{
+                  observe.next(false);
+                }        
+              }
+            );
+            // this.toastr({position: 'top-right', status: 'warning', conent:"token 过期了！需要重新登录"});
+            // this.router.navigate([loginurl])
+            // observe.next(roles_list);
+          }
+          else if (userInfo['userInfo']['roles']) {
+            console.log("*********************\t\t\t",userInfo['userInfo'])
+            const roles = userInfo['userInfo']["roles"];
+            roles.forEach(role => {
+              roles_list.push(role["roleid"]);
+            });
+            observe.next(roles_list)
+          } else {
+            this.toastr({position: 'top-right', status: 'danger', conent:"当前用户菜单权限不足，请联系管理员添加权限！"});
+            observe.next(roles_list)
+          }
+          
+        },error=>{
+          alert("err")
+        console.warn("userInfo 》》》》》》error",error)
+        }
+        )
+      })
+    }else{
+      this.router.navigate([loginurl]);
     }
-    return new Observable((observe)=>{
-    this.httpservice.get(INFO_API, opts)
-    .subscribe(
-      userInfo=>{
-      var roles_list = [];
-      console.log("userInfo  =======================", userInfo)
-      if (userInfo["status"] === 401){
-         // 提示token已过期，是否重新登录
-         this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `您的登录已失效，请重新登录`}} ).onClose.subscribe(
-           name=>{
-             console.log("token已过期，是否重新登录？",name)
-             if(name){
-              //  observe.next(false);
-              //  location.reload();
-              // this.router.navigate([loginurl]);
-              location.href = loginurl;
-              observe.next(false);
-             }else{
-               observe.next(false);
-             }        
-           }
-         );
-         // this.toastr({position: 'top-right', status: 'warning', conent:"token 过期了！需要重新登录"});
-         // this.router.navigate([loginurl])
-         // observe.next(roles_list);
-      }
-      else if (userInfo['userInfo']['roles']) {
-        console.log("*********************\t\t\t",userInfo['userInfo'])
-        const roles = userInfo['userInfo']["roles"];
-        roles.forEach(role => {
-          roles_list.push(role["roleid"]);
-        });
-        observe.next(roles_list)
-      } else {
-        this.toastr({position: 'top-right', status: 'danger', conent:"当前用户菜单权限不足，请联系管理员添加权限！"});
-        observe.next(roles_list)
-      }
-      
-    },error=>{
-      alert("err")
-     console.warn("userInfo 》》》》》》error",error)
-    }
-    )
-
-    })
   }
 
 
@@ -352,18 +339,13 @@ export class PublicmethodService {
 
   // lauyi需要得到 header，
   getheader(){
-    var admintoken = JSON.parse(localStorage.getItem(adminlocalstorage))? JSON.parse(localStorage.getItem(adminlocalstorage)): false;
     var token = JSON.parse(localStorage.getItem(ssotoken))? JSON.parse(localStorage.getItem(ssotoken)): false;
-    if (admintoken){
+    if (token){
       const opts = {
-        headers: 'Authorization' + ':' + 'Bearer ' + admintoken.token  
+        headers: 'Authorization' + ':' +  'Bearer ' + token.token  // tslint:disable-line:object-literal-key-quotes
       }
       return opts
     }
-    const opts = {
-      headers: 'Authorization' + ':' +  'Bearer ' + token.token  // tslint:disable-line:object-literal-key-quotes
-    }
-    return opts
   }
 
 
