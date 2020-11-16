@@ -224,9 +224,9 @@ let equipment_four_road = {
         };
         // console.log(JSON.stringify(option_s))
 
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             myChart.setOption(option_s, config ? config : {});
-        })
+        }
         myChart.setOption(option_s, config ? config : {});
         if (!config) myChart.resize();
     },
@@ -472,11 +472,11 @@ let equipment_four_road = {
             series: seriesData
         };
         // console.log(JSON.stringify(option_s))
-        window.addEventListener('resize', () => {
-            myChart.setOption(option_q, config ? config : {});
-        })
-        myChart.setOption(option_q, config ? config : {});
-        if (!config) myChart.resize();
+        window.onresize = function() {
+            myChart.resize();
+        }
+        myChart.setOption(option_q);
+        myChart.resize();
     },
     //设备状态表
     create_device_circular(gauge_data, myChart) {
@@ -525,7 +525,7 @@ let equipment_four_road = {
             name: '',
             type: 'pie',
             clockWise: false,
-            radius: [40, 50],
+            radius: [60, 70],
             hoverAnimation: false,
             itemStyle: {
                 normal: {
@@ -587,9 +587,9 @@ let equipment_four_road = {
             series: seriesOption
         };
         // console.log(JSON.stringify(option_p))
-        window.addEventListener('resize', () => {
+        window.onresize = function() {
             myChart.resize();
-        })
+        }
         myChart.setOption(option_p);
         myChart.resize();
     },
@@ -695,9 +695,9 @@ let equipment_four_road = {
 
             ]
         };
-        window.addEventListener('resize', f => {
+        window.onresize = function() {
             myChart.resize();
-        })
+        }
         myChart.setOption(option_o);
         myChart.resize();
     },
@@ -1004,9 +1004,9 @@ let equipment_four_road = {
         //     draw()
         // }, 100);
 
-        window.addEventListener('resize', f => {
-            myChart.resize()
-        });
+        window.onresize = function() {
+            myChart.resize();
+        }
         myChart.setOption(optionInterval);
         myChart.resize()
     },
@@ -1079,9 +1079,9 @@ let equipment_four_road = {
                 }]
             }]
         };
-        window.addEventListener('resize', f => {
+        window.onresize = function() {
             myChart.resize();
-        })
+        }
         myChart.setOption(option_i, )
         myChart.resize();
     },
@@ -1097,7 +1097,7 @@ let equipment_four_road = {
                     max: 100,
                     startAngle: 200,
                     endAngle: -20,
-                    radius: '100%',
+                    radius: '90%',
                     axisLine: { // 坐标轴线
                         lineStyle: { // 属性lineStyle控制线条样式
                             width: 5,
@@ -1281,9 +1281,9 @@ let equipment_four_road = {
             ]
         };
 
-        window.addEventListener('resize', f => {
+        window.onresize = function() {
             Chart.resize();
-        })
+        }
         Chart.setOption(option_u);
         Chart.resize();
     },
@@ -1381,9 +1381,10 @@ let equipment_four_road = {
         };
 
         chart.setOption(option_y);
-        window.addEventListener('resize', f => {
-            chart.resize();
-        })
+        window.onresize = function() {
+            console.log('1111')
+            myChart.resize();
+        }
         chart.resize();
     },
 
@@ -1560,9 +1561,9 @@ let equipment_four_road = {
                 }
             ];
 
-        window.addEventListener('resize', f => {
+        window.onresize = function() {
             myChart.resize();
-        })
+        }
         myChart.setOption(option_t);
         myChart.resize();
     },
@@ -1687,9 +1688,9 @@ let equipment_four_road = {
             ]
         };
 
-        window.addEventListener('resize', f => {
+        window.onresize = function() {
             myChart.resize();
-        })
+        }
         myChart.setOption(option_rg);
     },
 
@@ -1772,9 +1773,9 @@ let equipment_four_road = {
             },
             series: series
         };
-        window.addEventListener('resize', f => {
-            myChart.setOption(option_e, config ? config : {});
-        })
+        window.onresize = function() {
+            myChart.resize();
+        }
         myChart.setOption(option_e, config ? config : {});
     },
 
@@ -1827,9 +1828,9 @@ let equipment_four_road = {
     //             },
     //         ]
     //     };
-    //     window.addEventListener('resize', () => {
-    //         myChart.resize();
-    //     })
+    //     window.onresize = function() {
+    //          myChart.resize();
+    //      }
     //     myChart.setOption(option);
     //     myChart.resize();
     // }

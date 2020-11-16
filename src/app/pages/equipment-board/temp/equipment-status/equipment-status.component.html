@@ -1,0 +1,38 @@
+<div class="andon_status">
+
+    <div class="part_title">{{'equipment.equipmentStatus' | translate}}</div>
+    <div class="andon_status_font">
+        {{'equipment.SafetyLampStatus' | translate}}
+    </div>
+    <div class="andon_color">
+        <div *ngFor="let item of andon;let i = index;" style="height: 25%;">
+            <div class="bo_black {{ item.color}} {{item.status == 1?'bright':'dark'}}" [ngStyle]="{'border-top': i != 0 ? '3px solid black':''}" [ngClass]="{'first':i==0,'last':i == andon.length-1}">
+                <Span>{{item.name}}</Span>
+            </div>
+        </div>
+    </div>
+    <div class="andon_img"></div>
+</div>
+<div class="andon_status_chart">
+    <nb-flip-card [showToggleButton]="false" [flipped]="flipped" style=" height: 100%;   width: 100%;">
+        <nb-card-front>
+            <nb-card style="height: 100%;">
+                <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="flipped = !flipped;"></nb-icon>
+                <div class="chart">
+                    <div id="device_circular_1"></div>
+                    <div id="device_circular_2"></div>
+                </div>
+            </nb-card>
+        </nb-card-front>
+        <nb-card-back>
+            <nb-card style="height: 100%;">
+                <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="flipped = !flipped;"></nb-icon>
+                <div class="chart">
+                    <div id="device_status"></div>
+                    <div id="operatingRate" style="margin-top: 10px;"></div>
+                </div>
+            </nb-card>
+        </nb-card-back>
+    </nb-flip-card>
+
+</div>

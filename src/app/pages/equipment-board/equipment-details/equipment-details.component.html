@@ -2,29 +2,7 @@
     <div class="row" style="height: 100%;">
         <div class="col-md-4">
             <div class="first_first" style="height: 33%;">
-                <div class="andon_status">
-                    <div class="part_title">{{'equipment.equipmentStatus' | translate}}</div>
-                    <div class="andon_status_font">
-                        {{'equipment.SafetyLampStatus' | translate}}
-                    </div>
-                    <div class="andon_color">
-                        <div *ngFor="let item of andon;let i = index;" style="height: 25%;">
-                            <div class="bo_black" [ngStyle]="{'border-top': i != 0 ? '3px solid black':''}" [ngClass]="{'red':item.stauts == 1,'blue': item.stauts != 1,'first':i==0,'last':i == andon.length-1}">
-                                <Span>{{item.name}}</Span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="andon_img"></div>
-
-                </div>
-                <div class="andon_status_chart">
-                    <div class="row chart">
-                        <div class="col-md-6" id="device_circular_1"></div>
-                        <div class="col-md-6" id="device_circular_2"></div>
-                    </div>
-                    <div id="device_status"></div>
-                    <div id="operatingRate"></div>
-                </div>
+                <ngx-equipment-status style="display: flex;width: 100%;"></ngx-equipment-status>
             </div>
             <div class="first_second lattice_layout" style="height: 24%;">
                 <div class="part_title" style="top: -8px;left: 2px;">{{'equipment.expInfor'|translate}}</div>

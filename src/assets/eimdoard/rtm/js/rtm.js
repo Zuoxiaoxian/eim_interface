@@ -58,10 +58,10 @@ let rtm = {
             }]
         };
         myChart.setOption(option);
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
         option.series[0].data[0].value = gauge1_data;
         myChart.setOption(option);
         // 定时任务
@@ -129,10 +129,10 @@ let rtm = {
             }]
         };
         myChart.setOption(option);
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
         option.series[0].data[0].value = gauge2_data;
         myChart.setOption(option);
         // 定时任务
@@ -327,10 +327,10 @@ let rtm = {
         // 配置给实例化对象
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     },
 };
 

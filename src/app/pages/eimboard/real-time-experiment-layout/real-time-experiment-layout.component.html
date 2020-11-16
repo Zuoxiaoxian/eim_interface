@@ -67,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div id='center_img' style="width: 100%;">
+            <div id='center_img' style="width: 100%;height: 48%;">
                 <ng-container *ngFor="let item of task_data.data;let i = index">
                     <div id="{{item.class}}" *ngIf="item.taskname" (mouseover)="location_over(item)" (mousemove)="location_move(item)">
                         <div class="device-box" *ngIf="item.tipShow">

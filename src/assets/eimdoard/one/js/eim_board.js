@@ -1,7 +1,7 @@
 // 1、一个js文件表示一个模块
 let eim_board = {
     // 左侧第一个、bar
-    left_bar(){
+    left_bar() {
         var myChart = echarts.init(document.querySelector('.bar .chart'));
         var option = {
             // 颜色
@@ -11,7 +11,7 @@ let eim_board = {
                 // 触发方式 item 数据项图形触发 axis坐标轴触发
                 trigger: 'axis',
                 // 坐标轴指示器，坐标轴触发有效
-                axisPointer:{
+                axisPointer: {
                     type: "shadow" // 默认为直线，可选 shadow
                 }
             },
@@ -29,8 +29,8 @@ let eim_board = {
                     bottom: '4%',
                     // 显示刻度
                     containLabel: true,
-        
-    
+
+
                 }
             ],
             // 工具箱组件
@@ -39,16 +39,16 @@ let eim_board = {
             //         saveAsImage: {}
             //     }
             // },
-        
+
             // x轴的相关配置
             xAxis: {
                 // 轴的类型，catrgory 类目
-                type:'category',
+                type: 'category',
                 axisTick: {
                     alignWithLabel: true
                 },
                 // 修改文字大小 即刻度标签
-                axisLabel:{
+                axisLabel: {
                     color: 'rgba(225, 225, 225, .6)',
                     fontSize: '12px',
                 },
@@ -70,9 +70,9 @@ let eim_board = {
                 axisTick: {
                     alignWithLabel: true
                 },
-    
+
                 // 修改文字大小 即刻度标签
-                axisLabel:{
+                axisLabel: {
                     color: 'rgba(225, 225, 225, .6)',
                     fontSize: 12,
                 },
@@ -80,14 +80,14 @@ let eim_board = {
                 axisLine: {
                     // show: false,
                     // 如果想要设置单独的线条样式
-                    lineStyle:{
+                    lineStyle: {
                         color: 'rgba(225, 255, 255, .1)',
                         // width: 1,
                         // type: "solid"
                     }
                 },
                 // y 轴分割线样式
-                splitLine:{
+                splitLine: {
                     lineStyle: {
                         color: "rgba(255, 255, 255,0.1)"
                     }
@@ -101,22 +101,22 @@ let eim_board = {
                 barWidth: '35%',
                 data: [5, 20, 36, 10, 10, 200],
                 // 修改柱子圆角
-                itemStyle:{
+                itemStyle: {
                     barBorderRadius: 2
                 }
             }]
         }
-        
+
         myChart.setOption(option);
-    
+
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     },
     // 左侧第二个、line
-    left_line(){
+    left_line() {
         var myChart = echarts.init(document.querySelector('.line .chart'));
         option = {
             tooltip: {
@@ -131,13 +131,13 @@ let eim_board = {
             },
             legend: {
                 // series中的数据有name，那么这个就可以省略data
-                textStyle:{
+                textStyle: {
                     color: '#4c9bfd' // 图例文字颜色
                 },
                 right: '10%',
                 top: '5%'
             },
-    
+
             grid: {
                 top: '15%',
                 left: 0,
@@ -148,54 +148,49 @@ let eim_board = {
                 show: true, // 显示边框
                 borderColor: '#012f4a', // 边框颜色
             },
-            xAxis: [
-                {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: [ "01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","26","28","29","30"],
-                    // 去除x轴的刻度
-                    axisTick: {
-                        show: false
-                    },
-                    // x轴文本颜色
-                    axisLabel: {
-                        color: 'rgba(225, 225, 225, .6)',
-                        fontSize: '12px',
-                    },
-                    // 去除轴线
-                    axisLine: {
-                        show: false
-                    },
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    // 去除x轴的刻度
-                    axisTick: {
-                        show: false
-                    },
-                    // x轴文本颜色
-                    axisLabel: {
-                        color: 'rgba(225, 225, 225, .6)',
-                        fontSize: '12px',
-                    },
-                    // 去除轴线
-                    axisLine: {
-                        show: false
-                    },
-                    // y轴分割线
-                    splitLine: {
-                        lineStyle: {
-                            color: "#012f4a"
-                        }
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "26", "28", "29", "30"],
+                // 去除x轴的刻度
+                axisTick: {
+                    show: false
+                },
+                // x轴文本颜色
+                axisLabel: {
+                    color: 'rgba(225, 225, 225, .6)',
+                    fontSize: '12px',
+                },
+                // 去除轴线
+                axisLine: {
+                    show: false
+                },
+            }],
+            yAxis: [{
+                type: 'value',
+                // 去除x轴的刻度
+                axisTick: {
+                    show: false
+                },
+                // x轴文本颜色
+                axisLabel: {
+                    color: 'rgba(225, 225, 225, .6)',
+                    fontSize: '12px',
+                },
+                // 去除轴线
+                axisLine: {
+                    show: false
+                },
+                // y轴分割线
+                splitLine: {
+                    lineStyle: {
+                        color: "#012f4a"
                     }
                 }
-            ],
+            }],
             // 2 条折现颜色
-            color: ['#57ba196b',  '#65dae24a'],
-            series: [
-                {
+            color: ['#57ba196b', '#65dae24a'],
+            series: [{
                     name: '邮件营销',
                     type: 'line',
                     stack: '总量',
@@ -206,16 +201,14 @@ let eim_board = {
                             0,
                             0,
                             0,
-                            1,
-                            [
-                            {
-                                offset: 0,
-                                color: "rgba(1, 132, 213, 0.4)"   // 渐变色的起始颜色
-                            },
-                            {
-                                offset: 0.8,
-                                color: "rgba(1, 132, 213, 0.1)"   // 渐变线的结束颜色
-                            }
+                            1, [{
+                                    offset: 0,
+                                    color: "rgba(1, 132, 213, 0.4)" // 渐变色的起始颜色
+                                },
+                                {
+                                    offset: 0.8,
+                                    color: "rgba(1, 132, 213, 0.1)" // 渐变线的结束颜色
+                                }
                             ],
                             false
                         ),
@@ -235,13 +228,13 @@ let eim_board = {
                     // 开始不显示拐点，鼠标经过显示
                     showSymbol: false,
                     // 设置拐点的样式
-                    itemStyle:{
+                    itemStyle: {
                         color: '#0184d5',
                         borderColor: "rgba(221, 220, 107, .1)",
                         borderWidth: 12
                     },
-                    data: [ 30, 40, 30, 40,30, 40, 30,60,20, 40, 30, 40, 30, 40,30, 40, 30,60,20, 40, 30, 40, 30, 40,30, 40, 20,60,50, 40],
-    
+                    data: [30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 30, 40, 30, 40, 30, 40, 20, 60, 50, 40],
+
                 },
                 {
                     name: '联盟广告',
@@ -251,25 +244,23 @@ let eim_board = {
                     areaStyle: {
                         normal: {
                             color: new echarts.graphic.LinearGradient(
-                              0,
-                              0,
-                              0,
-                              1,
-                              [
-                                {
-                                  offset: 0,
-                                  color: "rgba(0, 216, 135, 0.4)"
-                                },
-                                {
-                                  offset: 0.8,
-                                  color: "rgba(0, 216, 135, 0.1)"
-                                }
-                              ],
-                              false
+                                0,
+                                0,
+                                0,
+                                1, [{
+                                        offset: 0,
+                                        color: "rgba(0, 216, 135, 0.4)"
+                                    },
+                                    {
+                                        offset: 0.8,
+                                        color: "rgba(0, 216, 135, 0.1)"
+                                    }
+                                ],
+                                false
                             ),
                             shadowColor: "rgba(0, 0, 0, 0.1)"
-                          }
-                
+                        }
+
                     },
                     // 设置拐点形状
                     symbol: 'circle',
@@ -278,12 +269,12 @@ let eim_board = {
                     // 开始不显示拐点，鼠标经过显示
                     showSymbol: false,
                     // 设置拐点的样式
-                    itemStyle:{
+                    itemStyle: {
                         color: 'green',
                         borderColor: "rgba(221, 220, 107, .1)",
                         borderWidth: 12
                     },
-                    
+
                     // 把折现改为圆滑
                     smooth: true,
                     // 单独修改 当前线条 修改线的样式
@@ -291,23 +282,23 @@ let eim_board = {
                         color: '#00d887',
                         width: 3,
                     },
-                    data: [ 130, 10, 20, 40,30, 40, 80,60,20, 40, 90, 40,20, 140,30, 40, 130,20,20, 40, 80, 70, 30, 40,30, 120, 20,99,50, 20],
+                    data: [130, 10, 20, 40, 30, 40, 80, 60, 20, 40, 90, 40, 20, 140, 30, 40, 130, 20, 20, 40, 80, 70, 30, 40, 30, 120, 20, 99, 50, 20],
                 },
-    
-    
+
+
             ]
         };
-    
+
         // 配置给实例化对象
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
     },
     // 左侧第三个、pie
-    left_pie(){
+    left_pie() {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.pei .chart'));
 
@@ -333,62 +324,60 @@ let eim_board = {
             },
 
             // 颜色
-            color:[
+            color: [
                 "#065aab",
                 "#066eab",
                 "#0682ab",
                 "#0696ab",
                 "#06a0ab"
             ],
-            series: [
-                {
-                    name: '年龄分布',
-                    type: 'pie',
-                    // 饼形图的大小,第一个内圆半径-第2个外圆半径
-                    radius: ['50%', '70%'],
-                    // 并状态的位置
-                    center: ["50%", "45%"],
+            series: [{
+                name: '年龄分布',
+                type: 'pie',
+                // 饼形图的大小,第一个内圆半径-第2个外圆半径
+                radius: ['50%', '70%'],
+                // 并状态的位置
+                center: ["50%", "45%"],
 
-                    avoidLabelOverlap: false,
-                    // 图形上文字
+                avoidLabelOverlap: false,
+                // 图形上文字
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                // 饼形图中间的提示文字
+                emphasis: {
                     label: {
                         show: false,
-                        position: 'center'
-                    },
-                    // 饼形图中间的提示文字
-                    emphasis: {
-                        label: {
-                            show: false,
-                            fontSize: '30',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    // 不显示连接线 图形和文字
-                    labelLine: {
-                        show: false
-                    },
-                    data: [
-                        {value: 335, name: '0岁以下'},
-                        {value: 310, name: '20-29岁'},
-                        {value: 234, name: '30-39岁'},
-                        {value: 135, name: '40-49岁'},
-                        {value: 1548, name: '50岁以下'}
-                    ]
-                }
-            ]
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                },
+                // 不显示连接线 图形和文字
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: 335, name: '0岁以下' },
+                    { value: 310, name: '20-29岁' },
+                    { value: 234, name: '30-39岁' },
+                    { value: 135, name: '40-49岁' },
+                    { value: 1548, name: '50岁以下' }
+                ]
+            }]
         };
         // 配置给实例化对象
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     },
 
     // 右侧第一个、bar
-    right_bar(){
+    right_bar() {
         var myChart = echarts.init(document.querySelector('.bar2 .chart'));
         var myColor = ['#1089E7', "#F57474", "#F88448", "#8878F6"]
         option = {
@@ -400,7 +389,7 @@ let eim_board = {
                 }
             },
 
-            
+
             grid: {
                 top: '10%',
                 left: '2%',
@@ -414,12 +403,11 @@ let eim_board = {
                 // 不显示x轴相关信息
                 show: false,
             },
-            yAxis: [
-                {
+            yAxis: [{
                     type: 'category',
                     inverse: true,
                     data: ['Sunny', 'Cloudy', 'Showers'],
-        
+
                     // 不显示y轴线条
                     axisLine: {
                         show: false,
@@ -437,7 +425,7 @@ let eim_board = {
                     type: 'category',
                     inverse: true,
                     data: [702, 350, 664],
-        
+
                     // 不显示y轴线条
                     axisLine: {
                         show: false,
@@ -454,8 +442,7 @@ let eim_board = {
                 }
 
             ],
-            series: [
-                {
+            series: [{
                     name: '条',
                     // 柱子之间的的距离
                     barCategoryGap: 60,
@@ -464,7 +451,7 @@ let eim_board = {
                     // 柱子设为圆
                     itemStyle: {
                         barBorderRadius: 20,
-                        color: function(params){
+                        color: function(params) {
                             return myColor[params.dataIndex]
                         },
                     },
@@ -500,19 +487,19 @@ let eim_board = {
                     data: [100, 100, 100],
                     // 类似css z-index
                     yAxisIndex: 1,
-    },
+                },
             ]
         };
-        
+
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     },
     // 右侧第二个、line
-    right_line(){
+    right_line() {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.line2 .chart'));
         option = {
@@ -528,7 +515,7 @@ let eim_board = {
             },
             legend: {
                 // series中的数据有name，那么这个就可以省略data
-                textStyle:{
+                textStyle: {
                     color: '#4c9bfd' // 图例文字颜色
                 },
                 right: '10%',
@@ -545,54 +532,49 @@ let eim_board = {
                 show: true, // 显示边框
                 borderColor: '#012f4a', // 边框颜色
             },
-            xAxis: [
-                {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: [ "01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","26","28","29","30"],
-                    // 去除x轴的刻度
-                    axisTick: {
-                        show: false
-                    },
-                    // x轴文本颜色
-                    axisLabel: {
-                        color: 'rgba(225, 225, 225, .6)',
-                        fontSize: '12px',
-                    },
-                    // 去除轴线
-                    axisLine: {
-                        show: false
-                    },
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    // 去除x轴的刻度
-                    axisTick: {
-                        show: false
-                    },
-                    // x轴文本颜色
-                    axisLabel: {
-                        color: 'rgba(225, 225, 225, .6)',
-                        fontSize: '12px',
-                    },
-                    // 去除轴线
-                    axisLine: {
-                        show: false
-                    },
-                    // y轴分割线
-                    splitLine: {
-                        lineStyle: {
-                            color: "#012f4a"
-                        }
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "26", "28", "29", "30"],
+                // 去除x轴的刻度
+                axisTick: {
+                    show: false
+                },
+                // x轴文本颜色
+                axisLabel: {
+                    color: 'rgba(225, 225, 225, .6)',
+                    fontSize: '12px',
+                },
+                // 去除轴线
+                axisLine: {
+                    show: false
+                },
+            }],
+            yAxis: [{
+                type: 'value',
+                // 去除x轴的刻度
+                axisTick: {
+                    show: false
+                },
+                // x轴文本颜色
+                axisLabel: {
+                    color: 'rgba(225, 225, 225, .6)',
+                    fontSize: '12px',
+                },
+                // 去除轴线
+                axisLine: {
+                    show: false
+                },
+                // y轴分割线
+                splitLine: {
+                    lineStyle: {
+                        color: "#012f4a"
                     }
                 }
-            ],
+            }],
             // 2 条折现颜色
-            color: ['#57ba196b',  '#65dae24a'],
-            series: [
-                {
+            color: ['#57ba196b', '#65dae24a'],
+            series: [{
                     name: '邮件营销',
                     type: 'line',
                     stack: '总量',
@@ -603,16 +585,14 @@ let eim_board = {
                             0,
                             0,
                             0,
-                            1,
-                            [
-                            {
-                                offset: 0,
-                                color: "rgba(1, 132, 213, 0.4)"   // 渐变色的起始颜色
-                            },
-                            {
-                                offset: 0.8,
-                                color: "rgba(1, 132, 213, 0.1)"   // 渐变线的结束颜色
-                            }
+                            1, [{
+                                    offset: 0,
+                                    color: "rgba(1, 132, 213, 0.4)" // 渐变色的起始颜色
+                                },
+                                {
+                                    offset: 0.8,
+                                    color: "rgba(1, 132, 213, 0.1)" // 渐变线的结束颜色
+                                }
                             ],
                             false
                         ),
@@ -632,12 +612,12 @@ let eim_board = {
                     // 开始不显示拐点，鼠标经过显示
                     showSymbol: false,
                     // 设置拐点的样式
-                    itemStyle:{
+                    itemStyle: {
                         color: '#0184d5',
                         borderColor: "rgba(221, 220, 107, .1)",
                         borderWidth: 12
                     },
-                    data: [ 30, 40, 30, 40,30, 40, 30,60,20, 40, 30, 40, 30, 40,30, 40, 30,60,20, 40, 30, 40, 30, 40,30, 40, 20,60,50, 40],
+                    data: [30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 30, 40, 30, 40, 30, 40, 30, 60, 20, 40, 30, 40, 30, 40, 30, 40, 20, 60, 50, 40],
 
                 },
                 {
@@ -648,25 +628,23 @@ let eim_board = {
                     areaStyle: {
                         normal: {
                             color: new echarts.graphic.LinearGradient(
-                            0,
-                            0,
-                            0,
-                            1,
-                            [
-                                {
-                                offset: 0,
-                                color: "rgba(0, 216, 135, 0.4)"
-                                },
-                                {
-                                offset: 0.8,
-                                color: "rgba(0, 216, 135, 0.1)"
-                                }
-                            ],
-                            false
+                                0,
+                                0,
+                                0,
+                                1, [{
+                                        offset: 0,
+                                        color: "rgba(0, 216, 135, 0.4)"
+                                    },
+                                    {
+                                        offset: 0.8,
+                                        color: "rgba(0, 216, 135, 0.1)"
+                                    }
+                                ],
+                                false
                             ),
                             shadowColor: "rgba(0, 0, 0, 0.1)"
                         }
-                
+
                     },
                     // 设置拐点形状
                     symbol: 'circle',
@@ -675,12 +653,12 @@ let eim_board = {
                     // 开始不显示拐点，鼠标经过显示
                     showSymbol: false,
                     // 设置拐点的样式
-                    itemStyle:{
+                    itemStyle: {
                         color: 'green',
                         borderColor: "rgba(221, 220, 107, .1)",
                         borderWidth: 12
                     },
-                    
+
                     // 把折现改为圆滑
                     smooth: true,
                     // 单独修改 当前线条 修改线的样式
@@ -688,7 +666,7 @@ let eim_board = {
                         color: '#00d887',
                         width: 3,
                     },
-                    data: [ 130, 10, 20, 40,30, 40, 80,60,20, 40, 90, 40,20, 140,30, 40, 130,20,20, 40, 80, 70, 30, 40,30, 120, 20,99,50, 20],
+                    data: [130, 10, 20, 40, 30, 40, 80, 60, 20, 40, 90, 40, 20, 140, 30, 40, 130, 20, 20, 40, 80, 70, 30, 40, 30, 120, 20, 99, 50, 20],
                 },
 
 
@@ -698,13 +676,13 @@ let eim_board = {
         // 配置给实例化对象
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     },
     // 右侧第三个、pie
-    right_pie(){
+    right_pie() {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.pei2 .chart'));
 
@@ -729,100 +707,97 @@ let eim_board = {
                 },
 
             },
-        
+
             // 颜色
             color: ['#006cff', '#60cda0', '#ed8884', '#ff9f7f', '#0096ff', '#9fe6b8', '#32c5e9', '#1d9dff'],
-            series: [
-                {
-                    name: '面积模式',
-                    type: 'pie',
-                    // 大小
-                    radius: ['10%', '55%'],
-                    // 位置-垂直居中
-                    center: ['50%', '50%'],
-                    // area 这是面积模式、radius这是半径模式
-                    roseType: 'radius',
-                    // 文本标签的大小
-                    label: {
-                        fontSize: 10
-                    },
-                    // 连接图形和文字的线
-                    labelLine: {
-                        // length连接图形的线， length2连接文字的线条！
-                        length: 10,
-                        length: 5
-                    }, 
-                    data: [
-                        {value: 10, name: '云南'},
-                        {value: 5, name: '北京'},
-                        {value: 15, name: '河北'},
-                        {value: 25, name: '江苏'},
-                        {value: 20, name: '浙江'},
-                        {value: 35, name: '山东'},
-                        {value: 30, name: '四川'},
-                        {value: 40, name: '河南'}
-                    ]
-                }
-            ]
+            series: [{
+                name: '面积模式',
+                type: 'pie',
+                // 大小
+                radius: ['10%', '55%'],
+                // 位置-垂直居中
+                center: ['50%', '50%'],
+                // area 这是面积模式、radius这是半径模式
+                roseType: 'radius',
+                // 文本标签的大小
+                label: {
+                    fontSize: 10
+                },
+                // 连接图形和文字的线
+                labelLine: {
+                    // length连接图形的线， length2连接文字的线条！
+                    length: 10,
+                    length: 5
+                },
+                data: [
+                    { value: 10, name: '云南' },
+                    { value: 5, name: '北京' },
+                    { value: 15, name: '河北' },
+                    { value: 25, name: '江苏' },
+                    { value: 20, name: '浙江' },
+                    { value: 35, name: '山东' },
+                    { value: 30, name: '四川' },
+                    { value: 40, name: '河南' }
+                ]
+            }]
         };
         // 配置给实例化对象
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     },
 
 
     // map 中国map
-    center_map2(){
+    center_map2() {
         // 实例化对象
         var mymap = echarts.init(document.querySelector('.map .map-chart'));
         // 配置
 
         var option = {
-            title : {
+            title: {
                 text: 'iphone销量',
                 subtext: '纯属虚构',
                 left: 'center'
             },
-            tooltip : {
+            tooltip: {
                 trigger: 'item'
             },
-           grid: {
-               right: '0%',
-               left: '20%',
-               width: '100%',
-           },
+            grid: {
+                right: '0%',
+                left: '20%',
+                width: '100%',
+            },
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data:['iphone3','iphone4','iphone5']
+                data: ['iphone3', 'iphone4', 'iphone5']
             },
             visualMap: {
                 min: 0,
                 max: 2500,
                 left: 'left',
                 top: 'bottom',
-                text:['高','低'],           // 文本，默认为数值文本
-                calculable : true
+                text: ['高', '低'], // 文本，默认为数值文本
+                calculable: true
             },
             toolbox: {
                 show: true,
-                orient : 'vertical',
+                orient: 'vertical',
                 left: 'right',
                 top: 'center',
-                feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
-                    restore : {show: true},
-                    saveAsImage : {show: true}
+                feature: {
+                    mark: { show: true },
+                    dataView: { show: true, readOnly: false },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
                 }
             },
-            series : [
-                {
+            series: [{
                     name: 'iphone3',
                     type: 'map',
                     mapType: 'china',
@@ -835,41 +810,41 @@ let eim_board = {
                             show: true
                         }
                     },
-                    data:[
-                        {name: '北京',value: Math.round(Math.random()*1000)},
-                        {name: '天津',value: Math.round(Math.random()*1000)},
-                        {name: '上海',value: Math.round(Math.random()*1000)},
-                        {name: '重庆',value: Math.round(Math.random()*1000)},
-                        {name: '河北',value: Math.round(Math.random()*1000)},
-                        {name: '河南',value: Math.round(Math.random()*1000)},
-                        {name: '云南',value: Math.round(Math.random()*1000)},
-                        {name: '辽宁',value: Math.round(Math.random()*1000)},
-                        {name: '黑龙江',value: Math.round(Math.random()*1000)},
-                        {name: '湖南',value: Math.round(Math.random()*1000)},
-                        {name: '安徽',value: Math.round(Math.random()*1000)},
-                        {name: '山东',value: Math.round(Math.random()*1000)},
-                        {name: '新疆',value: Math.round(Math.random()*1000)},
-                        {name: '江苏',value: Math.round(Math.random()*1000)},
-                        {name: '浙江',value: Math.round(Math.random()*1000)},
-                        {name: '江西',value: Math.round(Math.random()*1000)},
-                        {name: '湖北',value: Math.round(Math.random()*1000)},
-                        {name: '广西',value: Math.round(Math.random()*1000)},
-                        {name: '甘肃',value: Math.round(Math.random()*1000)},
-                        {name: '山西',value: Math.round(Math.random()*1000)},
-                        {name: '内蒙古',value: Math.round(Math.random()*1000)},
-                        {name: '陕西',value: Math.round(Math.random()*1000)},
-                        {name: '吉林',value: Math.round(Math.random()*1000)},
-                        {name: '福建',value: Math.round(Math.random()*1000)},
-                        {name: '贵州',value: Math.round(Math.random()*1000)},
-                        {name: '广东',value: Math.round(Math.random()*1000)},
-                        {name: '青海',value: Math.round(Math.random()*1000)},
-                        {name: '西藏',value: Math.round(Math.random()*1000)},
-                        {name: '四川',value: Math.round(Math.random()*1000)},
-                        {name: '宁夏',value: Math.round(Math.random()*1000)},
-                        {name: '海南',value: Math.round(Math.random()*1000)},
-                        {name: '台湾',value: Math.round(Math.random()*1000)},
-                        {name: '香港',value: Math.round(Math.random()*1000)},
-                        {name: '澳门',value: Math.round(Math.random()*1000)}
+                    data: [
+                        { name: '北京', value: Math.round(Math.random() * 1000) },
+                        { name: '天津', value: Math.round(Math.random() * 1000) },
+                        { name: '上海', value: Math.round(Math.random() * 1000) },
+                        { name: '重庆', value: Math.round(Math.random() * 1000) },
+                        { name: '河北', value: Math.round(Math.random() * 1000) },
+                        { name: '河南', value: Math.round(Math.random() * 1000) },
+                        { name: '云南', value: Math.round(Math.random() * 1000) },
+                        { name: '辽宁', value: Math.round(Math.random() * 1000) },
+                        { name: '黑龙江', value: Math.round(Math.random() * 1000) },
+                        { name: '湖南', value: Math.round(Math.random() * 1000) },
+                        { name: '安徽', value: Math.round(Math.random() * 1000) },
+                        { name: '山东', value: Math.round(Math.random() * 1000) },
+                        { name: '新疆', value: Math.round(Math.random() * 1000) },
+                        { name: '江苏', value: Math.round(Math.random() * 1000) },
+                        { name: '浙江', value: Math.round(Math.random() * 1000) },
+                        { name: '江西', value: Math.round(Math.random() * 1000) },
+                        { name: '湖北', value: Math.round(Math.random() * 1000) },
+                        { name: '广西', value: Math.round(Math.random() * 1000) },
+                        { name: '甘肃', value: Math.round(Math.random() * 1000) },
+                        { name: '山西', value: Math.round(Math.random() * 1000) },
+                        { name: '内蒙古', value: Math.round(Math.random() * 1000) },
+                        { name: '陕西', value: Math.round(Math.random() * 1000) },
+                        { name: '吉林', value: Math.round(Math.random() * 1000) },
+                        { name: '福建', value: Math.round(Math.random() * 1000) },
+                        { name: '贵州', value: Math.round(Math.random() * 1000) },
+                        { name: '广东', value: Math.round(Math.random() * 1000) },
+                        { name: '青海', value: Math.round(Math.random() * 1000) },
+                        { name: '西藏', value: Math.round(Math.random() * 1000) },
+                        { name: '四川', value: Math.round(Math.random() * 1000) },
+                        { name: '宁夏', value: Math.round(Math.random() * 1000) },
+                        { name: '海南', value: Math.round(Math.random() * 1000) },
+                        { name: '台湾', value: Math.round(Math.random() * 1000) },
+                        { name: '香港', value: Math.round(Math.random() * 1000) },
+                        { name: '澳门', value: Math.round(Math.random() * 1000) }
                     ]
                 },
                 {
@@ -884,26 +859,26 @@ let eim_board = {
                             show: true
                         }
                     },
-                    data:[
-                        {name: '北京',value: Math.round(Math.random()*1000)},
-                        {name: '天津',value: Math.round(Math.random()*1000)},
-                        {name: '上海',value: Math.round(Math.random()*1000)},
-                        {name: '重庆',value: Math.round(Math.random()*1000)},
-                        {name: '河北',value: Math.round(Math.random()*1000)},
-                        {name: '安徽',value: Math.round(Math.random()*1000)},
-                        {name: '新疆',value: Math.round(Math.random()*1000)},
-                        {name: '浙江',value: Math.round(Math.random()*1000)},
-                        {name: '江西',value: Math.round(Math.random()*1000)},
-                        {name: '山西',value: Math.round(Math.random()*1000)},
-                        {name: '内蒙古',value: Math.round(Math.random()*1000)},
-                        {name: '吉林',value: Math.round(Math.random()*1000)},
-                        {name: '福建',value: Math.round(Math.random()*1000)},
-                        {name: '广东',value: Math.round(Math.random()*1000)},
-                        {name: '西藏',value: Math.round(Math.random()*1000)},
-                        {name: '四川',value: Math.round(Math.random()*1000)},
-                        {name: '宁夏',value: Math.round(Math.random()*1000)},
-                        {name: '香港',value: Math.round(Math.random()*1000)},
-                        {name: '澳门',value: Math.round(Math.random()*1000)}
+                    data: [
+                        { name: '北京', value: Math.round(Math.random() * 1000) },
+                        { name: '天津', value: Math.round(Math.random() * 1000) },
+                        { name: '上海', value: Math.round(Math.random() * 1000) },
+                        { name: '重庆', value: Math.round(Math.random() * 1000) },
+                        { name: '河北', value: Math.round(Math.random() * 1000) },
+                        { name: '安徽', value: Math.round(Math.random() * 1000) },
+                        { name: '新疆', value: Math.round(Math.random() * 1000) },
+                        { name: '浙江', value: Math.round(Math.random() * 1000) },
+                        { name: '江西', value: Math.round(Math.random() * 1000) },
+                        { name: '山西', value: Math.round(Math.random() * 1000) },
+                        { name: '内蒙古', value: Math.round(Math.random() * 1000) },
+                        { name: '吉林', value: Math.round(Math.random() * 1000) },
+                        { name: '福建', value: Math.round(Math.random() * 1000) },
+                        { name: '广东', value: Math.round(Math.random() * 1000) },
+                        { name: '西藏', value: Math.round(Math.random() * 1000) },
+                        { name: '四川', value: Math.round(Math.random() * 1000) },
+                        { name: '宁夏', value: Math.round(Math.random() * 1000) },
+                        { name: '香港', value: Math.round(Math.random() * 1000) },
+                        { name: '澳门', value: Math.round(Math.random() * 1000) }
                     ]
                 },
                 {
@@ -918,14 +893,14 @@ let eim_board = {
                             show: true
                         }
                     },
-                    data:[
-                        {name: '北京',value: Math.round(Math.random()*1000)},
-                        {name: '天津',value: Math.round(Math.random()*1000)},
-                        {name: '上海',value: Math.round(Math.random()*1000)},
-                        {name: '广东',value: Math.round(Math.random()*1000)},
-                        {name: '台湾',value: Math.round(Math.random()*1000)},
-                        {name: '香港',value: Math.round(Math.random()*1000)},
-                        {name: '澳门',value: Math.round(Math.random()*1000)}
+                    data: [
+                        { name: '北京', value: Math.round(Math.random() * 1000) },
+                        { name: '天津', value: Math.round(Math.random() * 1000) },
+                        { name: '上海', value: Math.round(Math.random() * 1000) },
+                        { name: '广东', value: Math.round(Math.random() * 1000) },
+                        { name: '台湾', value: Math.round(Math.random() * 1000) },
+                        { name: '香港', value: Math.round(Math.random() * 1000) },
+                        { name: '澳门', value: Math.round(Math.random() * 1000) }
                     ]
                 }
             ]
@@ -933,12 +908,13 @@ let eim_board = {
         // 渲染
         mymap.setOption(option);
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
-            mymap.resize();
-        })
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
+            myChart.resize();
+        }
     },
     // map 中国2
-    center_map(){
+    center_map() {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.map .map-chart'));
         // 配置
@@ -1058,7 +1034,7 @@ let eim_board = {
             '青岛': [120.4651, 36.3373],
             '韶关': [113.7964, 24.7028]
         };
-        
+
         var XAData = [
             [{
                 name: '西安'
@@ -1091,7 +1067,7 @@ let eim_board = {
                 value: 100
             }]
         ];
-        
+
         var XNData = [
             [{
                 name: '西宁'
@@ -1152,18 +1128,18 @@ let eim_board = {
                 value: 100
             }],
         ];
-        
 
-        
+
+
         var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
         //var planePath = 'arrow';
         var convertData = function(data) {
-        
+
             var res = [];
             for (var i = 0; i < data.length; i++) {
-        
+
                 var dataItem = data[i];
-        
+
                 var fromCoord = geoCoordMap[dataItem[0].name];
                 var toCoord = geoCoordMap[dataItem[1].name];
                 if (fromCoord && toCoord) {
@@ -1176,9 +1152,9 @@ let eim_board = {
                 }
             }
             return res;
-        
+
         };
-        
+
         var color = ['#a6c84c', '#ffa022', '#46bee9', '#8878F6']; //航线的颜色
         var series = [];
         [
@@ -1187,84 +1163,80 @@ let eim_board = {
             // ['银川', YCData]
             ['宁波', JPData]
         ].forEach(function(item, i) {
-            series.push(
-                {
-                    name: item[0] + ' Top3',
-                    type: 'lines',
-                    zlevel: 1,
-                    effect: {
+            series.push({
+                name: item[0] + ' Top3',
+                type: 'lines',
+                zlevel: 1,
+                effect: {
+                    show: true,
+                    period: 6,
+                    trailLength: 0.7,
+                    color: 'red', //arrow箭头的颜色
+                    symbolSize: 3
+                },
+                lineStyle: {
+                    normal: {
+                        color: color[i],
+                        width: 0,
+                        curveness: 0.2
+                    }
+                },
+                data: convertData(item[1])
+            }, {
+                name: item[0] + ' Top3',
+                type: 'lines',
+                zlevel: 2,
+                symbol: ['none', 'arrow'],
+                symbolSize: 10,
+                effect: {
+                    show: true,
+                    period: 6,
+                    trailLength: 0,
+                    symbol: planePath,
+                    symbolSize: 15
+                },
+                lineStyle: {
+                    normal: {
+                        color: color[i],
+                        width: 1,
+                        opacity: 0.6,
+                        curveness: 0.2
+                    }
+                },
+                data: convertData(item[1])
+            }, {
+                name: item[0] + ' Top3',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                zlevel: 2,
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                label: {
+                    normal: {
                         show: true,
-                        period: 6,
-                        trailLength: 0.7,
-                        color: 'red', //arrow箭头的颜色
-                        symbolSize: 3
+                        position: 'right',
+                        formatter: '{b}'
+                    }
+                },
+                symbolSize: function(val) {
+                    return val[2] / 8;
+                },
+                itemStyle: {
+                    normal: {
+                        color: color[i],
                     },
-                    lineStyle: {
-                        normal: {
-                            color: color[i],
-                            width: 0,
-                            curveness: 0.2
-                        }
-                    },
-                    data: convertData(item[1])
-                }, 
-                {
-                    name: item[0] + ' Top3',
-                    type: 'lines',
-                    zlevel: 2,
-                    symbol: ['none', 'arrow'],
-                    symbolSize: 10,
-                    effect: {
-                        show: true,
-                        period: 6,
-                        trailLength: 0,
-                        symbol: planePath,
-                        symbolSize: 15
-                    },
-                    lineStyle: {
-                        normal: {
-                            color: color[i],
-                            width: 1,
-                            opacity: 0.6,
-                            curveness: 0.2
-                        }
-                    },
-                    data: convertData(item[1])
-                }, 
-                {
-                    name: item[0] + ' Top3',
-                    type: 'effectScatter',
-                    coordinateSystem: 'geo',
-                    zlevel: 2,
-                    rippleEffect: {
-                        brushType: 'stroke'
-                    },
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'right',
-                            formatter: '{b}'
-                        }
-                    },
-                    symbolSize: function(val) {
-                        return val[2] / 8;
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: color[i],
-                        },
-                        emphasis: {
-                            areaColor: '#2B91B7'
-                        }
-                    },
-                    data: item[1].map(function(dataItem) {
-                        return {
-                            name: dataItem[1].name,
-                            value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
-                        };
-                    })
-                }
-            );
+                    emphasis: {
+                        areaColor: '#2B91B7'
+                    }
+                },
+                data: item[1].map(function(dataItem) {
+                    return {
+                        name: dataItem[1].name,
+                        value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                    };
+                })
+            });
         });
         var option = {
 
@@ -1321,19 +1293,20 @@ let eim_board = {
         // 渲染
         myChart.setOption(option);
         // 单击
-        myChart.on('click', function(params){
+        myChart.on('click', function(params) {
             console.log("Params: ", params)
         }.bind(this));
-        
+
         // 双击
-        myChart.on('dblclick', function(params){
+        myChart.on('dblclick', function(params) {
             console.log("这是双击！")
         }.bind(this));
-        
+
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     }
 
 };

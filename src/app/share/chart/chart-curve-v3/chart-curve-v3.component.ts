@@ -198,20 +198,20 @@ export class ChartCurveV3Component implements OnInit {
             height:'60%',
 
         },
-        // dataZoom : [
-        //     {
-        //         show: false,
-        //         realtime: true,
-        //         start: 100-((10/(series[0].data.length))*100),
-        //         end: 100,
-        //     },
-        //     {
-        //         type: 'inside',
-        //         realtime: true,
-        //         start:  100-((10/(series[0].data.length))*100),
-        //         end: 100,
-        //     }
-        // ],
+        dataZoom : [
+            {
+                show: false,
+                realtime: true,
+                start: 100-((10/(series[0].data.length))*100),
+                end: 100,
+            },
+            {
+                type: 'inside',
+                realtime: true,
+                start:  100-((10/(series[0].data.length))*100),
+                end: 100,
+            }
+        ],
         legend: {
             show: true,
             icon: 'circle',
@@ -321,10 +321,9 @@ export class ChartCurveV3Component implements OnInit {
         option.legend = this.myChart.getOption().legend
         // option.dataZoom = this.myChart.getOption().dataZoom
     }
-    window.addEventListener('resize', function() {
-        console.log("重置的屏幕大小！")
+    window.onresize = function() {
         if(isthis.myChart)isthis.myChart.setOption(option,echartConfig);
-    });
+    }
     this.myChart.setOption(option,echartConfig);
 
   }

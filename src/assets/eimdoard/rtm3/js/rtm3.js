@@ -65,10 +65,10 @@ let rtm3 = {
             }]
         };
         console.log(option)
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
         myChart.setOption(option);
         myChart.resize();
     },
@@ -100,10 +100,10 @@ let rtm3 = {
                 data: gauge_data.legendData
             }
         };
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
         myChart.setOption(option);
         myChart.resize();
     },
@@ -154,10 +154,10 @@ let rtm3 = {
             }],
             series: gauge_data.seriesData
         };
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
         myChart.setOption(option);
         myChart.resize();
     },
@@ -267,11 +267,10 @@ let rtm3 = {
             ]
         };
 
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
-            plan_chart_1.resize();
-            plan_chart_2.resize();
-        });
+            myChart.resize();
+        }
         plan_chart_1.setOption(plan_option);
         plan_chart_1.resize();
         plan_chart_2.setOption(plan_option);
@@ -428,10 +427,10 @@ let rtm3 = {
             ]
         }
 
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
         myChart.setOption(option);
         myChart.resize();
     },
@@ -551,10 +550,11 @@ let rtm3 = {
                 data: gauge_data.seriesData
             }]
         };
-        window.addEventListener("resize", function() {
-            myChart.resize();
-        });
-        // 使用刚指定的配置项和数据显示图表。
+        window.onresize = function() {
+                this.console.log("重置的屏幕大小！")
+                myChart.resize();
+            }
+            // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
         myChart.resize();
     }

@@ -13,10 +13,11 @@
                 <span id="head_title">{{ title }}</span>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" style="position: relative;">
             <div class="head">
                 <span>{{date.year}}-{{date.month+1}}-{{date.day}}  {{date.hours}}:{{date.minute}}:{{date.second}}</span>
             </div>
+            <nb-icon [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
         </div>
     </div>
     <div class="body">

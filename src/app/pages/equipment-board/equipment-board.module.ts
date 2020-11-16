@@ -14,6 +14,8 @@ import { EquipmentMastComponent } from './equipment-mast/equipment-mast.componen
 import { EquipmentDetailsComponent } from './equipment-details/equipment-details.component';
 import { EquipmentMastV2Component } from './equipment-mast-v2/equipment-mast-v2.component';
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { EquipmentStatusComponent } from './temp/equipment-status/equipment-status.component';
+import { NbCardModule, NbIconModule } from '@nebular/theme';
 
 
 // 组件
@@ -22,13 +24,15 @@ const COMPONENT = [
   EquipmentHydraulicPressureComponent,EquipmentShockComponent,
   EquipmentCouplingPathComponent,EquipmentMotorSystemComponent,
   EquipmentAvlComponent,EquipmentMastComponent,
-  EquipmentDetailsComponent,EquipmentMastV2Component
+  EquipmentDetailsComponent,EquipmentMastV2Component,
+  EquipmentStatusComponent
 ]
 //设备看板模块
 @NgModule({
   declarations: COMPONENT,
   imports: [
-    CommonModule,ShareModule,EimboardEimboardRoutingModule,NzProgressModule,TranslateModule
+    CommonModule,ShareModule,EimboardEimboardRoutingModule,NzProgressModule,TranslateModule,
+    NbIconModule,NbCardModule
   ],
   providers:[
     TranslatePipe

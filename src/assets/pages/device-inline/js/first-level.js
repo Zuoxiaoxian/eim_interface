@@ -1,12 +1,12 @@
 let first_level = {
     // key-index 关键指标
-    key_index(){
+    key_index() {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.key-index'));
 
         // 配置
         option = {
-            
+
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -27,102 +27,100 @@ let first_level = {
             },
 
             // 颜色
-            color:[
+            color: [
                 "#065aab",
                 "#066eab",
                 "#0682ab",
                 "#0696ab",
                 "#06a0ab"
             ],
-            series: [
-                {
-                    name: '年龄分布',
-                    type: 'pie',
-                    // 饼形图的大小,第一个内圆半径-第2个外圆半径
-                    radius: ['0%', '70%'],
-                    // 并状态的位置
-                    center: ["50%", "45%"],
-                    itemStyle: {
-                        shadowBlur: 13,
-                        shadowOffsetX: -7.5,
-                        shadowOffsetY: 1.5,
-                        shadowColor: 'rgba(87, 149, 156, 1)',
-                    },
+            series: [{
+                name: '年龄分布',
+                type: 'pie',
+                // 饼形图的大小,第一个内圆半径-第2个外圆半径
+                radius: ['0%', '70%'],
+                // 并状态的位置
+                center: ["50%", "45%"],
+                itemStyle: {
+                    shadowBlur: 13,
+                    shadowOffsetX: -7.5,
+                    shadowOffsetY: 1.5,
+                    shadowColor: 'rgba(87, 149, 156, 1)',
+                },
 
-                    avoidLabelOverlap: false,
-                    // 图形上文字
+                avoidLabelOverlap: false,
+                // 图形上文字
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                // 饼形图中间的提示文字
+                emphasis: {
                     label: {
                         show: false,
-                        position: 'center'
-                    },
-                    // 饼形图中间的提示文字
-                    emphasis: {
-                        label: {
-                            show: false,
-                            fontSize: '30',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    // 不显示连接线 图形和文字
-                    labelLine: {
-                        show: false
-                    },
-                    data: [
-                        {value: 335, name: '0岁以下'},
-                        {value: 310, name: '20-29岁'},
-                        {value: 234, name: '30-39岁'},
-                        {value: 135, name: '40-49岁'},
-                        {value: 1548, name: '50岁以下'}
-                    ]
-                }
-            ]
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                },
+                // 不显示连接线 图形和文字
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: 335, name: '0岁以下' },
+                    { value: 310, name: '20-29岁' },
+                    { value: 234, name: '30-39岁' },
+                    { value: 135, name: '40-49岁' },
+                    { value: 1548, name: '50岁以下' }
+                ]
+            }]
         };
         // 配置给实例化对象
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     },
 
     // chian_map map 地图
-    chian_map(){
+    chian_map() {
         var data = [
-            { name: "天津", value: [117.4219, 39.4189, 42] },
-            { name: "河北", value: [114.4995, 38.1006, 102] },
-            { name: "山西", value: [112.3352, 37.9413, 81] },
-            { name: "内蒙古", value: [110.3467, 41.4899, 47] },
-            { name: "辽宁", value: [123.1238, 42.1216, 67] },
-            { name: "吉林", value: [125.8154, 44.2584, 82] },
-            { name: "黑龙江", value: [127.9688, 45.368, 123] },
-            { name: "上海", value: [121.4648, 31.2891, 24] },
-            { name: "江苏", value: [118.8062, 31.9208, 92] },
-            { name: "浙江", value: [119.5313, 29.8773, 114] },
-            { name: "安徽", value: [117.29, 32.0581, 109] },
-            { name: "福建", value: [119.4543, 25.9222, 116] },
-            { name: "江西", value: [116.0046, 28.6633, 91] },
-            { name: "山东", value: [117.1582, 36.8701, 119] },
-            { name: "河南", value: [113.4668, 34.6234, 137] },
-            { name: "湖北", value: [114.3896, 30.6628, 116] },
-            { name: "湖南", value: [113.0823, 28.2568, 114] },
-            { name: "重庆", value: [108.384366, 30.439702, 91] },
-            { name: "四川", value: [103.9526, 30.7617, 125] },
-            { name: "贵州", value: [106.6992, 26.7682, 62] },
-            { name: "云南", value: [102.9199, 25.4663, 83] },
-            { name: "西藏", value: [91.11, 29.97, 9] },
-            { name: "陕西", value: [109.1162, 34.2004, 80] },
-            { name: "甘肃", value: [103.5901, 36.3043, 56] },
-            { name: "青海", value: [101.4038, 36.8207, 10] },
-            { name: "宁夏", value: [106.3586, 38.1775, 18] },
-            { name: "新疆", value: [87.9236, 43.5883, 0] },
-            { name: "广东", value: [113.12244, 23.009505, 123] },
-            { name: "广西", value: [108.479, 23.1152, 59] },
-            { name: "海南", value: [110.3893, 19.8516, 14] },
-    
-        ]
-        // 实例化对象
+                { name: "天津", value: [117.4219, 39.4189, 42] },
+                { name: "河北", value: [114.4995, 38.1006, 102] },
+                { name: "山西", value: [112.3352, 37.9413, 81] },
+                { name: "内蒙古", value: [110.3467, 41.4899, 47] },
+                { name: "辽宁", value: [123.1238, 42.1216, 67] },
+                { name: "吉林", value: [125.8154, 44.2584, 82] },
+                { name: "黑龙江", value: [127.9688, 45.368, 123] },
+                { name: "上海", value: [121.4648, 31.2891, 24] },
+                { name: "江苏", value: [118.8062, 31.9208, 92] },
+                { name: "浙江", value: [119.5313, 29.8773, 114] },
+                { name: "安徽", value: [117.29, 32.0581, 109] },
+                { name: "福建", value: [119.4543, 25.9222, 116] },
+                { name: "江西", value: [116.0046, 28.6633, 91] },
+                { name: "山东", value: [117.1582, 36.8701, 119] },
+                { name: "河南", value: [113.4668, 34.6234, 137] },
+                { name: "湖北", value: [114.3896, 30.6628, 116] },
+                { name: "湖南", value: [113.0823, 28.2568, 114] },
+                { name: "重庆", value: [108.384366, 30.439702, 91] },
+                { name: "四川", value: [103.9526, 30.7617, 125] },
+                { name: "贵州", value: [106.6992, 26.7682, 62] },
+                { name: "云南", value: [102.9199, 25.4663, 83] },
+                { name: "西藏", value: [91.11, 29.97, 9] },
+                { name: "陕西", value: [109.1162, 34.2004, 80] },
+                { name: "甘肃", value: [103.5901, 36.3043, 56] },
+                { name: "青海", value: [101.4038, 36.8207, 10] },
+                { name: "宁夏", value: [106.3586, 38.1775, 18] },
+                { name: "新疆", value: [87.9236, 43.5883, 0] },
+                { name: "广东", value: [113.12244, 23.009505, 123] },
+                { name: "广西", value: [108.479, 23.1152, 59] },
+                { name: "海南", value: [110.3893, 19.8516, 14] },
+
+            ]
+            // 实例化对象
         var myChart = echarts.init(document.querySelector('.chian_map'));
 
         var option = {
@@ -217,7 +215,7 @@ let first_level = {
                     type: 'scatter',
                     coordinateSystem: 'geo',
                     symbol: 'pin',
-                    symbolSize: [50,50],
+                    symbolSize: [50, 50],
                     label: {
                         normal: {
                             show: true,
@@ -225,7 +223,7 @@ let first_level = {
                                 color: '#fff',
                                 fontSize: 9,
                             },
-                            formatter (value){
+                            formatter(value) {
                                 return value.data.value[2]
                             }
                         }
@@ -307,7 +305,7 @@ let first_level = {
         // 点击散点图上的点
 
         function eclick(params) {
-            if (params.seriesType === 'scatter'){
+            if (params.seriesType === 'scatter') {
                 console.log("点击执行： ", params);
                 console.log("点击执行： ", params.seriesType);
                 var store = require('store');
@@ -324,15 +322,16 @@ let first_level = {
 
 
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
 
     },
 
     // device-rate 设备xx率
     // 参考 https://gallery.echartsjs.com/editor.html?c=x8UGFy_Nb
-    device_rate(value){
+    device_rate(value) {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.device-rate'));
 
@@ -367,7 +366,7 @@ let first_level = {
                 show: false,
                 data: []
             },
-       
+
             series: [{
                 name: 'Line 1',
                 type: 'pie',
@@ -410,10 +409,10 @@ let first_level = {
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
+        window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
     },
 
 

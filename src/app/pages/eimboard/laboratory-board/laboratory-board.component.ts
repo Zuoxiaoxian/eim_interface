@@ -7,18 +7,28 @@ let rtm3a = require('../../../../assets/eimdoard/rtm3/js/rtm3a');
 })
 export class LaboratoryBoardComponent implements OnInit {
 
+  timer;
   constructor() { }
 
   ngOnInit(): void {
 
     setTimeout(() => {
-      this.initChart();
+      // this.initChart();
     }, 1000);
+    this.timer = setInterval(f =>{
+      this.initChart();
+    },1000)
   }
 
   initChart(){
     let mychart = document.getElementById('chart_1');
+    mychart = echarts.init(mychart)
     rtm3a.create_semicircle(parseInt((Math.random()*100).toString()),mychart);
+  }
+
+  //组件销毁
+  ngOnDestroy(){
+    clearInterval(this.timer)
   }
 
 }

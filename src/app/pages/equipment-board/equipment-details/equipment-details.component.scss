@@ -7,7 +7,6 @@
     .first_third,
     .sceond_fisrt,
     .sceond_third {
-        height: 33%;
         width: 100%;
         display: flex;
         box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
@@ -35,71 +34,6 @@
         top: -17px;
         left: -7px;
         min-width: 80px;
-    }
-    .andon_status {
-        width: 14%;
-        position: relative;
-        .andon_color {
-            border: 3px solid rgb(157, 195, 230);
-            border-radius: 21px;
-            height: 74%;
-            .last {
-                border-bottom-left-radius: 17px;
-                border-bottom-right-radius: 17px;
-            }
-            .first {
-                border-top-left-radius: 17px;
-                border-top-right-radius: 17px;
-            }
-        }
-        .andon_status_font {
-            padding: 3px;
-            color: white;
-            font-size: 12px;
-        }
-        .andon_img {
-            background: url('/assets/eimdoard/equipment/images/triangle.png');
-            height: 20%;
-            background-size: cover;
-            -webkit-background-size: cover;
-            -o-background-size: cover;
-            background-position: center center;
-            margin-left: 10px;
-        }
-    }
-    .andon_status_chart {
-        width: 86%;
-        display: flex;
-        flex-wrap: wrap;
-        #device_status {
-            height: 55%;
-            width: 50%;
-            box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
-        }
-        #operatingRate {
-            height: 55%;
-            width: 50%;
-            box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
-        }
-        .chart {
-            height: 112px;
-            padding-left: 21px;
-            width: 100%;
-        }
-    }
-    .red {
-        background-image: linear-gradient(rgb(208, 73, 67), rgb(141, 113, 127));
-        color: white;
-        height: 100%;
-        padding-top: 13%;
-        ;
-    }
-    .blue {
-        background-color: blue;
-        color: white;
-        height: 100%;
-        padding-top: 13%;
-        ;
     }
     .first_second_font {
         text-align: left;
@@ -219,12 +153,6 @@
     .width_70 {
         width: 70%;
     }
-    .height_32 {
-        height: 32%;
-    }
-    .height_33 {
-        height: 33%;
-    }
     .h_46_w_30 {
         height: 46%;
         width: 30%;
@@ -234,30 +162,6 @@
     .h_46_w_70 {
         height: 46%;
         width: 70%;
-    }
-    .height_50 {
-        height: 50%;
-    }
-    .height_30 {
-        height: 30%
-    }
-    .height_24 {
-        height: 24%;
-    }
-    .height_20 {
-        height: 20%;
-    }
-    .height_58 {
-        height: 58%;
-    }
-    .height_48 {
-        height: 48%;
-    }
-    .height_38 {
-        height: 38%;
-    }
-    .height_36 {
-        height: 36%;
     }
     .overflow_height_85 {
         height: 85%;

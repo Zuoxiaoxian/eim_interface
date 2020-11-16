@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { async } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { LangChangeEvent, TranslatePipe, TranslateService } from '@ngx-translate/core';
+import {  TranslateService } from '@ngx-translate/core';
 import { LayoutService } from '../../../@core/utils/layout.service';
-import { mq_config } from '../../../appconfig';
-import { EmqClientService } from '../../../services/emq-client/emq-client.service';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
-import { colors, dateformat,guid2, rgb_del_red,getMessage,painting_time } from '../equipment-board';
+import { colors, dateformat, rgb_del_red,getMessage,painting_time,create_third_chart_line } from '../equipment-board';
 
 let equipment_four_road = require('../../../../assets/eimdoard/equipment/js/equipment-four-road');
 let rtm3a = require('../../../../assets/eimdoard/rtm3/js/rtm3a');
@@ -252,9 +250,9 @@ export class EquipmentFourRoadComponent implements OnInit {
     this.timer60s = setInterval(f =>{
       this.get_device_mst_progress();
     },60000)
-    this.initChart();
     setTimeout(() => {
       this.initChart();
+      this.in();
     }, 1000);
    
   }
@@ -276,42 +274,7 @@ export class EquipmentFourRoadComponent implements OnInit {
   
   //初始化表格
   initChart(){
-    let data_1 = {
-      d_arr:[[12, 56, 36, 86, 98, 86],
-               [45, 20, 36, 106, 80, 16],
-              [90, 10, 36, 96, 80, 10],
-              [90, 56, 36, -6, -50, -70]],
-      title_arr:["空闲", "占位", "运行", "利用率"],
-      color_arr:[{
-        start: "rgba(155, 101, 229)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        start: "rgba(71, 173, 245)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        start: "rgba(82, 249, 107)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        color: "#00EAFF"
-    }
-  ],
-    xData:[1,2,3,4,5,6]
-    }
-    let myChart = echarts.init(document.getElementById('device_status'));
-    equipment_four_road.create_device_status(data_1,myChart);
-
     
-    let myChart_1 = echarts.init(document.getElementById('device_circular_1'));
-    equipment_four_road.create_device_circular(
-      {title:this.language?'SafetyLampStatus':'安灯状态',message:this.language?'LastMonth':'上个月'},myChart_1);
-
-    let myChart_2 = echarts.init(document.getElementById('device_circular_2'));
-    equipment_four_road.create_device_circular(
-      {title:this.language?'SafetyLampStatus':'安灯状态',message:this.language?'ThisMonth':'本月'},myChart_2);
-
     let data = {
       title:['一级警告','二级警告'],
       yAxis:['周一','周二','周三','周四','周五','周六','周日'],
@@ -341,15 +304,8 @@ export class EquipmentFourRoadComponent implements OnInit {
       if(this[`chart_${i+1}`])this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:[],index:1});
     })
 
-    this.create_third_chart_line();
+    create_third_chart_line(rtm3a,this);
 
-    let operatingRate = echarts.init(document.getElementById('operatingRate'));
-    var gauge_data_4 = {
-      xAxisData:['0时','1时','2时','3时','4时','5时','6时','7时','8时','9时','10时','11时','12时','13时','14时','15时','16时','17时'
-        ,'18时','19时','20时','21时','22时','23时'],
-      seriesData:[710, 312, 321,754, 500, 830, 710, 521, 504, 660, 530, 410,710, 312, 321,754, 500, 830, 710, 521, 504, 660, 530, 410],
-    } 
-    rtm3.create_right_buttom(gauge_data_4,operatingRate);
 
   }
 
@@ -367,24 +323,6 @@ export class EquipmentFourRoadComponent implements OnInit {
 
 
 
-  create_third_chart_line(){
-    var yearPlanData=[],yearOrderData = [],differenceData = [],visibityData = [],xAxisData = [];
-    for (var i = 0; i < 12; i++) {
-      yearPlanData.push(Math.round(Math.random() * 900) + 100);
-      yearOrderData.push(Math.round(Math.random() * yearPlanData[i]));
-      differenceData.push(yearPlanData[i] - yearOrderData[i]);
-      visibityData.push(yearOrderData[i]);
-      xAxisData.push((i + 1).toString() + "月");
-    }
-    rtm3a.create_third_chart_line({
-      yearPlanData:yearPlanData,
-      yearOrderData:yearOrderData,
-      differenceData:differenceData,
-      visibityData:visibityData,
-      xAxisData:xAxisData,
-      title:this.language?'MonthlyChartOfTemperatureAndHumidity':'温湿度月度图线'
-    }, 'third_second');
-  }
 
 //颜色的赋值
   color(){

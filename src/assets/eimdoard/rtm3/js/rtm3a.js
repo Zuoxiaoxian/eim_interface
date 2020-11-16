@@ -71,9 +71,10 @@ let rtm3a = {
         //   // 显示数值
         //   itemStyle : { normal: {label : {show: true}}}
         // },
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
 
         if (option && typeof option === "object") {
             myChart.setOption(option);
@@ -177,9 +178,10 @@ let rtm3a = {
                 }
             ]
         }
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
         myChart.setOption(option)
         myChart.resize();
     },
@@ -329,9 +331,10 @@ let rtm3a = {
                 }
             ]
         }
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
 
         myChart.setOption(option);
         myChart.resize();
@@ -345,7 +348,7 @@ let rtm3a = {
         ];
 
         option = {
-            backgroundColor: '#0E1327',
+            // backgroundColor: '#0E1327',
             series: [{ //内圆
                     type: 'pie',
                     radius: '85%',
@@ -377,7 +380,7 @@ let rtm3a = {
 
                 {
                     type: 'gauge',
-                    radius: '40%',
+                    radius: '85%',
                     startAngle: '180',
                     endAngle: '0',
                     pointer: {
@@ -425,9 +428,10 @@ let rtm3a = {
             ]
         };
 
-        window.addEventListener('resize', f => {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
         myChart.setOption(option);
         myChart.resize();
     }

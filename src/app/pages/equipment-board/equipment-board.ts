@@ -14,7 +14,7 @@ export const rgb_del_red = ()=> {//rgb颜色随机
 export const colors = [
     '#2074E8',
     '#00FC00',
-    '#0000F8',
+    
     '#F8FC00',
     '#00FCF8',
     '#F800F8',
@@ -41,6 +41,7 @@ export const colors = [
     '#7030A0',
     '#202420',
     '#F8FCF8',
+    '#0000F8',
 ]
 
 
@@ -143,4 +144,43 @@ export const  getMessage=(f,data)=>{
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     }
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}
+
+
+export const list_jion =(list,name,isthis)=>{
+  list.forEach((f,i)=>{
+    isthis[name][f].forEach(element => {
+      element.value.push(parseInt((Math.random()*100).toString()))
+      if(element.value.length > 10)element.value.splice(0,1)
+    });
+  })
+}
+export const list_copy=(list,name,isthis)=>{
+  list.forEach((f,i)=>{
+    isthis[name][f] = JSON.parse(JSON.stringify(isthis.attrs));
+  })
+}
+
+export const create_third_chart_line=(rtm3a,isthis)=>{
+  if(!document.getElementById('third_second'))return;
+  if(echarts.init(document.getElementById('third_second')).getOption()){
+    echarts.init(document.getElementById('third_second')).resize();
+    return;
+  }
+  var yearPlanData=[],yearOrderData = [],differenceData = [],visibityData = [],xAxisData = [];
+  for (var i = 0; i < 12; i++) {
+    yearPlanData.push(Math.round(Math.random() * 900) + 100);
+    yearOrderData.push(Math.round(Math.random() * yearPlanData[i]));
+    differenceData.push(yearPlanData[i] - yearOrderData[i]);
+    visibityData.push(yearOrderData[i]);
+    xAxisData.push((i + 1).toString() + "月");
+  }
+  rtm3a.create_third_chart_line({
+    yearPlanData:yearPlanData,
+    yearOrderData:yearOrderData,
+    differenceData:differenceData,
+    visibityData:visibityData,
+    xAxisData:xAxisData,
+    title:isthis.language?'MonthlyChartOfTemperatureAndHumidity':'温湿度月度图线'
+  }, 'third_second');
 }

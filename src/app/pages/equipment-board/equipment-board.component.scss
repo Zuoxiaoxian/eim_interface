@@ -38,8 +38,15 @@
         color: white;
         margin-top: 1%;
     }
+    nb-icon {
+        position: absolute;
+        background: rgba(22, 67, 127, 1);
+        cursor: pointer;
+        width: 53px;
+        height: 53px;
+    }
     .body {
-        height: 90%;
+        height: 100%;
         width: 100%;
         margin-top: 14px;
         position: relative;

@@ -27,10 +27,18 @@ export class EquipmentBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.creatDateInterval();
-    // this.activateInfo.queryParams.subscribe(f =>{
-      // console.log(f);
-    //   if(f.str)this.title = f.str;
-    // })
+    this.activateInfo.queryParams.subscribe(f =>{
+      console.log(f);
+    })
+    var isthis = this;
+    //监听键盘 esc键
+    document.onkeydown=function(event){
+      var e = event || window.event || arguments.callee.caller.arguments[0];   
+      if(e&& e.keyCode==27){
+        console.log('关闭全屏')
+        isthis.is_not_fullscreen = true;
+      }
+    }
   }
 
   //获取当前时间对象
@@ -48,9 +56,9 @@ export class EquipmentBoardComponent implements OnInit {
 
   //点击返回按钮
   return_btn_click(){
-    this.showAllTemplate();
-    // console.log('返回上一级')
-    // window.history.go(-1);
+    
+    console.log('返回上一级')
+    window.history.go(-1);
   }
 
   //点击菜单
@@ -72,8 +80,9 @@ export class EquipmentBoardComponent implements OnInit {
 
    // 全屏切换
    showAllTemplate(){
-    const board = document.getElementsByTagName('ngx-equipment-board')[0];
-    const sf = <Screenfull>screenfull;
+    var board = document.getElementById('equipment')
+    // var board = document.getElementsByTagName('ngx-equipment-board')[0];
+    var sf = <Screenfull>screenfull;
     if (sf.isEnabled){ // sf.isEnabled 布尔值，判断是否允许进入全屏！
       this.is_not_fullscreen = sf.isFullscreen;
       sf.toggle(board)
