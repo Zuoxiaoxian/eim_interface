@@ -109,13 +109,13 @@ export class MenuComponent implements OnInit {
     var data = this.anniuparentmenuselects;
 
     //  加载 eleTree 模块
-    layui.config({
-      base: "./assets/pages/system-set/layui/module/"
-      // base: "../../../../assets/pages/system-set/layui/module/"
-      // base: "assets/pages/system-set/layui/module/"
-    }).extend({
-        eleTree: "eleTree/eleTree"
-    });
+    // layui.config({
+    //   base: "./assets/pages/system-set/layui/module/"
+    //   // base: "../../../../assets/pages/system-set/layui/module/"
+    //   // base: "assets/pages/system-set/layui/module/"
+    // }).extend({
+    //     eleTree: "eleTree/eleTree"
+    // });
  
 
     var anniuparentmenu_treeSelect = this.anniuparentmenu_treeSelect;

@@ -28,9 +28,10 @@ import { OperationLogComponent } from './operation-log/operation-log.component';
 import { GocronComponent } from './gocron/gocron.component';
 import { GocronFormComponent } from './gocron/gocron-form/gocron-form.component';
 import { GocronFormNodeComponent } from './gocron/gocron-form-node/gocron-form-node.component';
+import { ActionComponent } from './user-employee/action/action.component';
 @NgModule({
   declarations: [SystemSetComponent, RoleComponent, MenuComponent, EmployeeComponent, MyTableNg2Component, SecurityLogComponent, UserEmployeeComponent, 
-    UserEmployeeGroupComponent, LayuiTableComponent, AgTableComponent, AgGridActionComponent, OperationLogComponent, GocronComponent, GocronFormComponent, GocronFormNodeComponent, ],
+    UserEmployeeGroupComponent, LayuiTableComponent, AgTableComponent, AgGridActionComponent, OperationLogComponent, GocronComponent, GocronFormComponent, GocronFormNodeComponent, ActionComponent, ],
   imports: [
     CommonModule,
     SystemSetRoutingModule,

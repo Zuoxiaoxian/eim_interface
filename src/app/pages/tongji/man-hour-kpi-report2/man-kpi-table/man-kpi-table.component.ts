@@ -1,6 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MAN_HOUR_KPI_REPORT_SETTINGS } from '../../tongji_tablesettings';
-import {LocalDataSource} from "@mykeels/ng2-smart-table";
 import { Observable } from 'rxjs';
 import { HttpserviceService } from '../../../../services/http/httpservice.service';
 import { ManKpiReport2Service } from '../man-hour-kpi-report2.service';
@@ -43,7 +41,6 @@ export class ManKpiTableComponent implements OnInit {
 
     // 订阅方,得到属性  导出!
     this.mankpiservice.currentMessage.subscribe(res=>{
-      console.log("订阅方：", res);
       if (res){
         this.download()
       }
@@ -92,10 +89,10 @@ export class ManKpiTableComponent implements OnInit {
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
       { field: 'devicename', headerName: '设备名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true, pinned: 'left'},
-      { field: 'department', headerName: '部门信息', resizable: true, minWidth: 10},
+      { field: 'department', headerName: '试验室', resizable: true, minWidth: 10},
       { field: 'deviceid', headerName: '设备id',  resizable: true, minWidth: 10},
       
-      { field: 'CustomTime', headerName: '自定义统计时间', 
+      { field: 'CustomTime', headerName: '自定义统计时间(默认最近一周)', 
         children:[
           { field: 'starttime', headerName: '开始时间', resizable: true},
           { field: 'endtime', headerName: '结束时间', resizable: true},
@@ -108,7 +105,7 @@ export class ManKpiTableComponent implements OnInit {
       { field: 'stop', headerName: '空闲时长(h)', resizable: true, minWidth: 10},
       { field: 'placeon', headerName: '占位时长(h)', resizable: true, minWidth: 10}, // 自定义设备编号！
       { field: 'warning', headerName: '维保时长(h)', resizable: true, minWidth: 10},
-      { field: 'belonged', headerName: '负责人', resizable: true, minWidth: 10},
+      // { field: 'belonged', headerName: '负责人', resizable: true, minWidth: 10},
       // 这个是跳转到详情kpi的 https://www.ag-grid.com/javascript-grid-cell-rendering-components/
       // { field: 'option', headerName: '详情', resizable: true, minWidth: 10, cellRenderer: 'optionCellRenderer'},
       {
@@ -156,9 +153,8 @@ export class ManKpiTableComponent implements OnInit {
     // }
     // 得到设备信息！
     this.http.callRPC(table, methond, colmun).subscribe((res)=>{
-      // console.log("get_menu_role", result)
+      console.log("-----------man-kpi-table---", res)
       var get_employee_limit = res['result']['message'][0]
-      console.log("ag-grid-----====---------------------------->>>", get_employee_limit);
 
       this.isloding = false;
       // 发布组件，编辑用户的组件
@@ -322,11 +318,10 @@ export class ManKpiTableComponent implements OnInit {
     var colmun = {
     }
     this.http.callRPC('device', 'dev_get_device_department', colmun).subscribe((res)=>{
-      // console.log("get_menu_role", result)
+      console.log("得到 tree input 的数据！", res)
       var tree_data = res['result']['message'][0]
       if (tree_data.code === 1){
         var treedata = tree_data.message;
-        console.log("dev_get_device_department---------------------------->>>", treedata);
         var handled_treedata = this.handle_treedata_befare(treedata); // 将数据处理成 tree data 需要的格式！
         // tree input             
         this.input_tree(handled_treedata);
@@ -387,8 +382,6 @@ export class ManKpiTableComponent implements OnInit {
         exit_td_obj_ch_list.push(td_obj_ch);
       }
     }
-    console.log("----------------->>>>> 部门\t不\t重复的", obj_list);
-    console.log("\n\n\n----------------->>>>> 部门重复的", exit_td_obj_ch_list);
     obj_list.forEach(obj=>{ // 部门节点 + 部门下的子节点
       exit_td_obj_ch_list.forEach(exit_obj=>{  // 部门下的子节点
         if (obj.label === exit_obj.parent_label ){
@@ -397,13 +390,11 @@ export class ManKpiTableComponent implements OnInit {
         }
       })
     })
-    console.log("----------------->>>>> 部门\t不\t重复的=====处理后的！  ", obj_list);
     return obj_list;
   };
   // 得到选择的树状数据，根据这些数据 得到table 
   get_agdata_with_selected_tree(selected_tree:any){
     console.log("得到选择的树状数据，根据这些数据 得到table ", selected_tree);
-
   }
   // ================================================ tree input
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { Observable } from 'rxjs';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
@@ -31,20 +31,17 @@ export class UserEmployeeComponent implements OnInit {
   constructor(protected dialogRef: NbDialogRef<UserEmployeeComponent>, private http: HttpserviceService,private userinfo: UserInfoService, 
     private publicservice: PublicmethodService, ) { 
 
-    this.getsecurity('employee', 'get_rolename', {}, this.http).subscribe((res: any[])=>{
-      // 初始化角色名
-      localStorage.setItem("employee_role_all_", JSON.stringify(res));
-    });
+    // this.getsecurity('employee', 'get_rolename', {}, this.http).subscribe((res: any[])=>{
+    //   // 初始化角色名
+    //   localStorage.setItem("employee_role_all_", JSON.stringify(res));
+    // });
 
-    this.getsecurity('groups', 'get_group', {}, this.http).subscribe((res: any[])=>{
-      // 初始化用户组
-      localStorage.setItem("employee_group_all_", JSON.stringify(res));
-      
-    });
+    // this.getsecurity('groups', 'get_group', {}, this.http).subscribe((res: any[])=>{
+    //   // 初始化用户组
+    //   localStorage.setItem("employee_group_all_", JSON.stringify(res));
+    // });
     
     this.login_name = this.userinfo.getName();
-    console.log("LLLLLLLLLLLLLLLLLLL", this.login_name);
-
   }
 
   // 登录用户名
@@ -58,7 +55,14 @@ export class UserEmployeeComponent implements OnInit {
 
   ngAfterViewInit(){
     this.layuiform();
-    
+  }
+
+
+
+  ngOnDestroy(){
+    // 删除 man-hour-kpi-report2-buttons
+    // localStorage.removeItem("employee_role_all_");
+    // localStorage.removeItem("employee_group_all_");
   }
 
 
@@ -69,9 +73,6 @@ export class UserEmployeeComponent implements OnInit {
 
     var login_name = this.login_name;
     var publicservice = this.publicservice;
-    var SavSuccess = this.SavSuccess;
-    var SavDanger = this.SavDanger;
-    var SavWarning = this.SavWarning;
     var dialogRef = this.dialogRef;
     
     var success = this.success;
@@ -160,38 +161,33 @@ export class UserEmployeeComponent implements OnInit {
         }
       })
 
-      form.on('radio(filter)', function(data){
-        console.log(data.elem); //得到radio原始DOM对象
-        console.log(data.value); //被点击的radio的value值
-      });
+      
       var select_roleid = [];
       var select_group = [];
       var res_list;
       var $parenttitle = $("#roleinput");
 
-      var res = JSON.parse(localStorage.getItem("employee_role_all_"));
-      var groups = JSON.parse(localStorage.getItem("employee_group_all_"))["message"];;
-      console.log("----------初始化角色名",res,"\n\n")
-      console.log("----------初始化角色名",groups,"\n\n")
+
+      var res;
+      var groups;
+
+      
+      var res = JSON.parse(localStorage.getItem("employee_rolename"));
+      var groups = JSON.parse(localStorage.getItem("employee_group_all_"))["message"];
+
+      
+    // 在用户的初始化时，得到，放到缓存中！
+      console.log("----------初始化角色名",res,"\n\n", localStorage.getItem("employee_rolename"))
+      console.log("----------初始化角色名",groups,"\n\n", localStorage.getItem("employee_group_all_"))
       // 初始化角色名
       for (let r of res){
-        // var r_str = `<input type="checkbox" name="${r["role"]}" title="${r["role_name"]}">`;
-        // select_roleid.push(r["role"])
         var r_str = `<input type="checkbox" name="${r["rid"]}" title="${r["role_name"]}">`;
         select_roleid.push(r["rid"])
         $parenttitle.append(r_str);
       }
       res_list = res
-
-
       // 初始化 用户组-----------------------
-      var employee_group = [
-        {group: "huanbao", group_name: "环保试验室", groupid: 11},
-        {group: "huanjing", group_name: "环境试验室", groupid: 22},
-        {group: "jiegou", group_name: "结构试验室", groupid: 33},
-        {group: "lihua", group_name: "理化试验室",groupid: 44},
-        {group: "xinnengyuan", group_name: "新能源试验室", groupid: 55}
-      ]
+    
       var $employee_group = $("#employeegroupinput");
       for (let g of groups){
         // var g_str = `<input type="checkbox" name="${g["group_name"]}" title="${g["group"]}">`;
@@ -201,33 +197,23 @@ export class UserEmployeeComponent implements OnInit {
         $employee_group.append(g_str);
       }
       // 初始化 用户组-----------------------
-
-
       form.render("radio"); // 刷新单选框！
       form.render("select"); // 刷新下拉框！
       form.render("checkbox"); // 刷新复选框！
-      
-
       form.on("submit(employee)", function(data){
         console.log("employeegroupinput》》》》》》》》》》》》》》", data.field)
-        // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
         var send_data = {};
-        var send_data_ = {};
         send_data["employeeid"] = null;
         send_data["active"] = data.field["active"] === 'on'? 1: 0;
         send_data["employeeno"] = data.field["employeeno"];
         send_data["loginname"] = data.field["loginname"];
-
         var send_data_list = [];
         send_data_list.push(send_data);
         getsecurity('employee', 'get_rolename', {}, http).subscribe((res: any[])=>{
-          console.log("-------------------->>>>>", select_roleid, res_list)
           var send_data_item = {};
           res_list.forEach(res => {
             send_data_item[res["rid"]] = data.field[res["rid"]]? true: false;
           });
-
-          console.log("************************",res)
           res.forEach(r => {
             var select_role_dict = {};
             select_roleid.forEach((item)=>{
@@ -237,7 +223,6 @@ export class UserEmployeeComponent implements OnInit {
               }
             })
           });
-
           // -------------------------------------------
           // 模拟用户组 select_group [huanbao, huanjing,jiegou,lihua,xinnengyuan]
           var send_group_item_list = []
@@ -247,9 +232,7 @@ export class UserEmployeeComponent implements OnInit {
             send_group_item["group"] = item;
             send_group_item_list.push(send_group_item)
           })
-
           console.log("employee_group,   send_group_item_list,   ", groups,  send_group_item_list )
-
           groups.forEach(group=>{
             send_group_item_list.forEach(select=>{
               if (select["groupid"] && group["groupid"] == select["group"].split('_')[0]){
@@ -291,8 +274,6 @@ export class UserEmployeeComponent implements OnInit {
                 var operationdata = "姓名:" + send_data_list[0]["name"] + "," + "域账号:" + send_data_list[0]["loginname"];
                 var option = '新增用户'; 
                 that.RecordOperation(1, option, operationdata)
-                
-                
               }else{
                 // 失败
                 // SavDanger["conent"] = res
@@ -305,13 +286,13 @@ export class UserEmployeeComponent implements OnInit {
           }
 
         });
-        
-        
 
         // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
         // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
         return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
       })
+
+
     });
 
 
@@ -329,10 +310,10 @@ export class UserEmployeeComponent implements OnInit {
 
 
 
+
   // 请求得到 表get_employee中的数据！
   getsecurity(table: string, method: string, colums: object, http){
     return new Observable((res)=>{
-
       http.callRPC(table, method, colums).subscribe((result)=>{
         console.log("*************---------------------****************", result)
         var employee_result =  result['result']['message'][0];
@@ -354,9 +335,6 @@ export class UserEmployeeComponent implements OnInit {
 
   // option_record
   RecordOperation(result,transactiontype, infodata){
-    console.warn("==============>", this.userinfo.getLoginName())
-    console.warn("infodata==============>", infodata)
-    console.warn("==============>")
     if(this.userinfo.getLoginName()){
       var employeeid = this.userinfo.getEmployeeID();
       var result = result; // 1:成功 0 失败

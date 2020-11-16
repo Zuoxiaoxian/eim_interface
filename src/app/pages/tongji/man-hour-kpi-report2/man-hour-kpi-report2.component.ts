@@ -50,10 +50,10 @@ export class ManHourKpiReport2Component implements OnInit,OnDestroy {
     ]
   }
 
-  // 下拉框---资产编号
+  // 下拉框---设备编号
   assetsnumber = {
-    placeholder: "请选择资产编号",
-    name: '资产编号',
+    placeholder: "请选择设备编号",
+    name: '设备编号',
     datas: [
       { name: 'GT1918-1720TM' },
       { name: 'GT1917-1819TM' },
@@ -157,17 +157,14 @@ export class ManHourKpiReport2Component implements OnInit,OnDestroy {
     // 根据menu_item_role得到 该页面对应的 button！
     var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
     if (button_list){
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      console.log(button_list)
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      console.log("------------------------------@@@@@@@@@@@@@@", )
+      console.log("^^^^^^^^^^^^^^^button_list^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",button_list);
       var man_hour_kpi_report2_buttons = localStorage.getItem("man-hour-kpi-report2-buttons") ===null? false: JSON.parse(localStorage.getItem("man-hour-kpi-report2-buttons"))
       if (man_hour_kpi_report2_buttons){
         this.buttons = man_hour_kpi_report2_buttons["buttons"];
         this.buttons2 = man_hour_kpi_report2_buttons["buttons2"];
       }else{
         this.publicservice.get_current_pathname().subscribe(res=>{
-          console.log("get_current_pathname   ", res);
+          console.log("button_list  else------   ", res);
           var currentmenuid = res["id"];
           var buttons = [];
           // 分离搜索、导入、导出
@@ -184,7 +181,7 @@ export class ManHourKpiReport2Component implements OnInit,OnDestroy {
             }
           });
   
-                  // 对button进行排序 根据 title(导入、导出), 或者是 permission(menu:import)
+          // 对button进行排序 根据 title(导入、导出), 或者是 permission(menu:import)
           buttons2.forEach(b=>{
             switch (b["permission"].split(":")[1]) {
               case "query":
@@ -220,7 +217,6 @@ export class ManHourKpiReport2Component implements OnInit,OnDestroy {
 
   // button按钮
   action(actionmethod){
-    console.log("++++++++++++++++++++action(actionmethod)++++++++++++++++++++++++++++", actionmethod);
     var method = actionmethod.split(":")[1];
     console.log("--------------->method", method)
     switch (method) {
@@ -265,7 +261,8 @@ export class ManHourKpiReport2Component implements OnInit,OnDestroy {
         daterange:daterange_data
       }
     );
-    this.RecordOperation("搜索工时", 1, '');
+    var data = "department:" + String(departmentselect_data) + "," + 'device_tpye:' + String(device_tpye_data) +','+'daterange:' + String(daterange_data);
+    this.RecordOperation("搜索工时", 1, data);
 
   }
 
@@ -278,9 +275,7 @@ export class ManHourKpiReport2Component implements OnInit,OnDestroy {
 
   // option_record
 RecordOperation(option, result,infodata){
-  console.warn("==============>", this.userinfo.getLoginName())
   console.warn("infodata==============>", infodata)
-  console.warn("==============>")
   if(this.userinfo.getLoginName()){
     var employeeid = this.userinfo.getEmployeeID();
     var result = result; // 1:成功 0 失败

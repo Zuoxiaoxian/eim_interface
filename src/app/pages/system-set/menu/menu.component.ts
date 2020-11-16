@@ -39,6 +39,7 @@ export class MenuComponent implements OnInit {
   buttons;
   isactions;
 
+  
 
   constructor(private http: HttpserviceService, private localstorageservice: LocalStorageService,
     private publicservice: PublicmethodService, private dialogService: NbDialogService,

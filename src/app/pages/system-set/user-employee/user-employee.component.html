@@ -30,8 +30,9 @@
 
 
         <div class="row">
-            <div class="col-md-12">
-                <ngx-ag-table #ag_Grid   (nzpageindexchange)="nzpageindexchange($event)" [children_call_for_updata_table]="children_call_for_updata_table"></ngx-ag-table>
+            <div class="col-md-12" [nbSpinner]="isloding" nbSpinnerStatus="basic">
+                <!-- [updategetemployee]="updategetemployee()" -->
+                <ngx-ag-table #ag_Grid   (nzpageindexchange)="nzpageindexchange($event)"></ngx-ag-table>
             </div>
         </div>
     </nb-card-body>

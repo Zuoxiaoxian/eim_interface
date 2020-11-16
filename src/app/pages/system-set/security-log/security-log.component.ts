@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 
-import { SECURITY_TABLE } from '../table_setting';
-import {LocalDataSource} from "@mykeels/ng2-smart-table";
 
 import { menu_button_list } from '../../../appconfig';
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';

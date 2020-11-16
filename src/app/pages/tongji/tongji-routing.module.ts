@@ -10,13 +10,11 @@ import { DeviceManageComponent } from './device-manage/device-manage.component';
 import { TestTaskManageComponent } from './test-task-manage/test-task-manage.component';
 
 // 设备KPI报表
-import { DeviceKpiReportComponent } from './device-kpi-report/device-kpi-report.component';
 
 // 设备KPI报表2
 import { DeviceKpiReport2Component } from './device-kpi-report2/device-kpi-report2.component';
 
 // 工时kpi报表
-import { ManHourKpiReportComponent } from './man-hour-kpi-report/man-hour-kpi-report.component';
 
 // kpi报表详情---> 适应于设备kpi报表、工时kpi
 import { KpiDetailComponent } from './kpi-detail/kpi-detail.component';

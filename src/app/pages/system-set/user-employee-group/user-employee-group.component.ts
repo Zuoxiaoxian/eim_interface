@@ -4,8 +4,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SYSMENU,menu_button_list,employeegroup_action } from '../../../appconfig';
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';
 
-import { EMPLOYEEGROUP_TABLE } from '../table_setting';
-import {LocalDataSource} from "@mykeels/ng2-smart-table";
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 import { Observable } from 'rxjs';
 import { NbDialogService } from '@nebular/theme';
@@ -30,11 +28,7 @@ export class UserEmployeeGroupComponent implements OnInit {
   @ViewChild("ag_Grid") agGrid: any;
 
 
-  table_data = {
-    settings: EMPLOYEEGROUP_TABLE,
-    // source: null,
-    source: new LocalDataSource(),
-  };
+
 
   // 前端要展示的button 主要是：增、删、改
   buttons;
@@ -492,10 +486,7 @@ ngOnDestroy(){
   danger(publicservice){
     publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"删除失败!"});
   }
-
-
   // =================================================agGrid
-
   tableDatas = {
     action: true,
     totalPageNumbers: 0, // 总页数
@@ -611,14 +602,7 @@ ngOnDestroy(){
     this.getetabledata(event);
   }
 
-    // 该方法是让agGrid子组件调用的！
-  children_call_for_updata_table(){
-    console.log("=========================")
-    console.log("=========================该方法是让agGrid子组件调用的！",);
-    console.log("=========================");
-    // 更新table
-
-  }
+ 
   
 
   // =================================================agGrid
@@ -626,9 +610,7 @@ ngOnDestroy(){
 
   // option_record  
   RecordOperation(result,transactiontype, infodata){
-    console.warn("==============>", this.userinfo.getLoginName())
-    console.warn("infodata==============>", infodata)
-    console.warn("==============>")
+    console.warn("用户组==============>", this.userinfo.getLoginName())
     if(this.userinfo.getLoginName()){
       var employeeid = this.userinfo.getEmployeeID();
       var result = result; // 1:成功 0 失败

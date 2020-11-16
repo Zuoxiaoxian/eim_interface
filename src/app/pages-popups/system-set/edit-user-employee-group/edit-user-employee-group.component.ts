@@ -83,10 +83,6 @@ export class EditUserEmployeeGroupComponent implements OnInit {
       // 验证 表单
       form.verify({
         group_: function(value, item){
-          console.log("验证、表单: AddEmployee",EmployeeGroup);
-          console.log("验证、表单: employeeno",EmployeeGroup["group_"]);
-          console.log("验证、表单: value",value);
-          console.log("验证、表单: item",item);
           // sql注入和特殊字符 special_str
           var special_sql = EmployeeGroup['special_sql']["special_sql"];
           var special_str = EmployeeGroup['special_sql']["special_str"];
@@ -139,25 +135,20 @@ export class EditUserEmployeeGroupComponent implements OnInit {
       form.on("submit(submit)", function(data){
         //获取表单区域所有值
         console.log("v======获取表单区域所有值",data.field) //当前容器的全部表单字段，名值对形式：{name: value}
-        var data1 = form.val("employeegroup");
         console.log(data.field) //被执行事件的元素DOM对象，一般为button对象
         var send_data = data.field;
         // send_data["active"] = send_data["active"] === undefined? 1: 0;
         send_data["active"] = send_data["active"] === "on"? 1: 0;
         send_data["groupid"] = rowdata["groupid"];
         send_data["id"] = rowdata["id"];
-        
         send_data["createdon"] = rowdata["createdon"];
         send_data["createdby"] = rowdata["createdby"];
-
-        console.log("提交修改的",  send_data, data1, data1["active"]) //被执行事件的元素DOM对象，一般为button对象
         // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
         // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
 
 
         // 更新修改的数据！ update_employee
         getsecurity("groups", "update_group",send_data,http).subscribe((res)=>{
-          console.log("update_group", res, send_data);
           if (res ===1 ){
             // publicmethod
             // publicmethod.toastr(UpSuccess);
@@ -197,7 +188,7 @@ export class EditUserEmployeeGroupComponent implements OnInit {
   getsecurity(table: string, method: string, colums: object, http){
     return new Observable((res)=>{
       http.callRPC(table, method, colums).subscribe((result)=>{
-        console.log("更新用户信息！", result)
+        // console.log("更新用户信息！", result)
         var result =  result['result']['message'][0];
         res.next(result)
       })
@@ -216,8 +207,6 @@ export class EditUserEmployeeGroupComponent implements OnInit {
   // option_record
   RecordOperation(result,transactiontype, infodata){
     console.warn("==============>", this.userinfo.getLoginName())
-    console.warn("infodata==============>", infodata)
-    console.warn("==============>")
     if(this.userinfo.getLoginName()){
       var employeeid = this.userinfo.getEmployeeID();
       var result = result; // 1:成功 0 失败
