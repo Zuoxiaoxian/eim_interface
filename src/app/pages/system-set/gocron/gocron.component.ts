@@ -17,8 +17,6 @@ export class GocronComponent implements OnInit {
   formstatus = true;
   ngOnInit(): void {
     console.warn('初始化');
-    this.datatask();
-    this.datatasknode();
     this.get_cron_token();
 
   }
@@ -125,6 +123,8 @@ export class GocronComponent implements OnInit {
       console.warn('go_cron_token', go_cron_token);
       localStorage.setItem('gocron_token', go_cron_token);
     });
+    this.datatask();
+    this.datatasknode();
   }
   results = [];
   datatask(): void {

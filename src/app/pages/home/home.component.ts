@@ -66,6 +66,7 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    localStorage.removeItem("token_expired");
   }
 
 }

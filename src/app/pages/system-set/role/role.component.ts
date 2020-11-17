@@ -236,6 +236,7 @@ export class RoleComponent implements OnInit {
         this.buttons = buttons;
         this.buttons2 = buttons2;
   
+        console.log("-----------buttons--------",buttons)
         console.log("-----------buttons2--------",buttons2)
         // ====================================================
         var isactions = {};

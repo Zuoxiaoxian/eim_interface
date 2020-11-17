@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 
 declare let layui;
@@ -10,24 +10,33 @@ declare let $;
   templateUrl: './expired-token.component.html',
   styleUrls: ['./expired-token.component.scss']
 })
-export class ExpiredTokenComponent implements OnInit {
+export class ExpiredTokenComponent implements OnInit,OnDestroy {
 
-  @Input() title: string;
-  @Input() content: string;
+  // @Input() title: string;
+  // @Input() content: string;
   constructor(private dialogRef: NbDialogRef<ExpiredTokenComponent>,) { }
 
   ngOnInit(): void {
   }
+
+  title = "提示";
+  content = "您的登录已失效，请重新登录";
 
   ngAfterViewInit(){
     this.commit();
     
   }
 
+  ngOnDestroy(){
+    // 删除 man-hour-kpi-report2-buttons
+    localStorage.removeItem("token_expired");
+  }
+
 
   // × 关闭diallog   及关闭弹框
   closedialog(){
     this.dialogRef.close(false);
+    // localStorage.setItem("token_expired", 'false');
   }
   
   // 取消
@@ -44,6 +53,7 @@ export class ExpiredTokenComponent implements OnInit {
       form.render();
       form.on('submit(tooltip)', function(data){
         dialogRef.close(true);
+        // localStorage.setItem("token_expired", 'false');
         return false;
       });
 

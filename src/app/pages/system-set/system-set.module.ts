@@ -28,9 +28,12 @@ import { GocronComponent } from './gocron/gocron.component';
 import { GocronFormComponent } from './gocron/gocron-form/gocron-form.component';
 import { GocronFormNodeComponent } from './gocron/gocron-form-node/gocron-form-node.component';
 import { ActionComponent } from './user-employee/action/action.component';
+import { NewUserEmployeeComponent } from './new-user-employee/new-user-employee.component';
+import { ActionComponent as NewActionComponent } from './new-user-employee/action/action.component';
+import { TranActiveComponent } from './new-user-employee/tran-active/tran-active.component';
 @NgModule({
   declarations: [SystemSetComponent, RoleComponent, MenuComponent, EmployeeComponent, MyTableNg2Component, SecurityLogComponent, UserEmployeeComponent, 
-    UserEmployeeGroupComponent, LayuiTableComponent, AgTableComponent,  OperationLogComponent, GocronComponent, GocronFormComponent, GocronFormNodeComponent, ActionComponent, ],
+    UserEmployeeGroupComponent, LayuiTableComponent, AgTableComponent,  OperationLogComponent, GocronComponent, GocronFormComponent, GocronFormNodeComponent, ActionComponent, NewUserEmployeeComponent, NewActionComponent, TranActiveComponent, ],
   imports: [
     CommonModule,
     SystemSetRoutingModule,

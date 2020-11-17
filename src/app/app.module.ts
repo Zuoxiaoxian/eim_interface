@@ -43,6 +43,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { ComponentTModule } from './pages/tongji/components/componentT.module'
 
 import { AgGridModule } from 'ag-grid-angular';
+import { httpInterceptorProviders } from './services/http-interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -82,6 +83,10 @@ import { AgGridModule } from 'ag-grid-angular';
     
   ],
   bootstrap: [AppComponent],
+  providers:[
+    // httpInterceptorProviders 拦截器
+    httpInterceptorProviders
+  ]
 
   // 刷新
   // providers:[

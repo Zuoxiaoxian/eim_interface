@@ -91,7 +91,7 @@ export class AgTableComponent implements OnInit {
     this.alltotalPageNumbers = employee_agGrid["totalPageNumbers"]; // 数据库中的总条数
     this.defaultColDef = { // 默认的列设置
       // flex: 1,
-      editable: true,
+      editable: false,
       // sortable: true,
       // filter: true,
     };
@@ -255,41 +255,13 @@ export class AgTableComponent implements OnInit {
       console.log("table_header----", table_header);
       table_data.push(table_header);
       // var data = this.rowData;
-      var data = this.selectedRows;
+      // var data = this.selectedRows;
+      var data = Object.assign([], this.selectedRows);
       data.forEach(element => {
+        if(element["active"]){
+          element["active"] = '是'
+        }
         var data_item = [];
-        // var keys = [];
-        // 适用于用户管理
-        // var keys = ["name", "loginname", "role_name", "role", "active", "employeeno", "email", "phoneno", "pictureurl", "department", "lastsignondate"]
-        // 适用于用户组管理
-        // var keys = ["group", "group_name", "createdon", "createdby", "active"];
-        
-        // 适用于角色管理
-        // var keys = ["role_name", "role", "active", "createdby", "createdon", "lastupdatedby", "lastupdateon"];
-        
-        // 适用于安全日志
-        // var keys = ["application", "source", "machinename", "info", "logintime"];
-        
-        // switch (title) {
-        //   case "用户管理":
-        //     keys = ["name", "loginname", "role_name", "groups_name", "active", "employeeno", "email", "department", "lastsignondate"];
-        //     break;
-        //   case "用户组管理":
-        //     keys = ["group", "group_name", "createdon", "createdby", "active"]
-        //     break;
-        //   case "角色管理":
-        //     keys = ["role_name", "role", "active", "createdby", "createdon", "lastupdatedby", "lastupdateon"];
-        //     break;
-        //   case "安全日志":
-        //     keys = ["source", "employeeid", "info", "createdby"];
-        //     break;
-        //   case "操作日志":
-        //     keys = ["employeeid", "result", "transactiontype", "info", "createdby"];
-        //     break;
-        //   default:
-        //     break;
-        // }
-
         if (keys != []){
           for (let k of keys){
             data_item.push(element[k]);
@@ -337,7 +309,6 @@ export class AgTableComponent implements OnInit {
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    
     return wb;
   };
 
@@ -370,103 +341,6 @@ export class AgTableComponent implements OnInit {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
   }
-
-  // ============================== 渲染组件\和他的父组件都  调用的方法 这是ag-grid中的 操作！
-  // methodFromParent(rowdata){ // parent： 是否是父组件调用！
-    
-  //   // {value: name, action: "edit"}
-  //   var action = rowdata.action;
-  //   var value = rowdata.value;
-  //   switch (action) {
-      
-  //     case "edit":
-  //       console.log("edit--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-  //       // this.children_call_for_updata_table(); // 调用父组件，没用到
-  //       // true 表示编辑、删除成功
-  //       // var rowNode  = this.gridApi.getRowNode(String(cell.id));
-  //       // rowNode.setData(cell); // Cannot read property 'setData' of undefined 未能解决
-  //       this.rowData.forEach(row => {
-  //         // 用户组管理
-  //         if (row.id === value.id && row.id){
-  //           var row_index = this.rowData.indexOf(row);
-  //           value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-  //           this.rowData[row_index] = value
-  //         }
-  //         // 用户管理
-  //         if (row.employeeid === value.employeeid && row.employeeid){
-  //           var row_index = this.rowData.indexOf(row);
-  //           value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-  //           this.rowData[row_index] = value
-  //         }
-  //         // 角色管理 roleid
-  //         if (row.roleid === value.roleid && row.roleid){
-  //           var row_index = this.rowData.indexOf(row);
-  //           value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-  //           this.rowData[row_index] = value;
-
-            
-  //         }
-
-  //       });
-    
-  //       this.totalPageNumbers = this.rowData.length
-  //       this.gridApi.setRowData(this.rowData);
-  //       // 清空选择的！
-  //       this.selectedRows = [];
-        
-        
-  //       break;
-  //     case "remove":
-  //       console.log("remove--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-  //       this.rowData.forEach(row => {
-  //         // 用户组管理
-  //         if (row.id === value.id && row.id){
-  //           // console.log("remove--------------row》》》》》》》》》》》》》》》》》》》》》》》",row);
-  //           var row_index = this.rowData.indexOf(row);
-  //           this.rowData.splice(row_index, 1);
-  //           var operationdata = "组名称:" + value["group"] + "," + "组名称(en):" + value["group_name"];
-  //           var option = '删除用户组'; 
-  //           this.RecordOperation(option, 1, operationdata);
-  //           this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-  //         }
-  //         // 用户管理
-  //         if (row.employeeid === value.employeeid && row.employeeid){
-  //           var row_index = this.rowData.indexOf(row);
-  //           this.rowData.splice(row_index, 1);
-  //           var operationdata = "姓名:" + value["name"] + "," + "域账号:" + value["loginname"];
-  //           var option = '删除用户'; 
-  //           this.RecordOperation(option, 1, operationdata);
-  //           this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-  //         }
-  //         // 角色管理 roleid
-  //         if (row.roleid === value.roleid && row.roleid){
-  //           var row_index = this.rowData.indexOf(row);
-  //           this.rowData.splice(row_index, 1);
-  //           var operationdata = "姓名:" + value["name"] + "," + "域账号:" + value["loginname"];
-  //           var option = '删除角色';
-  //           var operationdata = '角色名称(en):' + value["role"] + ',' + '角色名称:' + value["role_name"];
-  //           this.RecordOperation(option, 1, operationdata);
-  //           this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-  //         }
-  //       });
-  //       this.totalPageNumbers = this.rowData.length
-  //       this.gridApi.setRowData(this.rowData)
-  //       break;
-  //     case "add":
-  //       console.log("--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-  //       // value.active = value.active === 1?"是":"否";
-  //       this.rowData = value
-  //       this.totalPageNumbers = this.rowData.length
-  //       this.gridApi.setRowData(this.rowData);
-  //       this.alltotalPageNumbers = this.alltotalPageNumbers +1;
-  //       break;
-
-  //   };
-
-    
-    
- 
-  // };
 
   
 

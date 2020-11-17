@@ -258,42 +258,27 @@ export class PublicmethodService {
         .subscribe(
           userInfo=>{
           var roles_list = [];
-          console.log("userInfo  =======================", userInfo)
-          if (userInfo["status"] === 401){
-            // 提示token已过期，是否重新登录
-            this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `您的登录已失效，请重新登录`}} ).onClose.subscribe(
-              name=>{
-                console.log("token已过期，是否重新登录？",name)
-                if(name){
-                  //  observe.next(false);
-                  localStorage.removeItem(ssotoken);
-                  // this.router.navigate([loginurl]);
-                  location.href = loginurl;
-                  observe.next(false);
-                }else{
-                  observe.next(false);
-                }        
-              }
-            );
-            // this.toastr({position: 'top-right', status: 'warning', conent:"token 过期了！需要重新登录"});
-            // this.router.navigate([loginurl])
-            // observe.next(roles_list);
-          }
-          else if (userInfo['userInfo']['roles']) {
-            console.log("*********************\t\t\t",userInfo['userInfo'])
-            const roles = userInfo['userInfo']["roles"];
-            roles.forEach(role => {
-              roles_list.push(role["roleid"]);
-            });
-            observe.next(roles_list)
-          } else {
-            this.toastr({position: 'top-right', status: 'danger', conent:"当前用户菜单权限不足，请联系管理员添加权限！"});
-            observe.next(roles_list)
+          console.log("userInfo  =======================", userInfo);
+          if (userInfo["result"]){
+            
+          }else{
+            if (userInfo['userInfo']['roles']) {
+              console.log("*********************\t\t\t",userInfo['userInfo'])
+              const roles = userInfo['userInfo']["roles"];
+              roles.forEach(role => {
+                roles_list.push(role["roleid"]);
+              });
+              observe.next(roles_list)
+            } else {
+              this.toastr({position: 'top-right', status: 'danger', conent:"当前用户菜单权限不足，请联系管理员添加权限！"});
+              observe.next(roles_list)
+            }
+
           }
           
         },error=>{
           alert("err")
-        console.warn("userInfo 》》》》》》error",error)
+          console.warn("userInfo 》》》》》》error",error)
         }
         )
       })
@@ -424,6 +409,9 @@ export class PublicmethodService {
     })
   }
 
+  get_buttons_bypath(){
+    
+  }
    
   // -----------------------------------------页面得到 权限buttons
 

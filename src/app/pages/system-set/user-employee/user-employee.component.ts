@@ -20,9 +20,9 @@ declare let $;
 declare let layui;
 
 import * as XLSX from 'xlsx';
+type AOA = any[][];
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 import { ActionComponent } from './action/action.component';
-type AOA = any[][];
 
 @Component({
   selector: 'ngx-user-employee',
@@ -38,20 +38,32 @@ export class UserEmployeeComponent implements OnInit {
 
       // 得到用户组和角色  get_groupname get_rolename get_group
       this.http.callRPC("role", "get_rolename",{}).subscribe(roles=>{
-        console.log("get_rolename-------------------->>>>","得到用户组和角色" )
-        this.get_rolename = roles["result"]["message"][0];
-        localStorage.setItem("employee_rolename", JSON.stringify(this.get_rolename))
+        console.log("get_rolename-------------------->>>>","get_rolename",roles);
+        var res = roles["result"]["message"][0];
+        if (res["code"] ===1){
+          this.get_rolename = res["message"];
+          localStorage.setItem("employee_rolename", JSON.stringify(this.get_rolename))
+
+        }
       });
       this.http.callRPC("role", "get_groupname",{}).subscribe(roles=>{
-        console.log("get_groupname-------------------->>>>","得到用户组和角色" )
-        this.get_groupname = roles["result"]["message"][0];
-        localStorage.setItem("employee_groupname", JSON.stringify(this.get_groupname))
+        console.log("get_groupname-------------------->>>>","get_groupname", roles )
+        var res = roles["result"]["message"][0];
+        if (res["code"] === 1){
+          this.get_groupname = res["message"];
+          localStorage.setItem("employee_groupname", JSON.stringify(this.get_groupname))
+          
+        }
       });
       // get_group
       this.http.callRPC('groups', 'get_group', {}).subscribe(result=>{
-        console.log("get_group-------------------->>>>","得到用户组和角色" )
-        var employee_result =  result['result']['message'][0];
-        localStorage.setItem("employee_group_all_", JSON.stringify(employee_result))
+        console.log("get_group-------------------->>>>","get_group",  result);
+        var res = result["result"]["message"][0]
+        if (res["code"] === 1){
+          var employee_result =  res["message"];
+          localStorage.setItem("employee_group_all_", JSON.stringify(employee_result))
+          
+        }
 
       })
 
@@ -181,120 +193,121 @@ export class UserEmployeeComponent implements OnInit {
       limit = 50;
     }
     // 得到员工信息！
-    this.http.callRPC('emeployee', 'get_employee_limit', {offset: offset, limit: limit}).subscribe((res)=>{
-      console.log("get_menu_role", result)
-      var get_employee_limit = res['result']['message'][0]
-      console.log("get_employee_limit", get_employee_limit);
-
-      var message = res["result"]["message"][0];
-      if( message.code === 0){
-        // 表示token过期了，跳转到 / 
-      }
-      // 处理data
-      var result_data = message.message.reverse();
-      if (result_data[0] && result_data[0][0]["numbers"]){
-        var other_result_data = result_data.splice(1, result_data.length);
-      }else{
-        var other_result_data = result_data;
-      }
-      var other_result_data_after = [];
-      other_result_data.forEach(result => {
-        other_result_data_after = other_result_data_after.concat(result);
-      });
-      console.log("-------other_result_data_after-----------",other_result_data_after);
-      // -----------------------
-      var result = other_result_data_after;
-      var employee_list = [];
-      for (let item of result){
-        var rids = [];
-        var items_dict = {};
-        var role_name_lists = []; 
-        var groups_name_lists = []; 
-        for (let element of result){
-          var rid_name = {}
-          if (item["employeeid"] === element["employeeid"]){
-            // items_dict["active"] = element["active"] == 1?'是': "否";
-            items_dict["active"] = element["active"] == 1?'是': "否";
-            items_dict["company"] = element["company"];
-            items_dict["department"] = element["department"];
-            items_dict["email"] = element["email"];
-            items_dict["employeeid"] = element["employeeid"];
-            items_dict["employeeno"] = element["employeeno"];
-            items_dict["facility"] = element["facility"];
-            items_dict["loginname"] = element["loginname"];
-            items_dict["name"] = element["name"];
-            items_dict["phoneno"] = element["phoneno"];
-            items_dict["pictureurl"] = element["pictureurl"];
-            items_dict["rid"] = element["rid"];
-            items_dict["groupid"] = element["groupid"];
-            
-            items_dict["role"] = element["role"];
-            items_dict["lastsignondate"] = element["lastsignondate"];
-            
-            items_dict["role_name"] = element["role_name"];
-
-            rid_name["role"] = element["role"];
-            rid_name["rid"] = element["rid"];
-            var role_name_str: string | null = element["role_name"] ? element["role_name"]: null;
-            var groups_name_str: string | null = element["groups"] ? element["groups"]: null;
-            // rid_name["role_name"] =  role_name_str.replace(/\s/g, "");
-            role_name_lists.push(role_name_str)
-            groups_name_lists.push(groups_name_str)
-            rids.push(rid_name)
-            items_dict["rids"] = rids;
-            items_dict["role_name"] = role_name_lists;
-            items_dict["groups_name"] = groups_name_lists;
-            continue
-          }else{
-            
-          }
-        }
-        // 处理 role_names，将以第一， 去掉！
-        employee_list.push(items_dict)
-      }
-
-      // 列表去重！
-      var unique_result = unique(employee_list, "employeeid")
-
-      unique_group_role(unique_result, "groups_name");
-      unique_group_role(unique_result, "role_name");
-
-      console.log("***************************************************")
-      console.log("*******************unique_result****************", unique_result)
-      this.gridData.push(...unique_result)
-      this.tableDatas.rowData = this.gridData;
-      var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';;
-        this.tableDatas.totalPageNumbers = totalpagenumbers;
-      this.agGrid.init_agGrid(this.tableDatas);
-      console.log("*******************this.tableDatas****************", this.tableDatas)
-      // this.agGrid.update_agGrid(this.tableDatas);
-      
-      console.log("***************************************************")
-      function unique(arr, field) { // 根据employeeid去重
-        const map = {};
-        const res = [];
-        for (let i = 0; i < arr.length; i++) {
-          if (!map[arr[i][field]]) {
-            map[arr[i][field]] = 1;
-            res.push(arr[i]);
-          }
-        }
-        return res;
-      };
-
-      // groups_name、role_name去重
-      function unique_group_role(arr, fild){
-        arr.forEach(element => {
-          var arr_list = [];
-          var groups_name_list = element[fild];
-          groups_name_list.forEach(groups => {
-            if(arr_list.indexOf(groups) === -1){
-              arr_list.push(groups)
+    
+    this.http.callRPC('emeployee', 'get_employee_limit', {offset:offset,limit:limit}).subscribe((result_res)=>{
+      var res  = result_res["result"]["message"][0];
+      console.log("-=得到员工信息！-=-=-=-=-", res);
+      if (res["code"] === 1){
+        var get_employee_limit = res
+        console.log("get_employee_limit", get_employee_limit);
+        var message = res;
+        switch (message["code"]) {
+          case 401:
+            break;
+          case 1:
+            // 处理data
+            var result_data = message.message.reverse();
+            if (result_data[0] && result_data[0][0]["numbers"]){
+              var other_result_data = result_data.splice(1, result_data.length);
+            }else{
+              var other_result_data = result_data;
             }
-          });
-          // arr_list [] 改为 str
-          element[fild] = arr_list.join(";")
-        });
+            var other_result_data_after = [];
+            other_result_data.forEach(result => {
+              other_result_data_after = other_result_data_after.concat(result);
+            });
+            console.log("-------other_result_data_after-----------",other_result_data_after);
+            // -----------------------
+            var result = other_result_data_after;
+            var employee_list = [];
+            for (let item of result){
+              var rids = [];
+              var items_dict = {};
+              var role_name_lists = []; 
+              var groups_name_lists = []; 
+              for (let element of result){
+                var rid_name = {}
+                if (item["employeeid"] === element["employeeid"]){
+                  // items_dict["active"] = element["active"] == 1?'是': "否";
+                  items_dict["active"] = element["active"] == 1?'是': "否";
+                  items_dict["company"] = element["company"];
+                  items_dict["department"] = element["department"];
+                  items_dict["email"] = element["email"];
+                  items_dict["employeeid"] = element["employeeid"];
+                  items_dict["employeeno"] = element["employeeno"];
+                  items_dict["facility"] = element["facility"];
+                  items_dict["loginname"] = element["loginname"];
+                  items_dict["name"] = element["name"];
+                  items_dict["phoneno"] = element["phoneno"];
+                  items_dict["pictureurl"] = element["pictureurl"];
+                  items_dict["rid"] = element["rid"];
+                  items_dict["groupid"] = element["groupid"];
+                  
+                  items_dict["role"] = element["role"];
+                  items_dict["lastsignondate"] = element["lastsignondate"];
+                  
+                  items_dict["role_name"] = element["role_name"];
+      
+                  rid_name["role"] = element["role"];
+                  rid_name["rid"] = element["rid"];
+                  var role_name_str: string | null = element["role_name"] ? element["role_name"]: null;
+                  var groups_name_str: string | null = element["groups"] ? element["groups"]: null;
+                  // rid_name["role_name"] =  role_name_str.replace(/\s/g, "");
+                  role_name_lists.push(role_name_str)
+                  groups_name_lists.push(groups_name_str)
+                  rids.push(rid_name)
+                  items_dict["rids"] = rids;
+                  items_dict["role_name"] = role_name_lists;
+                  items_dict["groups_name"] = groups_name_lists;
+                  continue
+                }else{
+                  
+                }
+              }
+              // 处理 role_names，将以第一， 去掉！
+              employee_list.push(items_dict)
+            }
+            // 列表去重！
+            var unique_result = unique(employee_list, "employeeid")
+            unique_group_role(unique_result, "groups_name");
+            unique_group_role(unique_result, "role_name");
+            this.gridData.push(...unique_result)
+            this.tableDatas.rowData = this.gridData;
+            var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';;
+            this.tableDatas.totalPageNumbers = totalpagenumbers;
+            this.agGrid.init_agGrid(this.tableDatas);
+            function unique(arr, field) { // 根据employeeid去重
+              const map = {};
+              const res = [];
+              for (let i = 0; i < arr.length; i++) {
+                if (!map[arr[i][field]]) {
+                  map[arr[i][field]] = 1;
+                  res.push(arr[i]);
+                }
+              }
+              return res;
+            };
+            // groups_name、role_name去重
+            function unique_group_role(arr, fild){
+              arr.forEach(element => {
+                var arr_list = [];
+                var groups_name_list = element[fild];
+                groups_name_list.forEach(groups => {
+                  if(arr_list.indexOf(groups) === -1){
+                    arr_list.push(groups)
+                  }
+                });
+                // arr_list [] 改为 str
+                element[fild] = arr_list.join(";")
+              });
+            }
+            
+            break;
+          case 0:
+            break;
+
+        }
+
       }
 
     })
@@ -312,114 +325,115 @@ export class UserEmployeeComponent implements OnInit {
     // 得到员工信息！
     this.http.callRPC('emeployee', 'get_employee_limit', {offset: offset, limit: limit}).subscribe((res)=>{
       // console.log("get_menu_role", result)
-      var get_employee_limit = res['result']['message'][0]
-
       var message = res["result"]["message"][0];
-      if( message.code === 0){
-        // 表示token过期了，跳转到 / 
-      }
-      // 处理data
-      var result_data = message.message.reverse();
-      if (result_data[0] && result_data[0][0]["numbers"]){
-        var other_result_data = result_data.splice(1, result_data.length);
-      }else{
-        var other_result_data = result_data;
-      }
-      var other_result_data_after = [];
-      other_result_data.forEach(result => {
-        other_result_data_after = other_result_data_after.concat(result);
-      });
-      console.log("-------other_result_data_after-----------",other_result_data_after);
-      // -----------------------
-      var result = other_result_data_after;
-      var employee_list = [];
-      for (let item of result){
-        var rids = [];
-        var items_dict = {};
-        var role_name_lists = []; 
-        var groups_name_lists = []; 
-        for (let element of result){
-          var rid_name = {}
-          if (item["employeeid"] === element["employeeid"]){
-            // items_dict["active"] = element["active"] == 1?'是': "否";
-            items_dict["active"] = element["active"] == 1?'是': "否";
-            items_dict["company"] = element["company"];
-            items_dict["department"] = element["department"];
-            items_dict["email"] = element["email"];
-            items_dict["employeeid"] = element["employeeid"];
-            items_dict["employeeno"] = element["employeeno"];
-            items_dict["facility"] = element["facility"];
-            items_dict["loginname"] = element["loginname"];
-            items_dict["name"] = element["name"];
-            items_dict["phoneno"] = element["phoneno"];
-            items_dict["pictureurl"] = element["pictureurl"];
-            items_dict["rid"] = element["rid"];
-            items_dict["groupid"] = element["groupid"];
-            
-            items_dict["role"] = element["role"];
-            items_dict["lastsignondate"] = element["lastsignondate"];
-            
-            items_dict["role_name"] = element["role_name"];
-
-            rid_name["role"] = element["role"];
-            rid_name["rid"] = element["rid"];
-            var role_name_str: string | null = element["role_name"] ? element["role_name"]: null;
-            var groups_name_str: string | null = element["groups"] ? element["groups"]: null;
-            // rid_name["role_name"] =  role_name_str.replace(/\s/g, "");
-            role_name_lists.push(role_name_str)
-            groups_name_lists.push(groups_name_str)
-            rids.push(rid_name)
-            items_dict["rids"] = rids;
-            items_dict["role_name"] = role_name_lists;
-            items_dict["groups_name"] = groups_name_lists;
-            continue
-          }else{
-            
-          }
+      if (message["code"] ===1){
+        if( message.code === 0){
+          // 表示token过期了，跳转到 / 
         }
-        // 处理 role_names，将以第一， 去掉！
-        employee_list.push(items_dict)
-      }
-
-      // 列表去重！
-      var unique_result = unique(employee_list, "employeeid")
-
-      unique_group_role(unique_result, "groups_name");
-      unique_group_role(unique_result, "role_name");
-
-      this.gridData = [];
-      this.gridData.push(...unique_result)
-      this.tableDatas.rowData = this.gridData;
-      var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';
-      this.tableDatas.totalPageNumbers = totalpagenumbers;
-      // this.agGrid.update_agGrid(this.tableDatas);
-      this.agGrid.init_agGrid(this.tableDatas);
-      
-      function unique(arr, field) { // 根据employeeid去重
-        const map = {};
-        const res = [];
-        for (let i = 0; i < arr.length; i++) {
-          if (!map[arr[i][field]]) {
-            map[arr[i][field]] = 1;
-            res.push(arr[i]);
-          }
+        // 处理data
+        var result_data = message.message.reverse();
+        if (result_data[0] && result_data[0][0]["numbers"]){
+          var other_result_data = result_data.splice(1, result_data.length);
+        }else{
+          var other_result_data = result_data;
         }
-        return res;
-      };
-
-      // groups_name、role_name去重
-      function unique_group_role(arr, fild){
-        arr.forEach(element => {
-          var arr_list = [];
-          var groups_name_list = element[fild];
-          groups_name_list.forEach(groups => {
-            if(arr_list.indexOf(groups) === -1){
-              arr_list.push(groups)
-            }
-          });
-          // arr_list [] 改为 str
-          element[fild] = arr_list.join(";")
+        var other_result_data_after = [];
+        other_result_data.forEach(result => {
+          other_result_data_after = other_result_data_after.concat(result);
         });
+        console.log("-------other_result_data_after-----------",other_result_data_after);
+        // -----------------------
+        var result = other_result_data_after;
+        var employee_list = [];
+        for (let item of result){
+          var rids = [];
+          var items_dict = {};
+          var role_name_lists = []; 
+          var groups_name_lists = []; 
+          for (let element of result){
+            var rid_name = {}
+            if (item["employeeid"] === element["employeeid"]){
+              // items_dict["active"] = element["active"] == 1?'是': "否";
+              items_dict["active"] = element["active"] == 1?'是': "否";
+              items_dict["company"] = element["company"];
+              items_dict["department"] = element["department"];
+              items_dict["email"] = element["email"];
+              items_dict["employeeid"] = element["employeeid"];
+              items_dict["employeeno"] = element["employeeno"];
+              items_dict["facility"] = element["facility"];
+              items_dict["loginname"] = element["loginname"];
+              items_dict["name"] = element["name"];
+              items_dict["phoneno"] = element["phoneno"];
+              items_dict["pictureurl"] = element["pictureurl"];
+              items_dict["rid"] = element["rid"];
+              items_dict["groupid"] = element["groupid"];
+              
+              items_dict["role"] = element["role"];
+              items_dict["lastsignondate"] = element["lastsignondate"];
+              
+              items_dict["role_name"] = element["role_name"];
+  
+              rid_name["role"] = element["role"];
+              rid_name["rid"] = element["rid"];
+              var role_name_str: string | null = element["role_name"] ? element["role_name"]: null;
+              var groups_name_str: string | null = element["groups"] ? element["groups"]: null;
+              // rid_name["role_name"] =  role_name_str.replace(/\s/g, "");
+              role_name_lists.push(role_name_str)
+              groups_name_lists.push(groups_name_str)
+              rids.push(rid_name)
+              items_dict["rids"] = rids;
+              items_dict["role_name"] = role_name_lists;
+              items_dict["groups_name"] = groups_name_lists;
+              continue
+            }else{
+              
+            }
+          }
+          // 处理 role_names，将以第一， 去掉！
+          employee_list.push(items_dict)
+        }
+  
+        // 列表去重！
+        var unique_result = unique(employee_list, "employeeid")
+  
+        unique_group_role(unique_result, "groups_name");
+        unique_group_role(unique_result, "role_name");
+  
+        this.gridData = [];
+        this.gridData.push(...unique_result)
+        this.tableDatas.rowData = this.gridData;
+        var totalpagenumbers = message['numbers']? message['numbers'][0]['numbers']: '未得到总条数';
+        this.tableDatas.totalPageNumbers = totalpagenumbers;
+        // this.agGrid.update_agGrid(this.tableDatas);
+        this.agGrid.init_agGrid(this.tableDatas);
+        
+        function unique(arr, field) { // 根据employeeid去重
+          const map = {};
+          const res = [];
+          for (let i = 0; i < arr.length; i++) {
+            if (!map[arr[i][field]]) {
+              map[arr[i][field]] = 1;
+              res.push(arr[i]);
+            }
+          }
+          return res;
+        };
+  
+        // groups_name、role_name去重
+        function unique_group_role(arr, fild){
+          arr.forEach(element => {
+            var arr_list = [];
+            var groups_name_list = element[fild];
+            groups_name_list.forEach(groups => {
+              if(arr_list.indexOf(groups) === -1){
+                arr_list.push(groups)
+              }
+            });
+            // arr_list [] 改为 str
+            element[fild] = arr_list.join(";")
+          });
+        }
+
       }
 
     })
@@ -529,23 +543,16 @@ export class UserEmployeeComponent implements OnInit {
   getsecurity_edit(table: string, method: string, colums: object){
     return new Observable((res)=>{
       this.http.callRPC(table, method, colums).subscribe((result)=>{
-        console.log("===================================!!!!!!!!!!!!!!!!!!!!!!!!!! 用户组",employee_result)
-        var employee_result =  result['result']['message'][0];
-        res.next(employee_result)
+        console.log("===================================!!!!!!!!!!!!!!!!!!!!!!!! !! 用户组",result, "result  status ",result["result"]["message"][0]["code"])
+        
+        res.next(result)
       })
     })
   }
 
-  getsecurity_edit2(table: string, method: string, colums: object, http){
-    return new Observable((res)=>{
 
-      http.callRPC(table, method, colums).subscribe((result)=>{
-        var employee_result =  result['result']['message'][0];
-        console.log("employee_result", employee_result);
-        res.next(employee_result)
-      })
-    })
-  }
+  
+
 
 
   // 将得到的employee的数据，处理成编辑、添加需要的数据！
@@ -652,107 +659,110 @@ export class UserEmployeeComponent implements OnInit {
           console.log("get_menu_role", result)
           this.loading = false;
           var message = res["result"]["message"][0];
-          if( message.code === 0){
+          if( message.code === 401){
             // 表示token过期了，跳转到 / 
-          }
-          // 处理data
-          var result_data = message.message.reverse();
-          if (result_data[0] && result_data[0][0]["numbers"]){
-            var other_result_data = result_data.splice(1, result_data.length);
           }else{
-            var other_result_data = result_data;
-          }
-          var other_result_data_after = [];
-          other_result_data.forEach(result => {
-            other_result_data_after = other_result_data_after.concat(result);
-          });
-          console.log("-------other_result_data_after-----------",other_result_data_after);
-          // -----------------------
-          var result = other_result_data_after;
-          var employee_list = [];
-          for (let item of result){
-            var rids = [];
-            var items_dict = {};
-            var role_name_lists = []; 
-            var groups_name_lists = []; 
-            for (let element of result){
-              var rid_name = {}
-              if (item["employeeid"] === element["employeeid"]){
-                // items_dict["active"] = element["active"] == 1?'是': "否";
-                items_dict["active"] = element["active"] == 1?'是': "否";
-                items_dict["company"] = element["company"];
-                items_dict["department"] = element["department"];
-                items_dict["email"] = element["email"];
-                items_dict["employeeid"] = element["employeeid"];
-                items_dict["employeeno"] = element["employeeno"];
-                items_dict["facility"] = element["facility"];
-                items_dict["loginname"] = element["loginname"];
-                items_dict["name"] = element["name"];
-                items_dict["phoneno"] = element["phoneno"];
-                items_dict["pictureurl"] = element["pictureurl"];
-                items_dict["rid"] = element["rid"];
-                items_dict["groupid"] = element["groupid"];
-                
-                items_dict["role"] = element["role"];
-                items_dict["lastsignondate"] = element["lastsignondate"];
-                
-                items_dict["role_name"] = element["role_name"];
-    
-                rid_name["role"] = element["role"];
-                rid_name["rid"] = element["rid"];
-                var role_name_str: string | null = element["role_name"] ? element["role_name"]: null;
-                var groups_name_str: string | null = element["groups"] ? element["groups"]: null;
-                // rid_name["role_name"] =  role_name_str.replace(/\s/g, "");
-                role_name_lists.push(role_name_str)
-                groups_name_lists.push(groups_name_str)
-                rids.push(rid_name)
-                items_dict["rids"] = rids;
-                items_dict["role_name"] = role_name_lists;
-                items_dict["groups_name"] = groups_name_lists;
-                continue
-              }else{
-                
-              }
+            // 处理data
+            var result_data = message.message.reverse();
+            if (result_data[0] && result_data[0][0]["numbers"]){
+              var other_result_data = result_data.splice(1, result_data.length);
+            }else{
+              var other_result_data = result_data;
             }
-            // 处理 role_names，将以第一， 去掉！
-            employee_list.push(items_dict)
-          }
-    
-          // 列表去重！
-          var unique_result = unique(employee_list, "employeeid")
-    
-          unique_group_role(unique_result, "groups_name");
-          unique_group_role(unique_result, "role_name");
-          // this.loading = true
-          this.updategetemployee();
-          // this.loading = false
-          
-          
-          function unique(arr, field) { // 根据employeeid去重
-            const map = {};
-            const res = [];
-            for (let i = 0; i < arr.length; i++) {
-              if (!map[arr[i][field]]) {
-                map[arr[i][field]] = 1;
-                res.push(arr[i]);
-              }
-            }
-            return res;
-          };
-    
-          // groups_name、role_name去重
-          function unique_group_role(arr, fild){
-            arr.forEach(element => {
-              var arr_list = [];
-              var groups_name_list = element[fild];
-              groups_name_list.forEach(groups => {
-                if(arr_list.indexOf(groups) === -1){
-                  arr_list.push(groups)
-                }
-              });
-              // arr_list [] 改为 str
-              element[fild] = arr_list.join(";")
+            var other_result_data_after = [];
+            other_result_data.forEach(result => {
+              other_result_data_after = other_result_data_after.concat(result);
             });
+            
+            console.log("-------other_result_data_after-----------",other_result_data_after);
+            // -----------------------
+            var result = other_result_data_after;
+            var employee_list = [];
+            for (let item of result){
+              var rids = [];
+              var items_dict = {};
+              var role_name_lists = []; 
+              var groups_name_lists = []; 
+              for (let element of result){
+                var rid_name = {}
+                if (item["employeeid"] === element["employeeid"]){
+                  // items_dict["active"] = element["active"] == 1?'是': "否";
+                  items_dict["active"] = element["active"] == 1?'是': "否";
+                  items_dict["company"] = element["company"];
+                  items_dict["department"] = element["department"];
+                  items_dict["email"] = element["email"];
+                  items_dict["employeeid"] = element["employeeid"];
+                  items_dict["employeeno"] = element["employeeno"];
+                  items_dict["facility"] = element["facility"];
+                  items_dict["loginname"] = element["loginname"];
+                  items_dict["name"] = element["name"];
+                  items_dict["phoneno"] = element["phoneno"];
+                  items_dict["pictureurl"] = element["pictureurl"];
+                  items_dict["rid"] = element["rid"];
+                  items_dict["groupid"] = element["groupid"];
+                  
+                  items_dict["role"] = element["role"];
+                  items_dict["lastsignondate"] = element["lastsignondate"];
+                  
+                  items_dict["role_name"] = element["role_name"];
+      
+                  rid_name["role"] = element["role"];
+                  rid_name["rid"] = element["rid"];
+                  var role_name_str: string | null = element["role_name"] ? element["role_name"]: null;
+                  var groups_name_str: string | null = element["groups"] ? element["groups"]: null;
+                  // rid_name["role_name"] =  role_name_str.replace(/\s/g, "");
+                  role_name_lists.push(role_name_str)
+                  groups_name_lists.push(groups_name_str)
+                  rids.push(rid_name)
+                  items_dict["rids"] = rids;
+                  items_dict["role_name"] = role_name_lists;
+                  items_dict["groups_name"] = groups_name_lists;
+                  continue
+                }else{
+                  
+                }
+              }
+              // 处理 role_names，将以第一， 去掉！
+              employee_list.push(items_dict)
+            }
+      
+            // 列表去重！
+            var unique_result = unique(employee_list, "employeeid")
+      
+            unique_group_role(unique_result, "groups_name");
+            unique_group_role(unique_result, "role_name");
+            // this.loading = true
+            this.updategetemployee();
+            // this.loading = false
+            
+            
+            function unique(arr, field) { // 根据employeeid去重
+              const map = {};
+              const res = [];
+              for (let i = 0; i < arr.length; i++) {
+                if (!map[arr[i][field]]) {
+                  map[arr[i][field]] = 1;
+                  res.push(arr[i]);
+                }
+              }
+              return res;
+            };
+      
+            // groups_name、role_name去重
+            function unique_group_role(arr, fild){
+              arr.forEach(element => {
+                var arr_list = [];
+                var groups_name_list = element[fild];
+                groups_name_list.forEach(groups => {
+                  if(arr_list.indexOf(groups) === -1){
+                    arr_list.push(groups)
+                  }
+                });
+                // arr_list [] 改为 str
+                element[fild] = arr_list.join(";")
+              });
+            }
+
           }
         })
       }
@@ -770,19 +780,22 @@ export class UserEmployeeComponent implements OnInit {
       rowdata = this.agGrid.getselectedrows();
     }
     // 得到选中的aggrid rowdatas
-    console.log("------------rowdata--------------", rowdata)
     console.log("------------得到选中的aggrid rowdatas--------------", rowdata)
     if (rowdata.length === 0){
       console.log("没有选中行数据", rowdata);
       // 提示选择行数据  EditDelTooltipComponent
       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content: "请选择一行数据！"}} ).onClose.subscribe(
-        name=>{console.log("----name-----", name)}
+        name=>{
+          // console.log("----name-----", name)
+        }
       );
       
     }else if (rowdata.length > 1){
       console.log("button按钮执行222！ 编辑", rowdata);
       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `请选择一行数据！`}} ).onClose.subscribe(
-        name=>{console.log("----name-----", name)}
+        name=>{
+          // console.log("----name-----", name)
+        }
       );
     }else{
       var rowData = rowdata[0]
@@ -790,27 +803,33 @@ export class UserEmployeeComponent implements OnInit {
       var column = {
         employeeid:  rowData["employeeid"] // 用户id
       }
-      this.getsecurity_edit("groups", "get_groups", column).subscribe((goups:any[])=>{
+      this.loading = true
+      this.getsecurity_edit("groups", "get_groups", column).subscribe((goups)=>{
+        
         console.log("根据用户角色得到，用户对应的组:", goups, "res", res);
-        this.dialogService.open(AddUserEmployeeComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowData), res: JSON.stringify(res), goups: JSON.stringify(goups)} }).onClose.subscribe(
-        // this.dialogService.open(EditUserEmployeeComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowData), res: JSON.stringify(res), goups: JSON.stringify(goups)} }).onClose.subscribe(
-          name=>{
-            console.log("----编辑-----", name);
-            if (name){
-              // 更新table
-              // this.loading = true
-              // this.updategetemployee({value: name, action: "edit"});
-              this.updategetemployee();
-              // this.loading = false;
-              
-            };
-          }
-        );
+        var res_ = goups["result"]["message"][0];
+        this.loading = false;
+        if(res_["code"] === 1){
+          // var employee_result =  result['result']['message'][0];
+          var group_data = res_['message'];
+          this.dialogService.open(AddUserEmployeeComponent, { closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowData), res: JSON.stringify(res), goups: JSON.stringify(group_data)} }).onClose.subscribe(
+            name=>{
+              console.log("----编辑-----", name);
+              if (name){
+                // 更新table
+                // this.loading = true
+                this.updategetemployee();
+                this.RecordOperation("编辑用户", 1, "编辑成功")
+                
+                
+              };
+            }
+          );
+        }else{
+          this.RecordOperation("编辑用户", 0, "编辑失败")
+        }
       });
-      // this.getsecurity_edit('employee', 'get_rolename', {}).subscribe((res)=>{
-      //   console.log("employee_result-------------->", res);
-      //   // 根据用户角色得到，用户对应的组
-      // });
+     
 
 
     }
@@ -820,17 +839,16 @@ export class UserEmployeeComponent implements OnInit {
   del(active_data?){
     var rowdata
     // console.log("this.agGrid.getselectedrows()",this.agGrid.getselectedrows()) []
-    
-    if (active_data["active"]){
-      rowdata = active_data;
+    console.log("------------------------\t\t\t\t\t\tactive_data",active_data)
+    if (active_data){
+        rowdata = active_data;
     }else{
       rowdata = this.agGrid.getselectedrows();
     }
-    var getsecurity_edit2 = this.getsecurity_edit2;
+    var that = this
     var publicservice = this.publicmethod;
     var success = this.success;
     var danger = this.danger;
-    var http = this.http;
     console.log("------------rowdata--------------", rowdata)
     if ( rowdata.length === 0){
       console.log("没有选中行数据", rowdata);
@@ -838,7 +856,6 @@ export class UserEmployeeComponent implements OnInit {
       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `请选择一行数据！`}} ).onClose.subscribe(
         name=>{
           console.log("----name-----", name);
-
         }
       );
     }else{
@@ -848,30 +865,37 @@ export class UserEmployeeComponent implements OnInit {
       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `确定要删除${text}数据吗？`, rowData: JSON.stringify(rowData)} } ).onClose.subscribe(
         name=>{
           console.log("----name-----", name);
+          
           if (name){
             try {
               // 更新table
-              // this.loading = true
-              rowData.forEach(rd => {
-                getsecurity_edit2('employee', 'delete_employee', rd, http).subscribe((res)=>{
-                  console.log("delete_employee", res);
-                  if (res === 1){
-                    this.updategetemployee({value: rd, action: "remove"});
-
-                  }else{
-                    this.RecordOperation("删除用户", 0, "删除失败")
+              for (let index = 0; index < rowData.length; index++) {
+                const rd = rowData[index];
+                console.log("++++++++++++++++++==rd", rd);
+                this.loading = true
+                that.getsecurity_edit('employee', 'delete_employee', rd).subscribe((result)=>{
+                  var res_ = result["result"]["message"][0]; 
+                  console.log("delete_employee", res_);
+                  if (res_["code"] === 1){
+                    console.log("删除成功")
+                    this.RecordOperation("删除用户", 1, "删除成功")
+                  }else if(res_["code"]===0){
+                    this.RecordOperation("删除用户", 0, "删除失败");
                     throw 'error, 删除失败！'
-
                   }
                 });
-              });
-              
+                
+              }
               success(publicservice)
+              this.updategetemployee();
+              this.loading = false
+              
             }catch(err){
               danger(publicservice)
               
             }
           }
+          this.loading = false;
 
         }
       );
@@ -1054,7 +1078,7 @@ export class UserEmployeeComponent implements OnInit {
       datas.forEach(rd => {
         this.http.callRPC(table, method, rd).subscribe((result)=>{
           console.log("插入设备数据：", result)
-          const status = result['result']['message'][0];
+          const status = result['result']['code'];
           if (status === 1){
           }else{
             throw `error,${status}`

@@ -8,6 +8,8 @@ import {  PLV8_URL, ssotoken, loginurl} from '../../appconfig';
 
 import {retry} from "rxjs/operators";
 import { Router } from '@angular/router';
+import { NbDialogService } from '@nebular/theme';
+import { ExpiredTokenComponent } from '../../pages-popups/token-diallog/expired-token/expired-token.component';
 
 
 @Injectable({
@@ -15,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class HttpserviceService {
   
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private dialogService:NbDialogService) { }
   
   
   // GET
@@ -25,17 +27,22 @@ export class HttpserviceService {
     }
     return new Observable((observe)=>{
       this.http.get(url, headers).subscribe((response: any)=>{
+        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^observe^^^^^^^^^^^^^^^^^^",response);
         observe.next(response)
       },
       error=>{
         console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^observe^^^^error^^^^^^^^^^^^^^",error, error.status, error.error);
-
-        
-        // this.router.navigate([loginurl])
         var result = {
-          msg: error.error,
-          status: error.status
+          result:{
+            message:[
+              {
+                code: error.status,
+                message:[error.error]
+              }
+            ]
+          }
         }
+        
         observe.next(result)
       }
       )
@@ -47,18 +54,45 @@ export class HttpserviceService {
     if (headers == null){
       headers = {headers: new HttpHeaders({"Content-Type": "application/json"})}
     }else{
-      headers = {headers: new HttpHeaders(headers)}
+      // headers = {headers: new HttpHeaders(headers)}
     }
     return new Observable((observe)=>{
       this.http.post(url, data, headers).subscribe((response)=>{
         observe.next(response)
       },
       error=>{
-        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^post^^^^error^^^^^^^^^^^^^^",error, error.status, error.error);
-        alert("post请求失败")
         var result = {
-          msg: error.error,
-          status: error.status
+          result:{
+            message:[
+              {
+                code: error.status,
+                message:[error.error]
+              }
+            ]
+          }
+        }
+        if (error.status === 401){
+          console.log("result===>", result)
+          var isdialg = localStorage.getItem("token_expired")? localStorage.getItem("token_expired"): 'true';
+          if (JSON.parse(isdialg)){
+          
+            this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,} ).onClose.subscribe(
+            // this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `您的登录已失效，请重新登录`}} ).onClose.subscribe(
+              name=>{
+                console.log("token已过期，是否重新登录？",name)
+                if(name){
+                  localStorage.removeItem(ssotoken);
+                  location.href = loginurl;
+                  // localStorage.setItem("token_expired", 'false');
+                  localStorage.removeItem('token_expired');
+                  observe.next(result);
+                }else{
+                  observe.next(result);
+                  // localStorage.setItem("token_expired", 'true');
+                }        
+              });
+              localStorage.setItem("token_expired", 'false');
+          }
         }
         observe.next(result)
       })
@@ -75,7 +109,7 @@ export class HttpserviceService {
     }; 
     if (method === 'get_default_role'){
       console.warn("token is ‘’", token)
-      return this.http.post(PLV8_URL, {
+      return this.post(PLV8_URL, {
           "jsonrpc": "2.0",
           "method": "callrpc",
           "params": {
@@ -90,7 +124,8 @@ export class HttpserviceService {
       ).pipe(retry(3));
 
     }
-    return this.http.post(PLV8_URL, {
+    // return this.http.post(PLV8_URL, {
+    return this.post(PLV8_URL, {
         "jsonrpc": "2.0",
         "method": "callrpc",
         "params": {
@@ -136,4 +171,6 @@ export class HttpserviceService {
 
 
 }
+
+
 

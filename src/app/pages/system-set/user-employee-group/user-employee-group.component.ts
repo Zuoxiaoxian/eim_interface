@@ -61,28 +61,30 @@ export class UserEmployeeGroupComponent implements OnInit {
     
     
     // init data 
-    this.http.callRPC('group_', 'get_group', {}).subscribe((res)=>{
-      // console.log("get_menu_role", result)
-      var get_employee_limit = res['result']['message'][0]
-      console.log("get_employee_limit", get_employee_limit);
+    // this.http.callRPC('group_', 'get_group', {}).subscribe((res)=>{
+    //   console.log("init data  get_group ", res)
+    //   var get_employee_limit = res['result']['message'][0];
+    //   console.log("get_employee_limit", get_employee_limit);
+    //   if (get_employee_limit["code"] ===1){
+    //     this.loading = false;
+    //     // 发布组件，编辑用户的组件
+  
+    //     var message = res["result"]["message"][0]["message"];
+    //     if (message.length>0){
+    //       message.forEach(r => {
+    //         r["active"] = r["active"] === 1 ? '是': '否';
+    //       });
+    //       console.log("初始化用户组表！", message)
+    //     }
+    //     this.gridData.push(...message)
+    //     this.tableDatas.rowData = this.gridData;
+    //     var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';
+    //     this.tableDatas.totalPageNumbers = totalpagenumbers;
+    //     localStorage.setItem("employee_group_agGrid", JSON.stringify(this.tableDatas))
+    //     // this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
 
-      this.loading = false;
-      // 发布组件，编辑用户的组件
-
-      var message = res["result"]["message"][0]["message"];
-      if (message.length>0){
-        message.forEach(r => {
-          r["active"] = r["active"] === 1 ? '是': '否';
-        });
-        console.log("初始化用户组表！", message)
-      }
-      this.gridData.push(...message)
-      this.tableDatas.rowData = this.gridData;
-      var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';
-      this.tableDatas.totalPageNumbers = totalpagenumbers;
-      localStorage.setItem("employee_group_agGrid", JSON.stringify(this.tableDatas))
-      // this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
-    })
+    //   }
+    // })
 
     
   }
@@ -115,16 +117,17 @@ export class UserEmployeeGroupComponent implements OnInit {
     // 初始化table
     this.tableDatas.columnDefs.push(
       this.active
-    )
-    if (this.employee_group_agGrid == null){
-      this.pageabledata()
-    }else{
-      console.log("&&&&&&&&&&&&&&&&&&&&&&&this.employee_agGrid&&&&&&&&&&&&&&&&", this.employee_group_agGrid, this.agGrid);
-      setTimeout(() => {
-        this.agGrid.init_agGrid(this.employee_group_agGrid);
-      },);
+    );
+    this.pageabledata();
+    // if (this.employee_group_agGrid == null){
+    //   this.pageabledata()
+    // }else{
+    //   console.log("&&&&&&&&&&&&&&&&&&&&&&&this.employee_agGrid&&&&&&&&&&&&&&&&", this.employee_group_agGrid, this.agGrid);
+    //   setTimeout(() => {
+    //     this.agGrid.init_agGrid(this.employee_group_agGrid);
+    //   },);
 
-    }
+    // }
 }
 
 ngOnDestroy(){
