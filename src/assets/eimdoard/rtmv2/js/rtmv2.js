@@ -3,8 +3,9 @@
 let rtmv2 = {
     // 实例1 参考 https://gallery.echartsjs.com/editor.html?c=xH1vxib94f
     gauge1(gauge1_data) {
+        if (!document.querySelector('.gauge1')) return;
         var myChart = echarts.init(document.querySelector('.gauge1'));
-        option = {
+        let option_g1 = {
             // backgroundColor: "#ffffff",
             color: ["#37A2DA", "#32C5E9", "#67E0E3"],
             series: [{
@@ -64,7 +65,7 @@ let rtmv2 = {
         }
         option.series[0].data[0].value = gauge1_data.value;
         option.series[0].max = gauge1_data.maxValue;
-        myChart.setOption(option);
+        myChart.setOption(option_g1);
         // 定时任务
         // timer = setInterval(function(){
         //     option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
@@ -77,7 +78,7 @@ let rtmv2 = {
     gauge2(gauge2_data) {
         var myChart = echarts.init(document.querySelector('.gauge2'));
         if (!gauge2_data) myChart.resize();
-        option = {
+        let option_g2 = {
             // backgroundColor: "#ffffff",
             color: ["#37A2DA", "#32C5E9", "#67E0E3"],
             series: [{
@@ -130,14 +131,14 @@ let rtmv2 = {
 
             }]
         };
-        myChart.setOption(option);
+        myChart.setOption(option_g2);
         window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         }
         option.series[0].data[0].value = gauge2_data.value;
         option.series[0].max = gauge2_data.maxValue;
-        myChart.setOption(option);
+        myChart.setOption(option_g2);
         // 定时任务
         // timer = setInterval(function(){
         //     option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
@@ -153,7 +154,7 @@ let rtmv2 = {
         var doc = document.querySelector('.echart_line');
         if (!doc) return;
         var myChart = echarts.init(doc);
-        option = {
+        let option_l_d = {
             tooltip: {
                 trigger: 'axis',
                 // 鼠标放到坐标轴上触发，双轴显示
@@ -291,7 +292,7 @@ let rtmv2 = {
         option.xAxis[0].data = data.xdata;
         option.series[0].data = data.ydate;
         console.log("option.xAxis[0].data.value ", option.series[0].data)
-        myChart.setOption(option);
+        myChart.setOption(option_l_d);
         myChart.resize();
     },
 };

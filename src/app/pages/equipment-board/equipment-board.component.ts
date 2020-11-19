@@ -1,9 +1,9 @@
 import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as screenfull from 'screenfull';
 import { Screenfull } from 'screenfull';
-
+declare var $:any;
 @Component({
   selector: 'ngx-equipment-board',
   templateUrl: './equipment-board.component.html',
@@ -23,7 +23,7 @@ export class EquipmentBoardComponent implements OnInit {
   };//时间
   dateInterval:any;//定时器
 
-  constructor(private activateInfo:ActivatedRoute) { }
+  constructor(private router:Router,private activateInfo:ActivatedRoute) { }
 
   ngOnInit(): void {
     this.creatDateInterval();
@@ -31,14 +31,17 @@ export class EquipmentBoardComponent implements OnInit {
       console.log(f);
     })
     var isthis = this;
-    //监听键盘 esc键
-    document.onkeydown=function(event){
-      var e = event || window.event || arguments.callee.caller.arguments[0];   
-      if(e&& e.keyCode==27){
-        console.log('关闭全屏')
-        isthis.is_not_fullscreen = true;
-      }
-    }
+    // window.addEventListener('resize',d=>{
+    //   console.log(d)
+    // })
+
+  }
+
+  checkFull() {
+    var isFull:any =
+      document.fullscreenElement;
+    if (isFull === undefined) isFull = false
+    return isFull
   }
 
   //获取当前时间对象
@@ -63,7 +66,8 @@ export class EquipmentBoardComponent implements OnInit {
 
   //点击菜单
   menu_btn_click(){
-    console.log('点击菜单')
+    console.log('点击菜单');
+    this.router.navigate(['/pages']);
   }
 
   //创建时间 定时
@@ -80,8 +84,8 @@ export class EquipmentBoardComponent implements OnInit {
 
    // 全屏切换
    showAllTemplate(){
-    var board = document.getElementById('equipment')
-    // var board = document.getElementsByTagName('ngx-equipment-board')[0];
+    // var board = document.getElementById('equipment')
+    var board = document.getElementsByTagName('ngx-equipment-board')[0];
     var sf = <Screenfull>screenfull;
     if (sf.isEnabled){ // sf.isEnabled 布尔值，判断是否允许进入全屏！
       this.is_not_fullscreen = sf.isFullscreen;

@@ -14,7 +14,6 @@ import { RealTimeMonitoringUpdateComponent } from './real-time-monitoring-update
 import {RealTimeFourwdDischargeComponent} from "./real-time-fourwd-discharge/real-time-fourwd-discharge.component";
 import {RealTimeFourwdSecondComponent} from "./real-time-fourwd-second/real-time-fourwd-second.component";
 import { RealTimeExperimentLayoutComponent } from './real-time-experiment-layout/real-time-experiment-layout.component';
-import { LaboratoryBoardComponent } from './laboratory-board/laboratory-board.component';
 
 
 // board
@@ -55,10 +54,7 @@ const routes: Routes = [
         path: 'expLayout',
         component: RealTimeExperimentLayoutComponent
       },
-      {
-        path:'laboratory',
-        component:LaboratoryBoardComponent
-      },
+      
       {
         path: '',
         redirectTo: 'dashone',

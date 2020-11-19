@@ -123,21 +123,7 @@ export class EquipmentCouplingPathComponent implements OnInit {
     {name:'2',color:'yellow',status:0},
     {name:'1',color:'red',status:0},
   ];
-  experiment ={
-    user:'新工',
-    phone:'13499998888',
-    nexttest:'Geely001',
-    nextdate:'20/11/01-20/11/30',
-    // '实验编号','计划时长','进度'
-    title:['ExperimentNum','PLanDuration','schedule'],
-    data:[
-      ['WSN-100010','20/10/01-20/11/01',70],
-      ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-    ]
-  }
+
 
   log_warm = {
     title:['time','Loglevel','logInfor'],
@@ -303,18 +289,12 @@ export class EquipmentCouplingPathComponent implements OnInit {
 
   }
 
-  getleft(item){
-    return item > 40?item-20+'%':'20%';
-  }
 
 
   get_td_width(num){
     return 66/num+'%'
   }
 
-  get_height(){
-    return this.experiment.data.length <= 2?31*this.experiment.data.length+'px':'120px';
-  }
 
   clicEvent(e,i){
     //记录选定

@@ -10,9 +10,14 @@
         // height: 33%;
         width: 100%;
         display: flex;
-        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
         padding: 2%;
         color: white;
+        position: relative;
     }
     .font_w_too_long {
         word-break: keep-all;
@@ -25,12 +30,21 @@
     .thrid {
         height: 30%;
         width: 100%;
-        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
         padding: 2%;
         color: white;
+        position: relative;
     }
     .bo {
-        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
         padding: 2%;
     }
     .display_f {
@@ -49,8 +63,8 @@
         height: 20px;
         color: wheat;
         background: #4472c4;
-        top: -17px;
-        left: -7px;
+        top: 0;
+        left: 0;
         min-width: 80px;
     }
     .first_second_font {
@@ -149,26 +163,9 @@
         width: 100%;
         height: 100%;
     }
-    #circular {
-        width: 60%;
-        height: 60%;
-        border-radius: 60px;
-        background: rgb(59, 56, 56);
-        margin: 15%;
-    }
     #third_second {
         height: 50%;
         width: 96%;
-    }
-    .h_46_w_70 {
-        height: 46%;
-        width: 70%;
-    }
-    .h_46_w_30 {
-        height: 46%;
-        width: 30%;
-        display: flex;
-        padding: 2%;
     }
     .dis_f_w {
         display: flex;
@@ -182,6 +179,9 @@
     }
     .width_70 {
         width: 70%;
+    }
+    .width_50 {
+        width: 50%;
     }
     .h_46_w_100 {
         height: 46%;

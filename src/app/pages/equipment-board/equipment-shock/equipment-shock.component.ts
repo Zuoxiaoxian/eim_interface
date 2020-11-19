@@ -47,42 +47,7 @@ export class EquipmentShockComponent implements OnInit {
   @ViewChild('chart_2')chart_2:any;
   @ViewChild('chart_1')chart_1:any;
 
-  //安灯状态
-  andon = [
-    {name:'4',color:'blue',status:1},
-    {name:'3',color:'green',status:1},
-    {name:'2',color:'yellow',status:0},
-    {name:'1',color:'red',status:0},
-  ];
-  //实验信息
-  experiment ={
-    user:'新工',
-    phone:'13499998888',
-    nexttest:'Geely001',
-    nextdate:'20/11/01-20/11/30',
-    // '实验编号','计划时长','进度'
-    title:['ExperimentNum','PLanDuration','schedule'],
-    data:[
-      ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-    ]
-  }
-
-  //日志与警告
-  log_warm = {
-    // '时间','日志等级','日志信息'
-    title:['time','Loglevel','logInfor'],
-    data:[
-      ['2020-09-08','warning','Not ready'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-    ]
-  }
+ 
 
   // 实验实时状态表的实时数据
   switchStatus:any ={
@@ -217,8 +182,11 @@ export class EquipmentShockComponent implements OnInit {
       data.title = ['LV1Warn','LV2Warn'];
       data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     }
-    let myChart_3 = echarts.init(document.getElementById('warning'));
-    equipment_four_road.create_warning_chart(data,myChart_3);
+    if(document.getElementById('warning')){
+
+      let myChart_3 = echarts.init(document.getElementById('warning'));
+      equipment_four_road.create_warning_chart(data,myChart_3);
+    }
 
     // let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
     // equipment_four_road.create_real_temperature({value:55.33},myChart_4);
@@ -240,19 +208,13 @@ export class EquipmentShockComponent implements OnInit {
 
   }
 
-  //计算定位 左
-  getleft(item){
-    return item > 40?item-20+'%':'20%';
-  }
+
 
   //计算宽度
   get_td_width(num){
     return 66/num+'%'
   }
-  //计算高度
-  get_height(){
-    return this.experiment.data.length <= 2?31*this.experiment.data.length+'px':'120px';
-  }
+
 
   //选中改变重新画表格
   clicEvent(e,i){

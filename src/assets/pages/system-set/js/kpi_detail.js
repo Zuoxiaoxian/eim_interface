@@ -180,10 +180,10 @@ let kpi_detail = {
         mychart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
 
     // right_one  运行/停止/故障/非占位 百分比
@@ -232,10 +232,10 @@ let kpi_detail = {
         mychart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
 
 
     },
@@ -384,10 +384,10 @@ let kpi_detail = {
         mychart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
 
     // right_two 年份运行时间
@@ -536,10 +536,10 @@ let kpi_detail = {
         mychart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
 
     // 这是 重置echart

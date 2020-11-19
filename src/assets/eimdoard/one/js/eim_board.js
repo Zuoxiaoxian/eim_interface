@@ -110,10 +110,10 @@ let eim_board = {
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
     // 左侧第二个、line
     left_line() {
@@ -292,10 +292,10 @@ let eim_board = {
         // 配置给实例化对象
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
     // 左侧第三个、pie
     left_pie() {
@@ -370,10 +370,10 @@ let eim_board = {
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
 
     // 右侧第一个、bar
@@ -493,10 +493,10 @@ let eim_board = {
 
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
     // 右侧第二个、line
     right_line() {
@@ -676,10 +676,10 @@ let eim_board = {
         // 配置给实例化对象
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
     // 右侧第三个、pie
     right_pie() {
@@ -745,10 +745,10 @@ let eim_board = {
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
 
 
@@ -908,10 +908,10 @@ let eim_board = {
         // 渲染
         mymap.setOption(option);
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
     // map 中国2
     center_map() {
@@ -1303,10 +1303,10 @@ let eim_board = {
         }.bind(this));
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     }
 
 };

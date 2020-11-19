@@ -57,10 +57,10 @@ let real_time = {
             }]
         };
         myChart.setOption(option);
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
         option.series[0].data[0].value = gauge1_data;
         myChart.setOption(option);
         // 定时任务
@@ -128,10 +128,10 @@ let real_time = {
             }]
         };
         myChart.setOption(option);
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
         option.series[0].data[0].value = gauge2_data;
         myChart.setOption(option);
         // 定时任务
@@ -329,7 +329,7 @@ let real_time = {
         myChart.setOption(option);
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', function() {
-            this.console.log("重置的屏幕大小！")
+            console.log("重置的屏幕大小！")
             myChart.resize();
         })
     },

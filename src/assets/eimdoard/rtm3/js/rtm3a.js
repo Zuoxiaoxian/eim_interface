@@ -3,14 +3,13 @@ let rtm3a = {
         var dom = document.getElementById("second_chart");
         if (!dom) return;
         var myChart = echarts.init(dom);
-        option = null;
         // var xAxis = data.xAxis.map(f => ({
         //     value: f,
         //     textStyle: {
         //         display: 'inline - block'
         //     }
         // }));
-        option = {
+        let option_s_c = {
             title: {
                 show: false
             },
@@ -77,14 +76,14 @@ let rtm3a = {
         }
 
         if (option && typeof option === "object") {
-            myChart.setOption(option);
+            myChart.setOption(option_s_c);
             myChart.resize();
         }
     },
 
     create_third_chart(data, myChart) {
 
-        option = {
+        let option_t_c = {
             title: {
                 text: '目前进度',
                 subtext: '10%',
@@ -182,7 +181,7 @@ let rtm3a = {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         }
-        myChart.setOption(option)
+        myChart.setOption(option_t_c)
         myChart.resize();
     },
 
@@ -196,7 +195,7 @@ let rtm3a = {
         var visibityData = data.visibityData;
         var xAxisData = data.xAxisData;
 
-        option = {
+        let option_t_c_l = {
             title: {
                 show: data.title ? true : false,
                 text: data.title ? data.title : '',
@@ -336,7 +335,7 @@ let rtm3a = {
             myChart.resize();
         }
 
-        myChart.setOption(option);
+        myChart.setOption(option_t_c_l);
         myChart.resize();
     },
 
@@ -347,7 +346,7 @@ let rtm3a = {
             [1, '#15337C']
         ];
 
-        option = {
+        let option_s = {
             // backgroundColor: '#0E1327',
             series: [{ //内圆
                     type: 'pie',
@@ -432,7 +431,7 @@ let rtm3a = {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         }
-        myChart.setOption(option);
+        myChart.setOption(option_s);
         myChart.resize();
     }
 }

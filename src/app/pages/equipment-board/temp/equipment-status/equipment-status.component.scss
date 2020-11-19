@@ -1,6 +1,5 @@
 .andon_status {
     width: 14%;
-    position: relative;
     .andon_color {
         border: 3px solid rgb(157, 195, 230);
         border-radius: 21px;
@@ -15,13 +14,14 @@
         }
     }
     .andon_status_font {
+        margin-top: 17px;
         padding: 3px;
         color: white;
         font-size: 12px;
     }
     .andon_img {
         background: url('/assets/eimdoard/equipment/images/triangle.png');
-        height: 20%;
+        height: 11%;
         background-size: cover;
         -webkit-background-size: cover;
         -o-background-size: cover;
@@ -37,24 +37,24 @@
     flex-wrap: wrap;
     position: relative;
     .chart {
-        height: 80%;
+        // height: 100%;
         padding-left: 21px;
         width: 100%;
         display: flex;
         flex-wrap: wrap;
         // position: absolute;
-        min-height: 260px;
+        // min-height: 260px;
         #device_circular_1,
         #device_circular_2 {
-            width: 50%;
+            width: 33%;
             height: 100%;
         }
         #device_status,
         #operatingRate {
-            height: 45%;
+            // height: 45%;
             width: 95%;
             box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
-            min-height: 50%;
+            // min-height: 50%;
         }
     }
 }
@@ -64,7 +64,6 @@
     color: white;
     height: 100%;
     padding-top: 13%;
-    ;
 }
 
 .red {
@@ -114,7 +113,7 @@ nb-card {
     height: 20px;
     color: wheat;
     background: #4472c4;
-    top: -17px;
-    left: -7px;
+    top: 0;
+    left: 0;
     min-width: 80px;
 }

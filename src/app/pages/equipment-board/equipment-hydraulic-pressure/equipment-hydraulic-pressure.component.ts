@@ -125,29 +125,7 @@ xData:[]
     {name:'2',color:'yellow',status:0},
     {name:'1',color:'red',status:0},
   ];
-  //试验信息
-  experiment ={
-    user:'周工',
-    phone:'13499998888',
-    nexttest:'Geely001',
-    nextdate:'20/11/01-20/11/30',
-    // '实验编号','计划时长','进度'
-    title:['ExperimentNum','PLanDuration','schedule'],
-    data:[
-      ['WSN-100010','20/10/01-20/11/01',70],
-      ['WSN-100010','20/10/01-20/11/01',70],
-      ['WSN-100010','20/10/01-20/11/01',70],
-      ['WSN-100010','20/10/01-20/11/01',70],
-      ['WSN-100010','20/10/01-20/11/01',70],
-    ]
-  }
-//日志与警告
-  log_warm = {
-    // '时间','日志等级','日志信息'
-    title:['time','Loglevel','logInfor'],
-    data:[
-    ]
-  }
+ 
   //实验实时状态
   switchStatus: any ={
     title:[`stationNameCGF`,'OnOff','InternalLock','Programlock'],
@@ -267,7 +245,6 @@ xData:[]
       this.get_device_mst_oilseparator();//开油器
       let param = this.create_param();
       this.get_device_mts_01_status();
-      this.get_device_mts_log();
       if(param[1].length > 0){
         table = 'get_device_mts_realtimedata',method = 'device_monitor.get_device_mts_realtimedata';
         this.get_device_mts_realtimedata(table,method,param);
@@ -471,19 +448,6 @@ xData:[]
     })
   }
 
-  /**
-   * 获取日志数据
-   * @param table 
-   * @param method 
-   */
-  get_device_mts_log(){
-    this.http.callRPC('get_device_mts_log','device_monitor.get_device_mts_log',{"device":"device_mts_01"}).subscribe((g:any) =>{
-        console.log(g)
-        if(g.result.error || g.result.message[0].code == 0)return;
-        getMessage(g,this.log_warm.data);
-
-    })
-  }
 
    
 
@@ -498,15 +462,9 @@ xData:[]
   }
 
   //样式 逻辑方法
-  getleft(item){
-    return item > 40?item-20+'%':'20%';
-  }
   get_td_width(num,i){
     if(i == 0)return '23%'
     return 77/num+'%'
-  }
-  get_height(){
-    return this.experiment.data.length <= 2?31*this.experiment.data.length+'px':'120px';
   }
   get_height_real(){
     return 100/this.real_list.length +'%'

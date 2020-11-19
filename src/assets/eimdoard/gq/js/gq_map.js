@@ -205,9 +205,9 @@ let gq_map = {
             ]
         }
         myChart.setOption(option);
-        window.onresize = function() {
+        window.addEventListener('resize', f => {
             myChart.resize();
-        }
+        })
 
     },
     // 实例2 参考 https://gallery.echartsjs.com/editor.html?c=xryWGlyEYe
@@ -388,10 +388,10 @@ let gq_map = {
             }, ]
         };
         myChart.setOption(option);
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
 
     // 实例3 参考 https://gallery.echartsjs.com/editor.html?c=xH1vxib94f
@@ -432,10 +432,10 @@ let gq_map = {
             }]
         };
         myChart.setOption(option);
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
         option.series[0].data[0].value = demo3_data;
         myChart.setOption(option);
         // 定时任务
@@ -737,10 +737,10 @@ let gq_map = {
 
 
         myChart.setOption(option);
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
 
 
     },

@@ -129,18 +129,7 @@ export class EquipmentFourRoadComponent implements OnInit {
     {name:'2',color:'yellow',status:0},
     {name:'1',color:'red',status:0},
   ];
-  //试验信息
-  experiment ={
-    user:'新工',
-    phone:'13499998888',
-    nexttest:'Geely001',
-    nextdate:'20/11/01-20/11/30',
-    // '实验编号','计划时长','进度'
-    title:['ExperimentNum','PLanDuration','schedule'],
-    data:[
-      // ['WSN-100010','20/10/01-20/11/01',70],
-    ]
-  }
+ 
   //设备介绍
   str = `试验原理：--------------------------------------------------<br>
   设备构成：-------，-------，-------，--------<br>
@@ -149,14 +138,7 @@ export class EquipmentFourRoadComponent implements OnInit {
                     -----------------------------------------------<br>
                     --------------------------------------------<br>
    非标试验：---------------------------------------<br>`;
-  //警告与认知
-  log_warm = {
-    // '时间','日志等级','日志信息'
-    title:['time','Loglevel','logInfor'],
-    data:[
-
-    ]
-  }
+  
   //实验实时数据
   switchStatus:any ={
     title:[`stationName`,'OnOff',`OilSeparatorOn`,`HighOilSeparator`,'InternalLock','Programlock'],
@@ -235,7 +217,6 @@ export class EquipmentFourRoadComponent implements OnInit {
     this.timer = setInterval(f =>{
       let param = this.create_param();
       this.get_device_mts_01_status();
-      this.get_device_mts_log();
       if(param[1].length > 0){
         table = 'get_device_mts_realtimedata',method = 'device_monitor.get_device_mts_realtimedata';
         this.get_device_mts_realtimedata(table,method,param);
@@ -246,10 +227,7 @@ export class EquipmentFourRoadComponent implements OnInit {
       }
     },1000)
     
-    this.get_device_mst_progress();
-    this.timer60s = setInterval(f =>{
-      this.get_device_mst_progress();
-    },60000)
+
     setTimeout(() => {
       this.initChart();
       this.in();
@@ -262,13 +240,13 @@ export class EquipmentFourRoadComponent implements OnInit {
     
     let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
     let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
-    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
     this.timer1 = setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
+      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
     },3000)
     this.timer2 =  setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
+      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
     },3000)
   }
   
@@ -285,13 +263,16 @@ export class EquipmentFourRoadComponent implements OnInit {
       data.title = ['LV1Warn','LV2Warn'];
       data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     }
-    let myChart_3 = echarts.init(document.getElementById('warning'));
-    equipment_four_road.create_warning_chart(data,myChart_3);
+    if(document.getElementById('warning')){
+      let myChart_3 = echarts.init(document.getElementById('warning'));
+      equipment_four_road.create_warning_chart(data,myChart_3);
+    }
+
 
     let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
     let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
-    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
 
     // setInterval(f=>{
     //   equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
@@ -381,34 +362,8 @@ export class EquipmentFourRoadComponent implements OnInit {
       })
   }
 
-  /**
-   * 获取进度
-   */
-  get_device_mst_progress(){
-    this.http.callRPC('get_device_mts_progress','device_monitor.get_device_mts_progress',{
-      "device":"device_mts_01","arr":"status"
-    }).subscribe((f:any) =>{
-    console.log(f);
-      this.experiment.data = f.result.message[0].message.map(m =>
-        ([m[1],dateformat(new Date(m[0]),'yy/mm/dd'),parseInt((m[2]*100).toString())])
-        );
-    })
-  }
 
 
-  /**
-   * 获取日志数据
-   * @param table 
-   * @param method 
-   */
-  get_device_mts_log(){
-    this.http.callRPC('get_device_mts_log','device_monitor.get_device_mts_log',{"device":"device_mts_01"}).subscribe((g:any) =>{
-        console.log(g)
-        if(g.result.error || g.result.message[0].code == 0)return;
-        getMessage(g,this.log_warm.data);
-        
-    })
-  }
 
   
 
@@ -446,16 +401,11 @@ export class EquipmentFourRoadComponent implements OnInit {
 
 
   //样式 逻辑方法
-  getleft(item){
-    return item > 40?item-20+'%':'20%';
-  }
+  
   get_td_width(num){
     return 100/num+'%'
   }
-  get_height(){
-    return this.experiment.data.length <= 2?31*this.experiment.data.length+'px':'120px';
-  }
-
+  
   //组件销毁  
   ngOnDestroy(){
     clearInterval(this.timer)

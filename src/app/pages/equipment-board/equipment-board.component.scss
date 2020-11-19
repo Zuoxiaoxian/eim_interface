@@ -22,16 +22,21 @@
         margin-right: 0px;
     }
     .head {
-        display: inline-block;
-        margin-top: 5%;
+        display: inline-flex;
         padding: 10px;
         color: white;
-    }
-    .return_button {
-        border: 2px white solid;
+        // width: 82px;
+        // height: 40px;
         cursor: pointer;
-        height: 44px;
-        width: 47%;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+    }
+    .return_button_1 {
+        background: url('/assets/eimdoard/equipment/images/home.png') no-repeat;
+    }
+    .return_button_2 {
+        background: url('/assets/eimdoard/equipment/images/ret.png') no-repeat;
     }
     .title {
         font-size: xx-large;
@@ -51,31 +56,12 @@
         margin-top: 14px;
         position: relative;
         display: flex;
+        flex-wrap: wrap;
         // #left_img {
-        // position: absolute;
-        // height: 100%;
-        // width: 200px;
-        // background-image: url(../../../assets/eimdoard/equipment/images/left.png);
-        // background-size: cover;
-        // -webkit-background-size: cover;
-        // -o-background-size: cover;
-        // background-position: center center;
-        // }
-        // #right_img {
-        // position: absolute;
-        // right: 0px;
-        // height: 100%;
-        // width: 200px;
-        // background-image: url(../../../assets/eimdoard/equipment/images/right.png);
-        // background-size: cover;
-        // -webkit-background-size: cover;
-        // -o-background-size: cover;
-        // background-position: center center;
-        // }
         #center {
-            width: 94%;
+            width: 100%;
             height: 96%;
-            margin: 2% 3% 0% 3%;
+            margin: 2% 1% 0% 1%;
             display: flex;
         }
     }

@@ -10,16 +10,32 @@
         // height: 33%;
         width: 100%;
         display: flex;
-        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
         padding: 2%;
         color: white;
+        position: relative;
     }
     .thrid {
-        height: 29%;
+        height: 30%;
         width: 100%;
-        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
         padding: 2%;
         color: white;
+        position: relative;
+    }
+    .bo {
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
     }
     .part_title {
         position: absolute;
@@ -28,8 +44,8 @@
         height: 20px;
         color: wheat;
         background: #4472c4;
-        top: -17px;
-        left: -7px;
+        top: 0;
+        left: 0;
         min-width: 80px;
     }
     .first_second_font {

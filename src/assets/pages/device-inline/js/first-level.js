@@ -79,10 +79,10 @@ let first_level = {
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
 
     // chian_map map 地图
@@ -322,10 +322,10 @@ let first_level = {
 
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
 
     },
 
@@ -409,10 +409,10 @@ let first_level = {
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
-        }
+        })
     },
 
 

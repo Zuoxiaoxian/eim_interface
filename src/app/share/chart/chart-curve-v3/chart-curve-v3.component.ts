@@ -480,7 +480,7 @@ export class ChartCurveV3Component implements OnInit {
     //初始化
     // this.xData = data.xData[this.click_str] ?data.xData[this.click_str]:[];
     this.xData = data.xData.slice();
-    delete this.attrs.xData; 
+    if(this.attrs.xData)delete this.attrs.xData; 
     //更新表的数据
     this.choice_initleftChart();
     //更新仪表盘的数据

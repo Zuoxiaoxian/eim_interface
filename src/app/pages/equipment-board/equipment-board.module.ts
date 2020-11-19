@@ -16,6 +16,10 @@ import { EquipmentMastV2Component } from './equipment-mast-v2/equipment-mast-v2.
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { EquipmentStatusComponent } from './temp/equipment-status/equipment-status.component';
 import { NbCardModule, NbIconModule } from '@nebular/theme';
+import { LaboratoryBoardComponent } from './laboratory-board/laboratory-board.component';
+import { EquipmentMastV3Component } from './equipment-mast-v3/equipment-mast-v3.component';
+import { LogWarmComponent } from './temp/log-warm/log-warm.component';
+import { TestInformationComponent } from './temp/test-information/test-information.component';
 
 
 // 组件
@@ -25,7 +29,9 @@ const COMPONENT = [
   EquipmentCouplingPathComponent,EquipmentMotorSystemComponent,
   EquipmentAvlComponent,EquipmentMastComponent,
   EquipmentDetailsComponent,EquipmentMastV2Component,
-  EquipmentStatusComponent
+  EquipmentStatusComponent,LaboratoryBoardComponent,
+  EquipmentMastV3Component,LogWarmComponent,
+  TestInformationComponent
 ]
 //设备看板模块
 @NgModule({

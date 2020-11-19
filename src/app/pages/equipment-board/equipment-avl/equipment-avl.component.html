@@ -2,97 +2,31 @@
     <div class="row" style="height: 100%;">
         <div class="col-md-4">
             <div class="first_first" style="height: 35%;">
-                <ngx-equipment-status style="display: flex;width: 100%;"></ngx-equipment-status>
+                <ngx-equipment-status device='device_mts_01' style="display: flex;width: 100%;"></ngx-equipment-status>
             </div>
             <div class="first_second lattice_layout" style="height: 24%;">
-                <div class="part_title" style="top: -8px;left: 2px;">{{'equipment.expInfor'|translate}}</div>
-                <div class="first_second_font">
-                    <div class="width_30">{{'equipment.BenchPIC'|translate }}</div>
-                    <div style="width: 70%;">{{ experiment.user }} {{ 'equipment.contact'|translate }}:{{ experiment.phone }}</div>
-                </div>
-                <div class="first_second_font" *ngIf="experiment.data.length <= 2">
-                    <div class="width_30">{{ 'equipment.NextExperiment'|translate }}</div>
-                    <div style="width: 70%;">{{ experiment.nexttest }}</div>
-                </div>
-                <div class="first_second_font" *ngIf="experiment.data.length <= 2">
-                    <div class="width_30">{{ 'equipment.PLanDuration'|translate }}</div>
-                    <div class="wigth_70">{{ experiment.nextdate }}</div>
-                </div>
-                <div class="table">
-                    <div class="table_bo">
-                        <table>
-                            <tr class="header">
-                                <td *ngFor="let title of experiment.title">
-                                    {{'equipment.'+title | translate }}
-                                </td>
-                            </tr>
+                <div class="part_title">{{'equipment.expInfor'|translate}}</div>
+                <ngx-test-information device='device_mts_01' style="width: 100%;"></ngx-test-information>
 
-                        </table>
-                    </div>
-                    <div class="table_bo" style="overflow: auto;" [ngStyle]="{'height':get_height()}">
-                        <table>
-                            <tr class="body" *ngFor="let items of experiment.data">
-                                <td *ngFor="let item of items;let i = index">
-                                    <div *ngIf="i == 2;else fontTemp" class="progres_1">
-                                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" nzStatus="{{item<70?'active':'exception'}}"></nz-progress>
-                                        <div class="progres_2" [ngStyle]="{'left':getleft(item)}">
-                                            {{item}}%
-                                        </div>
-                                    </div>
-                                    <ng-template #fontTemp>
-                                        <div class="font_tolong">{{item}}</div>
-                                    </ng-template>
-
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                </div>
             </div>
             <div class="dis_f_w first_third lattice_layout height_33">
-                <div class="part_title" style="top: -8px;left: 2px;">{{'equipment.LogWarm' | translate}}</div>
-                <div class="h_46_w_30">
-                    <div style="width: 10%;">{{'equipment.LV1Warm'|translate}}</div>
-                    <div id="circular"></div>
-                </div>
-                <div class="h_46_w_70" id="warning"></div>
-                <div class="table height_50">
-                    <div class="table_bo height_30">
-                        <table>
-                            <tr class="header">
-                                <td *ngFor="let title of log_warm.title">
-                                    {{"equipment."+title | translate}}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="table_bo overflow_height_85">
-                        <table>
-                            <tr class="body" *ngFor="let items of log_warm.data" [ngStyle]="{'color':items[1] == 'error'?'red':items[1]=='warning'?'':'yellow'}">
-                                <td *ngFor="let item of items;let i = index">
-                                    <div>{{item}}</div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+                <ngx-log-warm device='device_mts_01' style="display: flex;width: 100%;flex-wrap: wrap;"></ngx-log-warm>
             </div>
         </div>
         <div class="col-md-4">
             <div class="sceond_fisrt height_24">
-                <div class="part_title" style="top: -8px;left: 18px;">{{ 'equipment.equipIntroduce'|translate}}</div>
+                <div class="part_title">{{ 'equipment.equipIntroduce'|translate}}</div>
                 <div style="padding: 20px;overflow: auto;">
                     设备分三部分：AVL 转股、排放分析仪、环境舱；
                 </div>
             </div>
             <div class="center_img">
-                <div class="part_title" style="top: -8px;left: 12px;">{{'equipment.OnlineVideo'|translate}}</div>
+                <div class="part_title">{{'equipment.OnlineVideo'|translate}}</div>
                 <img id="img" [src]="img.url" [alt]="img.name">
             </div>
-            <div class="sceond_third height_36" style="position: relative;flex-wrap: wrap;">
-                <div class="part_title" style="top: -8px;left: 18px;">{{ 'equipment.EmissionAnalyzer'|translate }}</div>
-                <div class="display_wrap height_40" style="width: 100%;">
+            <div class="sceond_third height_35" style="position: relative;flex-wrap: wrap;padding-top: 0%; margin-top: 2%;">
+                <div class="part_title">{{ 'equipment.EmissionAnalyzer'|translate }}</div>
+                <div class="display_wrap height_29" style="width: 100%;margin-top: 17px;">
                     <ng-container *ngFor="let item of discharge">
                         <div class="width_33 discharge">
                             {{language?item.nameEn:item.name}}
@@ -108,8 +42,9 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="part_title" style="top: -8px;left: 18px;">{{'equipment.EnvironBinParam'|translate}}</div>
+
             <div class="thrid">
+                <div class="part_title">{{'equipment.EnvironBinParam'|translate}}</div>
                 <div class="height_25" style="display: flex;">
                     <div id="real_temperature_4" style="height: 100%;"></div>
                     <div id="real_temperature_5" style="height: 100%;"></div>
@@ -145,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div style="height: 33%;">
+            <div class="height_33 bo" style="margin-top: 14px;">
                 <ngx-chart-curve-v3 #chart_1 [chartName]="'chart_1'" title="{{ 'equipment.AVLSpeed'|translate}}" (clicEvent)="clicEvent($event,1)" dashboardName='dashboard_1' [list]="[]"></ngx-chart-curve-v3>
             </div>
         </div>

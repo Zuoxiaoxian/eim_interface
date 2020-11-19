@@ -13,7 +13,7 @@ import {PagesPopupsModule} from "../../pages-popups/pages-popups.module";
 import { RealTimeFourwdDischargeComponent } from './real-time-fourwd-discharge/real-time-fourwd-discharge.component';
 import { RealTimeFourwdSecondComponent } from './real-time-fourwd-second/real-time-fourwd-second.component';
 import { RealTimeExperimentLayoutComponent } from './real-time-experiment-layout/real-time-experiment-layout.component';
-import { LaboratoryBoardComponent } from './laboratory-board/laboratory-board.component';
+
 
 
 @NgModule({
@@ -22,7 +22,7 @@ import { LaboratoryBoardComponent } from './laboratory-board/laboratory-board.co
     // DataVisualizationGqComponent, RealTimeMonitoringComponent, 
     RealTimeMonitoringUpdateComponent, 
     // RealTimeMonitoring3DComponent, 
-    RealTimeFourwdDischargeComponent, RealTimeFourwdSecondComponent, RealTimeExperimentLayoutComponent, LaboratoryBoardComponent],
+    RealTimeFourwdDischargeComponent, RealTimeFourwdSecondComponent, RealTimeExperimentLayoutComponent],
   imports: [
     CommonModule,
     EimboardRoutingModule,

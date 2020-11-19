@@ -3,6 +3,10 @@ const img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAYAAACJm/9dA
 let equipment_four_road = {
     //设备状态
     create_device_status(data, myChart, config) {
+        if (!data) {
+            myChart.resize();
+            return;
+        }
         var xData = data.xData,
             borderData = [],
             legend = data.title_arr,
@@ -10,91 +14,9 @@ let equipment_four_road = {
         var normalColor = "rgba(255,255,255,0.5)";
         //   var fontSize = 20;
         let seriesData = [];
-        var borderHeight = 4;
-        xData.forEach(element => {
-            borderData.push(borderHeight);
-        });
-        data.d_arr.forEach((item, index) => {
-            var obj1 = {};
-            var obj2 = {};
-            if (index < data.d_arr.length - 1) {
-                obj1 = {
-                    name: legend[index],
-                    type: "bar",
-                    stack: legend[index],
-                    data: item,
-                    barWidth: "15%",
-                    itemStyle: {
-                        normal: {
-                            color: {
-                                type: "linear",
-                                x: 0,
-                                y: 0,
-                                x2: 0,
-                                y2: 1,
-                                colorStops: [{
-                                        offset: 0,
-                                        color: colorArr[index].start
-                                    },
-                                    {
-                                        offset: 0.5,
-                                        color: colorArr[index].start
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: colorArr[index].end
-                                    }
-                                ],
-                                globalCoord: false
-                            }
-                        }
-                    }
-                };
-                obj2 = {
-                    name: "",
-                    type: "bar",
-                    stack: legend[index],
-                    itemStyle: {
-                        normal: {
-                            color: colorArr[index].start
-                        }
-                    },
-                    data: borderData
-                };
-                seriesData.push(obj1);
-                seriesData.push(obj2);
-            } else {
-                var obj3 = {
-                    name: legend[index],
-                    type: "line",
-                    yAxisIndex: 1,
-                    smooth: false,
-                    symbol: "circle",
-                    symbolSize: 10,
-                    lineStyle: {
-                        normal: {
-                            width: 2
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: colorArr[index].color,
-                            borderColor: "#fff",
-                            borderWidth: 1
-                        }
-                    },
-                    data: item,
-                    label: {
-                        normal: {
-                            show: false
-                        }
-                    }
-                };
-                seriesData.push(obj3);
-            }
-        });
+        this.create_device_status_fun(xData, data, seriesData, legend, borderData, colorArr);
         // console.log(seriesData);
-        option_s = {
+        let option_s = {
             // backgroundColor: "#000",
             grid: {
                 left: "3%",
@@ -158,12 +80,10 @@ let equipment_four_road = {
             }],
             yAxis: [{
                     type: "value",
-                    name: "%",
                     nameTextStyle: {
                         color: normalColor,
                         fontSize: 12
                     },
-                    max: 100,
                     axisLabel: {
                         formatter: "{value}",
                         textStyle: {
@@ -189,13 +109,10 @@ let equipment_four_road = {
                 },
                 {
                     type: "value",
-                    name: "%",
                     nameTextStyle: {
                         color: normalColor,
                         fontSize: 12
                     },
-                    min: -100,
-                    max: 100,
                     axisLabel: {
                         formatter: "{value}",
                         textStyle: {
@@ -239,93 +156,11 @@ let equipment_four_road = {
         var normalColor = "rgba(255,255,255,0.5)";
         //   var fontSize = 20;
         let seriesData = [];
-        var borderHeight = 4;
-        xData.forEach(element => {
-            borderData.push(borderHeight);
-        });
-        data.d_arr.forEach((item, index) => {
-            var obj1 = {};
-            var obj2 = {};
-            if (index < data.d_arr.length - 1) {
-                obj1 = {
-                    name: legend[index],
-                    type: "bar",
-                    stack: legend[index],
-                    data: item,
-                    barWidth: "15%",
-                    itemStyle: {
-                        normal: {
-                            color: {
-                                type: "linear",
-                                x: 0,
-                                y: 0,
-                                x2: 0,
-                                y2: 1,
-                                colorStops: [{
-                                        offset: 0,
-                                        color: colorArr[index].start
-                                    },
-                                    {
-                                        offset: 0.5,
-                                        color: colorArr[index].start
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: colorArr[index].end
-                                    }
-                                ],
-                                globalCoord: false
-                            }
-                        }
-                    }
-                };
-                obj2 = {
-                    name: "",
-                    type: "bar",
-                    stack: legend[index],
-                    itemStyle: {
-                        normal: {
-                            color: colorArr[index].start
-                        }
-                    },
-                    data: borderData
-                };
-                seriesData.push(obj1);
-                seriesData.push(obj2);
-            } else {
-                var obj3 = {
-                    name: legend[index],
-                    type: "line",
-                    yAxisIndex: 1,
-                    smooth: false,
-                    symbol: "circle",
-                    symbolSize: 10,
-                    lineStyle: {
-                        normal: {
-                            width: 2
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: colorArr[index].color,
-                            borderColor: "#fff",
-                            borderWidth: 1
-                        }
-                    },
-                    data: item,
-                    label: {
-                        normal: {
-                            show: false
-                        }
-                    }
-                };
-                seriesData.push(obj3);
-            }
-        });
+        this.create_device_status_fun(xData, data, seriesData, legend, borderData, colorArr);
         if (seriesData.length == 0)
-            seriesData.push({ name: '', type: "line", data: [] })
-            // console.log(seriesData);
-        option_q = {
+            seriesData.push({ name: '', type: "line", data: [] });
+        // console.log(seriesData);
+        let option_q = {
             // backgroundColor: "#000",
             grid: {
                 left: "3%",
@@ -525,7 +360,7 @@ let equipment_four_road = {
             name: '',
             type: 'pie',
             clockWise: false,
-            radius: [60, 70],
+            radius: [30, 40],
             hoverAnimation: false,
             itemStyle: {
                 normal: {
@@ -542,7 +377,7 @@ let equipment_four_road = {
             },
             data: data
         }];
-        option_p = {
+        let option_p = {
             // backgroundColor: '#0A2E5D',
             color: color,
             title: {
@@ -595,7 +430,7 @@ let equipment_four_road = {
     },
     //日志 警告
     create_warning_chart(data, myChart) {
-        option_o = {
+        let option_o = {
             // backgroundColor: '#001120',
             tooltip: {
                 trigger: 'axis',
@@ -705,7 +540,7 @@ let equipment_four_road = {
     create_real_temperature(gauge_data, myChart) {
         let angle = 0; //角度，用来做简单的动画效果的
         let value = gauge_data.value;
-        optionInterval = {
+        let optionInterval = {
             // backgroundColor:"#061740",
             title: {
                 text: '{a|' + value + '}{c|%}',
@@ -993,21 +828,73 @@ let equipment_four_road = {
             }
         }
 
-        function draw() {
-            angle = angle + 3
-            myChart.setOption(optionInterval, { notMerge: true, lazyUpdate: true })
-                //window.requestAnimationFrame(draw);
-        }
-
-        // setInterval(function() {
-        //     //     //用setInterval做动画感觉有问题
-        //     draw()
-        // }, 100);
-
         window.onresize = function() {
             myChart.resize();
         }
         myChart.setOption(optionInterval);
+        myChart.resize()
+    },
+    //实时温湿度 仪表盘 设定+当前
+    create_real_temperature_v2(gauge_data, myChart) {
+        var datas = {
+            value: gauge_data.value,
+            title: gauge_data.title,
+            type: 1,
+            radiusType: 1
+        };
+        let max = gauge_data.max;
+        let nqColor = [
+            [gauge_data.setValue / max, "#1e87f0"],
+            [1, "#e6e6e6"]
+        ]
+        let optionInterval_v2 = {
+            tooltip: {
+                show: false
+            },
+            series: [{
+                name: "",
+                type: "gauge",
+                radius: "120%",
+                center: ["50%", "70%"],
+                startAngle: 180,
+                endAngle: 0,
+                z: 7,
+                splitNumber: 5,
+                min: 0,
+                max: max,
+                axisLine: {
+                    lineStyle: {
+                        color: nqColor,
+                        width: 10,
+                        opacity: 0.9
+                    }
+                },
+                splitLine: {
+                    length: 12,
+                },
+                axisTick: { // 坐标轴小标记
+                    show: true,
+                    length: 10,
+                    lineStyle: {
+                        width: 1,
+                    }
+                },
+                pointer: {
+                    show: true,
+                    fontSize: 8,
+                },
+                detail: {
+                    show: true,
+                    // offsetCenter: [0, '0%'],
+
+                },
+                data: [datas]
+            }]
+        };
+        window.onresize = function() {
+            myChart.resize();
+        }
+        myChart.setOption(optionInterval_v2);
         myChart.resize()
     },
     //avl 出风回风温湿度
@@ -1088,7 +975,7 @@ let equipment_four_road = {
 
     //仪表盘
     create_real_dashboard(data, Chart) {
-        option_u = {
+        let option_u = {
             // backgroundColor: 'rgb(10,69,128)',
             series: [{
                     type: 'gauge',
@@ -1290,7 +1177,7 @@ let equipment_four_road = {
 
     //生成仪表盘单盘 上汽
     create_real_single_dashboard(data, chart) {
-        option_y = {
+        let option_y = {
             // backgroundColor: '#1b1b1b',
             tooltip: {
                 formatter: '{a} {c}'
@@ -1606,7 +1493,7 @@ let equipment_four_road = {
         };
 
 
-        option_rg = {
+        let option_rg = {
             // backgroundColor: '#fff',
             title: [{
                 text: data.text,
@@ -1735,7 +1622,7 @@ let equipment_four_road = {
                 });
         })
         if (series.length == 0) series.push({ type: 'line', name: '', data: [] });
-        option_e = {
+        let option_e = {
             tooltip: {
                 trigger: 'axis',
             },
@@ -1773,10 +1660,12 @@ let equipment_four_road = {
             },
             series: series
         };
+        myChart.setOption(option_e, config);
+        // myChart.resize();
         window.onresize = function() {
             myChart.resize();
         }
-        myChart.setOption(option_e, config ? config : {});
+
     },
 
     // //进度条
@@ -1883,6 +1772,90 @@ let equipment_four_road = {
             },
             smooth: true
         }
+    },
+    create_device_status_fun(xData, data, seriesData, legend, borderData, colorArr) {
+        xData.forEach(element => {
+            borderData.push(borderHeight);
+        });
+        data.d_arr.forEach((item, index) => {
+            var obj1 = {};
+            var obj2 = {};
+            if (index < data.d_arr.length - 1) {
+                obj1 = {
+                    name: legend[index],
+                    type: "bar",
+                    stack: legend[index],
+                    data: item,
+                    barWidth: "15%",
+                    itemStyle: {
+                        normal: {
+                            color: {
+                                type: "linear",
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                        offset: 0,
+                                        color: colorArr[index].start
+                                    },
+                                    {
+                                        offset: 0.5,
+                                        color: colorArr[index].start
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: colorArr[index].end
+                                    }
+                                ],
+                                globalCoord: false
+                            }
+                        }
+                    }
+                };
+                obj2 = {
+                    name: "",
+                    type: "bar",
+                    stack: legend[index],
+                    itemStyle: {
+                        normal: {
+                            color: colorArr[index].start
+                        }
+                    },
+                    data: borderData
+                };
+                seriesData.push(obj1);
+                seriesData.push(obj2);
+            } else {
+                var obj3 = {
+                    name: legend[index],
+                    type: "line",
+                    yAxisIndex: 1,
+                    smooth: false,
+                    symbol: "circle",
+                    symbolSize: 10,
+                    lineStyle: {
+                        normal: {
+                            width: 2
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: colorArr[index].color,
+                            borderColor: "#fff",
+                            borderWidth: 1
+                        }
+                    },
+                    data: item,
+                    label: {
+                        normal: {
+                            show: false
+                        }
+                    }
+                };
+                seriesData.push(obj3);
+            }
+        });
     }
 }
 

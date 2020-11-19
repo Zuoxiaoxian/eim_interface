@@ -69,11 +69,15 @@ export const dateformat=(date:Date,format:string)=>{
 
 export const  getMessage=(f,data)=>{
     let arr:any = [];
+    var aee = [];
+    var i = 0;
     f.result.message[0].message.forEach(m => {
-    arr = [
+      aee = m[2].split(' ');
+      i = aee.findIndex(f => f && f !=' ');
+      arr = [
           m[0],
-          m[2].split(' ')[0],
-          m[2].split(' ').splice(1).join(' '),
+          aee[i],
+          aee.splice(i+1).join(' '),
           m[1],
         ]
       if(!data.find(g => g[0] == arr[0] && g[1] == arr[1] && g[2] == arr[2])){
@@ -85,61 +89,64 @@ export const  getMessage=(f,data)=>{
     //锁定滚动条最下面
     var showContent = $(".overflow_height_85");
     showContent[0].scrollTop = showContent[0].scrollHeight;
-  }
+}
+
+export const copy=(d)=>{
+  return JSON.parse(JSON.stringify(d));
+}
 
 
+/**
+ * http请求中拿到的数据 调用子组件内部方法
+ * time 目前是 1 或者 10 
+ */
+export const painting_time = (f,time,isthis,arr) =>{
+  let data = {};
+  let x = {};
+  //拿接口请求到达的数据
+  f.result.message[0].message.forEach((el,i) => {
+    for(let key in el){
+      //将y轴数据打包成key string  value数组
+      time == 1?(data[key] = [], data[key].push(el[key][0][0])):data[key] = el[key].map(m => (m[0]?m[0]:0));
+      let arr = el[key];
+      //将x轴数据打包成key string  value数组
+      time == 1?(x[key] = [],x[key].push(dateformat(new Date(arr[0][1]),'dd:hh:ss')))
+      :x[key] =  arr.map(m =>( dateformat(new Date(m[1]),'dd:hh:ss')));
+    }
+  });
+  //进行匹配赋值
+  isthis.click_list.forEach((f,i)=>{
+      isthis[`attrs_${i+1}`][f].forEach((el,j) => {
+      //判断当前参数是否本次请求内是否有拿到值
+      if(data[el.nameEn.replace(".","").toLocaleLowerCase()]){
+        //将y轴的值放到组装好的对象中
+        time == 1?el.value.push(data[el.nameEn.replace(".","").toLocaleLowerCase()][0]):
+        el.value =  data[el.nameEn.replace(".","").toLocaleLowerCase()];
 
-  /**
-   * http请求中拿到的数据 调用子组件内部方法
-   * time 目前是 1 或者 10 
-   */
-  export const painting_time = (f,time,isthis,arr) =>{
-    let data = {};
-    let x = {};
-    //拿接口请求到达的数据
-    f.result.message[0].message.forEach((el,i) => {
-      for(let key in el){
-        //将y轴数据打包成key string  value数组
-        time == 1?(data[key] = [], data[key].push(el[key][0][0])):data[key] = el[key].map(m => (m[0]?m[0]:0));
-        let arr = el[key];
-        //将x轴数据打包成key string  value数组
-        time == 1?(x[key] = [],x[key].push(dateformat(new Date(arr[0][1]),'dd:hh:ss')))
-        :x[key] =  arr.map(m =>( dateformat(new Date(m[1]),'dd:hh:ss')));
-      }
-    });
-    //进行匹配赋值
-    isthis.click_list.forEach((f,i)=>{
-        isthis[`attrs_${i+1}`][f].forEach((el,j) => {
-        //判断当前参数是否本次请求内是否有拿到值
-        if(data[el.nameEn.replace(".","").toLocaleLowerCase()]){
-          //将y轴的值放到组装好的对象中
-          time == 1?el.value.push(data[el.nameEn.replace(".","").toLocaleLowerCase()][0]):
-          el.value =  data[el.nameEn.replace(".","").toLocaleLowerCase()];
-
-          //将x轴的值放到组装好的对象中
-          if(!isthis[`attrs_${i+1}`].xData)isthis[`attrs_${i+1}`].xData = [];
-          if(j==0)time == 1?isthis[`attrs_${i+1}`].xData.push(x[el.nameEn.replace(".","").toLocaleLowerCase()][0]):
-          isthis[`attrs_${i+1}`].xData = x[el.nameEn.replace(".","").toLocaleLowerCase()];
-          
-        }
-        //判断当前的x轴数组的值是否大于10 减去过长会导致显示拥挤
-        if(isthis[`attrs_${i+1}`].xData.length > 10)isthis[`attrs_${i+1}`].xData.splice(0,1);
+        //将x轴的值放到组装好的对象中
+        if(!isthis[`attrs_${i+1}`].xData)isthis[`attrs_${i+1}`].xData = [];
+        if(j==0)time == 1?isthis[`attrs_${i+1}`].xData.push(x[el.nameEn.replace(".","").toLocaleLowerCase()][0]):
+        isthis[`attrs_${i+1}`].xData = x[el.nameEn.replace(".","").toLocaleLowerCase()];
         
-        //echart 数值显示是以数组下标做对应
-        if(el.value.length > 10) el.value.splice(0,1);
-
-      })
+      }
+      //判断当前的x轴数组的值是否大于10 减去过长会导致显示拥挤
+      if(isthis[`attrs_${i+1}`].xData.length > 10)isthis[`attrs_${i+1}`].xData.splice(0,1);
+      
+      //echart 数值显示是以数组下标做对应
+      if(el.value.length > 10) el.value.splice(0,1);
 
     })
 
-    //吧当前所有的全部更新
-    arr.forEach((f,i)=>{
-      isthis[`chart_${i+1}`].painting({attrs:isthis[`attrs_${i+1}`][isthis.click_list[i]],xData:isthis[`attrs_${i+1}`].xData,index:1});
-    })
-  }
+  })
+
+  //吧当前所有的全部更新
+  arr.forEach((f,i)=>{
+    isthis[`chart_${i+1}`].painting({attrs:isthis[`attrs_${i+1}`][isthis.click_list[i]],xData:isthis[`attrs_${i+1}`].xData,index:1});
+  })
+}
 
 
-  export const guid2=()=> {
+export const guid2=()=> {
     function S4() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     }
@@ -159,6 +166,23 @@ export const list_copy=(list,name,isthis)=>{
   list.forEach((f,i)=>{
     isthis[name][f] = JSON.parse(JSON.stringify(isthis.attrs));
   })
+}
+export const list_copy_new = (list,attr,name,isthis)=>{
+  list.forEach(element => {
+    isthis[name][element] = copy(attr);
+  });
+  isthis[name].xData = [];
+}
+
+export const list_jion_new = (list,name,isthis)=>{
+  list.forEach((f,i)=>{
+    isthis[name][f].forEach(element => {
+      element.value.push(parseInt((Math.random()*100).toString()));
+      if(element.value.length > 10)element.value.splice(0,1)
+    });
+  });
+  isthis[name].xData.push(dateformat(new Date(),'mm:ss'));
+  if(isthis[name].xData.length>10)isthis[name].xData.splice(0,1)
 }
 
 export const create_third_chart_line=(rtm3a,isthis)=>{

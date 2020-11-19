@@ -7,9 +7,11 @@ import { EquipmentDetailsComponent } from './equipment-details/equipment-details
 import { EquipmentFourRoadComponent } from './equipment-four-road/equipment-four-road.component';
 import { EquipmentHydraulicPressureComponent } from './equipment-hydraulic-pressure/equipment-hydraulic-pressure.component';
 import { EquipmentMastV2Component } from './equipment-mast-v2/equipment-mast-v2.component';
+import { EquipmentMastV3Component } from './equipment-mast-v3/equipment-mast-v3.component';
 import { EquipmentMastComponent } from './equipment-mast/equipment-mast.component';
 import { EquipmentMotorSystemComponent } from './equipment-motor-system/equipment-motor-system.component';
 import { EquipmentShockComponent } from './equipment-shock/equipment-shock.component';
+import { LaboratoryBoardComponent } from './laboratory-board/laboratory-board.component';
 
 
 //路由
@@ -57,9 +59,17 @@ const ROUTERS: Routes = [{
         component:EquipmentMastV2Component
       },
       {
+        path:'mast-v3',
+        component:EquipmentMastV3Component
+      },
+      {
         path:'detailsDemo/:title',
         component:EquipmentDetailsComponent
-      }
+      },
+      {
+        path:'laboratory',
+        component:LaboratoryBoardComponent
+      },
     ]
 }];
 @NgModule({

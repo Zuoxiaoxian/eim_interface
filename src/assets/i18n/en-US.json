@@ -25,6 +25,8 @@
         "ambient": "Ambient",
         "realime": "Real",
         "ExperimentNum": "ExperimentNum",
+        "StartTime": "StartTime",
+        "PlannedRound": "PlannedRound",
         "PLanDuration": "PLanDuration",
         "schedule": "Schedule",
         "NextExperiment": "NextExperiment",
@@ -107,6 +109,14 @@
                 }
             }
 
+        },
+        "motor": {
+            "coolingWater": "CoolingWater",
+            "AxleBoxTemp": "AxleBoxTemperature",
+            "MotorParam": "MotorParam",
+            "MotorEfficiency": "MotorEfficiency",
+            "electricCurrent": "ElectricCurrent",
+            "Voltage": "Voltage"
         }
     }
 

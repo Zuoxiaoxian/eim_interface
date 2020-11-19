@@ -2,7 +2,7 @@ let rtm3 = {
 
     create_first_second(gauge_data) {
         var myChart = echarts.init(document.querySelector('.first_second'));
-        option = {
+        let option_f_s = {
             grid: {
                 left: '5%',
                 right: '5%',
@@ -64,12 +64,11 @@ let rtm3 = {
                 data: gauge_data.seriesData
             }]
         };
-        console.log(option)
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        // console.log(option_f_s)
+        window.addEventListener('resize', f => {
             myChart.resize();
-        }
-        myChart.setOption(option);
+        })
+        myChart.setOption(option_f_s);
         myChart.resize();
     },
 
@@ -78,7 +77,7 @@ let rtm3 = {
         var app = {};
         app.title = '极坐标系下的堆叠柱状图';
 
-        option = {
+        let option_b_f = {
             textStyle: { //图例文字的样式
                 color: '#dbdbdb',
                 fontSize: 10
@@ -100,19 +99,16 @@ let rtm3 = {
                 data: gauge_data.legendData
             }
         };
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
             myChart.resize();
-        }
-        myChart.setOption(option);
+        })
+        myChart.setOption(option_b_f);
         myChart.resize();
     },
 
     create_box3_right(gauge_data, myChart) {
 
-        var app = {};
-        option = null;
-        option = {
+        let option_b_r = {
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -154,11 +150,10 @@ let rtm3 = {
             }],
             series: gauge_data.seriesData
         };
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
             myChart.resize();
-        }
-        myChart.setOption(option);
+        })
+        myChart.setOption(option_b_r);
         myChart.resize();
     },
 
@@ -171,7 +166,7 @@ let rtm3 = {
         var color = ['#F35331', '#2499F8', '#3DF098', '#33B734'];
         plan_chart_1 = echarts.init(document.getElementById('line_chart_1'));
         plan_chart_2 = echarts.init(document.getElementById('line_chart_2'));
-        plan_option = {
+        let plan_option = {
             xAxis: {
                 data: plan_xAxis,
                 axisLabel: {
@@ -267,10 +262,10 @@ let rtm3 = {
             ]
         };
 
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
-            myChart.resize();
-        }
+        window.addEventListener('resize', f => {
+            plan_chart_1.resize();
+            plan_chart_2.resize();
+        })
         plan_chart_1.setOption(plan_option);
         plan_chart_1.resize();
         plan_chart_2.setOption(plan_option);
@@ -281,7 +276,7 @@ let rtm3 = {
     create_third_first(gauge_data, id) {
         if (!document.getElementById(id)) return;
         var myChart = echarts.init(document.getElementById(id));
-        option = {
+        let option_t_f = {
             title: {
                 text: `${gauge_data.title}\n\n${gauge_data.number}`,
                 x: 'center',
@@ -426,18 +421,20 @@ let rtm3 = {
                 }
             ]
         }
-
-        window.onresize = function() {
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
             myChart.resize();
-        }
-        myChart.setOption(option);
+        })
+        myChart.setOption(option_t_f);
         myChart.resize();
     },
 
     //最下层列表图表
     create_right_buttom(gauge_data, myChart) {
-        option = {
+        if (!gauge_data) {
+            myChart.resize()
+            return;
+        }
+        let option_r_b = {
             tooltip: {
                 trigger: 'axis'
             },
@@ -550,12 +547,11 @@ let rtm3 = {
                 data: gauge_data.seriesData
             }]
         };
-        window.onresize = function() {
-                this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
                 myChart.resize();
-            }
+            })
             // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+        myChart.setOption(option_r_b);
         myChart.resize();
     }
 }

@@ -37,33 +37,8 @@ export class EquipmentAvlComponent implements OnInit {
   attrs_3 = [];
 
  
-  experiment ={
-    user:'新工',
-    phone:'13499998888',
-    nexttest:'Geely001',
-    nextdate:'20/11/01-20/11/30',
-    // '实验编号','计划时长','进度'
-    title:['ExperimentNum','PLanDuration','schedule'],
-    data:[
-      ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-    ]
-  }
+ 
 
-  log_warm = {
-    // '时间','日志等级','日志信息'
-    title:['time','Loglevel','logInfor'],
-    data:[
-      ['2020-09-08','warning','Not ready'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-    ]
-  }
 
   switchStatus:any ={
     title:[`Station
@@ -269,9 +244,7 @@ export class EquipmentAvlComponent implements OnInit {
     return 100/num+'%'
   }
 
-  get_height(){
-    return this.experiment.data.length <= 2?31*this.experiment.data.length+'px':'120px';
-  }
+  
 
   clicEvent(e,i){
     //记录选定

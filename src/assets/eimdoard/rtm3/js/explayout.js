@@ -1,6 +1,6 @@
 let expLayouteChart = {
     create_percentage_chart(data, myChart) {
-        option = {
+        let option_p_c = {
             // backgroundColor: 'rgba(1,1,1,0)',
             tooltip: {
                 show: false,
@@ -64,13 +64,13 @@ let expLayouteChart = {
         }
 
         if (option && typeof option === "object") {
-            myChart.setOption(option);
+            myChart.setOption(option_p_c);
             myChart.resize();
         }
     },
 
     cteate_chart(data, myChart) {
-        option = {
+        let option_c = {
             title: {
                 show: true,
                 text: data.title,
@@ -128,7 +128,7 @@ let expLayouteChart = {
         }
 
         if (option && typeof option === "object") {
-            myChart.setOption(option);
+            myChart.setOption(option_c);
             myChart.resize();
         }
     }

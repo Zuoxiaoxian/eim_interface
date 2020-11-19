@@ -1,12 +1,11 @@
 #expLayout {
-    background: url('/assets/eimdoard/rtm3/images/bg.png');
+    background: url('/assets/eimdoard/rtm3/images/bg.png') no-repeat;
     position: relative;
     width: 100%;
     height: 100%;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
-    background-position: center center;
     text-align: center;
     display: flex;
     flex-flow: column;
@@ -116,7 +115,7 @@
     }
     .table_body {
         overflow-x: hidden;
-        height: 420px;
+        height: 627px;
         tr {
             height: 50px;
         }

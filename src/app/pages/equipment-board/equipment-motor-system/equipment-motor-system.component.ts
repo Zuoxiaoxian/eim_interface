@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LayoutService } from '../../../@core/utils/layout.service';
-import { colors, rgb_del_red,list_jion,list_copy,create_third_chart_line } from '../equipment-board';
+import { colors, rgb_del_red,list_jion,list_copy,create_third_chart_line,list_copy_new,list_jion_new } from '../equipment-board';
 
 let equipment_four_road = require('../../../../assets/eimdoard/equipment/js/equipment-four-road')
 let rtm3a = require('../../../../assets/eimdoard/rtm3/js/rtm3a');
@@ -16,13 +16,13 @@ let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
 })
 export class EquipmentMotorSystemComponent implements OnInit {
   attrs =[{ 
-    name: "参数1",nameEn: "param1", unit: "V",value: [],show:true,dashboardShow:true
+    name: "扭矩",nameEn: "param1", unit: "V",value: [],show:true,dashboardShow:true
     ,color:["#00FF00", "#00FF00"]
   },{ 
-      name: "参数2",nameEn: "param2", unit: "V",value: [],
+      name: "转速",nameEn: "param2", unit: "V",value: [],
       color:["#ff00ff", "#ff00ff"],dashboardShow:true
   },{ 
-      name: "参数3",nameEn: "param3", unit: "V",value: [],
+      name: "功率",nameEn: "param3", unit: "V",value: [],
       color:["#d9d919", "#d9d919"],dashboardShow:true
   },{ 
     name: "参数4",nameEn: "param4", unit: "V",value: [],
@@ -39,7 +39,50 @@ export class EquipmentMotorSystemComponent implements OnInit {
 }]
   xData = [];
 
-  attrs_1 = {};
+  attrs_1 = {'equipment.motor.coolingWater':[{ 
+    name: "扭矩",nameEn: "param1", unit: "V",value: [],show:true,dashboardShow:true
+    ,color:["#00FF00", "#00FF00"]
+  },{ 
+      name: "转速",nameEn: "param2", unit: "V",value: [],
+      color:["#ff00ff", "#ff00ff"],dashboardShow:true
+  },{ 
+      name: "功率",nameEn: "param3", unit: "V",value: [],
+      color:["#d9d919", "#d9d919"],dashboardShow:true
+  },{ 
+    name: "参数4",nameEn: "param4", unit: "V",value: [],
+    color:["#d9d919", "#d9d919"]
+},{ 
+  name: "参数5",nameEn: "param5", unit: "V",value: [],
+  color:["#d9d919", "#d9d919"]
+},{ 
+  name: "参数6",nameEn: "param6", unit: "V",value: [],
+  color:["#d9d919", "#d9d919"]
+},{ 
+  name: "参数7",nameEn: "param7", unit: "V",value: [],
+  color:["#d9d919", "#d9d919"]
+}],
+'equipment.motor.AxleBoxTemp':[{ 
+  name: "扭矩",nameEn: "param1", unit: "V",value: [],show:true,dashboardShow:true
+  ,color:["#00FF00", "#00FF00"]
+},{ 
+    name: "转速",nameEn: "param2", unit: "V",value: [],
+    color:["#ff00ff", "#ff00ff"],dashboardShow:true
+},{ 
+    name: "功率",nameEn: "param3", unit: "V",value: [],
+    color:["#d9d919", "#d9d919"],dashboardShow:true
+},{ 
+  name: "参数4",nameEn: "param4", unit: "V",value: [],
+  color:["#d9d919", "#d9d919"]
+},{ 
+name: "参数5",nameEn: "param5", unit: "V",value: [],
+color:["#d9d919", "#d9d919"]
+},{ 
+name: "参数6",nameEn: "param6", unit: "V",value: [],
+color:["#d9d919", "#d9d919"]
+},{ 
+name: "参数7",nameEn: "param7", unit: "V",value: [],
+color:["#d9d919", "#d9d919"]
+}]};
   attrs_2 = {};
   attrs_3 = {};
 
@@ -47,41 +90,7 @@ export class EquipmentMotorSystemComponent implements OnInit {
   str = ` 主要测试电机低速及控制系统性能，如：电机标定、转矩-转速特性、<br> 效率、温升、堵转试验、转矩控制精度、转速控制精度、峰值转矩、
   <br> 峰值功率`;
 
-  //安灯状态
-  andon = [
-    {name:'4',color:'blue',status:1},
-    {name:'3',color:'green',status:1},
-    {name:'2',color:'yellow',status:0},
-    {name:'1',color:'red',status:0},
-  ];
-  //试验信息
-  experiment ={
-    user:'新工',
-    phone:'13499998888',
-    nexttest:'Geely001',
-    nextdate:'20/11/01-20/11/30',
-    // '实验编号','计划时长','进度'
-    title:['ExperimentNum','PLanDuration','schedule'],
-    data:[
-      ['WSN-100010','20/10/01-20/11/01',69],
-      ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-    ]
-  }
-  //日志与警告
-  log_warm = {
-    // '时间','日志等级','日志信息'
-    title:['time','Loglevel','logInfor'],
-    data:[
-      ['2020-09-08','warning','Not ready'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-    ]
-  }
+  
   //图片
   img = {
     url:'assets/eimdoard/equipment/images/car_2.png',//中间图片
@@ -103,9 +112,9 @@ export class EquipmentMotorSystemComponent implements OnInit {
   @ViewChild('chart_1')chart_1:any;
 
   //每一个ngx-chart-curve-v3 中有哪些tag
-  list_2 = ['equipment.param1','equipment.param2'];
-  list_1 = ['equipment.param1','equipment.param2'];
-  list_3 = ['equipment.param1','equipment.param2'];
+  list_2 = ['equipment.motor.Voltage','equipment.motor.electricCurrent'];
+  list_1 = ['equipment.motor.MotorParam','equipment.motor.MotorEfficiency'];
+  list_3 = ['equipment.motor.coolingWater','equipment.motor.AxleBoxTemp'];
   click_list = [];//当前选中的tag
 
   timer:any;//定时器
@@ -139,12 +148,12 @@ export class EquipmentMotorSystemComponent implements OnInit {
     })
 
     //默认进去选中的tag记录
-    this.click_list = [this.list_1[0],this.list_3[0],this.list_3[0]]
+    this.click_list = [this.list_1[0],this.list_2[0],this.list_3[0]]
 
     //赋值
-    list_copy(this.list_1,`attrs_1`,this);
-    list_copy(this.list_2,`attrs_2`,this);
-    list_copy(this.list_3,`attrs_3`,this);
+    list_copy_new(this.list_1,this.attrs,`attrs_1`,this);
+    list_copy_new(this.list_2,this.attrs,`attrs_2`,this);
+    list_copy_new(this.list_3,this.attrs,`attrs_3`,this);
     this.getData();
     setTimeout(() => {
     this.initChart();
@@ -164,9 +173,9 @@ export class EquipmentMotorSystemComponent implements OnInit {
       this.xData.push(g);
       if(this.xData.length >10)this.xData.splice(0,1)
         g++;
-        list_jion(this.list_1,'attrs_1',this);
-      list_jion(this.list_2,'attrs_2',this);
-      list_jion(this.list_3,'attrs_3',this);
+        list_jion_new(this.list_1,'attrs_1',this);
+        list_jion_new(this.list_2,'attrs_2',this);
+        list_jion_new(this.list_3,'attrs_3',this);
         let array = ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
         this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:this.xData,index:g});
       })
@@ -217,21 +226,22 @@ export class EquipmentMotorSystemComponent implements OnInit {
   clicEvent(e,i){
     //记录选定
     this.click_list[i-1] = e;
-    this[`chart_${i}`].painting({attrs:this[`attrs_${i}`][e],xData:this.xData});
+    // this[`list_${i}`].forEach(f=>{
+    //   if(e!=f)this[`attrs_${i}`][f].forEach(el => {
+    //     el.value = [];
+    //     this[`attrs_${i}`][f].xData = [];
+    //   });
+    // })
   }
 
-  getleft(item){
-    return item > 40?item-20+'%':'20%';
-  }
+
 
 
   get_td_width(num){
     return 66/num+'%'
   }
 
-  get_height(){
-    return this.experiment.data.length <= 2?31*this.experiment.data.length+'px':'120px';
-  }
+
 
 
   ngOnDestroy(){
