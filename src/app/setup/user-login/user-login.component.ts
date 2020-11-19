@@ -355,7 +355,8 @@ export class UserLoginComponent implements OnInit {
   RecordLogin(){
 
     if(this.userInfoService.getLoginName()){
-      const source = this.userInfoService.getSourceid();        // 本机IP地址
+      // const source = this.userInfoService.getSourceid();        // 本机IP地址,
+      const source = this.userInfoService.getClientip();        // 客户端IP地址,
       const employeeid = this.userInfoService.getEmployeeID();  // employeeid
       // result 1
       // info 登录

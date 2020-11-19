@@ -20,6 +20,7 @@ import { ExpiredTokenComponent } from '../../pages-popups/token-diallog/expired-
 
 // 订阅
 import { BehaviorSubject } from 'rxjs' 
+import { UserInfoService } from '../user-info/user-info.service';
 
 
 @Injectable({
@@ -29,7 +30,8 @@ export class PublicmethodService {
 
   constructor(private toatrservice: NbToastrService, private location: PlatformLocation, private httpservice: HttpserviceService,
     private ngxtoastrservice: ToastrService, private datepipe: DatePipe, private router: Router,
-    private dialogService: NbDialogService) { }
+    private dialogService: NbDialogService,
+    ) { }
 
   /**
    * 弹出提示
@@ -304,6 +306,8 @@ export class PublicmethodService {
 
   }
 
+  // 
+
   // 得到时间范围，默认 昨天---今天
 
   public selectedMoments = [
@@ -409,8 +413,54 @@ export class PublicmethodService {
     })
   }
 
-  get_buttons_bypath(){
-    
+  get_buttons_bypath(roleid){
+    // 得到pathname --在得到button
+    return new Observable((observe)=>{
+      this.get_current_pathname().subscribe(result=>{
+        var link = result["link"];
+        console.warn("pathname: ", result, "link: ", link);
+        // 更具link 得到button
+        var table = "menu_item";
+        var method = "get_button";
+        // var columns = {redirecturl: link}
+        var columns = {redirecturl: link, roleid: roleid}
+        this.httpservice.callRPC(table, method, columns).subscribe(result=>{
+          console.log("get_button: ", result);
+          if(result["result"]["message"][0]["code"] === 1){
+            console.log("--------->", result["result"]["message"][0]["message"])
+            var button = result["result"]["message"][0]["message"];
+            for(var k in button){
+              // this.button[k]["class"] = this.buttons[k]["class"];
+              switch (k) {
+                case 'add':
+                  button[k]["class"] =  "info";
+                  break;
+                case 'del':
+                  button[k]["class"] =  "danger";
+                  break;
+                case 'edit':
+                  button[k]["class"] =  "warning";
+                  break;
+                case 'query':
+                  button[k]["class"] =  "success";
+                  break;
+                case 'import':
+                  button[k]["class"] =  "info";
+                  break;
+                case 'download':
+                  button[k]["class"] =  "primary";
+                  break;
+              
+                default:
+                  button[k]["class"] =  "primary";
+                  break;
+              }
+            }
+            observe.next(button)
+          }
+        })
+      });
+    })
   }
    
   // -----------------------------------------页面得到 权限buttons

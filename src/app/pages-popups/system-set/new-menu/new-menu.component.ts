@@ -111,13 +111,7 @@ export class NewMenuComponent implements OnInit {
       // input被选中事件
       eleTree.on("nodeClick(data5)",function(d) {
           $(".anniu_tab [name='parentid']").val(d.data.currentData.label)
-          // console.log(d.data);    // 点击节点对应的数据
-          // console.log("当前选择的数据的id", d.data.currentData.id, d.data.currentData.label);    // 点击节点对应的数据
-          // localStorage.setItem("anniunparentname", d.data.currentData.id);
           parentid =  d.data.currentData.id
-          // console.log(d.isChecked);   // input是否被选中
-          // console.log(d.node);    // 点击的dom节点
-          // console.log(this);      // input对应的dom
           $(".ele5").hide();
       }) 
       $(document).on("click",function() {
@@ -170,7 +164,7 @@ export class NewMenuComponent implements OnInit {
             ,"link": isnot_edit["link"] // 路由
             ,"visible": isnot_edit["active"]===1? true: false // 是否启用
             ,"orderindex": isnot_edit["orderindex"] // 排序号
-            ,"icon":isnot_edit["icon"] === null? '暂无' : isnot_edit["icon"]
+            ,"icon":isnot_edit["icon"] === null? null : isnot_edit["icon"]
             ,"parenttitle": isnot_edit["parentid"], // 上级目录
           }); 
           // 表单赋值--菜单
@@ -179,7 +173,7 @@ export class NewMenuComponent implements OnInit {
             ,"title_en": res["en"] // 菜单名称en
             ,"link": isnot_edit["link"] // 路由
             ,"visible": isnot_edit["active"]===1? true: false // 是否启用
-            ,"icon":isnot_edit["icon"] === null? '暂无' : isnot_edit["icon"]
+            ,"icon":isnot_edit["icon"] === null? null : isnot_edit["icon"]
             ,"permission": isnot_edit["permission"] === null? null : isnot_edit["permission"] // 权限标识
             ,"orderindex": isnot_edit["orderindex"] // 排序
             ,"parenttitle": isnot_edit["parentid"], // 上级目录

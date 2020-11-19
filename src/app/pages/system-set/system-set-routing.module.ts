@@ -28,10 +28,10 @@ const routes: Routes = [
         path: 'menu',
         component: MenuComponent,
       },
-      {
-        path: 'employee',
-        component: UserEmployeeComponent,
-      },
+      // {
+      //   path: 'employee',
+      //   component: UserEmployeeComponent,
+      // },
       {
         path: 'user',
         component: EmployeeComponent,
@@ -41,7 +41,7 @@ const routes: Routes = [
         component: UserEmployeeGroupComponent,
       },
       {
-        path: 'newemployeegroup',
+        path: 'employee',
         component: NewUserEmployeeComponent,
       },
       {

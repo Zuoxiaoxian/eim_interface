@@ -24,6 +24,7 @@ export class RoleComponent implements OnInit {
   @Input() rowdata: string;
   constructor(protected dialogRef: NbDialogRef<RoleComponent>, private http: HttpserviceService, private userinfo: UserInfoService,
     private publicservice: PublicmethodService) { }
+    title; // table 标题
 
   ngOnInit(): void {
     var dialogRef = this.dialogRef
@@ -41,8 +42,11 @@ export class RoleComponent implements OnInit {
     var formdatar = {};
     // 编辑
     if (isnot_edit != 'add'){
+      this.title = "编辑角色"
+    }else{
+      this.title = "添加角色"
 
-    }else{}
+    }
 
     
     var that = this;
@@ -152,6 +156,10 @@ export class RoleComponent implements OnInit {
           return false;
         }else{
           // 新增
+          if (!data.field["visible"]){
+            data.field["visible"] = "off"
+          }
+          console.log("------------新增角色-----------", data.field);
           var is_success = confirm(data.field, userinfo,http,that);
           if (is_success){
             dialogRef.close(true);
@@ -187,7 +195,7 @@ export class RoleComponent implements OnInit {
     const colums = {
       role: data["role"],
       role_name: data["role_name"],
-      visible: data["visible"] === "on"? 1: 0,
+      active: data["visible"] === "on"? 1: 0,
       roledetail: data["remark"],
       // 角色添加只有管理员可以，
       createdby: userinfo.getName()
@@ -235,7 +243,7 @@ export class RoleComponent implements OnInit {
   }
 
   // option_record  
-  RecordOperation(result,transactiontype, infodata){
+  RecordOperation(transactiontype, result,infodata){
     if(this.userinfo.getLoginName()){
       var employeeid = this.userinfo.getEmployeeID();
       var result = result; // 1:成功 0 失败

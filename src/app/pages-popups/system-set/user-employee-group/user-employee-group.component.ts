@@ -28,10 +28,21 @@ export class UserEmployeeGroupComponent implements OnInit {
 
   UpSuccess :any = {position: 'bottom-end', status: 'success', conent:"修改成功!"};
   UpDanger :any = {position: 'bottom-end', status: 'danger', conent:"修改失败！"}
-
+  title; // 标题
 
   ngOnInit(): void {
+    // 添加用户组
+    var isnot_edit = JSON.parse(this.rowdata);
+    console.log("添加用户组\n\n", isnot_edit)
+    if (isnot_edit != 'add'){
+      // 编辑 科室/功能组
+      this.title = "编辑科室/功能组"
+    }else{
+      // 添加 科室/功能组
+      this.title = "添加科室/功能组"
+    }
     this.getform();
+
   }
 
   // 监听表单 employeeid,group, createdby,active
@@ -98,9 +109,10 @@ export class UserEmployeeGroupComponent implements OnInit {
           if (value.length > 100){
             return "组名称最大长度不超过100！"
           }
-          // if (! new RegExp(EmployeeGroup["group_name"]).test(value)){
-          //   return "组名称不能有特殊字符"
-          // }
+          // 不为中文
+          if ( new RegExp(EmployeeGroup["group_name"]).test(value)){
+            return "组名称为英文"
+          }
           
           
         },
@@ -121,31 +133,24 @@ export class UserEmployeeGroupComponent implements OnInit {
         console.log("v======获取表单区域所有值",data.field) //当前容器的全部表单字段，名值对形式：{name: value}
         var send_data = data.field;
         send_data["active"] = send_data["active"] === "on"? 1: 0;
-        
-        
         // 是否编辑
         if (isnot_edit != 'add'){
           send_data["groupid"] = rowdata["groupid"];
           send_data["id"] = rowdata["id"];
           send_data["createdon"] = rowdata["createdon"];
           send_data["createdby"] = rowdata["createdby"];
-
           // 更新修改的数据！ update_employee
           getsecurity("groups", "update_group",send_data,http).subscribe((res)=>{
-            if (res ===1 ){
-              // publicmethod
-              // publicmethod.toastr(UpSuccess);
+            if (res === 1 ){
               editsuccess(publicmethod);
-              dialogRef.close(send_data);
-
-              var option = "编辑用户组";
-              var infodata = "组名称:" + send_data["group"] + "," + "组名称(en):" + send_data["group_name"];
+              dialogRef.close(true);
+              var option = "编辑";
+              var infodata = "科室/功能组:" + send_data["group"] + "," + "科室/功能组(en):" + send_data["group_name"];
               that.RecordOperation( 1, option,infodata)
-
             }else{
               editdanger(publicmethod);
-              var option = "编辑用户组";
-              var infodata = "组名称:" + send_data["group"] + "," + "组名称(en):" + send_data["group_name"];
+              var option = "编辑";
+              var infodata = "科室/功能组:" + send_data["group"] + "," + "科室/功能组(en):" + send_data["group_name"];
               that.RecordOperation( 0, option, infodata);
             }
           })
@@ -154,19 +159,17 @@ export class UserEmployeeGroupComponent implements OnInit {
           send_data["createdby"] = userinfo.getLoginName();
           // 更新修改的数据！ insert_group 
           getsecurity("employee", "insert_group",send_data,http).subscribe((res)=>{
-            console.log("KKKKKKKKKKK", res);
             if (res ===1 ){
-              // publicmeth
               success(publicmethod)
-              dialogRef.close(send_data);
-              var option = "新增用户组"
-              var infodata = "组名称:" + send_data["group"] + "," + "组名称(en):" + send_data["group_name"];
+              dialogRef.close(true);
+              var option = "新增"
+              var infodata = "科室/功能组:" + send_data["group"] + "," + "科室/功能组(en):" + send_data["group_name"];
   
               that.RecordOperation(1, option, infodata)
               
             }else{
-              var option = "新增用户组"
-              var infodata = "组名称:" + send_data["group"] + "," + "组名称(en):" + send_data["group_name"];
+              var option = "新增"
+              var infodata = "科室/功能组:" + send_data["group"] + "," + "科室/功能组(en):" + send_data["group_name"];
               that.RecordOperation(0, option, infodata);
               danger(publicmethod)
             }
@@ -216,7 +219,6 @@ export class UserEmployeeGroupComponent implements OnInit {
 
   // option_record
   RecordOperation(result,transactiontype, infodata){
-    console.warn("==============>", this.userinfo.getLoginName())
     if(this.userinfo.getLoginName()){
       var employeeid = this.userinfo.getEmployeeID();
       var result = result; // 1:成功 0 失败

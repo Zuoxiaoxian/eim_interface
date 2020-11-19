@@ -20,6 +20,7 @@ export class ActionComponent implements OnInit, ICellRendererAngularComp {
   constructor() { }
 
   ngOnInit(): void {
+    this.isactive();
   }
 
   agInit(params: any): void {
@@ -51,8 +52,25 @@ export class ActionComponent implements OnInit, ICellRendererAngularComp {
 
   // 是否禁用button
   isactive(){
-    var button_list = localStorage.getItem(employeegroup_action)? JSON.parse(localStorage.getItem(employeegroup_action)): false;
-    // var button_list = localStorage.getItem("employee_action")? JSON.parse(localStorage.getItem("employee_action")): false;
+    var button_lists = JSON.parse(localStorage.getItem("buttons_list"));
+    var button_list = {}
+    if(button_lists["edit"]){
+      button_list["edit"] = button_lists["edit"]["active"] === 1?  true: false;
+    }else{
+      button_list["edit"] = false;
+    }
+    if(button_lists["del"]){
+      button_list["del"] = button_lists["del"]["active"] === 1?  true: false;
+    }else{
+      button_list["del"] = false;
+    }
+
+    // var button_list = {
+    //   edit: button_lists["edit"]["active"] === 1? true: false,
+    //   del: button_lists["del"]["active"] === 1? true: false,
+    // }
+
+    // var button_list = localStorage.getItem(employeegroup_action)? JSON.parse(localStorage.getItem(employeegroup_action)): false;
     if (button_list){
       if (button_list["edit"]){ // 编辑存在
         $(".edit-edit").attr("disabled", false);

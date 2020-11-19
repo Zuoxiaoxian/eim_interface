@@ -1,7 +1,7 @@
 <nb-card class="system_role">
     <nb-card-header>
         <div class="row">
-            <div class="col-md-10" style="text-align: left;"> 添加角色</div>
+            <div class="col-md-10" style="text-align: left;"> {{title}}</div>
             <div class="col-md-2" style="text-align: right;">
                 <nb-icon icon="close-outline" style="cursor: pointer;" (click)="closedialog()"></nb-icon>
             </div>
@@ -13,19 +13,23 @@
         <form class="layui-form" action="" lay-filter="role">
           
             <div class="layui-form-item">
-              <div class="layui-inline">
-                <label class="layui-form-label mylabel mulu_title">角色名称</label>
-                <div class="layui-input-block">
-                  <input type="text" name="role_name" required  lay-verify="required|role_name" placeholder="角色名称" autocomplete="off" class="layui-input">
+              <div class="layui-row">
+                <div class="layui-col-md6">
+                  <label class="layui-form-label mylabel mulu_title">角色名称</label>
+                  <div class="layui-input-block">
+                    <input type="text" name="role_name" required  lay-verify="required|role_name" placeholder="角色名称" autocomplete="off" class="layui-input">
+                  </div>
                 </div>
-              </div>
 
-              <div class="layui-inline">
-                <label class="layui-form-label mylabel mulu_title">角色翻译</label>
+                <div class="layui-col-md6">
+                  <label class="layui-form-label mylabel mulu_title">角色翻译</label>
                   <div class="layui-input-block">
                     <input type="text" name="role" required  lay-verify="required|role" placeholder="角色英文名称" autocomplete="off" class="layui-input">
                   </div>
+                </div>
               </div>
+
+              
             </div>
             
             <div class="layui-form-item">

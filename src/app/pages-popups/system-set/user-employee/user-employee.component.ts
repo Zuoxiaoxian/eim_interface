@@ -64,15 +64,6 @@ export class UserEmployeeComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-    // this.http.callRPC('', 'sys_get_all_role_and_group', {}).subscribe(result=>{
-    //   console.log("---result-----------------------------------------------", result);
-    //   if (result["result"]["message"][0]["code"]===1){
-    //     this.roles_group =  result["result"]["message"][0];
-    //   }
-    // })
-    console.log("^^^^^^^^^^^^^^^^^^^")
-    console.log("^^^^^^^^^^^^^^^^^^^roles_group", this.roles_group)
-    console.log("^^^^^^^^^^^^^^^^^^^")
     this.layuiform();
   }
 
@@ -287,8 +278,6 @@ export class UserEmployeeComponent implements OnInit {
           res.forEach(res => {
             send_data_item[res["rid"]] = data.field[res["rid"]]? true: false;
           });
-  
-  
           res.forEach(r => {
             select_roleid.forEach((item)=>{
               var select_role_dict = {};
@@ -299,7 +288,6 @@ export class UserEmployeeComponent implements OnInit {
               }
             })
           });
-  
           // -------------------------------------------
           // 模拟用户组 select_group [huanbao, huanjing,jiegou,lihua,xinnengyuan]
           var send_group_item_list = []
@@ -309,10 +297,7 @@ export class UserEmployeeComponent implements OnInit {
             send_group_item["group"] = item;
             send_group_item_list.push(send_group_item)
           })
-  
           console.log("employee_group,   send_group_item_list,   ", groups,  send_group_item_list )
-  
-  
           groups.forEach(group=>{
             var select_group_item = {};
             send_group_item_list.forEach(select=>{
@@ -321,37 +306,29 @@ export class UserEmployeeComponent implements OnInit {
                 console.log("select_group_item", select_group_item)
                 send_data_list.push(select_group_item);
               }
-  
             })
           })
           // -------------------------------------------
-  
-  
           console.log("提交修改的",  send_data_list) //被执行事件的元素DOM对象，一般为button对象
-          // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
-          // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
-  
-  
           // 更新修改的数据！ update_employee
           that.getsecurity("employee", "update_employee",send_data_list).subscribe((res)=>{
             console.log("更新修改的数据！ update_employee>>>>>>>>>>>>>>>>>>>>>>",res)
             var res_ = res["result"]["message"][0];
             switch (res_["code"]) {
               case 401:
-                that.editdanger()
+                that.editdanger("会话结束")
                 that.RecordOperation( 0, "编辑用户",'会话结束')
                 that.dialogRef.close(false)
                 break;
-                case 1:
-                  that.editsuccess();
-                  localStorage.removeItem("employee_agGrid");
-                  that.dialogRef.close(true)
-                  
-                  
-                  break;
-                  case 0:
-                    that.editdanger()
-                    that.dialogRef.close(false)
+              case 1:
+                that.editsuccess();
+                var operationdata = "姓名:" + send_data_list[0]["name"] + "," + "域账号:" + send_data_list[0]["loginname"];
+                that.RecordOperation( 1, "编辑用户",operationdata)
+                that.dialogRef.close(true)
+                break;
+              case 0:
+                that.editdanger(res_["message"])
+                that.dialogRef.close(false)
                 that.RecordOperation( 0, "编辑用户",String(res_["message"]))
                 break;
 
@@ -360,7 +337,6 @@ export class UserEmployeeComponent implements OnInit {
           })
           return false;
         }else{
-
           console.log("employeegroupinput》》》》》》》》》》》》》》", data.field)
           var send_data = {};
           send_data["employeeid"] = null;
@@ -369,7 +345,6 @@ export class UserEmployeeComponent implements OnInit {
           send_data["loginname"] = data.field["loginname"];
           var send_data_list = [];
           send_data_list.push(send_data);
-
           var send_data_item = {};
           res_list.forEach(res => {
             send_data_item[res["rid"]] = data.field[res["rid"]]? true: false;
@@ -401,7 +376,6 @@ export class UserEmployeeComponent implements OnInit {
                 console.log("select_group_item", select_group_item)
                 send_data_list.push(select_group_item);
               }
-  
             })
           })
           // -------------------------------------------
@@ -433,13 +407,14 @@ export class UserEmployeeComponent implements OnInit {
                 case 1:
                   // 成功
                   dialogRef.close(true);
-                  success(publicservice);
+                  that.success();
                   var operationdata = "姓名:" + send_data_list[0]["name"] + "," + "域账号:" + send_data_list[0]["loginname"];
                   var option = '新增用户'; 
                   that.RecordOperation(1, option, operationdata)
                   break;
                 case 0:
-                  danger(publicservice);
+                  that.danger(result['result']["message"][0]["message"]);
+                  var option = '新增用户';
                   var operationdata = String(result['result']["message"][0]["message"])
                   that.RecordOperation(0, option, operationdata)
                   break;
@@ -488,11 +463,11 @@ export class UserEmployeeComponent implements OnInit {
   }
 
   // 展示状态
-  success(publicservice){
-    publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"添加成功!"});
+  success(){
+    this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"添加成功!"});
   }
-  danger(publicservice){
-    publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"添加失败!"});
+  danger(data){
+    this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"添加失败:" + data});
   }
   warning(){
     this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"添加失败！请确认是否选择了`角色`"});
@@ -500,8 +475,8 @@ export class UserEmployeeComponent implements OnInit {
   editsuccess(){
     this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"编辑成功!"});
   }
-  editdanger(){
-    this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"编辑失败!"});
+  editdanger(data){
+    this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"编辑失败:" + data});
   }
   
   // option_record

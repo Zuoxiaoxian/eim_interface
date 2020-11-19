@@ -68,7 +68,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     },
   ];
 
-  userMenu = [ { title: '修改密码'}, { title: '注销用户'} ];
+  userMenu = [ { title: '退出登录'} ];
+  // userMenu = [ { title: '修改密码'}, { title: '注销用户'} ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -177,14 +178,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.translate.use(langueName);
     // this.themeService.changeTheme(this.themeService.currentTheme);
     if (langueName == 'en-US'){
-      this.userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+      this.userMenu = [ { title: 'Log out' } ];
       console.log("您选择的语言是： 英文！",this.themes);
       
 
     }else{
       console.log("您选择的语言是： 中文！");
       
-      this.userMenu = [ { title: '修改密码'}, { title: '注销用户'} ];
+      this.userMenu = [ { title: '退出登录'} ];
 
     }
     console.log("this.currentTheme  ", this.currentTheme);
@@ -195,8 +196,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // 注销用户、修改密码
   alet_is_logout(title){
-    // 注销
-    if (title == this.userMenu[1]["title"]){
+    // 退出登录
+    if (title == this.userMenu[0]["title"]){
       this.authService.isLoggedIn = false;
       this.RecordLogin()
       localStorage.removeItem(MULU);
@@ -213,7 +214,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       var username = this.userinfoservice.getName();
       var login_info = localStorage.getItem(LOGIN_INFO);
       if (login_info && login_info["username"] === "admin"){
-        console.log("退出，获取用户名, 应该是admin")
+        console.log("退出，获取用户名")
         localStorage.removeItem(MULU);
         localStorage.removeItem(SYSMENU);
         localStorage.removeItem(ssotoken);
@@ -229,7 +230,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }else{
         // 这里是SSO登录需要调用 接口注销 token
         var ticket = this.localStorageService.get(ssotoken)? this.localStorageService.get(ssotoken): false;
-        console.log("退出，获取用户名, 应该是ticket");
+        console.log("退出，获取用户名, 应该是ticket",ticket);
         localStorage.removeItem(menu_button_list);
         localStorage.removeItem(employee_action);
         if (ticket){
@@ -266,20 +267,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
       
 
     }
-    // 修改password
-    if (title == this.userMenu[0]["title"]){
-      this.authService.isLoggedIn = true;
-      // 跳转到改变密码的界面
-      // this.router.navigate(['/setup/changepassword'])
-      // this.dialogService.open(ChangepasswordComponent, {context: { title: "修改密码" }});
-    }
+
   }
 
    // 记录登出
    RecordLogin(){
 
     if(this.userinfoservice.getLoginName()){
-      const source = this.userinfoservice.getSourceid();        // 本机IP地址
+      // const source = this.userinfoservice.getSourceid();        // 本机IP地址
+      const source = this.userinfoservice.getClientip();        // 客户端IP地址,
       const employeeid = this.userinfoservice.getEmployeeID();  // employeeid
       // result 1
       // info 登录

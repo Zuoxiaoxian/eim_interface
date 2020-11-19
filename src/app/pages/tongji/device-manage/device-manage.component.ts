@@ -6,6 +6,7 @@ import { menu_button_list, device_action } from '../../../appconfig';
 import { DeviceManageComponent as Add_Edit_DeviceManageComponent } from '../../../pages-popups/tongji/device-manage/device-manage.component';
 import { EditDelTooltipComponent } from '../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component';
 
+declare let $;
 
 import * as XLSX from 'xlsx';
 type AOA = any[][];
@@ -16,9 +17,11 @@ import { HttpserviceService } from '../../../services/http/httpservice.service';
 import { Observable } from 'rxjs';
 
 
-// 引入 设备管理 表单的验证
+// 引入 eim台账 表单的验证
 import { Device } from '../../../pages-popups/tongji/form_verification';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
+import { ActionComponent } from './action/action.component';
+import { TranActiveComponent } from './tran-active/tran-active.component';
 @Component({
   selector: 'ngx-device-manage',
   templateUrl: './device-manage.component.html',
@@ -89,16 +92,12 @@ export class DeviceManageComponent implements OnInit {
   // 前端要展示的buttons 主要是：搜索、导入导出
   buttons2;
 
-  // 要删除、修改的行数据 
-  rowdata = [];
+  loading = false;  // 加载
+  refresh = false; // 刷新tabel
 
   // 每一页展示多少条数据
   nzPageSize;
 
-  // ======================agGrid
-  
-  isloding = false;
-  // ======================agGrid
   // plv8请求
   querst(table: string, method: string, colmun: Object){
     return new Observable((observe)=>{
@@ -109,24 +108,48 @@ export class DeviceManageComponent implements OnInit {
     })
   }
 
+  button; // 权限button
+  active;  // aggrid 操作
+
 
   ngOnInit(): void {
-    this.getbuttons();
+    // this.getbuttons();
+
+    // agGrid
+    var that = this;
+    this.active = { field: 'action', headerName: '操作', cellRendererFramework: ActionComponent, pinned: 'right',resizable: true,flex: 1,
+      cellRendererParams: {
+        clicked: function(data: any) {
+          if (data["active"]==='edit'){
+            console.log("********************\n", data["data"])
+            that.edit([data["data"]]);
+          }else{
+            that.del([data["data"]]);
+          }
+        }
+      },
+    }
+
+    // 得到pathname --在得到button
+    var roleid = this.userinfo.getEmployeeRoleID();
+    this.publicservice.get_buttons_bypath(roleid).subscribe(result=>{
+      this.button = result;
+      localStorage.setItem("buttons_list", JSON.stringify(result));
+    })
+
 
 
 
     // ===============agGrid
 
-    this.getetabledata();
+    this.inttable();
     // ===============agGrid
   }
 
   ngAfterViewInit(){
-    // document.getElementsByClassName('devicename')['0'].style.width ='10px'
-    // document.getElementsByClassName('devicename')['0'].style.border ='1px red solid'
-    // document.getElementsByClassName('devicename')['0'].style.overflow ='hidden'
-    // var devicename = document.getElementsByClassName('devicename');
-    // console.log('--devicename--', devicename)
+    this.tableDatas.columnDefs.push(
+      this.active
+    )
   }
 
   ngOnDestroy(){
@@ -243,7 +266,7 @@ export class DeviceManageComponent implements OnInit {
         this.importfile();
         break;
       case 'download':
-        this.download('设备管理')
+        this.download('eim台账')
         break;
     }
 
@@ -254,18 +277,28 @@ export class DeviceManageComponent implements OnInit {
     console.log("button----add");
     this.dialogService.open(Add_Edit_DeviceManageComponent, { closeOnBackdropClick: false,context: { title: '添加设备', content:  'false'}} ).onClose.subscribe(name=>{
       if (name){
-        this.isloding = true;
-        this.updatetabledata();
-        this.RecordOperation("添加(设备管理)", 1,'');
+        this.gridData = [];
+        this.loading = true;
+        this.update_agGrid();
+        this.loading = false;
       }
     })
   }
 
   // button del  -- dev_delete_device
-  del(){
-    console.log("删除-设备管理", this.rowdata);
-    var rowdata = this.agGrid.getselectedrows();
-    var rowdata_ = this.option_table_before(rowdata)
+  del(active_data?){
+    // var rowdata = this.agGrid.getselectedrows();
+    
+    
+    var rowdata;
+    if (active_data){
+      rowdata = active_data;
+    }else{
+      rowdata = this.agGrid.getselectedrows();
+    };
+    console.log("删除-eim台账  rowdata", rowdata);
+    var rowdata_ = this.option_table_before(rowdata);
+    console.log("删除-eim台账  rowdata_", rowdata_);
 
     if (rowdata_.length === 0){
       // 未选中
@@ -275,48 +308,49 @@ export class DeviceManageComponent implements OnInit {
         }
       );
 
-    }else if (rowdata_.length === 1){
-      // 选中一条
-      var table = 'device';
-      var method = 'dev_delete_device';
-      var colums = rowdata_[0];
-      this.http.callRPC(table, method, colums).subscribe((result)=>{
-        
-        const status = result['result']['message'][0];
-        if (status === 1){
-          this.delsuccess()
-          this.isloding = true;
-          this.updatetabledata();
-          this.RecordOperation("删除(设备管理)", 1,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
-        }else{
-          this.deldanger()
-          this.RecordOperation("删除(设备管理)", 0,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
-        }
-      })
     }else{
-      // 选中多条
+      // 选中多条 dev_delete_device_list
       var rowData = rowdata_;
-      try {
-        rowData.forEach(colums => {
-          var table = 'device';
-          var method = 'dev_delete_device';
-          this.http.callRPC(table, method, colums).subscribe((result)=>{
-            const status = result['result']['message'][0];
-            if (status === 1){
-              this.RecordOperation("删除(设备管理)", 1,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
-            }else{
-              this.RecordOperation("删除(设备管理)", 0,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
+      var text = rowdata_.length > 1 ? "这些": "这条";
+      this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `确定要删除${text}数据吗？`, rowData: JSON.stringify(rowdata)} } ).onClose.subscribe(istrue=>{
+        if (istrue){
+          try {
+            var data_info;
+            var id_list = [];
+            rowData.forEach(item => {
+              id_list.push(item["devicename"])
+            });
+            var id_str = id_list.join(',');
+            data_info  = '删除(eim台账):' + id_str;
+            console.log("要删除的数据:", rowdata)
+
+            var table = 'device';
+            var method = 'dev_delete_device_list';
+            this.http.callRPC(table, method, rowData).subscribe((result)=>{
+              const status = result['result']['message'][0];
+              switch (status["code"]) {
+                case 1:
+                  this.RecordOperation("删除(eim台账)", 1, data_info);
+                  this.delsuccess();
+                  this.gridData = [];
+                  this.loading = true;
+                  this.update_agGrid();
+                  this.loading = false;
+                  break;
+              
+                default:
+                  var err_date = status["message"]
+                  this.RecordOperation("删除(eim台账)", 0, String(err_date))
+                  this.danger();
+                  break;
+              }
               throw 'error, 删除失败！'
-            }
-          })
-        });
-        // location.reload();
-        this.isloding = true;
-        this.updatetabledata();
-        this.delsuccess()
-      }catch(err){
-        this.deldanger()
-      }
+            })
+          }catch(err){
+            this.deldanger()
+          }
+        }else{}
+      })
 
       
 
@@ -325,11 +359,17 @@ export class DeviceManageComponent implements OnInit {
   
   
   // button deit
-  edit(){
-    console.log("编辑-设备管理", this.rowdata);
-    var rowdata = this.agGrid.getselectedrows();
+  edit(active_data?){
+    // var rowdata = this.agGrid.getselectedrows();
+    
+    var rowdata;
+    if (active_data){
+      rowdata = active_data;
+    }else{
+      rowdata = this.agGrid.getselectedrows();
+    };
     var rowdata_ = this.option_table_before(rowdata)
-    console.log("编辑-设备管理----agGrid-----rowdata",rowdata);
+    console.log("编辑-eim台账----agGrid-----rowdata",rowdata);
     if (rowdata.length === 0){
       // 未选中
       this.dialogService.open(EditDelTooltipComponent, { context: { title: '编辑设备提示', content:   `请选择要需要编辑的的行数！`}} ).onClose.subscribe(
@@ -341,13 +381,15 @@ export class DeviceManageComponent implements OnInit {
       }else if (rowdata.length === 1){
         // 选中一条
         console.log("选中一条", rowdata);
-        console.log("编辑-设备管理----agGrid-----rowdata----处理后的",rowdata_);
+        console.log("编辑-eim台账----agGrid-----rowdata----处理后的",rowdata_);
       this.dialogService.open(Add_Edit_DeviceManageComponent, { closeOnBackdropClick: false, context: { title: '编辑设备提示', content:   `true`, rowData: JSON.stringify(rowdata_)}} ).onClose.subscribe(
         name=>{
           console.log("----name-----", name);
           if (name){
-            this.isloding = true;
-            this.updatetabledata();
+            this.gridData = [];
+            this.loading = true;
+            this.update_agGrid();
+            this.loading = false;
           }
         }
       );
@@ -361,11 +403,13 @@ export class DeviceManageComponent implements OnInit {
     }
   }
 
-  // 点击行，选中行
-  runParent(rowdata){
-    this.rowdata = this.option_table_before(rowdata["selected"]);
-    
-    console.log("---子组件传值---", this.rowdata);
+  refresh_table(){
+    $("#employeenumber").val('')
+    this.refresh = true;
+    this.loading = true;
+    this.gridData = [];
+    this.inttable();
+    this.refresh = false;
   }
 
 
@@ -382,7 +426,7 @@ export class DeviceManageComponent implements OnInit {
     var device_tpye_data = this.device_tpye.getselect();
     var asset_number_data = this.asset_number.getselect();
     console.log("<------------搜索----------->", departmentselect_data, device_tpye_data,asset_number_data)
-    this.RecordOperation("搜索(设备管理)", 1, '');
+    this.RecordOperation("搜索(eim台账)", 1, '');
   }
 
   // 导出文件
@@ -460,24 +504,26 @@ export class DeviceManageComponent implements OnInit {
       console.log("----------------------------------------------------------验证后的数据 err", verify_after);
       if (verify_after.length > 0){
         this.verify_import(verify_after);
-        this.RecordOperation("导入(设备管理)", 0,'导入excel表');
+        this.RecordOperation("导入(eim台账)", 0,'导入excel表');
 
       }else{
         // 插入数据库之前 处理数据
         var datas = this.option_table_before(rowData)
         console.log("插入数据库之前 处理数据---->", datas);
         // 将导入的数据存入数据库
-        // this.isloding = true
-        // this.dev_insert_device(datas);
+        // this.loading = true
+        this.dev_insert_device(datas).subscribe(result=>{
+          if (result){
+            // 将导入的数据展示在table中
+            // var after_datas = this.show_table_before(rowData)
+            this.gridData = [];
+            this.loading = true;
+            this.update_agGrid();// 告诉组件刷新！
+            this.loading = false;
+            this.RecordOperation("导入(eim台账)", 1,'导入excel表');
+          }
+        });
     
-        // 将导入的数据展示在table中
-        var after_datas = this.show_table_before(rowData)
-        this.gridData = [];
-        this.gridData.push(...after_datas)
-        this.tableDatas.rowData = this.gridData;
-        this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
-
-        this.RecordOperation("导入(设备管理)", 1,'导入excel表');
 
       }
     }
@@ -493,30 +539,35 @@ export class DeviceManageComponent implements OnInit {
 
   // 将导入的数据插入到数据库中
   dev_insert_device(datas){
-    const table = "device";
-    const method = 'dev_insert_device';
-    try {
-      datas.forEach(rd => {
-        this.http.callRPC(table, method, rd).subscribe((result)=>{
+    return new Observable((observale)=>{
+      const table = "device";
+      const method = 'dev_insert_device_list';
+      try {
+        this.http.callRPC(table, method, datas).subscribe((result)=>{
           console.log("插入设备数据：", result)
-          const status = result['result']['message'][0];
+          const status = result['result']['message'][0]["code"];
           if (status === 1){
+            this.RecordOperation("导入", 1, "eim台账");
+            this.success()
+            observale.next(true)
           }else{
+              var data_info = result['result']["message"][0]["message"];
+              console.log("------------------->",data_info)
+              this.RecordOperation("导入", 0, String(data_info));
+              this.importSuccess(result['result']["message"][0]["message"])
+              observale.next(false)
             throw 'error, 删除失败！'
           }
         })
-      });
-      // setTimeout(() => {
-      //   location.reload();
-      // }, 1000);
-      this.isloding = false
-      this.success()
-    }catch(err){
-      console.log("err: ", err)
-      this.danger()
-    }
-
-    
+        
+        this.loading = false
+        
+      }catch(err){
+        this.RecordOperation("导入", 0, String(err));
+        observale.next(false)
+        this.danger()
+      }
+    })
   }
 
   // 在展示表格前，处理一下数据
@@ -625,12 +676,13 @@ export class DeviceManageComponent implements OnInit {
             devicestatus = 402;
           break;
       }
+
       var after_data: OptionDeviceData = {
         id: data.id,
         devicename:data.devicename,
         deviceno:data.deviceno,
         type:type,
-        active:data.active === "是"? 1: 0,
+        active:data.active === '是'? 1: 0,
         assetno:data.assetno,
         factoryno:data.factoryno,
         deviceid:data.deviceid,
@@ -895,31 +947,19 @@ export class DeviceManageComponent implements OnInit {
   deldanger(){
     this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"删除失败!"});
   }
-  
+
+  importSuccess(data){
+    this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'warning', conent:data});
+  }
 
 
 
   // =================================================agGrid
 
   tableDatas = {
-    action: true,
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
       { field: 'devicename', headerName: '设备名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true, pinned: 'left'},
-      { field: 'deviceno', headerName: 'EIM设备编号',  resizable: true, minWidth: 10},
-      { field: 'type', headerName: '设备类型', resizable: true},
-      { field: 'active', headerName: '是否启用', resizable: true},
-      { field: 'assetno', headerName: '资产编号', resizable: true, minWidth: 10},
-      
-      { field: 'factoryno', headerName: '出厂编号', resizable: true, minWidth: 10},
-      { field: 'deviceid', headerName: '设备编号', resizable: true, minWidth: 10}, // 自定义设备编号！
-      { field: 'purchaseon', headerName: '购置日期', resizable: true, minWidth: 10},
-      { field: 'supplier', headerName: '供应商', resizable: true, flex: 1},
-      { field: 'location', headerName: '存放地点', resizable: true, minWidth: 10},
-      { field: 'department', headerName: '使用部门', resizable: true, minWidth: 10},
-      { field: 'groups', headerName: '科室', resizable: true, minWidth: 10},
-      { field: 'belonged', headerName: '归属人', resizable: true, minWidth: 10},
-
       { field: 'devicestatus', headerName: '资产状态', resizable: true,minWidth: 50,pinned: 'left',
         cellStyle: function(params){
           var value = params.value;
@@ -959,6 +999,21 @@ export class DeviceManageComponent implements OnInit {
         }
       
       },
+      { field: 'deviceno', headerName: 'EIM设备编号',  resizable: true, minWidth: 10},
+      { field: 'type', headerName: '设备类型', resizable: true},
+      // { field: 'active', headerName: '是否启用', resizable: true},TranActiveComponent
+      { field: 'active', headerName: '是否启用', resizable: true, cellRendererFramework: TranActiveComponent,},
+      { field: 'assetno', headerName: '资产编号', resizable: true, minWidth: 10},
+      
+      { field: 'factoryno', headerName: '出厂编号', resizable: true, minWidth: 10},
+      { field: 'deviceid', headerName: '设备编号', resizable: true, minWidth: 10}, // 自定义设备编号！
+      { field: 'purchaseon', headerName: '购置日期', resizable: true, minWidth: 10},
+      { field: 'supplier', headerName: '供应商', resizable: true, flex: 1},
+      { field: 'location', headerName: '存放地点', resizable: true, minWidth: 10},
+      { field: 'department', headerName: '使用部门', resizable: true, minWidth: 10},
+      { field: 'groups', headerName: '科室', resizable: true, minWidth: 10},
+      { field: 'belonged', headerName: '归属人', resizable: true, minWidth: 10},
+
       // =================
 
       { field: 'createdby', headerName: '创建人', resizable: true},
@@ -967,7 +1022,7 @@ export class DeviceManageComponent implements OnInit {
       // { field: 'options', headerName: '操作', resizable: true, flex: 1},
     ],
     rowData: [ // data
-      { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
+      // { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
       // { name: 'Ford', loginname: 'Mondeo', role_name: 32000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" },
       // { name: 'Porsche', loginname: 'Boxter', role_name: 72000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" }
     ]
@@ -975,7 +1030,7 @@ export class DeviceManageComponent implements OnInit {
 
   private gridData = [];
   
-  getetabledata(event?){
+  inttable(event?){
     var offset;
     var limit;
     console.log("event------------------------------------------------", event);
@@ -984,125 +1039,67 @@ export class DeviceManageComponent implements OnInit {
       limit = event.limit;
     }else{
       offset = 0;
-      limit = 50;
+      limit = 20;
     }
-    // this.getsecurity('sys_security_log', 'get_security_log_limit', {offset:event.offset,limit:10});
-    // 得到员工信息！
-    this.http.callRPC('device', 'dev_get_device_limit', {offset: offset, limit: limit}).subscribe((res)=>{
-      // console.log("get_menu_role", result)
-      var get_employee_limit = res['result']['message'][0]
-      console.log("dev_get_device---------------------------->>>", get_employee_limit);
-
-      this.isloding = false;
-      // 发布组件，编辑用户的组件
-      this.publicservice.getcomponent(Add_Edit_DeviceManageComponent);
-      this.publicservice.getmethod("dev_delete_device");
-
-
-      var message = res["result"]["message"][0]["message"];
-      if (message.length>0){
-        message.forEach(r => {
-          r["active"] = r["active"] === 1 ? '是': '否';
-        });
-        console.log("初始化用户组表！", message)
-      }
-      var after_datas = this.show_table_before(message);
-      this.gridData = [];
-      this.gridData.push(...after_datas)
-      this.tableDatas.rowData = this.gridData;
-      var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';
+    var columns = {
+      offset: offset, 
+      limit: limit,
+    }
+    this.http.callRPC('device', 'dev_get_device_limit', columns).subscribe((result)=>{
+      var tabledata = result['result']['message'][0]
+      console.log("dev_get_device---------------------------->>>", tabledata);
+      this.loading = false;
+      if (tabledata["code"]===1){
+        var message = result["result"]["message"][0]["message"];
+        
+        var after_datas = this.show_table_before(message);
+        this.gridData.push(...after_datas)
+        this.tableDatas.rowData = this.gridData;
+        var totalpagenumbers = tabledata['numbers']? tabledata['numbers'][0]['numbers']: '未得到总条数';
         this.tableDatas.totalPageNumbers = totalpagenumbers;
-      this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
+        this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
+        this.RecordOperation('查看', 1,  "eim台账")
+      }else{this.RecordOperation('查看', 0,  "eim台账")}
     })
   }
 
-  pageabledata(event?){
+  update_agGrid(event?){
     var offset;
     var limit;
-    console.log("event------------------------------------------------", event);
     if (event != undefined){
       offset = event.offset;
       limit = event.limit;
     }else{
       offset = 0;
-      limit = 50;
+      limit = 20;
     }
-    // this.getsecurity('sys_security_log', 'get_security_log_limit', {offset:event.offset,limit:10});
-    // 得到员工信息！
-    this.http.callRPC('device', 'dev_get_device_limit', {offset: offset, limit: limit}).subscribe((res)=>{
-      // console.log("get_menu_role", result)
-      var get_employee_limit = res['result']['message'][0]
-      console.log("device---", get_employee_limit);
-
-      this.isloding = false;
-      // 发布组件，编辑用户的组件
-      this.publicservice.getcomponent(Add_Edit_DeviceManageComponent);
-      this.publicservice.getmethod("dev_delete_device");
-
-
-      var message = res["result"]["message"][0]["message"];
-      if (message.length>0){
-        message.forEach(r => {
-          r["active"] = r["active"] === 1 ? '是': '否';
-        });
-        console.log("初始化用户组表！", message)
-      }
-      var after_datas = this.show_table_before(message);
-      this.gridData.push(...after_datas)
-      this.tableDatas.rowData = this.gridData;
-      var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';
+    var columns = {
+      offset: offset, 
+      limit: limit,
+    }
+    this.http.callRPC('device', 'dev_get_device_limit', columns).subscribe((result)=>{
+      var tabledata = result['result']['message'][0]
+      console.log("device---", tabledata);
+      this.loading = false;
+      if (tabledata["code"] === 1){
+        var message = result["result"]["message"][0]["message"];
+        var after_datas = this.show_table_before(message);
+        this.gridData.push(...after_datas)
+        this.tableDatas.rowData = this.gridData;
+        var totalpagenumbers = tabledata['numbers']? tabledata['numbers'][0]['numbers']: '未得到总条数';
         this.tableDatas.totalPageNumbers = totalpagenumbers;
-      this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
+        this.agGrid.update_agGrid(this.tableDatas); // 告诉组件刷新！
+        this.RecordOperation('更新', 1, "eim台账");
+      }else{this.RecordOperation('更新', 0, "eim台账");}
+
     })
   }
-
-  updatetabledata(event?){
-    var offset;
-    var limit;
-    console.log("event------------------------------------------------", event, this.agGrid);
-    if (event != undefined){
-      offset = event.offset;
-      limit = event.limit;
-    }else{
-      offset = 0;
-      limit = 50;
-    }
-    // this.getsecurity('sys_security_log', 'get_security_log_limit', {offset:event.offset,limit:10});
-    // 得到员工信息！
-    this.http.callRPC('deveice', 'dev_get_device_limit', {offset: offset, limit: limit}).subscribe((res)=>{
-      console.log("updatetabledata\n\n", res)
-      var get_employee_limit = res['result']['message'][0]
-      console.log("deveice", get_employee_limit, "this.agGrid",this.agGrid);
-
-      this.isloding = false;
-      // 发布组件，编辑用户的组件
-      this.publicservice.getcomponent(Add_Edit_DeviceManageComponent);
-      this.publicservice.getmethod("dev_delete_device");
-
-
-      var message = res["result"]["message"][0]["message"];
-      if (message.length>0){
-        message.forEach(r => {
-          r["active"] = r["active"] === 1 ? '是': '否';
-        });
-        console.log("初始化用户组表！", message)
-      }
-      this.gridData = [];
-      var after_datas = this.show_table_before(message);
-      this.gridData.push(...after_datas)
-      this.tableDatas.rowData = this.gridData;
-      var totalpagenumbers = get_employee_limit['numbers']? get_employee_limit['numbers'][0]['numbers']: '未得到总条数';
-      this.tableDatas.totalPageNumbers = totalpagenumbers;
-      this.agGrid.update_agGrid(this.tableDatas); // 告诉组件刷新！
-    })
-
-  }
-      
 
   // nzpageindexchange 页码改变的回调
   nzpageindexchange_ag(event){
     console.log("页码改变的回调", event);
-    this.pageabledata(event);
+    this.loading = true;
+    this.inttable(event);
   }
 
 
@@ -1111,9 +1108,6 @@ export class DeviceManageComponent implements OnInit {
 
   // option_record
   RecordOperation(option, result,infodata){
-    console.warn("==============>", this.userinfo.getLoginName())
-    console.warn("infodata==============>", infodata)
-    console.warn("==============>")
     if(this.userinfo.getLoginName()){
       var employeeid = this.userinfo.getEmployeeID();
       var result = result; // 1:成功 0 失败

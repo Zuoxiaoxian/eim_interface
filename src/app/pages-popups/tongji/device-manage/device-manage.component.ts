@@ -64,7 +64,7 @@ export class DeviceManageComponent implements OnInit {
       form.verify({
         // 设备名称 验证：devicename character(20)
         devicename: function(value, item){
-          console.log("验证、表单: employeeno",Device["devicename"]);
+          console.log("验证、表单: devicename",Device["devicename"]);
           console.log("验证、表单: value",value);
           // sql注入和特殊字符 special_str
           var special_sql = Device['special_sql']["special_sql"];
@@ -163,7 +163,7 @@ export class DeviceManageComponent implements OnInit {
         
         // 购置日期 验证：purchaseon character(50)
         purchaseon: function(value, item){
-          console.log("验证、表单: value",value);
+          console.log("验证、表单: devicename",value);
           // if (! new RegExp(Device["factoryno"]).test(value)){
           //   if (value.length > 50){
           //     return "出场编号最大长度不超过100！"
@@ -467,16 +467,16 @@ export class DeviceManageComponent implements OnInit {
           if (status === 1){
             success(publicservice)
             if(content){
-              that.RecordOperation('编辑设备管理', 1,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
+              that.RecordOperation('编辑eim台账', 1,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
             }else{
-              that.RecordOperation('新增设备管理', 1,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
+              that.RecordOperation('新增eim台账', 1,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
             }
             dialogRef.close(colums);
           }else{
             if(content){
-              that.RecordOperation('编辑设备管理', 0,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
+              that.RecordOperation('编辑eim台账', 0,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
             }else{
-              that.RecordOperation('新增设备管理', 0,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
+              that.RecordOperation('新增eim台账', 0,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
             }
             danger(publicservice);
           }

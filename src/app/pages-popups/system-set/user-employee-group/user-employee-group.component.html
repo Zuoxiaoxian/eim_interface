@@ -1,7 +1,7 @@
 <nb-card class="setting_employee_group">
     <nb-card-header>
         <div class="row">
-            <div class="col-md-10" style="text-align: left;"> 添加用户组</div>
+            <div class="col-md-10" style="text-align: left;"> {{title}}</div>
             <div class="col-md-2" style="text-align: right;">
                 <nb-icon icon="close-outline" style="cursor: pointer;" (click)="closedialog()"></nb-icon>
             </div>
@@ -9,20 +9,21 @@
       </nb-card-header>
 
     <nb-card-body>
-
         
         <form class="layui-form" action="" lay-filter="employeegroup">
             <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label mylabel mulu_title">组名称</label>
-                    <div class="layui-input-block">
-                      <input type="text" name="group" required   lay-verify="required|group_"  placeholder="组名称" autocomplete="off" class="layui-input">
+                <div class="layui-row">
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label mylabel mulu_title">科室/功能组</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="group" required   lay-verify="required|group_"  placeholder="科室/功能组" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label mylabel2 mulu_title">组名称(en)</label>
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label mylabel2 mulu_title">科室/功能组(en)</label>
                     <div class="layui-input-block">
-                      <input type="text" name="group_name" required   lay-verify="required|group_name"  placeholder="组名称(英文)" autocomplete="off" class="layui-input">
+                      <input type="text" name="group_name" required   lay-verify="required|group_name"  placeholder="科室/功能组(英文)" autocomplete="off" class="layui-input">
+                    </div>
                     </div>
                 </div>
 

@@ -43,6 +43,17 @@ export class UserInfoService {
     return userinfo ? JSON.parse(userinfo)['employeeid'] : null;
   }
 
+  // 获取员工角色id
+  getEmployeeRoleID(){
+    const userinfo = this.getUserInfo();
+    var roles = JSON.parse(userinfo)["roles"];
+    var roles_lsit = [];
+    roles.forEach(item => {
+      roles_lsit.push(item["roleid"]);
+    });
+    return roles_lsit
+  }
+
   // 获取集团名称
   getDivision() {
     return "中国中车";
@@ -67,11 +78,17 @@ export class UserInfoService {
     return userinfo ? JSON.parse(userinfo)['department'] : null;
   }
 
-  // 获取用户ID
+  // 获取接口本机ip
   getSourceid() {
     // 例如：192.168.1.12
     const userinfo = this.getUserInfo();
     return userinfo ? JSON.parse(userinfo)['sourceid'] : null;
+  }
+
+  // 获取客户端ip
+  getClientip(){
+    const userinfo = this.getUserInfo();
+    return userinfo ? JSON.parse(userinfo)['clintip'] : null;
   }
 
   

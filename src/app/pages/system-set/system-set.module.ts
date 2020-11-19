@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SystemSetRoutingModule } from './system-set-routing.module';
 import { SystemSetComponent } from './system-set.component';
 import { RoleComponent } from './role/role.component';
-import { NbButtonModule, NbCardModule, NbTreeGridModule, NbIconModule, NbDialogModule, NbPopoverModule, NbInputModule, NbSpinnerModule, NbSelectModule   } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbTreeGridModule, NbIconModule, NbDialogModule, NbPopoverModule, NbInputModule, NbSpinnerModule, NbSelectModule, NbActionsModule   } from '@nebular/theme';
 import { MenuComponent } from './menu/menu.component';
 
 // import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -58,6 +58,7 @@ import { TranActiveComponent } from './new-user-employee/tran-active/tran-active
     NzInputModule,
     NzSelectModule,
     NgZorroAntdModule,
+
 
 
     AgGridModule.withComponents([]),

@@ -25,6 +25,7 @@ export class NewUserEmployeeComponent implements OnInit {
   @ViewChild("ag_Grid") agGrid: any;
   active;  // aggrid 操作
   loading = false;  // 加载
+  refresh = false; // 刷新tabel
   TABLE = "employee"; // table
   METHOD = "sys_get_employee_limit" // method
   button; // 权限button
@@ -35,16 +36,14 @@ export class NewUserEmployeeComponent implements OnInit {
   tableDatas = {
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection
-      { field: 'name', headerName: '姓名', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,},
-      { field: 'loginname', headerName: '域账号',  resizable: true,},
-      { field: 'role_name', headerName: '角色', resizable: true,},
-      { field: 'groups_name', headerName: '用户组', resizable: true,},
-      { field: 'active', headerName: '是否启用', resizable: true, cellRendererFramework: TranActiveComponent,},
+      { field: 'loginname', headerName: '域账号',  headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 30,resizable: true,},
+      { field: 'name', headerName: '姓名', resizable: true,},
       { field: 'employeeno', headerName: '员工编号', resizable: true,},
+      { field: 'role_name', headerName: '角色', resizable: true,},
+      { field: 'groups_name', headerName: '科室/功能组', resizable: true,},
+      { field: 'active', headerName: '是否启用', resizable: true, cellRendererFramework: TranActiveComponent,},
       { field: 'email', headerName: '邮箱', resizable: true,},
-
-      { field: 'department', headerName: '部门', resizable: true,},
-      { field: 'lastsignondate', headerName: '最后登录时间', flex: 1,resizable: true,},
+      { field: 'lastsignondate', headerName: '更新时间', resizable: true,},
     ],
     rowData: [ // data
     ]
@@ -61,15 +60,14 @@ export class NewUserEmployeeComponent implements OnInit {
           var roles_group =  result["result"]["message"][0];
           localStorage.setItem("roles", JSON.stringify(roles_group["roles"]))
           localStorage.setItem("groups", JSON.stringify(roles_group["groups"]))
-
         }
       })
-    }
+  }
 
   ngOnInit(): void {
     // agGrid
     var that = this;
-    this.active = { field: 'action', headerName: '操作', cellRendererFramework: ActionComponent, pinned: 'right',
+    this.active = { field: 'action', headerName: '操作', cellRendererFramework: ActionComponent, pinned: 'right',resizable: true,flex: 1,
       cellRendererParams: {
         clicked: function(data: any) {
           if (data["active"]==='edit'){
@@ -81,50 +79,11 @@ export class NewUserEmployeeComponent implements OnInit {
       },
     }
     // 得到pathname --在得到button
-    this.publicmethod.get_current_pathname().subscribe(result=>{
-      var link = result["link"];
-      console.warn("pathname: ", result, "link: ", link);
-      // 更具link 得到button
-      var table = "menu_item";
-      var method = "get_button";
-      var columns = {redirecturl: link}
-      this.http.callRPC(table, method, columns).subscribe(result=>{
-        console.log("get_button: ", result);
-        if(result["result"]["message"][0]["code"] === 1){
-          console.log("--------->", result["result"]["message"][0]["message"])
-          this.button = result["result"]["message"][0]["message"];
-          for(var k in this.button){
-            // this.button[k]["class"] = this.buttons[k]["class"];
-            switch (k) {
-              case 'add':
-                this.button[k]["class"] =  "info";
-                break;
-              case 'del':
-                this.button[k]["class"] =  "danger";
-                break;
-              case 'edit':
-                this.button[k]["class"] =  "warning";
-                break;
-              case 'query':
-                this.button[k]["class"] =  "success";
-                break;
-              case 'import':
-                this.button[k]["class"] =  "primary";
-                break;
-              case 'download':
-                this.button[k]["class"] =  "primary";
-                break;
-            
-              default:
-                this.button[k]["class"] =  "primary";
-                break;
-            }
-          }
-        }
-      })
-    });
-    
-
+    var roleid = this.userinfo.getEmployeeRoleID();
+    this.publicmethod.get_buttons_bypath(roleid).subscribe(result=>{
+      this.button = result;
+      localStorage.setItem("buttons_list", JSON.stringify(result));
+    })
   }
 
   ngAfterViewInit(){
@@ -240,7 +199,7 @@ export class NewUserEmployeeComponent implements OnInit {
         this.import();
         break;
       case 'download':
-        this.download('用户组管理')
+        this.download('用户管理')
         break;
     }
   }
@@ -250,7 +209,8 @@ export class NewUserEmployeeComponent implements OnInit {
       if(istrue){
         this.gridData = [];
         this.loading = true;
-        this.inttable();
+        this.update_agGrid();
+        this.loading = false;
       }
     })
 
@@ -273,29 +233,38 @@ export class NewUserEmployeeComponent implements OnInit {
       var text = rowdata.length > 1 ? "这些": "这条";
       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `确定要删除${text}数据吗？`, rowData: JSON.stringify(rowdata)} } ).onClose.subscribe(istrue=>{
         if (istrue){
+          // sys_delete_employees
           try{
+            // rowdata
+            var data_info;
+            var id_list = [];
             rowdata.forEach(item => {
-              this.http.callRPC("employee", "delete_employee",item).subscribe(result=>{
-                console.log("要删除的数据:", item, "result: ", result)
-                var res = result["result"]["message"][0];
-                switch (res["code"]) {
-                  case 1:
-                    this.RecordOperation("删除用户", 1, String(item["loginname"]))
-                    break;
-                    
-                    default:
-                      this.RecordOperation("删除用户", 0, String(item["loginname"]))
-                      throw 'error, 删除失败！'
-                      break;
-                }
-              })
+              id_list.push(item["employeeid"])
             });
-          this.success();
-          this.gridData = [];
-          this.loading = true;
-          this.inttable();
+            var id_str = id_list.join(',');
+            data_info  = '删除的用户id:' + id_str;
+            console.log("要删除的数据:", rowdata)
+            this.http.callRPC("employee", "sys_delete_employees",rowdata).subscribe(result=>{
+              var res = result["result"]["message"][0];
+              switch (res["code"]) {
+                case 1:
+                  this.RecordOperation("删除用户", 1, data_info);
+                  this.success();
+                  this.gridData = [];
+                  this.loading = true;
+                  this.update_agGrid();
+                  this.loading = false;
+                  break;
+                default:
+                  var err_date = res["message"]
+                  this.RecordOperation("删除用户", 0, String(err_date))
+                  this.danger();
+                  break;
+              }
+            })
+            throw 'error, 删除失败！'
+          
           }catch(err){
-            this.danger();
           }
         }
       })
@@ -316,7 +285,8 @@ export class NewUserEmployeeComponent implements OnInit {
           if(istrue){
             this.gridData = [];
             this.loading = true;
-            this.inttable();
+            this.update_agGrid();
+            this.loading = false;
           }
         })
         break;
@@ -331,7 +301,41 @@ export class NewUserEmployeeComponent implements OnInit {
 
 
   }
-  query(){}
+  query(){
+    // loginname
+    var loginname = $("#employeenumber").val();
+    if (loginname != ""){
+      console.log("button 搜索按钮", loginname, "--");
+      var columns = {
+        offset: 0, 
+        limit: 20,
+        loginname: loginname
+      }
+      this.gridData = [];
+      this.loading = true;
+      this.http.callRPC('employee', 'sys_search_employee', columns).subscribe(result=>{
+        var res = result['result']['message'][0];
+        this.loading = false;
+        if(res["code"]===1){
+          var message = res["message"];
+          this.gridData.push(...message)
+          this.tableDatas.rowData = this.gridData;
+          var totalpagenumbers = res['numbers']? res['numbers'][0]['numbers']: '未得到总条数';
+          this.tableDatas.totalPageNumbers = totalpagenumbers;
+          this.agGrid.update_agGrid(this.tableDatas); // 告诉组件刷新！
+          this.RecordOperation("搜索", 1, '搜索用户(域账号):' + loginname);
+          if (message.length < 1){
+            this.searchdanger(loginname)
+          }
+        }else{
+          var data_info = res["message"];
+          this.RecordOperation("搜索", 0, '搜索用户(域账号):' + String(data_info));
+        }
+      })
+      
+    }
+  }
+
   import(){
     var input = document.getElementById("import");
     // js执行点击input
@@ -339,7 +343,14 @@ export class NewUserEmployeeComponent implements OnInit {
   }
   download(title){
     this.agGrid.download(title);
-    
+  }
+  refresh_table(){
+    $("#employeenumber").val('')
+    this.refresh = true;
+    this.loading = true;
+    this.gridData = [];
+    this.inttable();
+    this.refresh = false;
   }
 
   
@@ -353,7 +364,7 @@ export class NewUserEmployeeComponent implements OnInit {
       limit = event.limit;
     }else{
       offset = 0;
-      limit = 50;
+      limit = 20;
     }
     // 得到员工信息！
     var columns = {
@@ -367,16 +378,58 @@ export class NewUserEmployeeComponent implements OnInit {
       var tabledata = result['result']['message'][0]
       console.log("tabledata", tabledata);
       this.loading = false;
-      // 发布组件，编辑用户的组件
-      var message = tabledata["message"];
-      this.gridData.push(...message)
-      this.tableDatas.rowData = this.gridData;
-      var totalpagenumbers = tabledata['numbers']? tabledata['numbers'][0]['numbers']: '未得到总条数';
-      this.tableDatas.totalPageNumbers = totalpagenumbers;
-      this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
+      if(tabledata["code"] === 1){
+        var message = tabledata["message"];
+        this.gridData.push(...message)
+        this.tableDatas.rowData = this.gridData;
+        var totalpagenumbers = tabledata['numbers']? tabledata['numbers'][0]['numbers']: '未得到总条数';
+        this.tableDatas.totalPageNumbers = totalpagenumbers;
+        this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
+        this.RecordOperation('查看', 1,  "用户管理")
+      }else{
+        this.RecordOperation('查看', 0, "用户管理")
+      }
     })
 
 
+  }
+
+  // 更新数据
+  update_agGrid(event?, loginname?){
+    var offset;
+    var limit;
+    if (event != undefined){
+      offset = event.offset;
+      limit = event.limit;
+    }else{
+      offset = 0;
+      limit = 20;
+    }
+    var columns = {
+      offset: offset, 
+      limit: limit,
+      loginname: loginname
+    }
+    this.http.callRPC(this.TABLE, this.METHOD, columns).subscribe((result)=>{
+      console.log("update----------------->tabledata: ", result)
+      var tabledata = result['result']['message'][0]
+      console.log("tabledata", tabledata);
+      if (tabledata["code"] === 1){
+        console.log("update 更新成功！");
+        // 发布组件，编辑用户的组件
+        var message = tabledata["message"];
+        this.gridData.push(...message)
+        this.tableDatas.rowData = this.gridData;
+        var totalpagenumbers = tabledata['numbers']? tabledata['numbers'][0]['numbers']: '未得到总条数';
+        this.tableDatas.totalPageNumbers = totalpagenumbers;
+        this.agGrid.update_agGrid(this.tableDatas); // 告诉组件刷新！
+        this.RecordOperation('更新', 1, "用户管理")
+      }else{
+        // 更新tabel失败！
+        console.log("更新tabel失败！", tabledata);
+        this.RecordOperation('更新', 0, "用户管理")
+      }
+    })
   }
 
   // nzpageindexchange 页码改变的回调
@@ -467,9 +520,12 @@ export class NewUserEmployeeComponent implements OnInit {
           this.dev_insert_device(datas).subscribe(result=>{
             if (result){
               // 将 rowData 显示到 agGrid中
-              this.tableDatas.rowData = rowData
-              this.agGrid.update_agGrid(this.tableDatas);
-              this.RecordOperation("导入用户管理", 1, "导入excel表格")
+              this.gridData = [];
+              this.loading = true;
+              this.update_agGrid();
+              this.loading = false;
+              // this.tableDatas.rowData = rowData
+              // this.agGrid.update_agGrid(this.tableDatas);
             }
           });
     
@@ -486,25 +542,26 @@ export class NewUserEmployeeComponent implements OnInit {
   dev_insert_device(datas){
     return new Observable((observale)=>{
       const table = "employee";
-      const method = 'insert_employee';
+      const method = 'insert_employee_list';
       try {
-        for (let index = 0; index < datas.length; index++) {
-          const rd = datas[index];
-          this.http.callRPC(table, method, rd).subscribe((result)=>{
-            console.log("插入设备数据：", result)
-            const status = result['result']["message"][0]['code'];
-            if (status === 1){
-              this.RecordOperation("导入", 1, "用户管理")
-            }else{
-              this.RecordOperation("导入", 0, result['result']["message"][0]["message"]);
-              this.importSuccess(result['result']["message"][0]["message"])
-              observale.next(false)
-              throw `error,`+status
-            }
-          })
-        }
+        this.http.callRPC(table, method, datas).subscribe((result)=>{
+          console.log("插入设备数据：", result)
+          const status = result['result']["message"][0]['code'];
+          if (status === 1){
+            this.RecordOperation("导入", 1, "用户管理");
+            this.importsuccess();
+            observale.next(true)
+          }else{
+            var data_info = result['result']["message"][0]["message"];
+            console.log("------------------->",data_info)
+            this.RecordOperation("导入", 0, String(data_info));
+            this.importSuccess(result['result']["message"][0]["message"])
+            observale.next(false)
+            throw `error,`+status
+          }
+        })
         
-        // this.inttable();
+        
         
       }catch(err){
         console.log("err: ", err);
@@ -563,7 +620,11 @@ export class NewUserEmployeeComponent implements OnInit {
   // 处理 groups_name: "理化试验科"    role_name: "普通用户;执行方"
   handle_groups_and_roles(data, fild){
     // var groups_name = data["groups_name"].split(";");
-      var names = data[fild].split(";");
+      var names = [];
+      if (data[fild]){
+        names = data[fild].split(";");
+
+      }
       // 得到用户组和角色
       if (fild != "groups_name"){
         var get_name = JSON.parse(localStorage.getItem("roles"));
@@ -728,8 +789,10 @@ export class NewUserEmployeeComponent implements OnInit {
     if (verify_sql_str != 1){
       return verify_sql_str
     }
-    if (groups_name.length > 50){
-      return "用户组最大长度不超过50！"
+    if (groups_name){
+      if (groups_name.length > 50){
+        return "用户组最大长度不超过50！"
+      }
     }
     return 1 // 返回1，表示 通过验证！
   }
@@ -741,6 +804,9 @@ export class NewUserEmployeeComponent implements OnInit {
   }
   danger(){
     this.publicmethod.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"删除失败!"});
+  }
+  searchdanger(data){
+    this.publicmethod.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"没要该域账号：" + data});
   }
 
   // 提示!

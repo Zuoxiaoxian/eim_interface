@@ -36,8 +36,12 @@ export class MenuComponent implements OnInit {
 
 
   // 前端要展示的button
+  button;
+  // 刷新 table
+  refresh = false;
   buttons;
   isactions;
+  isactions_new;
 
   
 
@@ -45,29 +49,38 @@ export class MenuComponent implements OnInit {
     private publicservice: PublicmethodService, private dialogService: NbDialogService,
     private toastrService: NbToastrService, private router: Router, private userinfo: UserInfoService) { 
     // local store 得到token id 
-    var admintoken = JSON.parse(localStorage.getItem(ssotoken))? JSON.parse(localStorage.getItem(ssotoken)): false;
-    var token = localStorage.getItem(ssotoken)? localStorage.getItem(ssotoken): false;
-    if (admintoken){
-      this.headers = { "Content-Type": "application/json", "indent": "4", "Authorization": "Bearer " + admintoken.token}
-    }else{
-      console.log("得到用户菜单：这个是从统一认证平添登录的");
-      // this.headers = { "Content-Type": "application/json", "indent": "4", "Authorization": "Bearer " + ssotoken.token};
-
-    }
-
-
+    var token = localStorage.getItem(ssotoken)? JSON.parse(localStorage.getItem(ssotoken)).token: '';
+    this.headers = { "Content-Type": "application/json", "indent": "4", "Authorization": "Bearer " + token }
   }
 
   ngOnInit(): void {
     // 初始化table
-    // this.getsysmenu_withuser();
-    this.getbuttons();
-    this.loadMenu();
+    // this.getbuttons();
+    // 得到权限button
+    var roleid = this.userinfo.getEmployeeRoleID();
+    this.publicservice.get_buttons_bypath(roleid).subscribe(result=>{
+      this.button = result;
+      var button_lists = result;
+      var button_list = {}
+      if(button_lists["edit"]){
+        button_list["edit"] = button_lists["edit"]["active"] === 1?  true: false;
+      }else{
+        button_list["edit"] = false;
+      }
+      if(button_lists["del"]){
+        button_list["del"] = button_lists["del"]["active"] === 1?  true: false;
+      }else{
+        button_list["del"] = false;
+      }
+      this.isactions = button_list;
+      console.log(">>>>>>>>this.isactions_new<<<<<<",this.isactions);
+      this.loadMenu();
+    });
+
+
   }
   
   ngAfterViewInit(){
-  
-
   }
 
 
@@ -76,27 +89,17 @@ export class MenuComponent implements OnInit {
   getbuttons(){
     // 根据menu_item_role得到 该页面对应的 button！
     var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
-    // this.publicservice.get_buttons().subscribe((button_list:any)=>{
-
-    // })
     if (button_list){
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      console.log(button_list)
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
       this.publicservice.get_current_pathname().subscribe(res=>{
         console.log("get_current_pathname   ", res);
         var currentmenuid = res["id"];
         var buttons = [];
-        
         button_list.forEach(button => {
           if (currentmenuid === button["parentid"]){
-            // button["permission"] = button["permission"].split(":")[1].replace(/\s/g, "");
             button["permission"] = button["permission"];
             buttons.push(button);
-            
           }
         });
-
         // -----------------------------------------------------------------------------------
         var isactions = {};
         buttons.forEach(button=>{
@@ -120,9 +123,7 @@ export class MenuComponent implements OnInit {
         if (!isactions["del"]){
           isactions["del"] = false
         }
-
         // -----------------------------------------------------------------------------------
-
         this.buttons = buttons;
         this.isactions = isactions;
         console.log("_________________________________-this.buttons---------________________",this.buttons);
@@ -224,11 +225,7 @@ export class MenuComponent implements OnInit {
         name=>{
           console.log("----name-----", name);
           if (name){
-            // $table.bootstrapTable('remove', {
-            //   field: 'id',
-            //   values: [row.id]
-            // });
-            this.updatetable()
+            this.updatetable(name)
             // 调用删除功能
             deleteitem(row, http, publicservice, success, danger,that)
           }
@@ -316,15 +313,25 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  refresh_table(){
+    $("#employeenumber").val('')
+    this.refresh = true;
+    this.updatetable();
+    this.refresh = false;
+  }
+
+
   // 修改button弹出
   open(row) {
     // this.dialogService.open(MenuComponent2,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify('') } }).onClose.subscribe(name=>{
     this.dialogService.open(NewMenuComponent,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify(row), title: '编辑目录'  } }).onClose.subscribe(name=>{
-    // this.dialogService.open(EditMenuComponent,{ closeOnBackdropClick: false,context: { rowdata: JSON.stringify('edit') } }).onClose.subscribe(name=>{
       console.log("-------------name----------------", name);
       if (name){
         // 更新table！
-        this.updatetable();
+        this.updatetable(name); // name 表示刷新目录栏
+        // 删除 mulu
+        localStorage.removeItem("mulu");
+        
       }
     })
   }
@@ -341,11 +348,11 @@ export class MenuComponent implements OnInit {
     var success = this.success
     var danger = this.danger
     var Data = Data;
-    
 
     var isactions = this.isactions;
+    var isactions_new = this.isactions_new;
 
-    console.log("-------------------this.isactions-------------------", isactions);
+    console.log("-------------------this.isactions-------------------", isactions, isactions_new);
     if (isactions === undefined){
       location.reload();
     }
@@ -421,10 +428,6 @@ export class MenuComponent implements OnInit {
               align: 'center',
               events: {
                 'click .edit': function (e, value, row, index) {
-                    // alert('You click like action, row: ' + JSON.stringify(row));
-                    // 将行数据保存在local storage中！
-                    // localStorage.setItem(SYSMENUEDIT, JSON.stringify(row));
-                    // 弹出
                     open(row);
                     
                 },
@@ -434,11 +437,7 @@ export class MenuComponent implements OnInit {
                       name=>{
                         console.log("----name-----", name);
                         if (name){
-                          // $table.bootstrapTable('remove', {
-                          //   field: 'id',
-                          //   values: [row.id]
-                          // });
-                          that.updatetable()
+                          that.updatetable(name)
                           // 调用删除功能
                           deleteitem(row, publicservice, success, danger)
                         }
@@ -473,39 +472,39 @@ export class MenuComponent implements OnInit {
         },
         // classes: "table table-bordered  table-hover table-primary:hover",
     });
-
-    
-    
-    
-      
-
     // 样式！
     $("#menuTable").children("tbody").children("tr").children("td").attr("style", "padding: 0px 12px; text-align: center;");
     $("#menuTable tbody tr td:nth-child(2)").attr("style", "")
     function typeFormatter(value, row, index) {
     if (value === 1) {
-        return '<span class="label label-success">菜单</span>'
+        return '菜单'
+        // return '<span class="label label-success">菜单</span>'
     }
     if (value === 0) {
-        return '<span class="label label-success">目录</span>'
+        return '目录'
+        // return '<span class="label label-success">目录</span>'
       }
       if (value === 2) {
-        return '<span class="label label-info">按钮</span>'
+        return '按钮'
+        // return '<span class="label label-info">按钮</span>'
     }
     return '-'
     };
 
     function permissionFormatter(value, row, index) {
-      return `<span class="label label-success">${value}</span>`
+      return `${value}`
+      // return `<span class="label label-success">${value}</span>`
     }
 
     // 是否启用
     function activeFormatter(value, row, index){
       if (value == 1) {
-        return '<span class="label label-info">是</span>'
+        return '是'
+        // return '<span class="label label-info">是</span>'
       }
       if (value == 0) {
-        return '<span class="label label-success">否</span>'
+        return '否'
+        // return '<span class="label label-success">否</span>'
       }
     }
 
@@ -613,27 +612,6 @@ export class MenuComponent implements OnInit {
       })
     }
 
-    // ajax请求
-    function getdata_for_table() {
-      // window.location.reload();
-      $.ajax({
-          url: url,
-          type: "POST",
-          headers: headers,
-          data: JSON.stringify({
-              "jsonrpc": "2.0",
-              "method": "getsysmenu_withuser",
-              "params": {},
-              "id": "1"
-            }),
-          dataType: "json",
-          success: analysisMenu,
-          error: function(err){
-              alert("失败")
-          }
-      });
-    }
-
     // 解析menu
     function analysisMenu(res) {
       console.log("params: ", res)
@@ -697,9 +675,8 @@ export class MenuComponent implements OnInit {
     // 弹出函数
     function open(row) {
       dialogService.open(NewMenuComponent,{closeOnBackdropClick: false,context: { rowdata: JSON.stringify(row), title: '编辑目录' }}).onClose.subscribe(name=>{
-      // dialogService.open(EditMenuComponent,{closeOnBackdropClick: false,}).onClose.subscribe(name=>{
         if(name){
-          that.updatetable();
+          that.updatetable(name);
         }
       });
     }
@@ -709,7 +686,7 @@ export class MenuComponent implements OnInit {
 
 
   // update table 更新table
-  updatetable(){
+  updatetable(isnotresh?){
     this.publicservice.getMenu().subscribe((data:any[])=>{
       if (data.length === 0){
         // 表示token 过期，返回登录界面
@@ -730,10 +707,20 @@ export class MenuComponent implements OnInit {
             var menu = this.dataTranslation(baseData);
             localStorage.setItem(SYSMENU, JSON.stringify(menu));
             // 按钮
-            // this.RanderTable(menu);
             var $table = $('#menuTable')
-            // $table.bootstrapTable('refreshOptions',menu);
             $table.bootstrapTable('load', menu);
+            $("#menuTable").children("tbody").children("tr").children("td").attr("style", "padding: 0px 12px; text-align: center;");
+            $("#menuTable tbody tr td:nth-child(2)").attr("style", "")
+            // 是否刷新目录栏
+            if(isnotresh){
+              // 提示刷新界面
+              if(confirm("请刷新界面，已更新目录")){
+                location.reload();
+              }else{
+
+              }
+              // location.reload();
+            }
             
           }
         })
@@ -753,39 +740,37 @@ export class MenuComponent implements OnInit {
     console.log("这是 系统设置的菜单界面！")
     var sysmenu = localStorage.getItem(SYSMENU) == null ? [] : JSON.parse(localStorage.getItem(SYSMENU));
     var mulu_language = localStorage.getItem('mulu_language') == null ? 'zh_CN' : localStorage.getItem('mulu_language');
-    this.publicservice.getMenu().subscribe((data:any[])=>{
-      if (data.length === 0){
-        // 表示token 过期，返回登录界面
-        this.router.navigate([loginurl]);
-      }else{
-        const colums = {
-          languageid: this.http.getLanguageID(),
-          roles: data
-        };
-        console.log("---colums--",colums)
-        const table = "menu_item";
-        // const method = "get_systemset_menu";
-        const method = "get_systemset_menu_all";
-        this.http.callRPC(table, method, colums).subscribe((result)=>{
-          console.log("---------------->>>>",result)
-          const baseData = result['result']['message'][0];
-          if (baseData != "T"){
-            var menu = this.dataTranslation(baseData);
-            localStorage.setItem(SYSMENU, JSON.stringify(menu));
-            // 按钮
-            this.RanderTable(menu);
-          }
-        })
-      }
-
-    });
-    // if(sysmenu.length == 0 || mulu_language != localStorage.getItem('currentLanguage')){
-    // }else{
-    //   var menu = this.dataTranslation(sysmenu);
-
-    //   console.log("------menu--目录：", sysmenu);
-    //   this.RanderTable(menu);
-    // }
+    if(sysmenu.length == 0 || mulu_language != localStorage.getItem('currentLanguage')){
+      this.publicservice.getMenu().subscribe((data:any[])=>{
+        if (data.length === 0){
+          // 表示token 过期，返回登录界面
+          this.router.navigate([loginurl]);
+        }else{
+          const colums = {
+            languageid: this.http.getLanguageID(),
+            roles: data
+          };
+          console.log("---colums--",colums)
+          const table = "menu_item";
+          // const method = "get_systemset_menu";
+          const method = "get_systemset_menu_all";
+          this.http.callRPC(table, method, colums).subscribe((result)=>{
+            console.log("---------------->>>>",result)
+            const baseData = result['result']['message'][0];
+            if (baseData != "T"){
+              var menu = this.dataTranslation(baseData);
+              localStorage.setItem(SYSMENU, JSON.stringify(menu));
+              // 按钮
+              this.RanderTable(menu);
+            }
+          })
+        }
+      });
+    }else{
+      var menu = this.dataTranslation(sysmenu);
+      console.log("------menu--目录：", sysmenu);
+      this.RanderTable(menu);
+    }
     
   }
 

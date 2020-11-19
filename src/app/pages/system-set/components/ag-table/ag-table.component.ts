@@ -51,7 +51,7 @@ export class AgTableComponent implements OnInit {
   current = 1;  // 当前页
   totalPageNumbers=10;  // 总数据条数
   setPageCount = 10;     // 默认每页10条数据
-  private requestPageCount = 5; // 每次请求的数目
+  private requestPageCount = 2; // 每次请求的数目
 
   selectedRows = [];     // 行选择数据
 
@@ -65,9 +65,6 @@ export class AgTableComponent implements OnInit {
   constructor(private dialogService: NbDialogService, private userinfo: UserInfoService, private publicservice: PublicmethodService) { 
   }
   
-  // action = { field: 'action', headerName: '操作', cellRendererFramework: AgGridActionComponent, pinned: 'right'};
-  // action = { field: 'action', headerName: '操作', cellRendererFramework: AgGridActionComponent, pinned: 'right'};
-  // action = { field: 'action', headerName: '操作', cellRenderer: 'agGridActionComponent', pinned: 'right'};
   
   ngOnInit(): void {
     // this.gridOptions();
@@ -98,38 +95,11 @@ export class AgTableComponent implements OnInit {
     this.getRowNodeId = function(data){
       return data.id
     };
-
     this.context = { componentParent: this };
-
-    
-
     this.paginationPageSize = 10;
     this.rowSelection = 'multiple';
-
-    
-    console.log("*****************************************vtableDatas")
-    console.log("***************************************** tableDatas", employee_agGrid)
-    console.log("*****************************************tableDatas");
-
-    if (this.action){
-      console.log("action===========222222222222222========", this.action);
-      console.log("this.tableDatas.columnDefs======this.tableDatas.columnDefs", this.columnDefs, "index: ");
-      // this.tableDatas.columnDefs.push(this.action)
-      // 表示具有操作功能
-      // this.frameworkComponents = {
-      //   // agGridActionComponent: AgGridActionComponent
-      //   countryCellRenderer: this.tableDatas.action_action
-      // }
-    }
-    // this.rowData = this.tableDatas.rowData;
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-    console.log("^^^^^^^^^^^^^^this.rowData^^^^^^^^^^^^^^",this.rowData)
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     this.totalPageNumbers = this.rowData.length
-    // this.columnDefs = this.columnDefs;
     console.log("------------------->>>>>>>>>>>>>>>>>>>>",this.columnDefs)
-
-    console.log("tableDatas===================", this.tableDatas)
   };
 
   
@@ -258,8 +228,10 @@ export class AgTableComponent implements OnInit {
       // var data = this.selectedRows;
       var data = Object.assign([], this.selectedRows);
       data.forEach(element => {
-        if(element["active"]){
+        if(element["active"] === 1){
           element["active"] = '是'
+        }else{
+          element["active"] = '否'
         }
         var data_item = [];
         if (keys != []){
@@ -276,6 +248,7 @@ export class AgTableComponent implements OnInit {
         table_data.push(data_item);
       });
       this.export(table_data);
+      this.selectedRows = [];
       
     }else{
       
@@ -312,35 +285,37 @@ export class AgTableComponent implements OnInit {
     return wb;
   };
 
-
-
-  // 父组件调用，告诉该组件数值改变了！
-  update_agGrid(tableDatas){
-    this.rowData = tableDatas.rowData;
-    console.log("父组件调用，告诉该组件数值改变了！=========",tableDatas)
-    console.log("父组件调用，告诉该组件数值改变了！=========this.rowData",this.rowData)
-    // 刷新
-    
-    // this.agGrid.api.setRowData(rowData);
-    this.totalPageNumbers = tableDatas.rowData.length;
-    this.alltotalPageNumbers = tableDatas.totalPageNumbers; // 数据库中的总条数
-    this.gridApi.setRowData(this.rowData);
-  }
-
-  // 父组件调用！ 填充表格
-  init_agGrid(employee_agGrid){
-    console.log("初始化-------父组件调用！ 填充表格=======", employee_agGrid)
-    this.gridOptions(employee_agGrid);
-  }
-
   // onGridReady
-  onGridReady(params) {
+  onGridReady(params){
     console.warn("params>>", params);
 
     console.warn(params);
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
   }
+
+
+  // 父组件调用，告诉该组件数值改变了！
+  update_agGrid(tableDatas){
+    // 刷新
+    this.agGrid.api.refreshView();
+    this.selectedRows = []; // 清除选择的行数据！
+    this.rowData = tableDatas.rowData;
+    this.totalPageNumbers = tableDatas.rowData.length;
+    this.alltotalPageNumbers = tableDatas.totalPageNumbers; // 数据库中的总条数
+    // this.agGrid.api.setRowData(this.rowData);
+    console.log("------------agGrid-------------", this.agGrid)
+    this.agGrid.api.setRowData(this.rowData);
+  }
+
+  // 父组件调用！ 初始化表格
+  init_agGrid(employee_agGrid){
+    this.gridOptions(employee_agGrid);
+  }
+
+ 
+
+
 
   
 
