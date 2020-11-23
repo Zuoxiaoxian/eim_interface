@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LayoutService } from '../../../@core/utils/layout.service';
-import { colors, rgb_del_red } from '../equipment-board';
+import { colors, rgb_del_red,list_jion,list_copy,create_third_chart_line,list_copy_new,list_jion_new } from '../equipment-board';
 
 let equipment_four_road = require('../../../../assets/eimdoard/equipment/js/equipment-four-road')
 let rtm3a = require('../../../../assets/eimdoard/rtm3/js/rtm3a');
@@ -16,13 +16,13 @@ let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
 })
 export class EquipmentMotorSystemComponent implements OnInit {
   attrs =[{ 
-    name: "参数1",nameEn: "param1", unit: "V",value: [],show:true,dashboardShow:true
+    name: "扭矩",nameEn: "param1", unit: "V",value: [],show:true,dashboardShow:true
     ,color:["#00FF00", "#00FF00"]
   },{ 
-      name: "参数2",nameEn: "param2", unit: "V",value: [],
+      name: "转速",nameEn: "param2", unit: "V",value: [],
       color:["#ff00ff", "#ff00ff"],dashboardShow:true
   },{ 
-      name: "参数3",nameEn: "param3", unit: "V",value: [],
+      name: "功率",nameEn: "param3", unit: "V",value: [],
       color:["#d9d919", "#d9d919"],dashboardShow:true
   },{ 
     name: "参数4",nameEn: "param4", unit: "V",value: [],
@@ -39,7 +39,50 @@ export class EquipmentMotorSystemComponent implements OnInit {
 }]
   xData = [];
 
-  attrs_1 = {};
+  attrs_1 = {'equipment.motor.coolingWater':[{ 
+    name: "扭矩",nameEn: "param1", unit: "V",value: [],show:true,dashboardShow:true
+    ,color:["#00FF00", "#00FF00"]
+  },{ 
+      name: "转速",nameEn: "param2", unit: "V",value: [],
+      color:["#ff00ff", "#ff00ff"],dashboardShow:true
+  },{ 
+      name: "功率",nameEn: "param3", unit: "V",value: [],
+      color:["#d9d919", "#d9d919"],dashboardShow:true
+  },{ 
+    name: "参数4",nameEn: "param4", unit: "V",value: [],
+    color:["#d9d919", "#d9d919"]
+},{ 
+  name: "参数5",nameEn: "param5", unit: "V",value: [],
+  color:["#d9d919", "#d9d919"]
+},{ 
+  name: "参数6",nameEn: "param6", unit: "V",value: [],
+  color:["#d9d919", "#d9d919"]
+},{ 
+  name: "参数7",nameEn: "param7", unit: "V",value: [],
+  color:["#d9d919", "#d9d919"]
+}],
+'equipment.motor.AxleBoxTemp':[{ 
+  name: "扭矩",nameEn: "param1", unit: "V",value: [],show:true,dashboardShow:true
+  ,color:["#00FF00", "#00FF00"]
+},{ 
+    name: "转速",nameEn: "param2", unit: "V",value: [],
+    color:["#ff00ff", "#ff00ff"],dashboardShow:true
+},{ 
+    name: "功率",nameEn: "param3", unit: "V",value: [],
+    color:["#d9d919", "#d9d919"],dashboardShow:true
+},{ 
+  name: "参数4",nameEn: "param4", unit: "V",value: [],
+  color:["#d9d919", "#d9d919"]
+},{ 
+name: "参数5",nameEn: "param5", unit: "V",value: [],
+color:["#d9d919", "#d9d919"]
+},{ 
+name: "参数6",nameEn: "param6", unit: "V",value: [],
+color:["#d9d919", "#d9d919"]
+},{ 
+name: "参数7",nameEn: "param7", unit: "V",value: [],
+color:["#d9d919", "#d9d919"]
+}]};
   attrs_2 = {};
   attrs_3 = {};
 
@@ -47,41 +90,7 @@ export class EquipmentMotorSystemComponent implements OnInit {
   str = ` 主要测试电机低速及控制系统性能，如：电机标定、转矩-转速特性、<br> 效率、温升、堵转试验、转矩控制精度、转速控制精度、峰值转矩、
   <br> 峰值功率`;
 
-  //安灯状态
-  andon = [
-    {name:'4',color:'blue',status:1},
-    {name:'3',color:'green',status:1},
-    {name:'2',color:'yellow',status:0},
-    {name:'1',color:'red',status:0},
-  ];
-  //试验信息
-  experiment ={
-    user:'新工',
-    phone:'13499998888',
-    nexttest:'Geely001',
-    nextdate:'20/11/01-20/11/30',
-    // '实验编号','计划时长','进度'
-    title:['ExperimentNum','PLanDuration','schedule'],
-    data:[
-      ['WSN-100010','20/10/01-20/11/01',69],
-      ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-    ]
-  }
-  //日志与警告
-  log_warm = {
-    // '时间','日志等级','日志信息'
-    title:['time','Loglevel','logInfor'],
-    data:[
-      ['2020-09-08','warning','Not ready'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-    ]
-  }
+  
   //图片
   img = {
     url:'assets/eimdoard/equipment/images/car_2.png',//中间图片
@@ -103,9 +112,9 @@ export class EquipmentMotorSystemComponent implements OnInit {
   @ViewChild('chart_1')chart_1:any;
 
   //每一个ngx-chart-curve-v3 中有哪些tag
-  list_2 = ['equipment.param1','equipment.param2'];
-  list_1 = ['equipment.param1','equipment.param2'];
-  list_3 = ['equipment.param1','equipment.param2'];
+  list_2 = ['equipment.motor.Voltage','equipment.motor.electricCurrent'];
+  list_1 = ['equipment.motor.MotorParam','equipment.motor.MotorEfficiency'];
+  list_3 = ['equipment.motor.coolingWater','equipment.motor.AxleBoxTemp'];
   click_list = [];//当前选中的tag
 
   timer:any;//定时器
@@ -139,20 +148,16 @@ export class EquipmentMotorSystemComponent implements OnInit {
     })
 
     //默认进去选中的tag记录
-    this.click_list = [this.list_1[0],this.list_3[0],this.list_3[0]]
+    this.click_list = [this.list_1[0],this.list_2[0],this.list_3[0]]
 
     //赋值
-    this.list_1.forEach((f,i)=>{
-      this[`attrs_1`][f] = JSON.parse(JSON.stringify(this.attrs));
-    })
-    this.list_2.forEach((f,i)=>{
-      this[`attrs_2`][f] = JSON.parse(JSON.stringify(this.attrs));
-    })
-    this.list_3.forEach((f,i)=>{
-      this[`attrs_3`][f] = JSON.parse(JSON.stringify(this.attrs));
-    })
+    list_copy_new(this.list_1,this.attrs,`attrs_1`,this);
+    list_copy_new(this.list_2,this.attrs,`attrs_2`,this);
+    list_copy_new(this.list_3,this.attrs,`attrs_3`,this);
     this.getData();
-    
+    setTimeout(() => {
+    this.initChart();
+    }, 1000);
   }
   
 
@@ -166,63 +171,24 @@ export class EquipmentMotorSystemComponent implements OnInit {
     //定时添加数据
     this.timer = setInterval(f =>{
       this.xData.push(g);
+      if(this.xData.length >10)this.xData.splice(0,1)
         g++;
-        this.list_1.forEach((f,i)=>{
-          this[`attrs_1`][f].forEach(element => {
-            element.value.push(parseInt((Math.random()*100).toString()))
-          });
-        })
-        this.list_2.forEach((f,i)=>{
-          this[`attrs_2`][f].forEach(element => {
-            element.value.push(parseInt((Math.random()*100).toString()))
-          });
-        })
-        this.list_3.forEach((f,i)=>{
-          this[`attrs_3`][f].forEach(element => {
-            element.value.push(parseInt((Math.random()*100).toString()))
-          });
-        })
+        list_jion_new(this.list_1,'attrs_1',this);
+        list_jion_new(this.list_2,'attrs_2',this);
+        list_jion_new(this.list_3,'attrs_3',this);
         let array = ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
         this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:this.xData,index:g});
       })
       
     },1000)
+
+  }
+
+  ngAfterViewInit(){
   }
   
 
   initChart(){
-    let data_1 = {
-      d_arr:[[12, 56, 36, 86, 98, 86],
-               [45, 20, 36, 106, 80, 16],
-              [90, 10, 36, 96, 80, 10],
-              [90, 56, 36, -6, -50, -70]],
-      title_arr:["空闲", "占位", "运行", "利用率"],
-      color_arr:[{
-        start: "rgba(155, 101, 229)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        start: "rgba(71, 173, 245)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        start: "rgba(82, 249, 107)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        color: "#00EAFF"
-    }
-  ],
-    xData:[1,2,3,4,5,6]
-    }
-    let myChart = echarts.init(document.getElementById('device_status'));
-    equipment_four_road.create_device_status(data_1,myChart);
-
-    let myChart_1 = echarts.init(document.getElementById('device_circular_1'));
-    equipment_four_road.create_device_circular({title:this.language?'SafetyLampStatus':'安灯状态',message:this.language?'LastMonth':'上个月'},myChart_1);
-
-    let myChart_2 = echarts.init(document.getElementById('device_circular_2'));
-    equipment_four_road.create_device_circular({title:this.language?'SafetyLampStatus':'安灯状态',message:this.language?'ThisMonth':'本月'},myChart_2);
 
     let data = {
       title:['一级警告','二级警告'],
@@ -239,26 +205,18 @@ export class EquipmentMotorSystemComponent implements OnInit {
     equipment_four_road.create_warning_chart(data,myChart_3);
 
     let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    equipment_four_road.create_real_temperature({value:55},myChart_4);
-
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
     let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature({value:55},myChart_5);
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
 
-    
 
     // ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
     //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.list[0]],xData:this.xData});
     // })
 
-    let operatingRate = echarts.init(document.getElementById('operatingRate'));
-    var gauge_data_4 = {
-      xAxisData:['0时','1时','2时','3时','4时','5时','6时','7时','8时','9时','10时','11时','12时','13时','14时','15时','16时','17时'
-        ,'18时','19时','20时','21时','22时','23时'],
-      seriesData:[710, 312, 321,754, 500, 830, 710, 521, 504, 660, 530, 410,710, 312, 321,754, 500, 830, 710, 521, 504, 660, 530, 410],
-    } 
-    rtm3.create_right_buttom(gauge_data_4,operatingRate);
+    create_third_chart_line(rtm3a,this);
 
-    this.create_third_chart_line();
+
   }
 
 
@@ -266,40 +224,23 @@ export class EquipmentMotorSystemComponent implements OnInit {
   clicEvent(e,i){
     //记录选定
     this.click_list[i-1] = e;
-    this[`chart_${i}`].painting({attrs:this[`attrs_${i}`][e],xData:this.xData});
+    // this[`list_${i}`].forEach(f=>{
+    //   if(e!=f)this[`attrs_${i}`][f].forEach(el => {
+    //     el.value = [];
+    //     this[`attrs_${i}`][f].xData = [];
+    //   });
+    // })
   }
 
-  getleft(item){
-    return item > 40?item-20+'%':'20%';
-  }
+
 
 
   get_td_width(num){
     return 66/num+'%'
   }
 
-  get_height(){
-    return this.experiment.data.length <= 2?31*this.experiment.data.length+'px':'120px';
-  }
 
-  create_third_chart_line(){
-    var yearPlanData=[],yearOrderData = [],differenceData = [],visibityData = [],xAxisData = [];
-    for (var i = 0; i < 12; i++) {
-      yearPlanData.push(Math.round(Math.random() * 900) + 100);
-      yearOrderData.push(Math.round(Math.random() * yearPlanData[i]));
-      differenceData.push(yearPlanData[i] - yearOrderData[i]);
-      visibityData.push(yearOrderData[i]);
-      xAxisData.push((i + 1).toString() + "月");
-    }
-    rtm3a.create_third_chart_line({
-      yearPlanData:yearPlanData,
-      yearOrderData:yearOrderData,
-      differenceData:differenceData,
-      visibityData:visibityData,
-      xAxisData:xAxisData,
-      title:this.language?'MonthlyChartOfTemperatureAndHumidity':'温湿度月度图线'
-    }, 'third_second');
-  }
+
 
   ngOnDestroy(){
     clearInterval(this.timer)

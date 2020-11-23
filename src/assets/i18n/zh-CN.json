@@ -24,7 +24,9 @@
         "ambient": "环境",
         "realime": "实时",
         "ExperimentNum": "实验编号",
+        "StartTime": "开始时间",
         "PLanDuration": "计划时长",
+        "PlannedRound": "计划轮次",
         "schedule": "进度",
         "NextExperiment": "下个实验",
         "contact": "联系方式",
@@ -106,6 +108,14 @@
                 }
             }
 
+        },
+        "motor": {
+            "coolingWater": "冷却水",
+            "AxleBoxTemp": "轴箱温度",
+            "MotorParam": "电机参数",
+            "MotorEfficiency": "电机效率",
+            "electricCurrent": "电流",
+            "Voltage": "电压"
         }
     }
 

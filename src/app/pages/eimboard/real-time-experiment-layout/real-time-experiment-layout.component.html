@@ -15,12 +15,12 @@
             <nb-icon style="cursor: pointer;" [icon]="is_not_fullscreen ? 'expand-outline' : 'collapse-outline'" [status]="is_not_fullscreen ? 'warning' : 'info'" (click)="showAllTemplate()"></nb-icon>
         </div>
     </div>
-    <div class="row">
+    <div class="row ">
         <div class="col-md-12 head">
             <h4>{{real_time_data.title}}</h4>
         </div>
     </div>
-    <div class="row">
+    <div class="row height_90">
         <div class="col-md-4">
             <div class="box_shadow">
                 <div class="font_c" style="padding-left: 7px;text-align: left;">{{ real_time_data.firstcol.title }}</div>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div id='center_img' style="width: 100%;">
+            <div id='center_img' style="width: 100%;height: 48%;">
                 <ng-container *ngFor="let item of task_data.data;let i = index">
                     <div id="{{item.class}}" *ngIf="item.taskname" (mouseover)="location_over(item)" (mousemove)="location_move(item)">
                         <div class="device-box" *ngIf="item.tipShow">

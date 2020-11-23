@@ -1,0 +1,61 @@
+.first_second_font {
+    text-align: left;
+    padding: 5px 0px 0px 10px;
+    display: flex;
+}
+
+.width_30 {
+    width: 30%;
+}
+
+.table {
+    // border: 1px solid rgb(68, 114, 196);
+    color: white;
+    table {
+        width: 100%;
+        height: 100%;
+        .header {
+            // height: 10%;
+            background: rgb(68, 114, 196);
+            td {
+                width: 20%;
+                padding: 5px;
+            }
+        }
+        .body {
+            font-size: 12px;
+            .progress_o {
+                border-radius: 3px;
+                width: 100%;
+            }
+            td {
+                padding: 5px;
+                width: 33%;
+            }
+            .progres_1 {
+                color: white;
+                position: relative;
+            }
+            .progres_2 {
+                position: absolute;
+                top: 0px;
+                ;
+            }
+        }
+    }
+    .font_tolong {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.lattice_layout {
+    margin-top: 10px;
+    display: inherit;
+    position: relative;
+}
+
+.table_bo {
+    border: 1px solid #4472c4;
+}

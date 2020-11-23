@@ -1,0 +1,110 @@
+#mast-v3 {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    color: white;
+    .d_flex {
+        display: flex;
+        nb-icon {
+            color: rgb(1, 243, 248);
+            width: 30px;
+            height: 40px;
+        }
+        .time {
+            border: 1px solid white;
+            background: black;
+            height: 100%;
+            padding-top: 5%;
+        }
+        span {
+            color: white;
+            font-size: 22px;
+        }
+        .title {
+            padding-top: 10px;
+        }
+        .blue {
+            color: rgb(1, 243, 248);
+        }
+        .back_g_1 {
+            background: rgb(0, 107, 156);
+            padding: 2%;
+        }
+        .green {
+            background: green;
+        }
+        .dark_red {
+            background: #500000;
+        }
+        .red {
+            background: red;
+        }
+        .gray {
+            background: #C0C0C0;
+        }
+        #your-clock,
+        #your-clock-2 {
+            height: 100%;
+            width: 50%;
+            ul {
+                height: 100%;
+            }
+        }
+    }
+    #chart_1 {
+        height: 60%;
+    }
+    #chart_2 {
+        height: 40%;
+    }
+    #chart_4,
+    #chart_5 {
+        height: 50%;
+    }
+    #chart_3 {
+        height: 79%;
+    }
+    img {
+        width: 100%;
+        height: 100%;
+    }
+    #jk {
+        position: relative;
+        div {
+            position: absolute;
+            width: 80px;
+            height: 50px;
+            padding: 13px;
+            font-size: 22px;
+            // border-radius: 80px;
+        }
+    }
+    .article {
+        // 开头空两格
+        text-indent: 2em;
+        text-align: left;
+        font-size: 20px;
+        line-height: normal;
+    }
+    // 底色
+    .undertone {
+        background: rgb(0, 76, 119);
+        border-bottom-left-radius: 12px;
+        border-top-right-radius: 12px;
+        // margin-bottom: 3%;
+        padding: 2%;
+    }
+    .width_33 {
+        width: 33%;
+    }
+    .bo_green {
+        border: 2px solid #00FF00;
+    }
+    .bo_now {
+        border-bottom: 2px solid rgb(0, 76, 119);
+        height: 108%;
+    }
+    .leak {
+        background: url('/assets/eimdoard/equipment/images/leak.png') no-repeat;
+    }
+}

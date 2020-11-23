@@ -46,9 +46,11 @@ export class EmqClientService {
 
   mqttConnectOk = () => {
     console.log('WebSocket mqtt 连接成功!');
-    // console.log('开始订阅主题',this.mqttBean.topic);
-    // this.mqttClient.subscribe(this.mqttBean.topic);
-    console.log('订阅完成');
+    if(this.mqttBean.topic){
+      console.log('开始订阅主题',this.mqttBean.topic);
+      this.mqttClient.subscribe(this.mqttBean.topic);
+      console.log('订阅完成');
+    }
   };
 
   //mqtt连接失败
@@ -84,7 +86,9 @@ export class EmqClientService {
       console.log('开始发送mq'+destinationName+',数据:'+data)
       this.mqttClient.send(message);
     }catch (e){
-      console.log("mq发送失败",e);
+      console.log("mq发送失败");
     }
   }
+
+
 }

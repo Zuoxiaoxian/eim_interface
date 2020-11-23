@@ -1,6 +1,6 @@
 let expLayouteChart = {
     create_percentage_chart(data, myChart) {
-        option = {
+        let option_p_c = {
             // backgroundColor: 'rgba(1,1,1,0)',
             tooltip: {
                 show: false,
@@ -58,18 +58,19 @@ let expLayouteChart = {
                 roundCap: 1 //可选项为1和2，不填则采用原有拼接方式
             }]
         }
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
 
         if (option && typeof option === "object") {
-            myChart.setOption(option);
+            myChart.setOption(option_p_c);
             myChart.resize();
         }
     },
 
     cteate_chart(data, myChart) {
-        option = {
+        let option_c = {
             title: {
                 show: true,
                 text: data.title,
@@ -121,12 +122,13 @@ let expLayouteChart = {
                 }
             }]
         };
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
 
         if (option && typeof option === "object") {
-            myChart.setOption(option);
+            myChart.setOption(option_c);
             myChart.resize();
         }
     }

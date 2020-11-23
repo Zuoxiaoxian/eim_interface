@@ -54,6 +54,7 @@ const routes: Routes = [
         path: 'expLayout',
         component: RealTimeExperimentLayoutComponent
       },
+      
       {
         path: '',
         redirectTo: 'dashone',

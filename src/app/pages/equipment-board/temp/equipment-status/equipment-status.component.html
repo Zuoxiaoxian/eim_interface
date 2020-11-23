@@ -1,0 +1,43 @@
+<div class="andon_status">
+    <div class="part_title">{{'equipment.equipmentStatus' | translate}}</div>
+    <div class="andon_status_font">
+        {{'equipment.SafetyLampStatus' | translate}}
+    </div>
+    <div class="andon_color">
+        <div *ngFor="let item of andon;let i = index;" style="height: 25%;">
+            <div class="bo_black {{ item.color}} {{item.t == andon_now?'bright':'dark'}}" [ngStyle]="{'border-top': i != 0 ? '3px solid black':''}" [ngClass]="{'first':i==0,'last':i == andon.length-1}">
+                <Span>{{item.name}}</Span>
+            </div>
+        </div>
+    </div>
+    <div class="andon_img"></div>
+</div>
+<div class="andon_status_chart">
+    <div class="chart height_30">
+        <div id="device_circular_1"></div>
+        <div id="device_circular_2"></div>
+        <div id="device_circular_3"></div>
+    </div>
+    <div class="chart height_70">
+        <div id="operatingRate" class="height_30"></div>
+        <div id="device_status" class="height_70"></div>
+    </div>
+    <!-- <nb-flip-card [showToggleButton]="false" [flipped]="flipped" style="width: 100%;">
+        <nb-card-front style="width: 100%;">
+            <nb-card style="width: 100%;display: flex;position: relative;">
+                <div id="device_circular_1" style="width: 50%;height: 100%;"></div>
+                <div id="device_circular_2" style="width: 50%;height: 100%;"></div>
+                <nb-icon style="position: absolute;right: 0;" icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="flipped = !flipped;"></nb-icon>
+
+            </nb-card>
+        </nb-card-front>
+        <nb-card-back style="width: 100%;">
+            <nb-card style="width: 100%;">
+                <div id="operatingRate" class="height_30"></div>
+                <div id="device_status" class="height_70"></div>
+                <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="flipped = !flipped;"></nb-icon>
+
+            </nb-card>
+        </nb-card-back>
+    </nb-flip-card> -->
+</div>

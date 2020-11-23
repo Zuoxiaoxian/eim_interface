@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { async } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { LangChangeEvent, TranslatePipe, TranslateService } from '@ngx-translate/core';
+import {  TranslateService } from '@ngx-translate/core';
 import { LayoutService } from '../../../@core/utils/layout.service';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
-import { colors, rgb_del_red } from '../equipment-board';
+import { colors, dateformat, rgb_del_red,getMessage,painting_time,create_third_chart_line } from '../equipment-board';
 
 let equipment_four_road = require('../../../../assets/eimdoard/equipment/js/equipment-four-road');
 let rtm3a = require('../../../../assets/eimdoard/rtm3/js/rtm3a');
@@ -19,29 +19,8 @@ let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
 export class EquipmentFourRoadComponent implements OnInit {
 
 
-  attrs:any = [{ 
-    name: "参数1", unit: "V",value: [],show:true
-    ,color:["", ""]
-  },{ 
-      name: "参数2", unit: "V",value: [],
-      color:["#ff00ff", "#ff00ff"]
-  },{ 
-      name: "参数3", unit: "V",value: [],
-      color:["#d9d919", "#d9d919"]
-  },{ 
-    name: "参数4", unit: "V",value: [],
-    color:["#d9d919", "#d9d919"]
-},{ 
-  name: "参数5", unit: "V",value: [],
-  color:["#d9d919", "#d9d919"]
-},{ 
-  name: "参数6", unit: "V",value: [],
-  color:["#d9d919", "#d9d919"]
-},{ 
-  name: "参数7", unit: "V",value: [],
-  color:["#d9d919", "#d9d919"]
-}]
-  xData = [];
+
+  xData:any = {};
 
   attrs_1:any = {
     'equipment.road.LeftRear.Params':[{ 
@@ -51,94 +30,97 @@ export class EquipmentFourRoadComponent implements OnInit {
         name: "左后位移",nameEn :'LeftRearDisplacement', unit: "V",value: [],show:true,
         color:["", ""]
     },{ 
-        name: "左后DeltaP",nameEn :'LeftRearDeltaP', unit: "V",value: [],show:true,
-        color:["", ""]
+      name: "左后活动Fdbk",nameEn :'LeftRearActiveFdbk', unit: "V",value: [],show:true,
+      color:["", ""]
     },{ 
       name: "左后指令频率",nameEn :'LeftRearCommandFrequency', unit: "V",value: [],
       color:["", ""]
   },{ 
-    name: "左后活动Fdbk",nameEn :'LeftRearActiveFdbk', unit: "V",value: [],
+    name: "左后位移绝对误差",nameEn :'LeftRearDisplacementAbs.Error', unit: "V",value: [],
     color:["", ""]
   },{ 
     name: "左后位移误差",nameEn :'LeftRearDisplacementError', unit: "V",value: [],
     color:["", ""]
   },{ 
-    name: "左后位移绝对误差",nameEn :'LeftRearDisplacementAbs.Error', unit: "V",value: [],
+    name: "左后DeltaP",nameEn :'LeftRearDeltaP', unit: "V",value: [],
     color:["", ""]
   }],
-    'equipment.road.RightRear.Params':[{ 
-      name: "右后输出",nameEn :'RightRearOutput', unit: "V",value: [],show:true
-      ,color:["", ""]
-    },{ 
-        name: "右后位移",nameEn :'RightRearDisplacement', unit: "V",value: [],show:true,
+      'equipment.road.RightRear.Params':[{ 
+        name: "右后输出",nameEn :'RightRearOutput', unit: "V",value: [],show:true
+        ,color:["", ""]
+      },{ 
+          name: "右后位移",nameEn :'RightRearDisplacement', unit: "V",value: [],show:true,
+          color:["", ""]
+      },{ 
+        name: "右后活动Fdbk",nameEn :'RightRearActiveFdbk', unit: "V",value: [],show:true,
+        color:["", ""]
+      },{ 
+        name: "右后指令频率",nameEn :'RightRearCommandFrequency', unit: "V",value: [],
         color:["", ""]
     },{ 
-        name: "右后DeltaP",nameEn :'RightRearDeltaP', unit: "V",value: [],show:true,
-        color:["", ""]
-    },{ 
-      name: "右后指令频率",nameEn :'RightRearCommandFrequency', unit: "V",value: [],
+      name: "右后位移绝对误差",nameEn :'RightRearDisplacementAbs.Error', unit: "V",value: [],
       color:["", ""]
-  },{ 
-    name: "右后活动Fdbk",nameEn :'RightRearActiveFdbk', unit: "V",value: [],
-    color:["", ""]
-  },{ 
-    name: "右后位移误差",nameEn :'RightRearDisplacementError', unit: "V",value: [],
-    color:["", ""]
-  },{ 
-    name: "右后位移绝对误差",nameEn :'RightRearDisplacementAbs.Error', unit: "V",value: [],
-    color:["", ""]
-  }]
-  };
+    },{ 
+      name: "右后位移误差",nameEn :'RightRearDisplacementError', unit: "V",value: [],
+      color:["", ""]
+    },{ 
+      name: "右后DeltaP",nameEn :'RightRearDeltaP', unit: "V",value: [],
+      color:["", ""]
+  }],
+  xData:[]
+    };
   attrs_2:any = {
-    'equipment.road.LeftFront.Params':[{ 
-      name: "左前输出",nameEn :'LeftFrontOutput', unit: "V",value: [],show:true
-      ,color:["", ""]
-    },{ 
-        name: "左前位移",nameEn :'LeftFrontDisplacement', unit: "V",value: [],show:true,
+      'equipment.road.LeftFront.Params':[{ 
+        name: "左前输出",nameEn :'LeftFrontOutput', unit: "V",value: [],show:true
+        ,color:["", ""]
+      },{ 
+          name: "左前位移",nameEn :'LeftFrontDisplacement', unit: "V",value: [],show:true,
+          color:["", ""]
+      },{ 
+        name: "左前活动Fdbk",nameEn :'LeftFrontActiveFdbk', unit: "V",value: [],show:true,
+        color:["", ""]
+      },{ 
+        name: "左前指令频率",nameEn :'LeftFrontCommandFrequency', unit: "V",value: [],
         color:["", ""]
     },{ 
-        name: "左前DeltaP",nameEn :'LeftFrontDeltaP', unit: "V",value: [],show:true,
-        color:["", ""]
-    },{ 
-      name: "左前指令频率",nameEn :'LeftFrontCommandFrequency', unit: "V",value: [],
+      name: "左前位移绝对误差",nameEn :'LeftFrontDisplacementAbs.Error', unit: "V",value: [],
       color:["", ""]
-  },{ 
-    name: "左前活动Fdbk",nameEn :'LeftFrontActiveFdbk', unit: "V",value: [],
-    color:["", ""]
-  },{ 
-    name: "左前位移误差",nameEn :'LeftFrontDisplacementError', unit: "V",value: [],
-    color:["", ""]
-  },{ 
-    name: "左前位移绝对误差",nameEn :'LeftFrontDisplacementAbs.Error', unit: "V",value: [],
-    color:["", ""]
+    },{ 
+      name: "左前位移误差",nameEn :'LeftFrontDisplacementError', unit: "V",value: [],
+      color:["", ""]
+    },{ 
+      name: "左前DeltaP",nameEn :'LeftFrontDeltaP', unit: "V",value: [],
+      color:["", ""]
   }],
-    'equipment.road.RightFront.Params':[{ 
-      name: "右前输出",nameEn :'RightFrontOutput', unit: "V",value: [],show:true
-      ,color:["", ""]
-    },{ 
-        name: "右前位移",nameEn :'RightFrontDisplacement', unit: "V",value: [],show:true,
+      'equipment.road.RightFront.Params':[{ 
+        name: "右前输出",nameEn :'RightFrontOutput', unit: "V",value: [],show:true
+        ,color:["", ""]
+      },{ 
+          name: "右前位移",nameEn :'RightFrontDisplacement', unit: "V",value: [],show:true,
+          color:["", ""]
+      },{ 
+        name: "右前活动Fdbk",nameEn :'RightFrontActiveFdbk', unit: "V",value: [],show:true,
+        color:["", ""]
+      },{ 
+        name: "右前指令频率",nameEn :'RightFrontCommandFrequency', unit: "V",value: [],
         color:["", ""]
     },{ 
-        name: "右前DeltaP",nameEn :'RightFrontDeltaP', unit: "V",value: [],show:true,
-        color:["", ""]
-    },{ 
-      name: "右前指令频率",nameEn :'RightFrontCommandFrequency', unit: "V",value: [],
+      name: "右前位移绝对误差",nameEn :'RightFrontDisplacementAbs.Error', unit: "V",value: [],
       color:["", ""]
-  },{ 
-    name: "右前活动Fdbk",nameEn :'RightFrontActiveFdbk', unit: "V",value: [],
-    color:["", ""]
-  },{ 
-    name: "右前位移误差",nameEn :'RightFrontDisplacementError', unit: "V",value: [],
-    color:["", ""]
-  },{ 
-    name: "右前位移绝对误差",nameEn :'RightFrontDisplacementAbs.Error', unit: "V",value: [],
-    color:["", ""]
-  }]
-  };
+    },{ 
+      name: "右前位移误差",nameEn :'RightFrontDisplacementError', unit: "V",value: [],
+      color:["", ""]
+    },{ 
+      name: "右前DeltaP",nameEn :'RightFrontDeltaP', unit: "V",value: [],
+      color:["", ""]
+  }],
+  xData:[]
+    };
   attrs_3:any = {"equipment.dataChannelList":[{ 
-    name: "左后输出",nameEn :'RightFrontDisplaceme', unit: "V",value: [],show:true
-    ,color:["", ""]
-  }]};
+      name: "左后输出",nameEn :'RightFrontDisplacement', unit: "V",value: [],show:true
+      ,color:["", ""]
+    }],
+    xData:[]};
 
   //安灯状态
   andon = [
@@ -147,22 +129,7 @@ export class EquipmentFourRoadComponent implements OnInit {
     {name:'2',color:'yellow',status:0},
     {name:'1',color:'red',status:0},
   ];
-  //试验信息
-  experiment ={
-    user:'新工',
-    phone:'13499998888',
-    nexttest:'Geely001',
-    nextdate:'20/11/01-20/11/30',
-    // '实验编号','计划时长','进度'
-    title:['ExperimentNum','PLanDuration','schedule'],
-    data:[
-      ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-      // ['WSN-100010','20/10/01-20/11/01',70],
-    ]
-  }
+ 
   //设备介绍
   str = `试验原理：--------------------------------------------------<br>
   设备构成：-------，-------，-------，--------<br>
@@ -171,24 +138,13 @@ export class EquipmentFourRoadComponent implements OnInit {
                     -----------------------------------------------<br>
                     --------------------------------------------<br>
    非标试验：---------------------------------------<br>`;
-  //警告与认知
-  log_warm = {
-    // '时间','日志等级','日志信息'
-    title:['time','Loglevel','logInfor'],
-    data:[
-      ['2020-09-08','warning','Not ready'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-      ['2020-10-01','error','Broken！'],
-    ]
-  }
+  
   //实验实时数据
   switchStatus:any ={
     title:[`stationName`,'OnOff',`OilSeparatorOn`,`HighOilSeparator`,'InternalLock','Programlock'],
-    data:[['Act1 and Act2',
-    {value:1,color:'green',id:'circle'},{value:1,color:'green',id:'circle'},{value:1,color:'green',id:'circle'},
-    {value:1,color:'white',id:'strip'},{value:1,color:'white',id:'strip'}]]
+    data:[['',
+    {value:1,color:'',id:'circle'},{value:1,color:'',id:'circle'},{value:1,color:'green',id:'circle'},
+    {value:1,color:'',id:'strip'},{value:1,color:'',id:'strip'}]]
   }
 
 
@@ -212,13 +168,26 @@ export class EquipmentFourRoadComponent implements OnInit {
 
 
   timer:any;//定时器
+  timer60s:any;//定时器60s
   language = '';//语言 空为zh-CN中文
 
   constructor(private layoutService: LayoutService,private activateInfo:ActivatedRoute
-    ,private http:HttpserviceService,private translate:TranslateService,
-    private translatePipe: TranslatePipe) { }
+    ,private http:HttpserviceService,private translate:TranslateService) { }
 
   ngOnInit(): void {
+    // let mqservice = new EmqClientService();
+    // let mqBean :any= {
+    //   hostname: mq_config.hostname,
+    //   port: mq_config.port,
+    //   clientId: guid2(),
+    //   mqttConnectFail:function(data){
+    //     console.log(data)
+    //   },
+    //   topic:'#'
+    // }
+    // mqservice.getmqtt(mqBean);
+    //记录初始化默认选中tag
+    this.click_list = [this.list_1[0],this.list_2[0],this.list_3[0]];
     //获取当前语言
     let language = localStorage.getItem('currentLanguage');
     if(language!='zh-CN')this.language = language;
@@ -227,9 +196,6 @@ export class EquipmentFourRoadComponent implements OnInit {
       this.initChart();
     })
 
-    // this.initChart();
-
-    // this.i18();
     //路由订阅
     this.activateInfo.params.subscribe(f =>{
       console.log(f);
@@ -238,106 +204,42 @@ export class EquipmentFourRoadComponent implements OnInit {
     })
     //颜色的赋值
     this.color();
-    //记录初始化默认选中tag
-    this.click_list = [this.list_1[0],this.list_2[0],this.list_3[0]];
-
+    
+    //获取数据
     this.getData();
+
+    this.get_device_mts_timerangedata();
+
+    
   }
 
   getData(){
-    // this.http.callRPC('panel_detail','get_device_panel_detail',
-    //   {"deviceid":this.deviceid}).subscribe((f:any) =>{
-
-    //   })
-    //定时添加数据
-    let g = 1;
+    // 定时添加数据
+    let table,method = '';
     this.timer = setInterval(f =>{
-      this.xData.push(g);
-      if(this.xData.length > 10)this.xData.splice(0,1);
-      g++;
-      this.click_list.forEach((f,i)=>{
-        this[`attrs_${i+1}`][f].forEach(el => {
-          if(el.show){
-            if(el.value.length == 0){
-              for(let i = 1;i<10;i++){
-                // el.value.splice(0,1);
-                el.value.push(parseInt((Math.random()*100).toString()));
-              };
-            } if(el.value.length < 10)
-              el.value.push(parseInt((Math.random()*100).toString()));
-            else if(el.value.length >= 10){
-              el.value.splice(0,1);
-              el.value.push(parseInt((Math.random()*100).toString()));
-            }
-
-          }
-        });
-        // if(this[`attrs_${i+1}`][f].show){
-
-        // }
-        // this[`attrs_${i+1}`][f]
-      })
-      // this.list_1.forEach((f,i)=>{
-      //   this[`attrs_1`][f].forEach(element => {
-      //     element.value.push(parseInt((Math.random()*100).toString()))
-      //   });
-      // })
-      // this.list_2.forEach((f,i)=>{
-      //   this[`attrs_2`][f].forEach(element => {
-      //     element.value.push(parseInt((Math.random()*100).toString()))
-      //   });
-      // })
-      // this.list_3.forEach((f,i)=>{
-      //   this[`attrs_3`][f].forEach(element => {
-      //     element.value.push(parseInt((Math.random()*100).toString()))
-      //   });
-      // })
-      let array = ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
-        this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:this.xData,index:g});
-      })
-      
+      let param = this.create_param();
+      this.get_device_mts_01_status();
+      if(param[1].length > 0){
+        table = 'get_device_mts_realtimedata',method = 'device_monitor.get_device_mts_realtimedata';
+        this.get_device_mts_realtimedata(table,method,param);
+      }
+      if(param[0].length > 0){
+        table = 'get_device_mts_time',method = 'device_monitor.get_device_mts_timerangedata';
+        this.get_device_mts_time(table,method,param);
+      }
+      this.get_device_mts_weiss();
     },1000)
+    
 
+    setTimeout(() => {
+      this.initChart();
+    }, 1000);
+   
   }
   
   //初始化表格
   initChart(){
-    let data_1 = {
-      d_arr:[[12, 56, 36, 86, 98, 86],
-               [45, 20, 36, 106, 80, 16],
-              [90, 10, 36, 96, 80, 10],
-              [90, 56, 36, -6, -50, -70]],
-      title_arr:["空闲", "占位", "运行", "利用率"],
-      color_arr:[{
-        start: "rgba(155, 101, 229)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        start: "rgba(71, 173, 245)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        start: "rgba(82, 249, 107)",
-        end: "rgba(18, 58, 86,0.5)"
-    },
-    {
-        color: "#00EAFF"
-    }
-  ],
-    xData:[1,2,3,4,5,6]
-    }
-    let myChart = echarts.init(document.getElementById('device_status'));
-    equipment_four_road.create_device_status(data_1,myChart);
-
     
-    let myChart_1 = echarts.init(document.getElementById('device_circular_1'));
-    equipment_four_road.create_device_circular(
-      {title:this.language?'SafetyLampStatus':'安灯状态',message:this.language?'LastMonth':'上个月'},myChart_1);
-
-    let myChart_2 = echarts.init(document.getElementById('device_circular_2'));
-    equipment_four_road.create_device_circular(
-      {title:this.language?'SafetyLampStatus':'安灯状态',message:this.language?'ThisMonth':'本月'},myChart_2);
-
     let data = {
       title:['一级警告','二级警告'],
       yAxis:['周一','周二','周三','周四','周五','周六','周日'],
@@ -348,83 +250,32 @@ export class EquipmentFourRoadComponent implements OnInit {
       data.title = ['LV1Warn','LV2Warn'];
       data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     }
-    let myChart_3 = echarts.init(document.getElementById('warning'));
-    equipment_four_road.create_warning_chart(data,myChart_3);
+    if(document.getElementById('warning')){
+      let myChart_3 = echarts.init(document.getElementById('warning'));
+      equipment_four_road.create_warning_chart(data,myChart_3);
+    }
 
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    equipment_four_road.create_real_temperature({value:55.33},myChart_4);
-
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature({value:55.33},myChart_5);
-
-    setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
-    },3000)
-    setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
-    },3000)
-
-    // this.list.forEach((f,i)=>{
-    //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.list[0]],xData:this.xData});
-    // })
-
-    this.create_third_chart_line();
-
-    let operatingRate = echarts.init(document.getElementById('operatingRate'));
-    var gauge_data_4 = {
-      xAxisData:['0时','1时','2时','3时','4时','5时','6时','7时','8时','9时','10时','11时','12时','13时','14时','15时','16时','17时'
-        ,'18时','19时','20时','21时','22时','23时'],
-      seriesData:[710, 312, 321,754, 500, 830, 710, 521, 504, 660, 530, 410,710, 312, 321,754, 500, 830, 710, 521, 504, 660, 530, 410],
-    } 
-    rtm3.create_right_buttom(gauge_data_4,operatingRate);
+    let array = ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
+      if(this[`chart_${i+1}`])this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:[],index:1});
+    })
+    create_third_chart_line(rtm3a,this);
 
   }
 
   clicEvent(e,i){
     //记录选定
     this.click_list[i-1] = e;  
-    // this[`chart_${i}`].painting({attrs:this[`attrs_${i}`][e],xData:this.xData});
     this[`list_${i}`].forEach(f=>{
-      if(e!=f)this[`attrs_${i}`][f].value = [];
+      if(e!=f)this[`attrs_${i}`][f].forEach(el => {
+        el.value = [];
+        this[`attrs_${i}`][f].xData = [];
+      });
     })
   }
 
-  getleft(item){
-    return item > 40?item-20+'%':'20%';
-  }
-
-
-  get_td_width(num){
-    return 100/num+'%'
-  }
-
-  get_height(){
-    return this.experiment.data.length <= 2?31*this.experiment.data.length+'px':'120px';
-  }
-
-
-  create_third_chart_line(){
-    var yearPlanData=[],yearOrderData = [],differenceData = [],visibityData = [],xAxisData = [];
-    for (var i = 0; i < 12; i++) {
-      yearPlanData.push(Math.round(Math.random() * 900) + 100);
-      yearOrderData.push(Math.round(Math.random() * yearPlanData[i]));
-      differenceData.push(yearPlanData[i] - yearOrderData[i]);
-      visibityData.push(yearOrderData[i]);
-      xAxisData.push((i + 1).toString() + "月");
-    }
-    rtm3a.create_third_chart_line({
-      yearPlanData:yearPlanData,
-      yearOrderData:yearOrderData,
-      differenceData:differenceData,
-      visibityData:visibityData,
-      xAxisData:xAxisData,
-      title:this.language?'MonthlyChartOfTemperatureAndHumidity':'温湿度月度图线'
-    }, 'third_second');
-  }
 
 //颜色的赋值
   color(){
-    
     let rgb = '';
     ['attrs_1','attrs_2','attrs_3'].forEach(element => {
       for(let item in this[element]){
@@ -440,27 +291,155 @@ export class EquipmentFourRoadComponent implements OnInit {
   }
 
 
-  ngOnDestroy(){
-    clearInterval(this.timer)
-  }
-
-
-  // async i18(){
-  //   let f = await this.translate.get('equipment.road').toPromise();
-  // }
-
   //生成实时数据需要的参数
   create_param(){
     let arr10s = [];
     let arr1s = [];
     this.click_list.forEach((f,i)=>{
-      this[`attrs_${i}`][f].forEach(el => {
-        if(el.show && el.data){
-          el.value.lenght <= 0?arr10s.push(el.nameEn.toUpperCase()):arr1s.push(el.nameEn.toUpperCase());
+      this[`attrs_${i+1}`][f].forEach(el => {
+        if(el.value){
+          el.value.length <= 0?arr10s.push(el.nameEn.replace(".","").toLocaleLowerCase()):arr1s.push(el.nameEn.replace(".","").toLocaleLowerCase());
         }
       });
     })
-
+    return [arr10s,arr1s];
   }
+
+  /**
+   *   中间的表的数据 开关这些数据     
+   */
+  get_device_mts_01_status(){
+      this.http.callRPC('get_device_mts_01_status','device_monitor.get_device_mts_01_status',{}).subscribe((f:any) =>{
+        if(f.result.error || f.result.message[0].code == 0)return;
+        this.switchStatus.data[0][0] =  f.result.message[0][0].stationname;
+        //起停状态
+        this.switchStatus.data[0][1].value =  f.result.message[0][0].runstop;
+        this.switchStatus.data[0][1].color =  this.switchStatus.data[0][1].value == 1?'green':'#C0C0C0';
+        //分油器开
+        this.switchStatus.data[0][2].value =  f.result.message[0][0].hsmt9j28aon;
+        this.switchStatus.data[0][2].color =  this.switchStatus.data[0][1].value == 1?'green':'#C0C0C0';
+        //分油器高
+        this.switchStatus.data[0][3].value =  f.result.message[0][0].hsmt9j28ahigh;
+        this.switchStatus.data[0][3].color =  this.switchStatus.data[0][1].value == 1?'green':'#C0C0C0';
+        //内锁
+        this.switchStatus.data[0][4].value =  f.result.message[0][0].interlock;
+        this.switchStatus.data[0][4].color =  this.switchStatus.data[0][1].value == 1?'white':'orange';
+        //程序锁
+        this.switchStatus.data[0][5].value =  f.result.message[0][0].programinterlock;
+        this.switchStatus.data[0][5].color =  this.switchStatus.data[0][1].value == 1?'white':'orange';
+      })
+  }
+
+
+
+
+  
+
+  /**
+   * 图表 获取一段时间
+   * @param table 
+   * @param method 
+   * @param param 
+   */
+  get_device_mts_time(table,method,param){
+    // let datestr = dateformat(new Date(),'yyyy-MM-dd hh:mm');
+    // let datestr_ = dateformat(new Date(),'yyyy-MM-dd hh:mm');
+    this.http.callRPC(table,method,{"start":"2020-11-09 14:02:00","end":"2020-11-10 20:20:00","device":"device_mts_01",
+    arr:param[0].join(',')}).subscribe((f:any) =>{
+      if(f.result.error || f.result.message[0].code == 0)return;
+      painting_time(f,10,this,['chart_1','chart_2','chart_3']);
+      
+    })
+  }
+
+  /**
+   *  图表  获取一秒
+   * @param table 
+   * @param method 
+   * @param param 
+   */
+  get_device_mts_realtimedata(table,method,param){
+    this.http.callRPC(table,method,{"device":"device_mts_01",
+    arr:param[1].join(',')}).subscribe((g:any) =>{
+      if(g.result.error || g.result.message[0].code == 0)return;
+      painting_time(g,1,this,['chart_1','chart_2','chart_3']);
+    })
+  }
+
+  //环境实时信息
+  get_device_mts_weiss(){
+    // temp温度
+    //  humi湿度
+    this.http.callRPC('get_device_mts_realtimedata','device_monitor.get_device_mts_realtimedata'
+    ,{device:"device_weiss_01",arr:"tempreal,tempset,humireal,humiset"}).subscribe((g:any) =>{
+      if(g.result.error || g.result.message[0].code == 0)return;
+      let obj = this.temp_humi_change(g.result.message[0].message);
+      //渲染温度
+      if(document.getElementById('real_temperature_1'))
+        equipment_four_road.create_real_temperature_v2(
+          {value:obj.tempreal[0][0],title:'温度',max:70,setValue:obj.tempset[0][0]},
+          echarts.init(document.getElementById('real_temperature_1')));
+      //渲染湿度
+      if(document.getElementById('real_temperature_2'))
+        equipment_four_road.create_real_temperature_v2(
+          {value:obj.humireal[0][0],title:'湿度',max:100,setValue:obj.humireal[0][0]},
+          echarts.init(document.getElementById('real_temperature_2')));
+    })
+  }
+
+  //环境历史信息
+  get_device_mts_timerangedata(){
+    this.http.callRPC('get_device_mts_realtimedata','device_monitor.get_device_mts_realtimedata'
+    ,{start:"2020-01-01 14:02:00",end:"2020-11-21 20:20:00",device:"device_weiss_01",arr:"tempreal,humireal"}).subscribe((g:any) =>{
+      if(g.result.error || g.result.message[0].code == 0)return;
+      console.log(this.temp_humi_change(g.result.message[0].message));
+      let arrj = this.temp_humi_change(g.result.message[0].message)
+      let yearPlanData,yearOrderData,differenceData=[],visibityData=[],xAxisData=[];
+      yearPlanData = arrj.tempreal.map(m => (m[0]));//温度
+      yearOrderData = arrj.humireal.map(m => (m[0]));;//湿度度
+      xAxisData = arrj.humireal.map(m => (dateformat(new Date(m[1]),'MM-dd hh:mm:ss')))
+      // create_third_chart_line(rtm3a,this);
+      rtm3a.create_third_chart_line({
+        yearPlanData:yearPlanData,
+        yearOrderData:yearOrderData,
+        differenceData:differenceData,
+        visibityData:visibityData,
+        xAxisData:xAxisData,
+        title:this.language?'MonthlyChartOfTemperatureAndHumidity':'温湿度月度图线'
+      }, 'third_second');
+    })
+  }
+
+  //环境转换
+  temp_humi_change(data){
+    let obj = {
+      tempset:[],//温度设定值
+      tempreal:[],// 温度
+      humiset:[],//湿度设定值
+      humireal:[],// 湿度
+    }
+    data.forEach(el => {
+      for(let key in el)obj[key].push(el[key][0]);
+    });
+    return obj
+  }
+
+
+
+  //样式 逻辑方法
+  
+  get_td_width(num){
+    return 100/num+'%'
+  }
+  
+  //组件销毁  
+  ngOnDestroy(){
+    clearInterval(this.timer)
+    clearInterval(this.timer60s)
+    // clearInterval(this.timer1)
+    // clearInterval(this.timer2)
+  }
+
+
 
 }

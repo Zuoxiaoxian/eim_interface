@@ -7,19 +7,28 @@
     .first_third,
     .sceond_fisrt,
     .sceond_third {
-        height: 33%;
+        // height: 33%;
         width: 100%;
         display: flex;
-        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
         padding: 2%;
         color: white;
     }
     .thrid {
-        height: 93%;
+        height: 30%;
         width: 100%;
         // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
         padding: 2%;
         color: white;
+        position: relative;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
     }
     .part_title {
         position: absolute;
@@ -28,87 +37,9 @@
         height: 20px;
         color: wheat;
         background: #4472c4;
-        top: -17px;
-        left: -7px;
-    }
-    .andon_status {
-        width: 14%;
-        position: relative;
-        .andon_color {
-            border: 3px solid rgb(157, 195, 230);
-            border-radius: 21px;
-            height: 74%;
-            .last {
-                border-bottom-left-radius: 17px;
-                border-bottom-right-radius: 17px;
-            }
-            .first {
-                border-top-left-radius: 17px;
-                border-top-right-radius: 17px;
-            }
-        }
-        .andon_status_font {
-            padding: 3px;
-            color: white;
-            font-size: 12px;
-        }
-        .andon_img {
-            background: url('/assets/eimdoard/equipment/images/triangle.png');
-            height: 20%;
-            background-size: cover;
-            -webkit-background-size: cover;
-            -o-background-size: cover;
-            background-position: center center;
-            margin-left: 10px;
-        }
-    }
-    .andon_status_chart {
-        width: 86%;
-        display: flex;
-        flex-wrap: wrap;
-        #device_status {
-            height: 55%;
-            width: 50%;
-            box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
-        }
-        #operatingRate {
-            height: 55%;
-            width: 50%;
-            box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
-        }
-        .chart {
-            height: 112px;
-            padding-left: 21px;
-            width: 100%;
-        }
-    }
-    .yellow {
-        background-color: #faa755;
-        color: white;
-        height: 100%;
-        padding-top: 13%;
-        ;
-    }
-    .blue {
-        background-color: #006ced;
-        color: white;
-        height: 100%;
-        padding-top: 13%;
-        ;
-    }
-    .red {
-        background-color: #d71345;
-        color: white;
-        height: 100%;
-        padding-top: 13%;
-        ;
-    }
-    .green {
-        background-color: rgb(74, 181, 107);
-        color: white;
-        height: 100%;
-        padding-top: 13%;
-        ;
+        top: 0;
+        left: 0;
+        min-width: 80px;
     }
     .first_second_font {
         text-align: left;
@@ -156,7 +87,11 @@
         border: 1px solid #4472c4;
     }
     .bo {
-        box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+        // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
         padding: 2%;
     }
     .display_f {
@@ -238,51 +173,9 @@
     .width_70 {
         width: 70%;
     }
-    .height_32 {
-        height: 32%;
-    }
-    .height_33 {
-        height: 33%;
-    }
     .h_46_w_100 {
         height: 46%;
         width: 100%;
-    }
-    .height_50 {
-        height: 50%;
-    }
-    .height_30 {
-        height: 30%
-    }
-    .height_24 {
-        height: 24%;
-    }
-    .height_20 {
-        height: 20%;
-    }
-    .height_15 {
-        height: 15%;
-    }
-    .height_17 {
-        height: 17%;
-    }
-    .height_18 {
-        height: 18%
-    }
-    .height_58 {
-        height: 58%;
-    }
-    .height_48 {
-        height: 48%;
-    }
-    .height_38 {
-        height: 38%;
-    }
-    .height_36 {
-        height: 36%;
-    }
-    .height_71 {
-        height: 71%;
     }
     .overflow_height_85 {
         height: 85%;

@@ -1,101 +1,89 @@
-/* 这是map地图中，自定义的css */
-
-#alert_a:hover {
-    background-color: red;
-}
-
-#alert_a {
-    background: green;
-}
-
-.device_info_li {
-    /* marker 设备信息 */
-    list-style: none;
-    font-size: .011111rem;
-}
-
-
-/* 这是跟踪 样式 */
-
-#less_div:hover {
-    background-color: blue;
-}
-
-#less_div_img:hover {
-    background-color: blue;
-}
-
-#add_div:hover {
-    background-color: blue;
-}
-
-
-/* 报警 */
-
-#my_map_alert:hover {
-    background-color: blue;
-}
-
-
-/* 这是 菜单中的操作图标！ */
-
-.buedit {
-    color: #ffffff;
-    margin-right: 50px;
-    border-color: #00ffff00;
-    background: #ff000000;
-}
-
-.buedit>a>i:hover {
-    color: #11bdd8;
-    /* background-color: red; */
-}
-
-.disable_edit {
-    cursor: not-allowed;
-    border-color: #00ffff00;
-    background: #ff000000;
-}
-
-.disable_edit>a {
-    cursor: not-allowed;
-}
-
-.disable_edit>a>i {
-    cursor: not-allowed;
-}
-
-
-/* 删除========================= */
-
-.buremove {
-    border-color: #00ffff00;
-    background: #ff000000;
-}
-
-.buremove>a>i:hover {
-    color: red;
-}
-
-.disable_remove {
-    cursor: not-allowed;
-    border-color: #00ffff00;
-    background: #ff000000;
-}
-
-.disable_remove>a {
-    cursor: not-allowed;
-}
-
-.disable_remove>a>i {
-    cursor: not-allowed;
-}
-
-
-/* 这是 统计分析-设备报表 */
-
-
-/* 这是 菜单中的操作图标！
+    /* 这是map地图中，自定义的css */
+    
+    #alert_a:hover {
+        background-color: red;
+    }
+    
+    #alert_a {
+        background: green;
+    }
+    
+    .device_info_li {
+        /* marker 设备信息 */
+        list-style: none;
+        font-size: .011111rem;
+    }
+    /* 这是跟踪 样式 */
+    
+    #less_div:hover {
+        background-color: blue;
+    }
+    
+    #less_div_img:hover {
+        background-color: blue;
+    }
+    
+    #add_div:hover {
+        background-color: blue;
+    }
+    /* 报警 */
+    
+    #my_map_alert:hover {
+        background-color: blue;
+    }
+    /* 这是 菜单中的操作图标！ */
+    
+    .buedit {
+        color: #ffffff;
+        margin-right: 50px;
+        border-color: #00ffff00;
+        background: #ff000000;
+    }
+    
+    .buedit>a>i:hover {
+        color: #11bdd8;
+        /* background-color: red; */
+    }
+    
+    .disable_edit {
+        cursor: not-allowed;
+        border-color: #00ffff00;
+        background: #ff000000;
+    }
+    
+    .disable_edit>a {
+        cursor: not-allowed;
+    }
+    
+    .disable_edit>a>i {
+        cursor: not-allowed;
+    }
+    /* 删除========================= */
+    
+    .buremove {
+        border-color: #00ffff00;
+        background: #ff000000;
+    }
+    
+    .buremove>a>i:hover {
+        color: red;
+    }
+    
+    .disable_remove {
+        cursor: not-allowed;
+        border-color: #00ffff00;
+        background: #ff000000;
+    }
+    
+    .disable_remove>a {
+        cursor: not-allowed;
+    }
+    
+    .disable_remove>a>i {
+        cursor: not-allowed;
+    }
+    /* 这是 统计分析-设备报表 */
+    /* 这是 菜单中的操作图标！
 .edit>i:hover{
   color: #11bdd8;
 
@@ -105,70 +93,498 @@
   color: red;
 
 } */
-
-
-/* board */
-
-
-/*-------- li_c 看板消息 ---------*/
-
-@keyframes action_scaleOut {
-    0% {
-        transform: scale(0.2);
-        opacity: 0;
+    /* board */
+    /*-------- li_c 看板消息 ---------*/
+    
+    @keyframes action_scaleOut {
+        0% {
+            transform: scale(0.2);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
-    100% {
-        transform: scale(1);
-        opacity: 1;
+    
+    .li_c {
+        animation: action_scaleOut 1s;
+        -moz-animation: action_scaleOut 1s;
+        -webkit-animation: action_scaleOut 1s;
+        -o-animation: action_scaleOut 1s;
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        list-style: none;
+        border-bottom: 1px dashed #dbdbdb;
+        color: #F5F5F5 !important;
+        padding-top: 23px;
     }
-}
-
-.li_c {
-    animation: action_scaleOut 1s;
-    -moz-animation: action_scaleOut 1s;
-    -webkit-animation: action_scaleOut 1s;
-    -o-animation: action_scaleOut 1s;
-    width: 100%;
-    height: 60px;
-    line-height: 60px;
-    list-style: none;
-    border-bottom: 1px dashed #dbdbdb;
-    color: #F5F5F5 !important;
-    padding-top: 23px;
-}
-
-.li_c>div {
-    width: 100%;
-    overflow: auto;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.li_c>div::-webkit-scrollbar {
-    display: none;
-    width: 2px;
-}
-
-
-/* 文字高亮 */
-
-.font_yellow {
-    color: yellow;
-    font-size: 18px;
-}
-
-
-/* 亮度变暗 */
-
-.dark {
-    -webkit-filter: brightness(0.7);
-    filter: brightness(0.7);
-}
-
-
-/* 亮度变亮 */
-
-.bright {
-    -webkit-filter: brightness(1.7);
-    filter: brightness(1.7);
-}
+    
+    .li_c>div {
+        width: 100%;
+        overflow: auto;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .li_c>div::-webkit-scrollbar {
+        display: none;
+        width: 2px;
+    }
+    /* 文字高亮 */
+    
+    .font_yellow {
+        color: yellow;
+        font-size: 18px;
+    }
+    
+    .font_big {
+        font-size: 26px;
+    }
+    /* 亮度变暗 */
+    
+    .dark {
+        -webkit-filter: brightness(0.7);
+        filter: brightness(0.7);
+    }
+    /* 亮度变亮 */
+    
+    .bright {
+        -webkit-filter: brightness(1.7);
+        filter: brightness(1.7);
+    }
+    
+    .ant-progress-bg {
+        height: 12px !important;
+    }
+    /* flipclock ul样式 */
+    
+    .flip-clock-wrapper ul {
+        width: 8% !important;
+        height: 65px !important;
+    }
+    
+    .flip-clock-wrapper ul li a div div.inn {
+        font-size: 24px !important;
+        line-height: 24px !important;
+        padding-top: 20px !important;
+    }
+    
+    .flip-clock-divider {
+        width: 12px !important;
+    }
+    
+    .flip-clock-divider {
+        width: 4px!important;
+    }
+    
+    .flip-clock-dot.top {
+        top: 17px !important;
+    }
+    
+    .flip-clock-dot {
+        left: -1px !important;
+        width: 4px;
+    }
+    
+    .flip-clock-dot.bottom {
+        bottom: 44px !important;
+    }
+    /* 高度百分比 */
+    
+    .height_1 {
+        height: 1%;
+    }
+    
+    .height_2 {
+        height: 2%;
+    }
+    
+    .height_3 {
+        height: 3%;
+    }
+    
+    .height_4 {
+        height: 4%;
+    }
+    
+    .height_5 {
+        height: 5%;
+    }
+    
+    .height_6 {
+        height: 6%;
+    }
+    
+    .height_7 {
+        height: 7%;
+    }
+    
+    .height_8 {
+        height: 8%;
+    }
+    
+    .height_9 {
+        height: 9%;
+    }
+    
+    .height_10 {
+        height: 10%;
+    }
+    
+    .height_11 {
+        height: 11%;
+    }
+    
+    .height_12 {
+        height: 12%;
+    }
+    
+    .height_13 {
+        height: 13%;
+    }
+    
+    .height_14 {
+        height: 14%;
+    }
+    
+    .height_15 {
+        height: 15%;
+    }
+    
+    .height_16 {
+        height: 16%;
+    }
+    
+    .height_17 {
+        height: 17%;
+    }
+    
+    .height_18 {
+        height: 18%;
+    }
+    
+    .height_19 {
+        height: 19%;
+    }
+    
+    .height_20 {
+        height: 20%;
+    }
+    
+    .height_21 {
+        height: 21%;
+    }
+    
+    .height_22 {
+        height: 22%;
+    }
+    
+    .height_23 {
+        height: 23%;
+    }
+    
+    .height_24 {
+        height: 24%;
+    }
+    
+    .height_25 {
+        height: 25%;
+    }
+    
+    .height_26 {
+        height: 26%;
+    }
+    
+    .height_27 {
+        height: 27%;
+    }
+    
+    .height_28 {
+        height: 28%;
+    }
+    
+    .height_29 {
+        height: 29%;
+    }
+    
+    .height_30 {
+        height: 30%;
+    }
+    
+    .height_31 {
+        height: 31%;
+    }
+    
+    .height_32 {
+        height: 32%;
+    }
+    
+    .height_33 {
+        height: 33%;
+    }
+    
+    .height_34 {
+        height: 34%;
+    }
+    
+    .height_35 {
+        height: 35%;
+    }
+    
+    .height_36 {
+        height: 36%;
+    }
+    
+    .height_37 {
+        height: 37%;
+    }
+    
+    .height_38 {
+        height: 38%;
+    }
+    
+    .height_39 {
+        height: 39%;
+    }
+    
+    .height_40 {
+        height: 40%;
+    }
+    
+    .height_41 {
+        height: 41%;
+    }
+    
+    .height_42 {
+        height: 42%;
+    }
+    
+    .height_43 {
+        height: 43%;
+    }
+    
+    .height_44 {
+        height: 44%;
+    }
+    
+    .height_45 {
+        height: 45%;
+    }
+    
+    .height_46 {
+        height: 46%;
+    }
+    
+    .height_47 {
+        height: 47%;
+    }
+    
+    .height_48 {
+        height: 48%;
+    }
+    
+    .height_49 {
+        height: 49%;
+    }
+    
+    .height_50 {
+        height: 50%;
+    }
+    
+    .height_51 {
+        height: 51%;
+    }
+    
+    .height_52 {
+        height: 52%;
+    }
+    
+    .height_53 {
+        height: 53%;
+    }
+    
+    .height_54 {
+        height: 54%;
+    }
+    
+    .height_55 {
+        height: 55%;
+    }
+    
+    .height_56 {
+        height: 56%;
+    }
+    
+    .height_57 {
+        height: 57%;
+    }
+    
+    .height_58 {
+        height: 58%;
+    }
+    
+    .height_59 {
+        height: 59%;
+    }
+    
+    .height_60 {
+        height: 60%;
+    }
+    
+    .height_61 {
+        height: 61%;
+    }
+    
+    .height_62 {
+        height: 62%;
+    }
+    
+    .height_63 {
+        height: 64%;
+    }
+    
+    .height_65 {
+        height: 65%;
+    }
+    
+    .height_66 {
+        height: 66%;
+    }
+    
+    .height_67 {
+        height: 67%;
+    }
+    
+    .height_68 {
+        height: 68%;
+    }
+    
+    .height_69 {
+        height: 69%;
+    }
+    
+    .height_70 {
+        height: 70%;
+    }
+    
+    .height_71 {
+        height: 71%;
+    }
+    
+    .height_72 {
+        height: 72%;
+    }
+    
+    .height_73 {
+        height: 73%;
+    }
+    
+    .height_74 {
+        height: 74%;
+    }
+    
+    .height_75 {
+        height: 75%;
+    }
+    
+    .height_76 {
+        height: 76%;
+    }
+    
+    .height_77 {
+        height: 77%;
+    }
+    
+    .height_78 {
+        height: 78%;
+    }
+    
+    .height_79 {
+        height: 79%;
+    }
+    
+    .height_80 {
+        height: 80%;
+    }
+    
+    .height_81 {
+        height: 81%;
+    }
+    
+    .height_82 {
+        height: 82%;
+    }
+    
+    .height_83 {
+        height: 83%;
+    }
+    
+    .height_84 {
+        height: 84%;
+    }
+    
+    .height_85 {
+        height: 85%;
+    }
+    
+    .height_86 {
+        height: 86%;
+    }
+    
+    .height_87 {
+        height: 87%;
+    }
+    
+    .height_88 {
+        height: 88%;
+    }
+    
+    .height_89 {
+        height: 89%;
+    }
+    
+    .height_90 {
+        height: 90%;
+    }
+    
+    .height_91 {
+        height: 91%;
+    }
+    
+    .height_92 {
+        height: 92%;
+    }
+    
+    .height_93 {
+        height: 93%;
+    }
+    
+    .height_94 {
+        height: 94%;
+    }
+    
+    .height_95 {
+        height: 95%;
+    }
+    
+    .height_96 {
+        height: 96%;
+    }
+    
+    .height_97 {
+        height: 97%;
+    }
+    
+    .height_98 {
+        height: 98%;
+    }
+    
+    .height_99 {
+        height: 99%;
+    }
+    
+    .height_100 {
+        height: 100%;
+    }

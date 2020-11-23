@@ -1,11 +1,11 @@
 let second_level = {
     // key-index 关键指标
-    key_index(){
+    key_index() {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.key-index'));
 
         // 配置
-        option = {
+        let option = {
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -26,68 +26,66 @@ let second_level = {
             },
 
             // 颜色
-            color:[
+            color: [
                 "#065aab",
                 "#066eab",
                 "#0682ab",
                 "#0696ab",
                 "#06a0ab"
             ],
-            series: [
-                {
-                    name: '年龄分布',
-                    type: 'pie',
-                    // 饼形图的大小,第一个内圆半径-第2个外圆半径
-                    radius: ['50%', '70%'],
-                    // 并状态的位置
-                    center: ["50%", "45%"],
+            series: [{
+                name: '年龄分布',
+                type: 'pie',
+                // 饼形图的大小,第一个内圆半径-第2个外圆半径
+                radius: ['50%', '70%'],
+                // 并状态的位置
+                center: ["50%", "45%"],
 
-                    avoidLabelOverlap: false,
-                    // 图形上文字
+                avoidLabelOverlap: false,
+                // 图形上文字
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                // 饼形图中间的提示文字
+                emphasis: {
                     label: {
                         show: false,
-                        position: 'center'
-                    },
-                    // 饼形图中间的提示文字
-                    emphasis: {
-                        label: {
-                            show: false,
-                            fontSize: '30',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    // 不显示连接线 图形和文字
-                    labelLine: {
-                        show: false
-                    },
-                    data: [
-                        {value: 335, name: '0岁以下'},
-                        {value: 310, name: '20-29岁'},
-                        {value: 234, name: '30-39岁'},
-                        {value: 135, name: '40-49岁'},
-                        {value: 1548, name: '50岁以下'}
-                    ]
-                }
-            ]
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                },
+                // 不显示连接线 图形和文字
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: 335, name: '0岁以下' },
+                    { value: 310, name: '20-29岁' },
+                    { value: 234, name: '30-39岁' },
+                    { value: 135, name: '40-49岁' },
+                    { value: 1548, name: '50岁以下' }
+                ]
+            }]
         };
         // 配置给实例化对象
         myChart.setOption(option);
 
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
         })
     },
 
     // chian_map map 地图
-    nibo_map(){
+    nibo_map() {
         var ningboJson = "assets/pages/device-inline/fonts/nibo.json"
         var data = [
             { name: "慈溪市", value: [121.23, 30.17, 42] },
             { name: "奉化市", value: [121.40, 29.65, 42] },
         ]
-        $.get(ningboJson, function (niboJson) {
+        $.get(ningboJson, function(niboJson) {
             echarts.registerMap('nibo', niboJson);
             // 实例化对象
             var myChart = echarts.init(document.querySelector('.nibo_map'));
@@ -128,7 +126,7 @@ let second_level = {
                         type: 'scatter',
                         coordinateSystem: 'geo',
                         symbol: 'pin',
-                        symbolSize: [50,50],
+                        symbolSize: [50, 50],
                         label: {
                             normal: {
                                 show: true,
@@ -136,7 +134,7 @@ let second_level = {
                                     color: '#fff',
                                     fontSize: 9,
                                 },
-                                formatter (value){
+                                formatter(value) {
                                     return value.data.value[2]
                                 }
                             }
@@ -183,11 +181,11 @@ let second_level = {
                     // },
                 ]
             });
-            console.log("-------------------->chinaJson: ",niboJson)
-             // 点击散点图上的点
+            console.log("-------------------->chinaJson: ", niboJson)
+                // 点击散点图上的点
 
             function eclick(params) {
-                if (params.seriesType === 'scatter'){
+                if (params.seriesType === 'scatter') {
                     console.log("点击执行： ", params);
                     console.log("点击执行： ", params.seriesType);
                     var store = require('store');
@@ -202,7 +200,7 @@ let second_level = {
             myChart.on('click', eclick);
 
             // 让图标跟随屏幕自适应
-            window.addEventListener('resize', function(){
+            window.addEventListener('resize', function() {
                 myChart.resize();
             })
         });
@@ -211,7 +209,7 @@ let second_level = {
 
     // device-rate 设备xx率
     // 参考 https://gallery.echartsjs.com/editor.html?c=x8UGFy_Nb
-    device_rate(value){
+    device_rate(value) {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.device-rate'));
 
@@ -228,7 +226,7 @@ let second_level = {
                 color: '#367bec' // 100% 处的颜色
             }]
         }
-        var option = {
+        var option_device_rate = {
             // backgroundColor:"#000",
             title: {
                 text: value + datas.company,
@@ -246,7 +244,7 @@ let second_level = {
                 show: false,
                 data: []
             },
-    
+
             series: [{
                 name: 'Line 1',
                 type: 'pie',
@@ -286,11 +284,11 @@ let second_level = {
             }]
         };
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_device_rate);
 
         // 让图标跟随屏幕自适应
-        window.addEventListener('resize', function(){
-            this.console.log("重置的屏幕大小！")
+        window.addEventListener('resize', f => {
+            console.log("重置的屏幕大小！")
             myChart.resize();
         })
     },

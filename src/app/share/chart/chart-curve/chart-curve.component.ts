@@ -236,10 +236,9 @@ export class ChartCurveComponent implements OnInit {
             fontSize:12,
         },
     };
-    window.addEventListener('resize', function() {
-        console.log("重置的屏幕大小！")
+    window.onresize = function() {
         isthis.myChart.resize();
-    });
+    }
     this.myChart.setOption(option,echartConfig);
 
   }

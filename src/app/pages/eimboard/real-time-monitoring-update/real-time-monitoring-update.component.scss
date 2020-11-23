@@ -1,7 +1,11 @@
 @import '../../../../assets/eimdoard/rtmv2/css/iconfont_for_rtmv2.css';
 #rtmv2 {
-    background: url('/assets/eimdoard/rtm/images/bg.png');
+    background: url('/assets/eimdoard/rtm/images/bg.png') no-repeat;
     position: relative;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    height: 100%;
     .go_back {
         cursor: pointer;
         color: white;
@@ -62,7 +66,7 @@
     .zhibiao_table {
         // 滚动
         overflow-x: hidden;
-        height: 710px;
+        height: 794px;
         .table thead {
             background-color: transparent;
             .header {

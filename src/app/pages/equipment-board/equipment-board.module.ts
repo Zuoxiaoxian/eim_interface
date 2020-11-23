@@ -14,6 +14,13 @@ import { EquipmentMastComponent } from './equipment-mast/equipment-mast.componen
 import { EquipmentDetailsComponent } from './equipment-details/equipment-details.component';
 import { EquipmentMastV2Component } from './equipment-mast-v2/equipment-mast-v2.component';
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { EquipmentStatusComponent } from './temp/equipment-status/equipment-status.component';
+import { NbCardModule, NbIconModule } from '@nebular/theme';
+import { LaboratoryBoardComponent } from './laboratory-board/laboratory-board.component';
+import { EquipmentMastV3Component } from './equipment-mast-v3/equipment-mast-v3.component';
+import { LogWarmComponent } from './temp/log-warm/log-warm.component';
+import { TestInformationComponent } from './temp/test-information/test-information.component';
+import { EquipmentMastTwoLevelComponent } from './equipment-mast-two-level/equipment-mast-two-level.component';
 
 
 // 组件
@@ -22,13 +29,17 @@ const COMPONENT = [
   EquipmentHydraulicPressureComponent,EquipmentShockComponent,
   EquipmentCouplingPathComponent,EquipmentMotorSystemComponent,
   EquipmentAvlComponent,EquipmentMastComponent,
-  EquipmentDetailsComponent,EquipmentMastV2Component
+  EquipmentDetailsComponent,EquipmentMastV2Component,
+  EquipmentStatusComponent,LaboratoryBoardComponent,
+  EquipmentMastV3Component,LogWarmComponent,
+  TestInformationComponent,EquipmentMastTwoLevelComponent
 ]
 //设备看板模块
 @NgModule({
   declarations: COMPONENT,
   imports: [
-    CommonModule,ShareModule,EimboardEimboardRoutingModule,NzProgressModule,TranslateModule
+    CommonModule,ShareModule,EimboardEimboardRoutingModule,NzProgressModule,TranslateModule,
+    NbIconModule,NbCardModule
   ],
   providers:[
     TranslatePipe

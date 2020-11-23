@@ -1,0 +1,45 @@
+<div class="first_second_font" style="margin-top: 4px;">
+    <div class="width_30">{{'equipment.BenchPIC'|translate }}</div>
+    <div style="width: 70%;">{{ experiment.user }}
+        <!-- {{ 'equipment.contact'|translate }}:{{ experiment.phone }} -->
+    </div>
+</div>
+<div class="first_second_font" *ngIf="experiment.data.length <= 2">
+    <div class="width_30">{{ 'equipment.NextExperiment'|translate }}</div>
+    <div style="width: 70%;">{{ experiment.nexttest }}</div>
+</div>
+<div class="first_second_font" *ngIf="experiment.data.length <= 2">
+    <div class="width_30">{{ 'equipment.PLanDuration'|translate }}</div>
+    <div class="wigth_70">{{ experiment.nextdate }}</div>
+</div>
+<div class="table">
+    <div class="table_bo">
+        <table>
+            <tr class="header">
+                <td *ngFor="let title of experiment.title">
+                    {{'equipment.'+title | translate }}
+                </td>
+            </tr>
+
+        </table>
+    </div>
+    <div class="table_bo" style="overflow: auto;" [ngStyle]="{'height':get_height()}">
+        <table>
+            <tr class="body" *ngFor="let items of experiment.data">
+                <td *ngFor="let item of items;let i = index" style="width: 20%;">
+                    <div *ngIf="i == 4;else fontTemp" class="progres_1">
+                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" nzStatus="{{item<70?'active':'exception'}}"></nz-progress>
+                        <div class="progres_2" [ngStyle]="{'left':getleft(item)}">
+                            {{item}}%
+                        </div>
+                    </div>
+                    <ng-template #fontTemp>
+                        <div class="font_tolong">{{item}}</div>
+                    </ng-template>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

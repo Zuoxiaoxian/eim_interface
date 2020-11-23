@@ -12,7 +12,7 @@ declare var $:any;
 })
 export class ChartCurveV3Component implements OnInit {
 
-  attrs = [];
+  attrs:any = [];
   xData = [];//表x轴的数据
   dashboard = [];
   @Input() title = 'equipment.real'//组件title 传i18n配置
@@ -190,7 +190,15 @@ export class ChartCurveV3Component implements OnInit {
             show:false,
             text:'',
         },
-        dataZoom: [
+        grid: {
+            left: '15%',
+            top: '7%',
+            right: '5%',
+            bottom: '15%',
+            height:'60%',
+
+        },
+        dataZoom : [
             {
                 show: false,
                 realtime: true,
@@ -200,24 +208,16 @@ export class ChartCurveV3Component implements OnInit {
             {
                 type: 'inside',
                 realtime: true,
-                start: 100-((10/(series[0].data.length))*100),
+                start:  100-((10/(series[0].data.length))*100),
                 end: 100,
             }
         ],
-        grid: {
-            left: '15%',
-            top: '7%',
-            right: '5%',
-            bottom: '15%',
-            height:'60%',
-
-        },
         legend: {
             show: true,
             icon: 'circle',
             type:'scroll',
             orient: 'horizontal',
-            top: '77.5%',
+            top: '80.5%',
             width: '100%',
             right: 'center',
             itemWidth: 16.5,
@@ -236,15 +236,15 @@ export class ChartCurveV3Component implements OnInit {
                 show: true,
                 fontSize: 9,
                 color:'white',//X轴文字颜色
-                formatter: function(value) {
-                    var str = "";
-                    if(value &&  value.length>5)
-                        str += value.substring(5, 10);
-                    else 
-                        str = value;
-                    // str += value.substring(0, 4) + "\n";
-                    return str;
-                }
+                // formatter: function(value) {
+                //     var str = "";
+                //     if(value &&  value.length>5)
+                //         str += value.substring(5, 10);
+                //     else 
+                //         str = value;
+                //     // str += value.substring(0, 4) + "\n";
+                //     return str;
+                // }
             },
             axisLine: {
                 show: false //不显示x轴
@@ -319,11 +319,11 @@ export class ChartCurveV3Component implements OnInit {
     //判断当前是否已经有legend配置
     if(this.myChart.getOption()){
         option.legend = this.myChart.getOption().legend
+        // option.dataZoom = this.myChart.getOption().dataZoom
     }
-    window.addEventListener('resize', function() {
-        console.log("重置的屏幕大小！")
+    window.onresize = function() {
         if(isthis.myChart)isthis.myChart.setOption(option,echartConfig);
-    });
+    }
     this.myChart.setOption(option,echartConfig);
 
   }
@@ -453,7 +453,7 @@ export class ChartCurveV3Component implements OnInit {
         if(i < 3)
             for(let j = 0;j<3-i;j++)this.dashboard[2-j] = {name: '',unit: '',value:0};
 
-        this.dashboard = this.attrs.slice(0,3).map(m =>({name: m[this.languageName],unit: m.unit,value:m.value[m.value.length-1]}))
+        this.dashboard = this.attrs.slice(0,3).map(m =>({name: m[this.languageName],unit: m.unit,value:m.value && m.value[0]?m.value[m.value.length-1]:0}))
         this.dashboard_cl =  this.attrs.slice(0,3).map(m =>  m[this.languageName])
         equipment_four_road.create_real_dashboard(this.dashboard,dashboardChart);
     }
@@ -478,8 +478,9 @@ export class ChartCurveV3Component implements OnInit {
     // }
 
     //初始化
-    
-    this.xData = data.xData;
+    // this.xData = data.xData[this.click_str] ?data.xData[this.click_str]:[];
+    this.xData = data.xData.slice();
+    if(this.attrs.xData)delete this.attrs.xData; 
     //更新表的数据
     this.choice_initleftChart();
     //更新仪表盘的数据

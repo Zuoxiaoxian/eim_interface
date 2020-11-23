@@ -3,14 +3,13 @@ let rtm3a = {
         var dom = document.getElementById("second_chart");
         if (!dom) return;
         var myChart = echarts.init(dom);
-        option = null;
         // var xAxis = data.xAxis.map(f => ({
         //     value: f,
         //     textStyle: {
         //         display: 'inline - block'
         //     }
         // }));
-        option = {
+        let option_s_c = {
             title: {
                 show: false
             },
@@ -71,19 +70,20 @@ let rtm3a = {
         //   // 显示数值
         //   itemStyle : { normal: {label : {show: true}}}
         // },
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
+        }
 
         if (option && typeof option === "object") {
-            myChart.setOption(option);
+            myChart.setOption(option_s_c);
             myChart.resize();
         }
     },
 
     create_third_chart(data, myChart) {
 
-        option = {
+        let option_t_c = {
             title: {
                 text: '目前进度',
                 subtext: '10%',
@@ -177,10 +177,11 @@ let rtm3a = {
                 }
             ]
         }
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        })
-        myChart.setOption(option)
+        }
+        myChart.setOption(option_t_c)
         myChart.resize();
     },
 
@@ -190,11 +191,11 @@ let rtm3a = {
         //订单完成情况螺旋图
         var yearPlanData = data.yearPlanData;
         var yearOrderData = data.yearOrderData;
-        var differenceData = data.differenceData;
+        // var differenceData = data.differenceData;
         var visibityData = data.visibityData;
         var xAxisData = data.xAxisData;
 
-        option = {
+        let option_t_c_l = {
             title: {
                 show: data.title ? true : false,
                 text: data.title ? data.title : '',
@@ -213,10 +214,7 @@ let rtm3a = {
                 formatter: function(params) {
                     return params[0].name + '<br/>' +
                         params[0].seriesName + ' : ' + params[0].value + '<br/>' +
-                        params[1].seriesName + ' : ' + params[1].value + '<br/>' +
-                        '完成率：' +
-                        (params[0].value > 0 ? (params[1].value / params[0].value * 100).toFixed(2) + '%' : '-') +
-                        '<br/>'
+                        params[1].seriesName + ' : ' + params[1].value + '<br/>';
                 },
                 textStyle: {
                     color: '#FFF',
@@ -224,15 +222,6 @@ let rtm3a = {
                 }
             },
             toolbox: { show: false },
-            // legend: {
-            //     top: 'top',
-            //     textStyle: {
-            //         color: '#B7E2FF',
-            //         fontSize: 12,
-            //         fontFamily: '微软雅黑'
-            //     },
-            //     data: ['计划生产', '已接订单']
-            // },
             xAxis: {
                 data: xAxisData,
                 axisLabel: {
@@ -278,7 +267,7 @@ let rtm3a = {
                 width: '90%',
             },
             series: [{
-                    name: '计划生产',
+                    name: '温度',
                     type: 'line',
                     smooth: true,
                     symbol: 'circle',
@@ -288,7 +277,7 @@ let rtm3a = {
                     data: yearPlanData
                 },
                 {
-                    name: '已接订单',
+                    name: '湿度',
                     type: 'line',
                     smooth: true,
                     symbol: 'circle',
@@ -318,24 +307,113 @@ let rtm3a = {
                         }
                     },
                     data: visibityData
-                },
-                {
-                    name: '变化',
-                    type: 'bar',
-                    stack: '1',
-                    barWidth: 1,
-                    color: '#B7E1FF',
-                    data: differenceData
                 }
             ]
         }
-        window.addEventListener('resize', function() {
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
             myChart.resize();
-        });
+        }
 
-        myChart.setOption(option);
+        myChart.setOption(option_t_c_l);
         myChart.resize();
     },
+
+    //半圆加百分比
+    create_semicircle(data, myChart) {
+        var colorSet = [
+            [data / 100, 'green'],
+            [1, '#15337C']
+        ];
+
+        let option_s = {
+            // backgroundColor: '#0E1327',
+            series: [{ //内圆
+                    type: 'pie',
+                    radius: '85%',
+                    center: ['50%', '50%'],
+                    z: 0,
+                    itemStyle: {
+                        normal: {
+                            color: new echarts.graphic.RadialGradient(.5, .5, 1, [{
+                                offset: 0,
+                                color: 'rgba(17,24,43,0)'
+                            }, ], false),
+                            label: {
+                                show: false
+                            },
+                            labelLine: {
+                                show: false
+                            }
+                        },
+                    },
+                    hoverAnimation: false,
+                    label: {
+                        show: false,
+                    },
+                    tooltip: {
+                        show: false
+                    },
+                    data: [100],
+                },
+
+                {
+                    type: 'gauge',
+                    radius: '85%',
+                    startAngle: '180',
+                    endAngle: '0',
+                    pointer: {
+                        show: false
+                    },
+
+                    data: [{ value: data }],
+                    title: {
+                        show: false,
+                    },
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: colorSet,
+                            width: 25,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            opacity: 1
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    detail: {
+                        color: 'green',
+                        offsetCenter: ['0%', '0%'],
+                        formatter: "{value}%",
+                        fontWeight: 'bold',
+
+                    },
+                    splitLine: {
+                        show: false,
+                        length: 25,
+                        lineStyle: {
+                            color: '#00377a',
+                            width: 2,
+                            type: 'solid',
+                        },
+                    },
+                }
+
+            ]
+        };
+
+        window.onresize = function() {
+            this.console.log("重置的屏幕大小！")
+            myChart.resize();
+        }
+        myChart.setOption(option_s);
+        myChart.resize();
+    }
 }
 
 module.exports = rtm3a;
