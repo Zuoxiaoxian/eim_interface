@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 
 import {Data} from "@angular/router";
-import { AgGridActionComponent } from '../components/ag-table/ag-grid-action/ag-grid-action.component';
 
 declare let layui;
 

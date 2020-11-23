@@ -205,12 +205,10 @@ color:["#d9d919", "#d9d919"]
     equipment_four_road.create_warning_chart(data,myChart_3);
 
     let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    equipment_four_road.create_real_temperature({value:55},myChart_4);
-
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
     let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature({value:55},myChart_5);
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
 
-    
 
     // ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
     //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.list[0]],xData:this.xData});

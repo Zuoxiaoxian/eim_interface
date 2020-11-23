@@ -6,19 +6,15 @@ export const redirectUrl: string = "http://localhost:4200/pages";
 
 export const salt:string = "YzcmCZNvbXocrsz9dm8e";
 
-export const localstorage: string = "jili_app_token";
-export const USERINFO: string = "userinfo";
 export const MULU: string = "mulu";
 
-// admin login
-export const adminlocalstorage: string = "admin_app_token";
 
 // 记住用户登录信息
 export const LOGIN_INFO: string = "login_info";
 
 
 // 统一认证login
-export const ssotoken: string = "token";
+export const ssotoken: string = "app_token";
 
 export const SSOUSERINFO: string = "ssouserinfo";
 
@@ -119,16 +115,16 @@ export interface List{
 
 
 
-// gps 定位监控 - 搜索需要
-export interface Group {
-    title: string;
-    icon:string;
-    device_info:any[];
-    children: string[];
-  }
+    // gps 定位监控 - 搜索需要
+    export interface Group {
+        title: string;
+        icon:string;
+        device_info:any[];
+        children: string[];
+    }
 
 
-// 结合唐山的 --------------------------------
+    // 结合唐山的 --------------------------------
 
     // login 
     export let LOGIN_API = 'http://192.168.8.105/api/v1/auth/login';   
@@ -136,6 +132,7 @@ export interface Group {
 
     // plv8 url
     export let PLV8_URL = "http://192.168.8.105/rpc/v1"
+
 
 
     // export let LOGIN_API = '/api/v1/auth/login';   

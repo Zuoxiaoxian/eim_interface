@@ -13,11 +13,11 @@ let gq_map = {
             return data;
         }();
 
-        option = {
+        let option_demo1 = {
             // backgroundColor: "#344b58",
-            "title": {
-                "text": "本年商场顾客男女人数统计",
-                "subtext": "BY Wang Dingding",
+            title: {
+                text: "本年商场顾客男女人数统计",
+                subtext: "BY Wang Dingding",
                 x: "4%",
 
                 textStyle: {
@@ -30,21 +30,21 @@ let gq_map = {
 
                 },
             },
-            "tooltip": {
-                "trigger": "axis",
-                "axisPointer": {
-                    "type": "shadow",
+            tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                    type: "shadow",
                     textStyle: {
                         color: "#fff"
                     }
 
                 },
             },
-            "grid": {
-                "borderWidth": 0,
-                "top": 70,
-                "bottom": 80,
-                "height": '50%',
+            grid: {
+                borderWidth: 0,
+                top: 70,
+                bottom: 80,
+                height: '50%',
                 left: '15%',
                 right: '5%',
 
@@ -52,7 +52,7 @@ let gq_map = {
                     color: "#fff"
                 }
             },
-            "legend": {
+            legend: {
                 x: '4%',
                 top: '12%',
                 itemHeight: 13,
@@ -60,62 +60,62 @@ let gq_map = {
                 textStyle: {
                     color: '#90979c',
                 },
-                "data": ['女', '男', '平均']
+                data: ['女', '男', '平均']
             },
-            "calculable": true,
-            "xAxis": [{
-                "type": "category",
-                "axisLine": {
+            calculable: true,
+            xAxis: [{
+                type: "category",
+                axisLine: {
                     lineStyle: {
                         color: '#90979c'
                     }
                 },
-                "splitLine": {
-                    "show": false
+                splitLine: {
+                    show: false
                 },
-                "axisTick": {
-                    "show": false
+                axisTick: {
+                    show: false
                 },
-                "splitArea": {
-                    "show": false
+                splitArea: {
+                    show: false
                 },
-                "axisLabel": {
-                    "interval": 0,
-                    "fontSize": 6, // x 轴字体大小
+                axisLabel: {
+                    interval: 0,
+                    fontSize: 6, // x 轴字体大小
                 },
-                "data": xData,
+                data: xData,
             }],
-            "yAxis": [{
-                "type": "value",
-                "splitLine": {
-                    "show": false
+            yAxis: [{
+                type: "value",
+                splitLine: {
+                    show: false
                 },
-                "axisLine": {
+                axisLine: {
                     lineStyle: {
                         color: '#90979c'
                     }
                 },
-                "axisTick": {
-                    "show": false
+                axisTick: {
+                    show: false
                 },
-                "axisLabel": {
-                    "interval": 0,
-                    "fontSize": 9, // y 字体大小
+                axisLabel: {
+                    interval: 0,
+                    fontSize: 9, // y 字体大小
                 },
-                "splitArea": {
-                    "show": false
+                splitArea: {
+                    show: false
                 },
 
             }],
-            "dataZoom": [{
-                "show": true,
-                "height": 20,
-                "xAxisIndex": [
+            dataZoom: [{
+                show: true,
+                height: 20,
+                xAxisIndex: [
                     0
                 ],
                 bottom: 20,
-                "start": 10,
-                "end": 80,
+                start: 10,
+                end: 80,
                 handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
                 handleSize: '110%',
                 handleStyle: {
@@ -129,50 +129,50 @@ let gq_map = {
 
 
             }, {
-                "type": "inside",
-                "show": true,
-                "height": 15,
-                "start": 1,
-                "end": 35
+                type: "inside",
+                show: true,
+                height: 15,
+                start: 1,
+                end: 35
             }],
-            "series": [{
-                    "name": "女",
-                    "type": "bar",
-                    "stack": "总量",
-                    "barMaxWidth": 35,
-                    "barGap": "10%",
-                    "itemStyle": {
-                        "barMinWidth": 5,
-                        "normal": {
-                            "color": "rgba(255,144,128,1)",
-                            "label": {
-                                "show": true,
-                                "textStyle": {
-                                    "color": "#fff",
-                                    "fontSize": 7,
+            series: [{
+                    name: "女",
+                    type: "bar",
+                    stack: "总量",
+                    barMaxWidth: 35,
+                    barGap: "10%",
+                    itemStyle: {
+                        barMinWidth: 5,
+                        normal: {
+                            color: "rgba(255,144,128,1)",
+                            label: {
+                                show: true,
+                                textStyle: {
+                                    color: "#fff",
+                                    fontSize: 7,
                                 },
-                                "position": "inside",
+                                position: "inside",
                                 formatter: function(p) {
                                     return p.value > 0 ? (p.value) : '';
                                 }
                             }
                         }
                     },
-                    "data": w_m_total.woman,
+                    data: w_m_total.woman,
                 },
 
                 {
-                    "name": "男",
-                    "type": "bar",
-                    "stack": "总量",
-                    "itemStyle": {
-                        "normal": {
-                            "color": "rgba(0,191,183,1)",
-                            "barBorderRadius": 0,
-                            "label": {
-                                "show": true,
-                                "position": "inside",
-                                "textStyle": {
+                    name: "男",
+                    type: "bar",
+                    stack: "总量",
+                    itemStyle: {
+                        normal: {
+                            color: "rgba(0,191,183,1)",
+                            barBorderRadius: 0,
+                            label: {
+                                show: true,
+                                position: "inside",
+                                textStyle: {
                                     "fontSize": 6,
                                 },
                                 formatter: function(p) {
@@ -181,30 +181,30 @@ let gq_map = {
                             }
                         }
                     },
-                    "data": w_m_total.male
+                    data: w_m_total.male
                 }, {
-                    "name": "总数",
-                    "type": "line",
+                    name: "总数",
+                    type: "line",
                     symbolSize: 10,
                     symbol: 'circle',
-                    "itemStyle": {
-                        "normal": {
-                            "color": "rgba(252,230,48,1)",
-                            "barBorderRadius": 0,
-                            "label": {
-                                "show": true,
-                                "position": "top",
+                    itemStyle: {
+                        normal: {
+                            color: "rgba(252,230,48,1)",
+                            barBorderRadius: 0,
+                            label: {
+                                show: true,
+                                position: "top",
                                 formatter: function(p) {
                                     return p.value > 0 ? (p.value) : '';
                                 }
                             }
                         }
                     },
-                    "data": w_m_total.total
+                    data: w_m_total.total
                 },
             ]
         }
-        myChart.setOption(option);
+        myChart.setOption(option_demo1);
         window.addEventListener('resize', f => {
             myChart.resize();
         })
@@ -213,7 +213,7 @@ let gq_map = {
     // 实例2 参考 https://gallery.echartsjs.com/editor.html?c=xryWGlyEYe
     demo2(demo2_data) {
         var myChart = echarts.init(document.querySelector('.demo2'));
-        option = {
+        let option_demo2 = {
             backgroundColor: '#222b4533',
             title: {
                 text: '请求数',
@@ -387,7 +387,7 @@ let gq_map = {
                 data: demo2_data.lt
             }, ]
         };
-        myChart.setOption(option);
+        myChart.setOption(option_demo2);
         window.addEventListener('resize', f => {
             console.log("重置的屏幕大小！")
             myChart.resize();
@@ -397,7 +397,7 @@ let gq_map = {
     // 实例3 参考 https://gallery.echartsjs.com/editor.html?c=xH1vxib94f
     demo3(demo3_data) {
         var myChart = echarts.init(document.querySelector('.demo3'));
-        option = {
+        let option_demo3 = {
             // backgroundColor: "#ffffff",
             color: ["#37A2DA", "#32C5E9", "#67E0E3"],
             series: [{
@@ -431,13 +431,13 @@ let gq_map = {
 
             }]
         };
-        myChart.setOption(option);
+        myChart.setOption(option_demo3);
         window.addEventListener('resize', f => {
             console.log("重置的屏幕大小！")
             myChart.resize();
         })
-        option.series[0].data[0].value = demo3_data;
-        myChart.setOption(option);
+        option_demo3.series[0].data[0].value = demo3_data;
+        myChart.setOption(option_demo3);
         // 定时任务
         // timer = setInterval(function(){
         //     option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
@@ -573,7 +573,7 @@ let gq_map = {
 
 
 
-        option = {
+        let option_demo4 = {
             title: {
                 text: '上证指数',
                 left: 0,
@@ -614,12 +614,12 @@ let gq_map = {
                 data: data0.categoryData,
                 scale: true,
                 boundaryGap: false,
-                axisLine: { onZero: false },
+                // axisLine: { onZero: false },
                 splitLine: { show: false },
                 splitNumber: 20,
                 min: 'dataMin',
                 max: 'dataMax',
-                "axisLine": {
+                axisLine: {
                     lineStyle: {
                         color: '#90979c'
                     }
@@ -630,7 +630,7 @@ let gq_map = {
                 splitArea: {
                     show: true
                 },
-                "axisLine": {
+                axisLine: {
                     lineStyle: {
                         color: '#90979c'
                     }
@@ -736,7 +736,7 @@ let gq_map = {
         };
 
 
-        myChart.setOption(option);
+        myChart.setOption(option_demo4);
         window.addEventListener('resize', f => {
             console.log("重置的屏幕大小！")
             myChart.resize();

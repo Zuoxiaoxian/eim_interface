@@ -2,9 +2,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
-import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+// import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 
 import { HomeComponent } from './home/home.component';
+
+// 404 
+import { NotFoundComponent } from '../miscellaneous/not-found/not-found.component';
 
 
 const routes: Routes = [{
@@ -72,20 +75,20 @@ const routes: Routes = [{
     },
     
     // 404 界面
-    {
-      path: 'miscellaneous',
-      loadChildren: () => import('./miscellaneous/miscellaneous.module')
-        .then(m => m.MiscellaneousModule),
-    },
+    // {
+    //   path: 'miscellaneous',
+    //   loadChildren: () => import('./miscellaneous/miscellaneous.module')
+    //     .then(m => m.MiscellaneousModule),
+    // },
     {
       path: '',
       redirectTo: 'home',
       pathMatch: 'full',
     },
-    {
-      path: '**',
-      component: NotFoundComponent,
-    },
+    // {
+    //   path: '**',
+    //   component: NotFoundComponent,
+    // },
   ],
 }];
 

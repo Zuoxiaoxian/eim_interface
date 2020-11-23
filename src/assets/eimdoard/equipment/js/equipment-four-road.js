@@ -10,136 +10,12 @@ let equipment_four_road = {
         var xData = data.xData,
             borderData = [],
             legend = data.title_arr,
-            colorArr = data.color_arr;
-        var normalColor = "rgba(255,255,255,0.5)";
-        //   var fontSize = 20;
+            borderHeight = 0,
+            normalColor = "rgba(255,255,255,0.5)";
         let seriesData = [];
-        this.create_device_status_fun(xData, data, seriesData, legend, borderData, colorArr);
+        this.create_device_status_fun(data, seriesData, legend, borderData, borderHeight);
         // console.log(seriesData);
-        let option_s = {
-            // backgroundColor: "#000",
-            grid: {
-                left: "3%",
-                top: "16%",
-                right: "3%",
-                bottom: 0,
-                containLabel: true
-            },
-            legend: {
-                show: false,
-                icon: "rect",
-                itemWidth: 20,
-                itemHeight: 3,
-                right: "15%",
-                top: "0%",
-                textStyle: {
-                    color: "#fff"
-                },
-                data: legend
-            },
-            tooltip: {
-                trigger: "axis",
-                formatter: function(params) {
-                    var str = "";
-                    for (var i = 0; i < params.length; i++) {
-                        if (params[i].seriesName !== "") {
-                            str +=
-                                params[i].name +
-                                ":" +
-                                params[i].seriesName +
-                                params[i].value +
-                                "<br/>";
-                        }
-                    }
-                    return str;
-                }
-            },
-            xAxis: [{
-                type: "category",
-                data: xData,
-                axisPointer: {
-                    type: "shadow"
-                },
-                axisLabel: {
-                    textStyle: {
-                        color: normalColor,
-                        fontSize: 12
-                    }
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: normalColor
-                    }
-                },
-                axisTick: {
-                    show: false
-                },
-                splitLine: {
-                    show: false
-                }
-            }],
-            yAxis: [{
-                    type: "value",
-                    nameTextStyle: {
-                        color: normalColor,
-                        fontSize: 12
-                    },
-                    axisLabel: {
-                        formatter: "{value}",
-                        textStyle: {
-                            color: normalColor,
-                            fontSize: 12
-                        }
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: normalColor
-                        }
-                    },
-                    axisTick: {
-                        show: false
-                    },
-                    splitLine: {
-                        show: false,
-                        lineStyle: {
-                            type: "dashed",
-                            color: normalColor
-                        }
-                    }
-                },
-                {
-                    type: "value",
-                    nameTextStyle: {
-                        color: normalColor,
-                        fontSize: 12
-                    },
-                    axisLabel: {
-                        formatter: "{value}",
-                        textStyle: {
-                            color: normalColor,
-                            fontSize: 12
-                        }
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: normalColor
-                        }
-                    },
-                    axisTick: {
-                        show: false
-                    },
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            type: "dashed",
-                            color: "rgba(255,255,255,0.2)"
-                        }
-                    }
-                }
-            ],
-            series: seriesData
-        };
-        // console.log(JSON.stringify(option_s))
+        let option_s = this.getoption(xData, borderData, legend, borderHeight, normalColor, seriesData);
 
         window.onresize = function() {
             myChart.setOption(option_s, config ? config : {});
@@ -152,15 +28,24 @@ let equipment_four_road = {
         var xData = data.xData,
             borderData = [],
             legend = data.title_arr,
-            colorArr = data.color_arr;
-        var normalColor = "rgba(255,255,255,0.5)";
+            borderHeight = 0,
+            normalColor = "rgba(255,255,255,0.5)";
         //   var fontSize = 20;
         let seriesData = [];
-        this.create_device_status_fun(xData, data, seriesData, legend, borderData, colorArr);
+        this.create_device_status_fun(data, seriesData, legend, borderData, borderHeight);
         if (seriesData.length == 0)
             seriesData.push({ name: '', type: "line", data: [] });
         // console.log(seriesData);
-        let option_q = {
+        let option_q = this.getoption(xData, borderData, legend, borderHeight, normalColor, seriesData);
+        // console.log(JSON.stringify(option_s))
+        window.onresize = function() {
+            myChart.resize();
+        }
+        myChart.setOption(option_q);
+        myChart.resize();
+    },
+    getoption(xData, borderData, legend, borderHeight, normalColor, seriesData) {
+        return {
             // backgroundColor: "#000",
             grid: {
                 left: "3%",
@@ -184,8 +69,8 @@ let equipment_four_road = {
             tooltip: {
                 trigger: "axis",
                 formatter: function(params) {
-                    var str = "";
-                    for (var i = 0; i < params.length; i++) {
+                    let str = "";
+                    for (let i = 0; i < params.length; i++) {
                         if (params[i].seriesName !== "") {
                             str +=
                                 params[i].name +
@@ -306,28 +191,31 @@ let equipment_four_road = {
             ],
             series: seriesData
         };
-        // console.log(JSON.stringify(option_s))
-        window.onresize = function() {
-            myChart.resize();
-        }
-        myChart.setOption(option_q);
-        myChart.resize();
     },
+
+
+
     //设备状态表
     create_device_circular(gauge_data, myChart) {
-        var trafficWay = [{
-            value: 50
-        }, {
-            value: 20
-        }, {
-            value: 30
-        }, {
-            value: 70
-        }];
+        var trafficWay = [],
+            sum = 0;
+        if (gauge_data.value) {
+            gauge_data.value.forEach(m => {
+                sum += m.value ? m.value : 0
+            });
+            trafficWay = gauge_data.value.map(m => ({
+                value: m.value * (170 / sum)
+            }));
+        } else {
+            trafficWay = [{ value: 170 / 4 }, { value: 170 / 4 }, { value: 170 / 4 }, { value: 170 / 4 }];
+            sum = 0;
+        }
+
+
 
         var data = [];
-        var color = ['#006ced', '#faa755', '#d71345', 'rgb(74,181,107)', 'rgb(74,181,107)']
-        for (var i = 0; i < trafficWay.length; i++) {
+        var color = ['rgb(74,181,107)', '#faa755', '#006ced', '#d71345', ]
+        for (let i = 0; i < trafficWay.length; i++) {
             data.push({
                 value: trafficWay[i].value,
                 itemStyle: {
@@ -408,11 +296,8 @@ let equipment_four_road = {
             tooltip: {
                 show: true,
                 trigger: "item",
-                formatter: function(data) {
-                    // console.log(data)
-                    return `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${data.data.itemStyle.shadowColor};"></span> ${((data.value / 170)*100).toFixed(0)}%`;
-
-                    // data.marker + ' ' + (data.value / 170).toFixed(2) * 100 + '%';
+                formatter: function(data_dd) {
+                    return `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${data_dd.data.itemStyle.shadowColor};"></span> ${((data_dd.value / 170)*100).toFixed(2)}%`;
                 },
             },
 
@@ -421,6 +306,7 @@ let equipment_four_road = {
             },
             series: seriesOption
         };
+        if (!gauge_data.value) option_p.tooltip.show = false;
         // console.log(JSON.stringify(option_p))
         window.onresize = function() {
             myChart.resize();
@@ -439,7 +325,8 @@ let equipment_four_road = {
                 },
                 formatter: function(value) {
                     console.log(value)
-                    str = ''
+                    let str = '',
+                        i = 0;
                     if (value.length == 2) {
                         i = value.findIndex(f => f.seriesIndex != '1');
                         str += value[i].axisValue + '<br />' + value[i].marker + ' ' + value[i].seriesName + ' ' + value[i].value
@@ -819,9 +706,9 @@ let equipment_four_road = {
         };
 
         //获取圆上面某点的坐标(x0,y0表示坐标，r半径，angle角度)
-        function getCirlPoint(x0, y0, r, angle) {
-            let x1 = x0 + r * Math.cos(angle * Math.PI / 180)
-            let y1 = y0 + r * Math.sin(angle * Math.PI / 180)
+        function getCirlPoint(x0, y0, r, angle_args) {
+            let x1 = x0 + r * Math.cos(angle_args * Math.PI / 180)
+            let y1 = y0 + r * Math.sin(angle_args * Math.PI / 180)
             return {
                 x: x1,
                 y: y1
@@ -1295,7 +1182,7 @@ let equipment_four_road = {
                         "<div style='background:rgba(13,5,30,.6);border:1px solid rgba(255,255,255,.2);padding:5px;border-radius:3px;'>" +
                         "<div style='text-align:center;'>" + param[0].name + "</div>" +
                         "<div style='padding-top:5px;'>"
-                    for (var i = 0; i < param.length; i++) {
+                    for (let i = 0; i < param.length; i++) {
 
                         if (i > 0) {
                             resultTooltip += "<div style='padding-top:2px;'>"
@@ -1356,7 +1243,7 @@ let equipment_four_road = {
                     fontSize: 9,
                     color: 'white', //X轴文字颜色
                     formatter: function(value) {
-                        var str = "";
+                        let str = "";
                         // str += value.substring(0, 4) + "\n";
                         str += value.substring(5, 10);
                         return str;
@@ -1585,8 +1472,8 @@ let equipment_four_road = {
     //ngx-chart-curve-v3 折线
     create_broken_line(data, myChart, config) {
         var series = [];
-        data.series.forEach((f, i) => {
-            if (i == data.series.length - 1)
+        data.series.forEach((f, j) => {
+            if (j == data.series.length - 1)
                 series.push({
                     name: f.name,
                     type: 'line',
@@ -1773,8 +1660,8 @@ let equipment_four_road = {
             smooth: true
         }
     },
-    create_device_status_fun(xData, data, seriesData, legend, borderData, colorArr) {
-        xData.forEach(element => {
+    create_device_status_fun(data, seriesData, legend, borderData, borderHeight) {
+        data.xData.forEach(element => {
             borderData.push(borderHeight);
         });
         data.d_arr.forEach((item, index) => {
@@ -1797,15 +1684,15 @@ let equipment_four_road = {
                                 y2: 1,
                                 colorStops: [{
                                         offset: 0,
-                                        color: colorArr[index].start
+                                        color: data.color_arr[index].start
                                     },
                                     {
                                         offset: 0.5,
-                                        color: colorArr[index].start
+                                        color: data.color_arr[index].start
                                     },
                                     {
                                         offset: 1,
-                                        color: colorArr[index].end
+                                        color: data.color_arr[index].end
                                     }
                                 ],
                                 globalCoord: false
@@ -1819,7 +1706,7 @@ let equipment_four_road = {
                     stack: legend[index],
                     itemStyle: {
                         normal: {
-                            color: colorArr[index].start
+                            color: data.color_arr[index].start
                         }
                     },
                     data: borderData
@@ -1841,7 +1728,7 @@ let equipment_four_road = {
                     },
                     itemStyle: {
                         normal: {
-                            color: colorArr[index].color,
+                            color: data.color_arr[index].color,
                             borderColor: "#fff",
                             borderWidth: 1
                         }

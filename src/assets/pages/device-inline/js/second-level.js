@@ -5,7 +5,7 @@ let second_level = {
         var myChart = echarts.init(document.querySelector('.key-index'));
 
         // 配置
-        option = {
+        let option = {
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -226,7 +226,7 @@ let second_level = {
                 color: '#367bec' // 100% 处的颜色
             }]
         }
-        var option = {
+        var option_device_rate = {
             // backgroundColor:"#000",
             title: {
                 text: value + datas.company,
@@ -284,7 +284,7 @@ let second_level = {
             }]
         };
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_device_rate);
 
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {

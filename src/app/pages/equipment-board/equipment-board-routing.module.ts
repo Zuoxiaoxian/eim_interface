@@ -6,6 +6,7 @@ import { EquipmentCouplingPathComponent } from './equipment-coupling-path/equipm
 import { EquipmentDetailsComponent } from './equipment-details/equipment-details.component';
 import { EquipmentFourRoadComponent } from './equipment-four-road/equipment-four-road.component';
 import { EquipmentHydraulicPressureComponent } from './equipment-hydraulic-pressure/equipment-hydraulic-pressure.component';
+import { EquipmentMastTwoLevelComponent } from './equipment-mast-two-level/equipment-mast-two-level.component';
 import { EquipmentMastV2Component } from './equipment-mast-v2/equipment-mast-v2.component';
 import { EquipmentMastV3Component } from './equipment-mast-v3/equipment-mast-v3.component';
 import { EquipmentMastComponent } from './equipment-mast/equipment-mast.component';
@@ -61,6 +62,10 @@ const ROUTERS: Routes = [{
       {
         path:'mast-v3',
         component:EquipmentMastV3Component
+      },
+      {
+        path:'mast-twolv',
+        component:EquipmentMastTwoLevelComponent
       },
       {
         path:'detailsDemo/:title',

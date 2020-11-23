@@ -42,6 +42,15 @@ export class LogWarmComponent implements OnInit {
     })
   }
 
+  get_device_mts_log_his(){
+    this.http.callRPC('get_device_mts_log','device_monitor.get_device_mts_log',{"device":this.device}).subscribe((g:any) =>{
+        console.log(g)
+        if(g.result.error || g.result.message[0].code == 0)return;
+        getMessage(g,this.log_warm.data);
+    })
+  }
+
+
   //组件销毁  
   ngOnDestroy(){
     clearInterval(this.timer)

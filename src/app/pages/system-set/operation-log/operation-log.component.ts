@@ -3,6 +3,9 @@ import { Component, OnDestroy, OnInit,ViewChild } from '@angular/core';
 import { menu_button_list } from '../../../appconfig';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';
+import { UserInfoService } from '../../../services/user-info/user-info.service';
+
+declare let $;
 
 @Component({
   selector: 'ngx-operation-log',
@@ -12,97 +15,30 @@ import { PublicmethodService } from '../../../services/publicmethod/publicmethod
 export class OperationLogComponent implements OnInit, OnDestroy {
   @ViewChild("agGrid") agGrid: any;
 
-  constructor(private publicmethod: PublicmethodService, private http: HttpserviceService) {
+  constructor(private publicmethod: PublicmethodService, private http: HttpserviceService, private userinfo: UserInfoService) {
    }
-
-   // 前端要展示的button 主要是：增、删、改
-   buttons;
-
-   // 前端要展示的buttons 主要是：搜索、导入导出
-   buttons2;
-
-   // 加载table
-   isloding = false;
-   operation_log_agGrid = null;
-
+  button; // 权限button
+  loading = false;  // 加载
+  refresh = false; // 刷新tabel
 
   ngOnInit(): void {
-    this.getbuttons();
+    // 得到pathname --在得到button
+    var roleid = this.userinfo.getEmployeeRoleID();
+    this.publicmethod.get_buttons_bypath(roleid).subscribe(result=>{
+      this.button = result;
+      localStorage.setItem("buttons_list", JSON.stringify(result));
+    })
   }
 
   ngAfterViewInit(){
-    this.http.callRPC('sys_security_log', 'get_sys_transaction_log', {offset: 0, limit: 50}).subscribe((res)=>{
-      var get_sys_transaction_log = res['result']['message'][0]
-      if (get_sys_transaction_log["code"]===1){
-        this.isloding = false;
-        this.gridData = []
-        var message = get_sys_transaction_log['message'];
-        var totalpagenumbers = get_sys_transaction_log['numbers'][0]['numbers'];
-        this.tableDatas.totalPageNumbers = totalpagenumbers;
-        // formart result
-        message.forEach(row => {
-          row["result"] = row["result"] === 1? '成功':'失败';
-        });
-        this.gridData.push(...message);
-        this.tableDatas.rowData = this.gridData;
-        this.agGrid.init_agGrid(this.tableDatas);
-      }
-    })
+    // init  table
+    this.inttable();
   }
   
   ngOnDestroy(){
   }
 
-  // 得到buttons----------------------------------------------------------
-  getbuttons(){
-    // 根据menu_item_role得到 该页面对应的 button！
-    var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
-    if (button_list){
-      this.publicmethod.get_current_pathname().subscribe(res=>{
-        var currentmenuid = res["id"];
-        var buttons = [];
-        // 分离搜索、导入、导出
-        var buttons2 = [];
-        button_list.forEach(button => {
-          if (currentmenuid === button["parentid"]){
-            var method = button["permission"].split(":")[1];
-            if ( method === "query" || method === "import" || method === "download" ){
-              buttons2.push(button)
-            }else{
-              buttons.push(button);
-            }
-            
-          }
-        });
 
-        // 对button进行排序 根据 title(导入、导出), 或者是 permission(menu:import)
-        buttons2.forEach(b=>{
-          switch (b["permission"].split(":")[1]) {
-            case "query":
-              b["order_"] = 0;
-              break;
-            case "import":
-              b["order_"] = 1;
-              break;
-            case "download":
-              b["order_"] = 2;
-              break;
-
-          }
-        })
-
-        // -----排序
-        buttons2.sort(function(item1, item2){
-          return item1["order_"] - item2["order_"]
-        });
-
-        this.buttons = buttons;
-        this.buttons2 = buttons2;
-
-        // console.log("-----------buttons2--------",buttons2)
-      })
-    }
-  }
   action(actionmethod){
     // console.log("++++++++++++++++++++action(actionmethod)++++++++++++++++++++++++++++", actionmethod);
     var method = actionmethod.split(":")[1];
@@ -122,6 +58,16 @@ export class OperationLogComponent implements OnInit, OnDestroy {
     this.agGrid.download(title);
   }
 
+  refresh_table(){
+    $("#employeenumber").val('')
+    this.refresh = true;
+    this.loading = true;
+    this.gridData = [];
+    this.inttable();
+    this.refresh = false;
+    this.loading = false;
+  }
+
 
   // =================================================agGrid
 
@@ -130,8 +76,8 @@ export class OperationLogComponent implements OnInit, OnDestroy {
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
       // { field: 'application', headerName: '应用', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true},
-      { field: 'createdby', headerName: '用户名称',headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true,  resizable: true, flex: 1},
-      // { field: 'employeeid', headerName: '用户ID',resizable: true, flex: 1},
+      { field: 'createdby', headerName: '域账号',headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true,  resizable: true, flex: 1},
+      { field: 'name', headerName: '姓名', resizable: true, flex: 1},
       { field: 'result', headerName: '状态',  resizable: true, flex: 1},
       { field: 'transactiontype', headerName: '类型',  resizable: true, flex: 1},
       { field: 'info', headerName: '信息', resizable: true, flex: 1},
@@ -142,8 +88,45 @@ export class OperationLogComponent implements OnInit, OnDestroy {
   };
 
   private gridData = [];
+
+  // 初始化table
+  inttable(event?){
+    var offset;
+    var limit;
+    if (event != undefined){
+      offset = event.offset;
+      limit = event.limit;
+    }else{
+      offset = 0;
+      limit = 20;
+    }
+    var columns = {
+      offset: offset, 
+      limit: limit,
+    }
+    this.http.callRPC('sys_security_log', 'get_sys_transaction_log', columns).subscribe((res)=>{
+      var get_sys_transaction_log = res['result']['message'][0]
+      if (get_sys_transaction_log["code"]===1){
+        this.loading = false;
+        var message = get_sys_transaction_log['message'];
+        var totalpagenumbers = get_sys_transaction_log['numbers'][0]['numbers'];
+        this.tableDatas.totalPageNumbers = totalpagenumbers;
+        // formart result
+        message.forEach(row => {
+          row["result"] = row["result"] === 1? '成功':'失败';
+        });
+        this.gridData.push(...message);
+        this.tableDatas.rowData = this.gridData;
+        this.agGrid.init_agGrid(this.tableDatas);
+        this.RecordOperation(1, '查看', "操作日志");
+      }else{
+        this.RecordOperation(0, '查看', "操作日志");
+      }
+    })
+  }
   
-  getetabledata(event?){
+  // 更新 表
+  update_agGrid(event?){
     var offset;
     var limit;
     console.log("event------------------------------------------------", event);
@@ -152,14 +135,14 @@ export class OperationLogComponent implements OnInit, OnDestroy {
       limit = event.limit;
     }else{
       offset = 0;
-      limit = 50;
+      limit = 20;
     }
     this.http.callRPC('sys_security_log', 'get_sys_transaction_log', {offset: offset, limit: limit}).subscribe((res)=>{
       console.log("get_sys_transaction_log", res)
       var get_sys_transaction_log = res['result']['message'][0]
       console.log("get_sys_transaction_log", get_sys_transaction_log);
       if (get_sys_transaction_log["code"]===1){
-        this.isloding = false;
+        this.loading = false;
         // 发布组件，编辑用户的组件
         // this.publicmethod.getcomponent(EditUserEmployeeComponent);
   
@@ -169,6 +152,8 @@ export class OperationLogComponent implements OnInit, OnDestroy {
         message.forEach(row => {
           row["result"] = row["result"] === 1? '成功':'失败';
         });
+        this.gridData = []
+
         this.gridData.push(...message)
         this.tableDatas.rowData = this.gridData;
         this.tableDatas.totalPageNumbers = totalpagenumbers;
@@ -182,11 +167,23 @@ export class OperationLogComponent implements OnInit, OnDestroy {
   // nzpageindexchange 页码改变的回调
   nzpageindexchange(event){
     console.log("页码改变的回调", event);
-    this.getetabledata(event);
+    this.inttable(event);
   }
 
 
   // =================================================agGrid
+  // option_record
+  RecordOperation( result,option,infodata){
+    // option:操作类型, result:操作的结果, infodata:附加信息!
+    if(this.userinfo.getLoginName()){
+      var employeeid = this.userinfo.getEmployeeID();
+      var result = result; // 1:成功 0 失败
+      var transactiontype = option; // '新增用户';
+      var info = infodata;
+      var createdby = this.userinfo.getLoginName();
+      this.publicmethod.option_record(employeeid, result,transactiontype,info,createdby);
+    }
 
+  }
 
 }

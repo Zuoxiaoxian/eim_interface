@@ -20,6 +20,7 @@ import { LaboratoryBoardComponent } from './laboratory-board/laboratory-board.co
 import { EquipmentMastV3Component } from './equipment-mast-v3/equipment-mast-v3.component';
 import { LogWarmComponent } from './temp/log-warm/log-warm.component';
 import { TestInformationComponent } from './temp/test-information/test-information.component';
+import { EquipmentMastTwoLevelComponent } from './equipment-mast-two-level/equipment-mast-two-level.component';
 
 
 // 组件
@@ -31,7 +32,7 @@ const COMPONENT = [
   EquipmentDetailsComponent,EquipmentMastV2Component,
   EquipmentStatusComponent,LaboratoryBoardComponent,
   EquipmentMastV3Component,LogWarmComponent,
-  TestInformationComponent
+  TestInformationComponent,EquipmentMastTwoLevelComponent
 ]
 //设备看板模块
 @NgModule({

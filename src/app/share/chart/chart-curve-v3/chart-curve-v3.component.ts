@@ -217,7 +217,7 @@ export class ChartCurveV3Component implements OnInit {
             icon: 'circle',
             type:'scroll',
             orient: 'horizontal',
-            top: '77.5%',
+            top: '80.5%',
             width: '100%',
             right: 'center',
             itemWidth: 16.5,

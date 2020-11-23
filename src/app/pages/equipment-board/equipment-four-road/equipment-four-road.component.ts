@@ -208,6 +208,8 @@ export class EquipmentFourRoadComponent implements OnInit {
     //获取数据
     this.getData();
 
+    this.get_device_mts_timerangedata();
+
     
   }
 
@@ -225,29 +227,14 @@ export class EquipmentFourRoadComponent implements OnInit {
         table = 'get_device_mts_time',method = 'device_monitor.get_device_mts_timerangedata';
         this.get_device_mts_time(table,method,param);
       }
+      this.get_device_mts_weiss();
     },1000)
     
 
     setTimeout(() => {
       this.initChart();
-      this.in();
     }, 1000);
    
-  }
-  timer1;
-  timer2;
-  in(){
-    
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-    this.timer1 = setInterval(f=>{
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    },3000)
-    this.timer2 =  setInterval(f=>{
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-    },3000)
   }
   
   //初始化表格
@@ -268,25 +255,10 @@ export class EquipmentFourRoadComponent implements OnInit {
       equipment_four_road.create_warning_chart(data,myChart_3);
     }
 
-
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-
-    // setInterval(f=>{
-    //   equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
-    // },3000)
-    // setInterval(f=>{
-    //   equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
-    // },3000)
-
     let array = ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
       if(this[`chart_${i+1}`])this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:[],index:1});
     })
-
     create_third_chart_line(rtm3a,this);
-
 
   }
 
@@ -302,12 +274,8 @@ export class EquipmentFourRoadComponent implements OnInit {
   }
 
 
-
-
-
 //颜色的赋值
   color(){
-    
     let rgb = '';
     ['attrs_1','attrs_2','attrs_3'].forEach(element => {
       for(let item in this[element]){
@@ -398,6 +366,64 @@ export class EquipmentFourRoadComponent implements OnInit {
     })
   }
 
+  //环境实时信息
+  get_device_mts_weiss(){
+    // temp温度
+    //  humi湿度
+    this.http.callRPC('get_device_mts_realtimedata','device_monitor.get_device_mts_realtimedata'
+    ,{device:"device_weiss_01",arr:"tempreal,tempset,humireal,humiset"}).subscribe((g:any) =>{
+      if(g.result.error || g.result.message[0].code == 0)return;
+      let obj = this.temp_humi_change(g.result.message[0].message);
+      //渲染温度
+      if(document.getElementById('real_temperature_1'))
+        equipment_four_road.create_real_temperature_v2(
+          {value:obj.tempreal[0][0],title:'温度',max:70,setValue:obj.tempset[0][0]},
+          echarts.init(document.getElementById('real_temperature_1')));
+      //渲染湿度
+      if(document.getElementById('real_temperature_2'))
+        equipment_four_road.create_real_temperature_v2(
+          {value:obj.humireal[0][0],title:'湿度',max:100,setValue:obj.humireal[0][0]},
+          echarts.init(document.getElementById('real_temperature_2')));
+    })
+  }
+
+  //环境历史信息
+  get_device_mts_timerangedata(){
+    this.http.callRPC('get_device_mts_realtimedata','device_monitor.get_device_mts_realtimedata'
+    ,{start:"2020-01-01 14:02:00",end:"2020-11-21 20:20:00",device:"device_weiss_01",arr:"tempreal,humireal"}).subscribe((g:any) =>{
+      if(g.result.error || g.result.message[0].code == 0)return;
+      console.log(this.temp_humi_change(g.result.message[0].message));
+      let arrj = this.temp_humi_change(g.result.message[0].message)
+      let yearPlanData,yearOrderData,differenceData=[],visibityData=[],xAxisData=[];
+      yearPlanData = arrj.tempreal.map(m => (m[0]));//温度
+      yearOrderData = arrj.humireal.map(m => (m[0]));;//湿度度
+      xAxisData = arrj.humireal.map(m => (dateformat(new Date(m[1]),'MM-dd hh:mm:ss')))
+      // create_third_chart_line(rtm3a,this);
+      rtm3a.create_third_chart_line({
+        yearPlanData:yearPlanData,
+        yearOrderData:yearOrderData,
+        differenceData:differenceData,
+        visibityData:visibityData,
+        xAxisData:xAxisData,
+        title:this.language?'MonthlyChartOfTemperatureAndHumidity':'温湿度月度图线'
+      }, 'third_second');
+    })
+  }
+
+  //环境转换
+  temp_humi_change(data){
+    let obj = {
+      tempset:[],//温度设定值
+      tempreal:[],// 温度
+      humiset:[],//湿度设定值
+      humireal:[],// 湿度
+    }
+    data.forEach(el => {
+      for(let key in el)obj[key].push(el[key][0]);
+    });
+    return obj
+  }
+
 
 
   //样式 逻辑方法
@@ -410,8 +436,8 @@ export class EquipmentFourRoadComponent implements OnInit {
   ngOnDestroy(){
     clearInterval(this.timer)
     clearInterval(this.timer60s)
-    clearInterval(this.timer1)
-    clearInterval(this.timer2)
+    // clearInterval(this.timer1)
+    // clearInterval(this.timer2)
   }
 
 

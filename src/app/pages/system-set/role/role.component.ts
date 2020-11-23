@@ -3,7 +3,7 @@ import { Component, OnInit,TemplateRef, ViewChild } from '@angular/core';
 
 import { DatePipe } from '@angular/common';
 
-import { SYSROLEMENU, role_tree_data, SYSROLE, menu_button_list, role_action, MULU,loginurl } from '../../../appconfig';
+import { SYSROLEMENU,  SYSROLE, menu_button_list, role_action, MULU,loginurl } from '../../../appconfig';
 
 declare let layui;
 
@@ -13,22 +13,21 @@ var store = require('store');
 
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 
-import { url, adminlocalstorage,ssotoken} from '../../../appconfig';
+
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import { NbDialogService } from '@nebular/theme';
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';
 
-// 弹出编辑role
-import { EditRoleComponent } from '../../../pages-popups/system-set/edit-role/edit-role.component'
 
 import { RoleComponent as AddRoleComponent} from '../../../pages-popups/system-set/role/role.component';
 import { Observable } from 'rxjs';
 
-import {LocalDataSource} from "@mykeels/ng2-smart-table";
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 
 import { EditDelTooltipComponent } from '../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component';
 import { Router } from '@angular/router';
+import { ActionComponent } from './action/action.component';
+import { TranActiveComponent } from '../new-user-employee/tran-active/tran-active.component';
 
 
 @Component({
@@ -39,99 +38,53 @@ import { Router } from '@angular/router';
 export class RoleComponent implements OnInit {
   @ViewChild('dialog') dialog: TemplateRef<any>;
   @ViewChild("agGrid") agGrid: any;
-
-
-  get_jili_app_token;
-
-
-  tree_data;
-
-  // 前端要展示的button 主要是：增、删、改
-  buttons;
-
-  // 前端要展示的buttons 主要是：搜索、导入导出
-  buttons2;
-
+  refresh = false; // 刷新tabel
+  loading = false;  // 加载
+  button; // 权限button
   // 要删除、修改的行数据 
   rowdata;
-
-  isloding = false; // agGrid
-  role_agGrid;
-
   // 得到日志的plv8函数名
   GetRole = "get_role_limit";
+  // 展示状态
+  success(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"保存成功!"});
+  }
+  danger(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"保存失败!"});
+  }
 
+  // 展示状态
+  delsuccess(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"删除成功!"});
+  }
+  deldanger(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"删除失败!"});
+  }
 
-    // 展示状态
-    success(publicservice){
-      publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"保存成功!"});
-    }
-    danger(publicservice){
-      publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"保存失败!"});
-    }
-  
-    // 展示状态
-    delsuccess(publicservice){
-      publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"删除成功!"});
-    }
-    deldanger(publicservice){
-      publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"删除失败!"});
-    }
-  
-    // 展示状态
-    editsuccess(publicservice){
-      publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"修改成功!"});
-    }
-    editdanger(publicservice){
-      publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"修改失败!"});
-    }
-    // 展示状态
-    addsuccess(publicservice){
-      publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"添加成功!"});
-    }
-    adddanger(publicservice){
-      publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"添加失败!"});
-    }
+  // 展示状态
+  editsuccess(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"修改成功!"});
+  }
+  editdanger(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"修改失败!"});
+  }
+  // 展示状态
+  addsuccess(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'success', conent:"添加成功!"});
+  }
+  adddanger(publicservice){
+    publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"添加失败!"});
+  }
 
+  searchdanger(data){
+    this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"没有角色名称(role_name):" + data});
+  }
 
+  active; // 操作！
   constructor(private http: HttpserviceService, private localstorageservice: LocalStorageService,
     private dialogService: NbDialogService, private datapipe: DatePipe, private publicservice: PublicmethodService, private userinfo: UserInfoService,
     private router: Router) { 
-      // localStorage.removeItem("role_agGrid");
-      // 得到员工信息！
-    var sysrole = localStorage.getItem(SYSROLE) == null ? {code: 0} : JSON.parse(localStorage.getItem(SYSROLE));
-    console.log("sysrole------------------------------------------------", sysrole);
-  
-    const table = "role";
-    const method = this.GetRole;
-    const colums = {offset: 0, limit: 50}
-    this.http.callRPC(table, method, colums).subscribe((result)=>{
-      console.log("sys_role--------------------------", result)
-      const baseData = result['result']['message'][0];
-      // 发布组件，编辑角色的组件 和删除所需要的 plv8 函数 delete_role
-      this.publicservice.getcomponent(EditRoleComponent);
-      this.publicservice.getmethod("delete_role"); //  删除角色
-
-      this.isloding = false;
-      // ------
-      if (baseData["code"] === 1){
-        localStorage.setItem(SYSROLE, JSON.stringify(baseData));
-        baseData["message"].forEach(element => {
-          element["active"] = element["active"] === 1? '是': '否';
-        });
-        this.gridData.push(...baseData["message"]);
-        this.tableDatas.rowData = this.gridData
-        var totalpagenumbers = baseData['numbers']? baseData['numbers'][0]['numbers']: '未得到总条数';
-        this.tableDatas.totalPageNumbers = totalpagenumbers;
-        localStorage.setItem("role_agGrid", JSON.stringify(this.tableDatas))
-      }else{
-        this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"得到角色失败" + baseData["message"]});
-      }
-    })
-
-
   }
-
   
   ngOnInit(): void {
     // 加载树状menu  初始化
@@ -142,153 +95,49 @@ export class RoleComponent implements OnInit {
     });
 
     // 得到该页面下的button
-    this.getbuttons();
+    var roleid = this.userinfo.getEmployeeRoleID();
+    this.publicservice.get_buttons_bypath(roleid).subscribe(result=>{
+      this.button = result;
+      localStorage.setItem("buttons_list", JSON.stringify(result));
+    })
     
-    setTimeout(() => {
-      this.role_agGrid = JSON.parse(localStorage.getItem("role_agGrid"));
-    }, );
+
+    // ====================================agGrid
+      var that = this;
+      this.active = { field: 'action', headerName: '操作', cellRendererFramework: ActionComponent, pinned: 'right',
+        cellRendererParams: {
+          clicked: function(data: any) {
+            if (data["active"]==='edit'){
+              that.editrole([data["data"]]);
+            }else{
+              that.remove([data["data"]]);
+            }
+          }
+        },
+      }
+      
   }
   
   ngAfterViewInit(){
-    console.log("----------------------------------\n\n,+++=", this.role_agGrid, this.gridData)
-    if (this.role_agGrid == null){
-      this.gridData = [];
-      this.pagemployee()
-    }else{
-      console.log("&&&&&&&&&&&&&&&&&&&&&&&this.employee_agGrid&&&&&&&&&&&&&&&&", this.role_agGrid, this.agGrid);
-      setTimeout(() => {
-        this.agGrid.init_agGrid(this.role_agGrid);
-      },);
-
-    }
-
+    // 初始化table
+    this.tableDatas.columnDefs.push(
+      this.active
+    )
+    this.inttable()
 
   }
 
   ngOnDestory(){
-    localStorage.removeItem("role_agGrid");
   }
 
 
   getsecurity_edit2(table: string, method: string, colums: object, http){
     return new Observable((res)=>{
-
       http.callRPC(table, method, colums).subscribe((result)=>{
-        var employee_result =  result['result']['message'][0];
-        console.log("employee_result", employee_result);
-        res.next(employee_result)
+        res.next(result)
       })
     })
   }
-
-   // 得到buttons----------------------------------------------------------
-  
-  getbuttons(){
-    // 根据menu_item_role得到 该页面对应的 button！
-    var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
-    if (button_list){
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      console.log(button_list)
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      this.publicservice.get_current_pathname().subscribe(res=>{
-        console.log("get_current_pathname   ", res);
-        var currentmenuid = res["id"];
-        var buttons = [];
-        // 分离搜索、导入、导出
-        var buttons2 = [];
-        
-        button_list.forEach(button => {
-          if (currentmenuid === button["parentid"]){
-            var method = button["permission"].split(":")[1];
-            if ( method === "query" || method === "import" || method === "download" ){
-              buttons2.push(button)
-            }else{
-              buttons.push(button);
-            }
-            
-          }
-        });
-
-        // 对button进行排序 根据 title(导入、导出), 或者是 permission(menu:import)
-        buttons2.forEach(b=>{
-          switch (b["permission"].split(":")[1]) {
-            case "query":
-              b["order_"] = 0;
-              break;
-            case "import":
-              b["order_"] = 1;
-              break;
-            case "download":
-              b["order_"] = 2;
-              break;
-
-          }
-        })
-
-        // -----排序
-        buttons2.sort(function(item1, item2){
-          return item1["order_"] - item2["order_"]
-        });
-
-        this.buttons = buttons;
-        this.buttons2 = buttons2;
-
-        console.log("-----------buttons2--------",buttons2)
-        
-
-        // ====================================================
-        var isactions = {};
-        buttons.forEach(button=>{
-          var mdthod = button["permission"].split(":")[1];
-          switch (mdthod) {
-            case "add":
-              break;
-            case "del":
-              isactions["del"] = true
-              break;
-            case "edit":
-              isactions["edit"] = true
-              break;
-            
-          }
-        })
-
-        if (!isactions["edit"]){
-          isactions["edit"] = false
-        }
-        if (!isactions["del"]){
-          isactions["del"] = false
-        }
-
-        // var isactions = {};
-        // buttons.forEach(button=>{
-        //   if (button["permission"].search("add") === -1){
-        //     if (button["permission"].search("edit") === -1){
-        //       // 编辑不存在
-        //       // isactions.push({edit:false})
-        //     }else{ // 编辑存在
-        //       isactions["edit"] = true
-        //     }
-        //     if (button["permission"].search("del") === -1){
-        //       // isactions.push({del: false})
-        //     }else{
-        //       isactions["del"] = true
-        //     }
-        //   }
-        // })
-
-        // if (!isactions["edit"]){
-        //   isactions["edit"] = false
-        // }
-        // if (!isactions["del"]){
-        //   isactions["del"] = false
-        // }
-        localStorage.setItem(role_action, JSON.stringify(isactions));
-        console.log("_________________________________-isactions---------________________",isactions)
-      })
-    }
-  }
-
 
   action(actionmethod){
     console.log("++++++++++++++++++++action(actionmethod)++++++++++++++++++++++++++++", actionmethod);
@@ -320,66 +169,69 @@ export class RoleComponent implements OnInit {
 
   // 添加role button 弹出框形式
   addrole(){
-    this.dialogService.open(AddRoleComponent, {closeOnBackdropClick: false,}).onClose.subscribe(name=>{
+    this.dialogService.open(AddRoleComponent, {closeOnBackdropClick: false,context: { rowdata: JSON.stringify('add')}}).onClose.subscribe(name=>{
       if (name){
-        this.isloding = true
         this.gridData = [];
-        // agGrid 
-        this.pagemployee();
+        this.loading = true;
+        this.update_agGrid();
+        this.loading = false;
       }
     })
     
   }
 
   // 修改role button 
-  editrole(){
-    // var rowdata = this.rowdata;
-    // 得到选中的aggrid rowdatas
-    var rowdata = this.agGrid.getselectedrows();
-    console.log("修改role button ", rowdata);
-    if (rowdata.length === 0){
-      console.log("没有选中行数据", rowdata);
-      // 提示选择行数据
-      this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `请选择一行数据！`}} ).onClose.subscribe(
-        name=>{console.log("----name-----", name)}
-      );
-    }else if (rowdata.length > 1){
-      console.log("button按钮执行222！ 编辑", rowdata);
-      this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `请选择一行数据！`}} ).onClose.subscribe(
-        name=>{console.log("----name-----", name)}
-      );
-      
+  editrole(active_data?){
+    console.log("-------------------------->>>>>>>>>>>>>>>", active_data)
+    var rowdata;
+    if (active_data){
+      rowdata = active_data;
     }else{
-      var rowData = rowdata[0]
-      this.dialogService.open(EditRoleComponent, {closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowData)} }).onClose.subscribe(
-        name=>{
-          console.log("修改角色----name-----", name);
-          console.log("修改角色----this.agGrid-----", this.agGrid);
-          if (name){
-            this.isloding = true
-            this.updategetemployee({value: name, action: "edit"});
-            this.isloding = false
-            localStorage.removeItem(SYSROLE);
-            
-
-          }else{
-          }
-        }
-      );;
+      rowdata = this.agGrid.getselectedrows();
     }
+    // 得到选中的aggrid rowdatas
+    console.log("修改role button ", rowdata);
+    switch (rowdata.length) {
+      case 1:
+        var rowData = rowdata[0]
+        this.dialogService.open(AddRoleComponent, {closeOnBackdropClick: false,context: { rowdata: JSON.stringify(rowData)} }).onClose.subscribe(
+          name=>{
+            console.log("修改角色----name-----", name);
+            console.log("修改角色----this.agGrid-----", this.agGrid);
+            if (name){
+              this.gridData = [];
+              this.loading = true;
+              this.update_agGrid();
+              this.loading = false;
+              localStorage.removeItem(SYSROLE);
 
+            }else{
+            }
+          }
+        );
+        break;
+      default:
+        this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `请选择一行数据！`}} ).onClose.subscribe(
+          name=>{console.log("----name-----", name)}
+        );
+        break;
+    }
   }
 
   // 删除role button
-  remove(){
+  remove(active_data?){
+    var rowdata;
+    if (active_data){
+      rowdata = active_data;
+    }else{
+      rowdata = this.agGrid.getselectedrows();
+    }
     // 得到选中的aggrid rowdatas
-    var rowdata = this.agGrid.getselectedrows();
     var http = this.http;
     var getsecurity_edit2 = this.getsecurity_edit2;
     var publicservice = this.publicservice;
     var DelSuccess = this.delsuccess;
     var DelDanger = this.deldanger;
-
     if (rowdata.length === 0){
           console.log("没有选中行数据", rowdata);
           // 提示选择行数据
@@ -394,27 +246,32 @@ export class RoleComponent implements OnInit {
         name=>{
           console.log("----name-----", name);
           if (name){
-            this.isloding = true
-            rowData.forEach(rd => {
-              try {
-                getsecurity_edit2('role', 'delete_role', rd, http).subscribe((res)=>{
-                  console.log("delete_role", res);
-                  if (res["code"] === 1){
-                    console.log("------>删除结果", res)
-                    this.updategetemployee({value: rd, action: "remove"});
-                  }else{
-                    throw 'error, 删除失败！'
-                  }
-                });
-                localStorage.removeItem(SYSROLE);
-                
-                this.isloding = false
-
-                DelSuccess(publicservice)
-              }catch(err){
-                DelDanger(publicservice)
-              }
-            });
+            try {
+              var data_info;
+              var id_list = [];
+              rowData.forEach(item => {
+                id_list.push(item["role_name"])
+              });
+              var id_str = id_list.join(',');
+              data_info  = '角色名称:' + id_str;
+              getsecurity_edit2('role', 'sys_delete_role', rowData, http).subscribe((result)=>{
+                var res = result["result"]["message"][0];
+                if (res["code"] === 1){
+                  this.RecordOperation( "删除角色",  1, data_info);
+                  this.gridData = [];
+                  this.loading = true;
+                  this.update_agGrid();
+                  this.loading = false;
+                  DelSuccess(publicservice)
+                }else{
+                  this.RecordOperation( "删除角色", 0, data_info);
+                  DelDanger(publicservice)
+                }
+              });
+            }catch(err){
+              throw 'error, 删除失败！'
+            }
+           
           }
         }
       );
@@ -436,13 +293,57 @@ export class RoleComponent implements OnInit {
     this.RecordOperation("导出"+title, 1, "导出excel表格");
   }
 
-   // button 搜索按钮
-   query(){
-    var employeenumber = $("#employeenumber").val();
-    if (employeenumber != ""){
-      console.log("button 搜索按钮", employeenumber, "--");
-      this.RecordOperation("搜索", 1, '搜索角色:' + employeenumber);
+  // button 搜索按钮
+  query(){
+    var role_name = $("#employeenumber").val();
+    if (role_name != ""){
+      console.log("button 搜索按钮", role_name, "--");
+      var columns = {
+        offset: 0, 
+        limit: 20,
+        role_name: role_name
+      }
+      this.gridData = [];
+      this.loading = true;
+      this.http.callRPC('role', 'sys_search_role', columns).subscribe(result=>{
+        var res = result['result']['message'][0];
+        this.loading = false;
+        if(res["code"]===1){
+          var message = res["message"];
+          this.gridData.push(...message)
+          this.tableDatas.rowData = this.gridData;
+          var totalpagenumbers = res['numbers']? res['numbers'][0]['numbers']: '未得到总条数';
+          this.tableDatas.totalPageNumbers = totalpagenumbers;
+          this.agGrid.update_agGrid(this.tableDatas); // 告诉组件刷新！
+          this.RecordOperation("搜索", 1, '角色名称(role_name):' + role_name);
+          if (message.length < 1){
+            this.searchdanger(role_name);
+          }
+        }else{
+          var data_info = res["message"];
+          this.RecordOperation("搜索", 0, '角色名称(role_name):' + String(data_info));
+        }
+      })
+      this.RecordOperation("搜索", 1, '搜索角色:' + role_name);
     }
+  }
+
+  // 刷新
+  refresh_table(){
+    $("#employeenumber").val('')
+    this.refresh = true;
+    this.loading = true;
+    this.gridData = [];
+    this.inttable();
+    this.loading = false;
+    this.refresh = false;
+    // 加载树状menu  初始化
+    this.loadMenu().subscribe((treedata)=>{
+      this.showTreedata_v2(treedata);
+    });
+    // disabled  禁止保存按钮
+    var $save = $("#save");
+    $save.attr("class", "layui-btn layui-btn-disabled");
   }
 
   // agGrid 点击行时，update 树状菜单！
@@ -496,45 +397,31 @@ export class RoleComponent implements OnInit {
   loadMenu(roles?, methods?){
     console.log("这是 系统设置的  角色  界面！" )
     return new Observable((observe)=>{
-      var sysrolemenu = localStorage.getItem(SYSROLEMENU) == null ? [] : JSON.parse(localStorage.getItem(SYSROLEMENU));
-      var mulu_language = localStorage.getItem('mulu_language') == null ? 'zh_CN' : localStorage.getItem('mulu_language');
-      if(sysrolemenu.length == 0 || mulu_language != localStorage.getItem('currentLanguage')){
-        this.publicservice.getMenu().subscribe((data)=>{
-          var roles_ = roles === undefined ? data: roles;
-          var method_ = methods === undefined ? 'get_systemset_menu_all': methods;
-          console.log("这是 系统设置的  角色  界面！", roles_, method_)
-          console.log("这是 系统设置的  角色  界面！=================data", data, )
+      this.publicservice.getMenu().subscribe((data)=>{
+        var roles_ = roles === undefined ? data: roles;
+        var method_ = methods === undefined ? 'get_systemset_menu_all': methods;
+        console.log("这是 系统设置的  角色  界面！", roles_, method_)
+        console.log("这是 系统设置的  角色  界面！=================data", data, )
 
+        const colums = {
+          languageid: this.http.getLanguageID(),
+          roles: data
+        };
+        console.log("---colums--",colums)
+        const table = "menu_item";
+        const method = "get_systemset_menu_all";
+        this.http.callRPC(table, method, colums).subscribe((result)=>{
           
-
-          const colums = {
-            languageid: this.http.getLanguageID(),
-            roles: data
-          };
-          console.log("---colums--",colums)
-          const table = "menu_item";
-          const method = "get_systemset_menu_all";
-          this.http.callRPC(table, method, colums).subscribe((result)=>{
-            
-            const baseData = result['result']['message'][0];
-            console.log("sys_role_menu", baseData)
-            localStorage.setItem(SYSROLEMENU, JSON.stringify(baseData));
-            // 得到特定的树状结构数据
-            this.sysrolemenu_to_tree_v2(baseData).subscribe((treedata)=>{
-              observe.next(treedata)
-            });
-          })
-        });
-      }else{
-        console.log("------menu--role tree：", sysrolemenu);
-        this.sysrolemenu_to_tree_v2(sysrolemenu).subscribe((treedata)=>{
-          observe.next(treedata)
+          const baseData = result['result']['message'][0];
+          console.log("sys_role_menu", baseData)
+          localStorage.setItem(SYSROLEMENU, JSON.stringify(baseData));
+          // 得到特定的树状结构数据
+          this.sysrolemenu_to_tree_v2(baseData).subscribe((treedata)=>{
+            observe.next(treedata)
+          });
         })
-      }
-
+      });
     })
-    
-    // this.RanderTable(data);
   }
 
   // 当点击角色是请求菜单
@@ -558,20 +445,10 @@ export class RoleComponent implements OnInit {
             button_list.push(element)
           }
         });
-        // const allmenu = result['result']['message'][0]["allmenu"];
         const result_allmenu = result['result']['message'][0]["allmenu"];
         const allmenu = JSON.parse(localStorage.getItem(SYSROLEMENU));
-        
         const selectmenu = result['result']['message'][0]["selectmenu"];
         console.log("------------------------result_allmenu",result_allmenu)
-        
-
-        // console.log("sys_role_menu", allmenu)
-        // localStorage.setItem(SYSROLEMENU, JSON.stringify(allmenu));
-        // 得到特定的树状结构数据
-        // this.sysrolemenu_to_tree(allmenu, selectmenu).subscribe((treedata)=>{
-        //   observe.next(treedata)
-        // });
         this.sysrolemenu_to_tree_v2(allmenu, selectmenu).subscribe((res)=>{
           observe.next(res)
         });
@@ -582,17 +459,15 @@ export class RoleComponent implements OnInit {
   }
 
 
-
-
   // 菜单分配树状图
-  showTreedata_v2(res){
+  showTreedata_v2(res, is_reload?){
 
     var http = this.http;
     var publicservice = this.publicservice;
     var success = this.success;
     var danger = this.danger;
 
-    var updatabutton_list = this.updatabutton_list;
+    // var updatabutton_list = this.updatabutton_list;
 
     var that = this
 
@@ -767,27 +642,25 @@ export class RoleComponent implements OnInit {
           if (baseData === 1){
             // publicservice.toastr(SavSuccess);
             success(publicservice);
-            
-
             // 成功后更新 menu_button_list
-            updatabutton_list(publicservice,http);
+            // updatabutton_list(publicservice,http);
             localStorage.removeItem(MULU); // 这个是更新左侧目录栏
-            that.RecordOperation('保存菜单分配', 1,"角色id:"+colums["roleid"] + ',' + "菜单id:"+colums["menuitemid"]);
 
+            that.RecordOperation('保存菜单分配', 1,"角色id:"+colums["roleid"] + ',' + "菜单id:"+colums["menuitemid"]);
             // 加载树状menu  初始化
             that.loadMenu().subscribe((treedata)=>{
               console.log("加载树状menu  初始化>>>>>>>>>>>", treedata)
-              that.showTreedata_v2(treedata);
+              that.showTreedata_v2(treedata, true);
+              
             });
 
 
-            // setTimeout(() => {
-            //   location.reload();
-            // }, 1000);
+
+            
 
           }else{
             // publicservice.toastr(SavDanger);
-            var data = String(result['result']['message'][0])
+            var data = String(result['result']['message'][0]["message"])
             that.RecordOperation('保存菜单分配', 0, "保存失败");
             console.log("保存失败的原因：", result, result['result']['message'][0]);
             danger(publicservice);
@@ -801,8 +674,16 @@ export class RoleComponent implements OnInit {
 
     })
 
-  }
+    if (is_reload){
+      // 提示刷新界面
+      if(confirm("请刷新界面，已更新目录")){
+        location.reload();
+      }else{
 
+      }
+    }
+    
+  }
 
   // 更新button_list！
   updatabutton_list(publicservice, http){
@@ -828,13 +709,10 @@ export class RoleComponent implements OnInit {
       })
 
 
+
     });
     
   }
-
-
-
-  
 
 
   // 根据得到的 sysrolemenu 角色界面的菜单数据得到适用于特定树状结构的数据
@@ -1019,8 +897,6 @@ export class RoleComponent implements OnInit {
       var child_list = [];
       childList.forEach(child => {
         if (child["parentid"] === parent["id"]){
-          // delete child.parentid;
-          // delete parent.parentid;
           child_list.push(child)
         }else if(child["parentid"] === 0 ){
           // 属于菜单，但没有上级目录
@@ -1047,47 +923,37 @@ export class RoleComponent implements OnInit {
   }
 
 
-
-
-
-
-
-
-
   // =================================================agGrid
 
   tableDatas = {
-    action: true,
+    action: false,
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection
-      { field: 'role_name', headerName: '角色名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,},
-      { field: 'role', headerName: '英文名称',  },
-      { field: 'active', headerName: '是否启用', },
-      { field: 'createdby', headerName: '创建人', },
-      { field: 'createdon', headerName: '创建时间', },
-      { field: 'lastupdatedby', headerName: '更新人', },
-      { field: 'lastupdateon', headerName: '更新时间', },
+      { field: 'role_name', headerName: '角色名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true,},
+      { field: 'role', headerName: '角色名称(en)', resizable: true,},
+      // { field: 'active', headerName: '是否启用',resizable: true,},
+      { field: 'active', headerName: '是否启用',resizable: true,cellRendererFramework: TranActiveComponent,},
+      { field: 'createdby', headerName: '创建人', resizable: true,},
+      { field: 'createdon', headerName: '创建时间', resizable: true,},
+      { field: 'lastupdatedby', headerName: '更新人', resizable: true,},
+      { field: 'lastupdateon', headerName: '更新时间', resizable: true,},
       
     ],
     rowData: [ // data
-      { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
-      // { name: 'Ford', loginname: 'Mondeo', role_name: 32000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" },
-      // { name: 'Porsche', loginname: 'Boxter', role_name: 72000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" }
     ]
   };
 
   private gridData = [];
   
-  getemployee(event?){
+  inttable(event?){
     var offset;
     var limit;
-    console.log("event------------------------------------------------", event);
     if (event != undefined){
       offset = event.offset;
       limit = event.limit;
     }else{
       offset = 0;
-      limit = 50;
+      limit = 20;
     }
 
     const table = "role";
@@ -1096,39 +962,30 @@ export class RoleComponent implements OnInit {
     this.http.callRPC(table, method, colums).subscribe((result)=>{
       console.log("sys_role--------------------------", result)
       const baseData = result['result']['message'][0];
-      // 发布组件，编辑角色的组件 和删除所需要的 plv8 函数 delete_role
-      this.publicservice.getcomponent(EditRoleComponent);
-      this.publicservice.getmethod("delete_role"); //  删除角色
-
-      this.isloding = false;
-      // ------
       if (baseData["code"] === 1){
-        localStorage.setItem(SYSROLE, JSON.stringify(baseData));
-        baseData["message"].forEach(element => {
-          element["active"] = element["active"] === 1? '是': '否';
-        });
+        // localStorage.setItem(SYSROLE, JSON.stringify(baseData));
+        
         this.gridData.push(...baseData["message"]);
         this.tableDatas.rowData = this.gridData
         var totalpagenumbers = baseData['numbers']? baseData['numbers'][0]['numbers']: '未得到总条数';
         this.tableDatas.totalPageNumbers = totalpagenumbers;
         this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
-
       }else{
         this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"得到角色失败" + baseData["message"]});
       }
     })
     
   }
-  pagemployee(event?){
+  // 更新table update_agGrid
+  update_agGrid(event?){
     var offset;
     var limit;
-    console.log("event------------------------------------------------", event);
     if (event != undefined){
       offset = event.offset;
       limit = event.limit;
     }else{
       offset = 0;
-      limit = 50;
+      limit = 20;
     }
     const table = "role";
     const method = this.GetRole;
@@ -1136,23 +993,13 @@ export class RoleComponent implements OnInit {
     this.http.callRPC(table, method, colums).subscribe((result)=>{
       console.log("sys_role--------------------------", result)
       const baseData = result['result']['message'][0];
-      // 发布组件，编辑角色的组件 和删除所需要的 plv8 函数 delete_role
-      this.publicservice.getcomponent(EditRoleComponent);
-      this.publicservice.getmethod("delete_role"); //  删除角色
-
-      this.isloding = false;
-      // ------
       if (baseData["code"] === 1){
-        localStorage.setItem(SYSROLE, JSON.stringify(baseData));
-        baseData["message"].forEach(element => {
-          element["active"] = element["active"] === 1? '是': '否';
-        });
-        this.gridData = []
         this.gridData.push(...baseData["message"]);
         this.tableDatas.rowData = this.gridData;
         var totalpagenumbers = baseData['numbers']? baseData['numbers'][0]['numbers']: '未得到总条数';
         this.tableDatas.totalPageNumbers = totalpagenumbers;
-        this.agGrid.init_agGrid(this.tableDatas); // 告诉组件刷新！
+        // this.agGrid.update_agGrid(this.tableDatas); // 告诉组件刷新！
+        this.agGrid.update_agGrid(this.tableDatas); // 告诉组件刷新！
 
       }else{
         this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"得到角色失败" + baseData["message"]});
@@ -1163,21 +1010,19 @@ export class RoleComponent implements OnInit {
 
   // 更新table  update_agGrid
   updategetemployee(event?){
+    // 更新table
+    this.update_agGrid();
     // 加载树状menu  初始化
     this.loadMenu().subscribe((treedata)=>{
       // this.showTreedata(treedata)
       this.showTreedata_v2(treedata);
     });
-
-    this.agGrid.methodFromParent(event, true);
-    // 在更table的同时，也更新 树状结构
-    
   }
 
   // nzpageindexchange 页码改变的回调
   nzpageindexchange(event){
     console.log("页码改变的回调", event);
-    this.getemployee(event);
+    this.inttable(event);
   }
 
 

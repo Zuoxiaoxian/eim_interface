@@ -6,11 +6,9 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 // ===========================
 
-import { ViewCell } from 'ng2-smart-table';
 
 import { NbDialogService } from '@nebular/theme';
 
-import { EditUserEmployeeComponent } from '../../../../../pages-popups/system-set/edit-user-employee/edit-user-employee.component';
 import { HttpserviceService } from '../../../../../services/http/httpservice.service';
 import { Observable } from 'rxjs';
 import { PublicmethodService } from '../../../../../services/publicmethod/publicmethod.service';

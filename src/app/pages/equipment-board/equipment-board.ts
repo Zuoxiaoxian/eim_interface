@@ -192,13 +192,19 @@ export const create_third_chart_line=(rtm3a,isthis)=>{
     return;
   }
   var yearPlanData=[],yearOrderData = [],differenceData = [],visibityData = [],xAxisData = [];
-  for (var i = 0; i < 12; i++) {
-    yearPlanData.push(Math.round(Math.random() * 900) + 100);
-    yearOrderData.push(Math.round(Math.random() * yearPlanData[i]));
-    differenceData.push(yearPlanData[i] - yearOrderData[i]);
-    visibityData.push(yearOrderData[i]);
-    xAxisData.push((i + 1).toString() + "月");
-  }
+  // for (var i = 0; i < 12; i++) {
+  //   yearPlanData.push(Math.round(Math.random() * 900) + 100);//温度
+  //   yearOrderData.push(Math.round(Math.random() * yearPlanData[i]));//湿度
+  //   differenceData.push(yearPlanData[i] - yearOrderData[i]);
+  //   visibityData.push(yearOrderData[i]);
+  //   xAxisData.push((i + 1).toString() + "月");
+  // }
+  
+  // data.tempreal.forEach(element => {
+  //   xAxisData.push(element[1]);//x轴时间
+  //   yearPlanData.push();
+  //   yearOrderData.push();
+  // });
   rtm3a.create_third_chart_line({
     yearPlanData:yearPlanData,
     yearOrderData:yearOrderData,

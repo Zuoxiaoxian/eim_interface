@@ -60,7 +60,8 @@ export const AddRole =  {
 */
 
 export const EmployeeGroup =  {
-    group_name: "^[a-zA-Z0-9_]{1,20}$",       // 数字、字母、_ 
+    group_name: "^[\u4e00-\u9fa5\\s·]{1,20}$",       // 数字、字母、_ 
+    // group_name: "^[a-zA-Z0-9_]{1,20}$",       // 数字、字母、_ 
     group_: "^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]{1,100}$",  // 数字、字母、中文
 
     special_sql: special_sql, // sql注入

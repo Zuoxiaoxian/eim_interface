@@ -27,7 +27,6 @@ import {
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 // Aot requires an export function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -43,6 +42,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { ComponentTModule } from './pages/tongji/components/componentT.module'
 
 import { AgGridModule } from 'ag-grid-angular';
+import { httpInterceptorProviders } from './services/http-interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -82,6 +82,10 @@ import { AgGridModule } from 'ag-grid-angular';
     
   ],
   bootstrap: [AppComponent],
+  providers:[
+    // httpInterceptorProviders 拦截器
+    httpInterceptorProviders
+  ]
 
   // 刷新
   // providers:[

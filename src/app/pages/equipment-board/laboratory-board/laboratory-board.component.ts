@@ -11,7 +11,8 @@ export class LaboratoryBoardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-
+    if(document.getElementById('head_title'))
+        document.getElementById('head_title').innerText = '实验室布局';
     setTimeout(() => {
       // this.initChart();
     }, 1000);

@@ -51,11 +51,13 @@ export class AgTableComponent implements OnInit {
   rowSelection; // 选中行
   frameworkComponents; // 表格渲染组件！
 
+  defaultColDef;
+
   // 分页
   current = 1;  // 当前页
   totalPageNumbers=10;  // 总数据条数
   setPageCount = 10;     // 默认每页10条数据
-  private requestPageCount = 5; // 每次请求的数目
+  private requestPageCount = 2; // 每次请求的数目
 
   
 
@@ -101,23 +103,12 @@ export class AgTableComponent implements OnInit {
     // this.paginationPageSize = 10;
     this.rowSelection = 'multiple';
     this.context = { componentParent: this };
-
-    
-    
-
-    if (this.action){
-      console.log("this.tableDatas.columnDefs======this.tableDatas.columnDefs", this.columnDefs, "index: ",this.columnDefs.indexOf(action));
-      // user-employee
-      var action = { field: 'action', headerName: '操作', cellRendererFramework: AgGridActionComponent, pinned: 'right'};
-      this.columnDefs.forEach(column => {
-        if (column["field"] === "action"){
-          console.log("action===================", this.action);
-          var index = this.columnDefs.indexOf(column);
-          this.columnDefs.splice(index, 1);
-        }
-      });
-      this.columnDefs.push(action);
-    }
+    this.defaultColDef = { // 默认的列设置
+      // flex: 1,
+      editable: false,
+      // sortable: true,
+      // filter: true,
+    };
     this.totalPageNumbers = this.rowData.length
     // this.columnDefs = this.columnDefs;
   };
@@ -252,8 +243,15 @@ export class AgTableComponent implements OnInit {
     if (select_data.length != 0){
       console.log("table_header----", table_header);
       table_data.push(table_header);
-      console.log("导出数据>>>>>>>>", select_data)
-      select_data.forEach(element => {
+      console.log("导出数据>>>>>>>>", select_data);
+      var data = Object.assign([], select_data);
+      data.forEach(element => {
+        if(element["active"] === 1){
+          element["active"] = '是'
+        }else{
+          element["active"] = '否'
+        }
+
         var data_item = [];
         
         if (keys != []){
@@ -271,6 +269,7 @@ export class AgTableComponent implements OnInit {
       });
       console.log("table_data=====", table_data);
       this.export(table_data);
+      this.selectedRows = [];
       
     }else{
       table_data.push(table_header);
@@ -322,17 +321,15 @@ export class AgTableComponent implements OnInit {
 
   // 父组件调用，告诉该组件数值改变了！
   update_agGrid(tableDatas){
-    this.rowData = tableDatas.rowData;
-    console.log("父组件调用，告诉该组件数值改变了！=========",tableDatas)
-    console.log("父组件调用，告诉该组件数值改变了！=========this.rowData",this.rowData)
     // 刷新
-    
-    // this.agGrid.api.setRowData(rowData);
+    this.agGrid.api.refreshView();
+    this.selectedRows = []; // 清除选择的行数据！
+    this.rowData = tableDatas.rowData;
     this.totalPageNumbers = tableDatas.rowData.length;
     this.alltotalPageNumbers = tableDatas.totalPageNumbers; // 数据库中的总条数
-    // this.gridApi.updateRowData()
-    this.gridApi.setRowData(this.rowData);
-    // this.agGrid.api.redrawRows();
+    // this.agGrid.api.setRowData(this.rowData);
+    console.log("------------agGrid-------------", this.agGrid)
+    this.agGrid.api.setRowData(this.rowData);
   }
 
   // 父组件调用！ 填充表格
@@ -342,137 +339,7 @@ export class AgTableComponent implements OnInit {
   }
 
 
-  // ============================== 渲染组件调用的方法 这是ag-grid中的 操作！
-  methodFromParent(rowdata){
-    // {value: name, action: "edit"}
-    var action = rowdata.action;
-    var value = rowdata.value;
-    console.log("edit--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-    switch (action) {
-      case "edit":
-        // this.children_call_for_updata_table(); // 调用父组件，没用到
-        // true 表示编辑、删除成功
-        // var rowNode  = this.gridApi.getRowNode(String(cell.id));
-        // rowNode.setData(cell); // Cannot read property 'setData' of undefined 未能解决
-        this.rowData.forEach(row => {
-          // 设备管理
-          if (row.id === value.id && row.id){
-            var row_index = this.rowData.indexOf(row);
-            value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-            var type;
-            var devicestatus;
-            switch (value["type"]) {
-              case 1:
-                type = "台架设备";
-                break;
-                case 2:
-                  type = "移动资产";
-                  break;
-                case 3:
-                  type = "举升机";
-                break;
-                case 402:
-                  type = "其它设备";
-                break;
-            };
-            switch (value["devicestatus"]) {
-              case 1:
-                devicestatus = "在用";
-                break;
-                case 2:
-                  devicestatus = "封存";
-                  break;
-                case 3:
-                  devicestatus = "停用";
-                break;
-                case 4:
-                  devicestatus = "闲置";
-                break;
-                case 402:
-                  devicestatus = "其它";
-                break;
-            }
-            value.type = type;
-            value.devicestatus = devicestatus;
-            this.rowData[row_index] = value
-          }
-          // 用户管理
-          if (row.employeeid === value.employeeid && row.employeeid){
-            var row_index = this.rowData.indexOf(row);
-            value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-            this.rowData[row_index] = value
-          }
-          // 角色管理 roleid
-          if (row.roleid === value.roleid && row.roleid){
-            var row_index = this.rowData.indexOf(row);
-            value.active = value.active === 1 || value.active === true|| value.active === "是"? "是": "否";
-            this.rowData[row_index] = value
-          }
-
-        });
-    
-        this.totalPageNumbers = this.rowData.length
-        this.gridApi.setRowData(this.rowData)
-        // 调用父组件方法，告诉父组件 编辑、删除成功
-        // this.children_call_for_updata_table(cell);
-        
-        break;
-      case "remove":
-        console.log("remove--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-        this.rowData.forEach(row => {
-          // 用户组管理
-          if (row.id === value.id && row.id){
-            // console.log("remove--------------row》》》》》》》》》》》》》》》》》》》》》》》",row);
-            var row_index = this.rowData.indexOf(row);
-            this.rowData.splice(row_index, 1);
-            var operationdata = "组名称:" + value["group"] + "," + "组名称(en):" + value["group_name"];
-            var option = '删除用户组'; 
-            this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-            this.RecordOperation(option, 1, operationdata);
-          }
-          // 用户管理
-          if (row.employeeid === value.employeeid && row.employeeid){
-            var row_index = this.rowData.indexOf(row);
-            this.rowData.splice(row_index, 1);
-            var operationdata = "姓名:" + value["name"] + "," + "域账号:" + value["loginname"];
-            var option = '删除用户'; 
-            this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-            this.RecordOperation(option, 1, operationdata)
-          }
-          // 角色管理 roleid
-          if (row.roleid === value.roleid && row.roleid){
-            var row_index = this.rowData.indexOf(row);
-            this.rowData.splice(row_index, 1);
-            var operationdata = "姓名:" + value["name"] + "," + "域账号:" + value["loginname"];
-            var option = '删除角色';
-            var operationdata = '角色名称(en):' + value["role"] + ',' + '角色名称:' + value["role_name"];
-            this.alltotalPageNumbers = this.alltotalPageNumbers -1;
-            this.RecordOperation(option, 1, operationdata);
-          }
-        });
-        this.totalPageNumbers = this.rowData.length
-        this.gridApi.setRowData(this.rowData)
-        break;
-      case "add":
-        console.log("--------------》》》》》》》》》》》》》》》》》》》》》》》",action, value);
-        // value.active = value.active === 1?"是":"否";
-        this.rowData = value
-        this.totalPageNumbers = this.rowData.length
-        this.gridApi.setRowData(this.rowData);
-        this.alltotalPageNumbers = this.alltotalPageNumbers +1;
-        break;
-
-    }
- 
-  };
-
-  
-
-
-
   // ============================== 渲染组件调用的方法
-
-
 
   // option_record
   RecordOperation(option, result,infodata){

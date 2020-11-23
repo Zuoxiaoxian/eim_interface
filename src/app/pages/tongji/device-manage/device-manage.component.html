@@ -4,37 +4,77 @@
     <div class="col-md-12">
         <nb-card>
             <nb-card-body>
-                <div class="row" style="margin-bottom: 20px;">
-                    <div class="col-md-3 my-select" style="padding-left: 0px;">
-                        <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
-                    </div>
-                    <div class="col-md-3 my-select">
-                        <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
-                    </div>
-                    <div class="col-md-3 my-select">
-                        <ngx-my-select #asset_number [selectdatas]="assets"></ngx-my-select>
-                    </div>
                 
-                    <div class="col-md-3 my-select">
+
+                <!-- buttons -->
+                <div class="row">
+                    <div class="col-md-10">
                         <div class="row">
-                            
-                            <div class="col-md-4 my-button" *ngFor="let button of buttons2">
-                                <button nbButton size="small" [status]="button.class" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
-                                <!-- <button nbButton status="info" size="small" (click)="query()">搜索</button> -->
-                                <input type="file" class="import" id="import" (change)="onFileChange($event)" multiple="false" >
+                            <!-- input 设备名称输入框 -->
+                            <div class="example-items-rows" style="margin-left: 16px;">
+                                <input nbInput  shape="rectangle"  style="margin-left: 2px;" placeholder="请输入设备名称" status="success" type="text" id="employeenumber">
                             </div>
 
-              
+                            <!-- 科室/功能组 --> 
+                            <div class="example-items-rows button_item " >
+                                <div class="gongneng_keshi">
+                                    <!-- <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group> -->
+                                    <ngx-my-select-tree #groups [placeholder]="groups_placeholder"></ngx-my-select-tree>
+                                </div>
+                            </div>
+                            <!-- eim设备类别下拉框 -->
+                            <div class="example-items-rows ">
+                                <div class="gongneng_keshi">
+                                    <ngx-my-select #eimdevicetpye [selectdatas]="eimdevicetpyedata"></ngx-my-select>
+                                    <!-- <ngx-my-select-tree #eimdevicetpye [placeholder]="eimdevicetpye_placeholder"></ngx-my-select-tree> -->
+                                </div>
+                            </div>
+                            <!-- 搜索 -->
+                            <div class="example-items-rows button_item query" *ngIf="button?.query">
+                                <button nbButton [status]="button?.query.class" size="small" (click)="action(button?.query.permission)"  [disabled]="button?.query.active == 0? true:false"><nb-icon [icon]="button?.query.icon"></nb-icon>{{button?.query.title}}</button>
+                            </div>
+                            
+                            <!-- add、edit、del -->
+                            <div class="example-items-rows button_item add" *ngIf="button?.add" style="margin-left: 16px;">
+                                <button nbButton [status]="button?.add.class" size="small" (click)="action(button?.add.permission)"  [disabled]="button?.add.active == 0? true:false"><nb-icon [icon]="button?.add.icon"></nb-icon>{{button?.add.title}}</button>
+                            </div>
+                            <div class="example-items-rows button_item edit" *ngIf="button?.edit">
+                                <button nbButton [status]="button?.edit.class" size="small" (click)="action(button?.edit.permission)"  [disabled]="button?.edit.active == 0? true:false"><nb-icon [icon]="button?.edit.icon"></nb-icon>{{button?.edit.title}}</button>
+                            </div>
+                            <div class="example-items-rows button_item del" *ngIf="button?.del">
+                                <button nbButton [status]="button?.del.class" size="small" (click)="action(button?.del.permission)"  [disabled]="button?.del.active == 0? true:false"><nb-icon [icon]="button?.del.icon"></nb-icon>{{button?.del.title}}</button>
+                            </div>
+                
+                            
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-1" style="margin-bottom: 12px;" *ngFor="let button of buttons">
-                        <button nbButton [status]="button.class" size="small" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
+
+                    <div class="col-md-2 " style="display: flex;">
+                        <!-- 导入、导出 -->
+                        <div style="flex: auto;">
+                        </div>
+                        <div class=" button_item my_import " *ngIf="button?.import">
+                            <button nbButton [status]="button?.import.class" size="small" (click)="action(button?.import.permission)"  [disabled]="button?.import.active == 0? true:false"><nb-icon [icon]="button?.import.icon"></nb-icon>{{button?.import.title}}</button>
+                            <input type="file" class="import" id="import" (change)="onFileChange($event)" multiple="false" >
+                        </div>
+                        
+                        <div class=" button_item download" *ngIf="button?.download">
+                            <button nbButton [status]="button?.download.class" size="small" (click)="action(button?.download.permission)"  [disabled]="button?.download.active == 0? true:false"><nb-icon [icon]="button?.download.icon"></nb-icon>{{button?.download.title}}</button>
+                        </div>
+                        
+                        <div class="" style="text-align: right;">
+                            <!-- loader-outline -->
+                            <button nbButton [nbSpinner]="refresh" nbSpinnerStatus="success" size="small" (click)="refresh_table()">
+                                <nb-icon icon="sync-outline"></nb-icon>
+                            </button>
+                        </div>
+
                     </div>
+                    
                 </div>
 
-                <div class="row" [nbSpinner]="isloding" nbSpinnerStatus="basic">
+
+                <div class="row" [nbSpinner]="loading" nbSpinnerStatus="basic">
                     <div class="col-md-12">
                         <ngx-ag-table #ag_Grid   (nzpageindexchange)="nzpageindexchange_ag($event)"></ngx-ag-table>
                     </div>

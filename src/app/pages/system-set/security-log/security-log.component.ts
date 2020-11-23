@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
-
-
-import { menu_button_list } from '../../../appconfig';
+declare let $;
 import { PublicmethodService } from '../../../services/publicmethod/publicmethod.service';
-
+import { UserInfoService } from '../../../services/user-info/user-info.service';
 @Component({
   selector: 'ngx-security-log',
   templateUrl: './security-log.component.html',
@@ -13,129 +11,45 @@ import { PublicmethodService } from '../../../services/publicmethod/publicmethod
 export class SecurityLogComponent implements OnInit {
   @ViewChild("agGrid") agGrid: any;
 
-  constructor(private http: HttpserviceService, private publicmethod: PublicmethodService) { 
+  constructor(private http: HttpserviceService, private publicmethod: PublicmethodService, private userinfo: UserInfoService) { 
 
-    this.http.callRPC('sys_security_log', 'get_sys_login_log', {offset: 0, limit: 50}).subscribe((res)=>{
-      console.log("******************************");
-      console.log("**************安全日志****************",res);
-      console.log("******************************");
-      
-      var get_sys_login_log = res['result']['message'][0]
-      console.log("get_sys_login_log", get_sys_login_log);
-      if (get_sys_login_log["code"]===1){
-        this.isloding = false;
-        // 发布组件，编辑用户的组件
-        // this.publicmethod.getcomponent(EditUserEmployeeComponent);
-        this.gridData = []
-        var message = get_sys_login_log['message'];
-        var totalpagenumbers = get_sys_login_log['numbers'][0]['numbers'];
-        this.tableDatas.totalPageNumbers = totalpagenumbers;
-        console.log("***************message***************",message);
-        this.gridData.push(...message)
-        this.tableDatas.rowData = this.gridData;
-        localStorage.setItem("system_log_agGrid", JSON.stringify(this.tableDatas))
-      }
-    })
+    
 
   }
 
 
+  button; // 权限button
+
+  loading = false;  // 加载
+  refresh = false; // 刷新tabel
 
 
-  // 前端要展示的button 主要是：增、删、改
-  buttons;
-
-  // 前端要展示的buttons 主要是：搜索、导入导出
-  buttons2;
-
-
-  // 加载table
-  isloding = false;
-  system_log_agGrid;
 
   ngOnInit(): void {
+    // 得到pathname --在得到button
+    var roleid = this.userinfo.getEmployeeRoleID();
+    this.publicmethod.get_buttons_bypath(roleid).subscribe(result=>{
+      this.button = result;
+      localStorage.setItem("buttons_list", JSON.stringify(result));
+    })
 
+    
+      
+  }
+  
+  ngAfterViewInit(){
     // ====================================agGrid
       // 初始化table
-      // ====================================agGrid
-      this.getbuttons();
-    }
+      this.inttable()
+    // ====================================agGrid 
     
-    ngAfterViewInit(){
-      this.http.callRPC('sys_security_log', 'get_sys_login_log', {offset: 0, limit: 50}).subscribe((res)=>{
-        console.log("**************安全日志****************",res);
-        var get_sys_login_log = res['result']['message'][0]
-        if (get_sys_login_log["code"]===1){
-          this.isloding = false;
-          this.gridData = []
-          var message = get_sys_login_log['message'];
-          var totalpagenumbers = get_sys_login_log['numbers'][0]['numbers'];
-          this.tableDatas.totalPageNumbers = totalpagenumbers;
-          this.gridData.push(...message)
-          this.tableDatas.rowData = this.gridData;
-          this.agGrid.init_agGrid(this.tableDatas);
-        }
-      })
-    }
-
-    
-ngOnDestroy(){
-  localStorage.removeItem("system_log_agGrid");
-}
-
-
-  // 得到buttons----------------------------------------------------------
-  getbuttons(){
-    // 根据menu_item_role得到 该页面对应的 button！
-    var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
-    if (button_list){
-      this.publicmethod.get_current_pathname().subscribe(res=>{
-        console.log("get_current_pathname   ", res);
-        var currentmenuid = res["id"];
-        var buttons = [];
-        // 分离搜索、导入、导出
-        var buttons2 = [];
-        
-        button_list.forEach(button => {
-          if (currentmenuid === button["parentid"]){
-            var method = button["permission"].split(":")[1];
-            if ( method === "query" || method === "import" || method === "download" ){
-              buttons2.push(button)
-            }else{
-              buttons.push(button);
-            }
-            
-          }
-        });
-
-        // 对button进行排序 根据 title(导入、导出), 或者是 permission(menu:import)
-        buttons2.forEach(b=>{
-          switch (b["permission"].split(":")[1]) {
-            case "query":
-              b["order_"] = 0;
-              break;
-            case "import":
-              b["order_"] = 1;
-              break;
-            case "download":
-              b["order_"] = 2;
-              break;
-
-          }
-        })
-
-        // -----排序
-        buttons2.sort(function(item1, item2){
-          return item1["order_"] - item2["order_"]
-        });
-
-        this.buttons = buttons;
-        this.buttons2 = buttons2;
-
-        // console.log("-----------buttons2--------",buttons2)
-      })
-    }
   }
+
+    
+  ngOnDestroy(){
+  }
+
+
   action(actionmethod){
     // console.log("++++++++++++++++++++action(actionmethod)++++++++++++++++++++++++++++", actionmethod);
     var method = actionmethod.split(":")[1];
@@ -155,6 +69,16 @@ ngOnDestroy(){
     this.agGrid.download(title);
   }
 
+  refresh_table(){
+    $("#employeenumber").val('')
+    this.refresh = true;
+    this.loading = true;
+    this.gridData = [];
+    this.inttable();
+    this.refresh = false;
+    this.loading = false;
+  }
+
 
 
 
@@ -166,41 +90,69 @@ ngOnDestroy(){
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
       // { field: 'application', headerName: '应用', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true},
-      { field: 'createdby', headerName: '用户名称',headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, resizable: true, flex: 1},
+      { field: 'createdby', headerName: '域账号',headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, resizable: true, flex: 1},
+      { field: 'name', headerName: '姓名', resizable: true, flex: 1},
       { field: 'source', headerName: '访问IP',  resizable: true, flex: 1},
-      // { field: 'employeeid', headerName: '用户ID', resizable: true, flex: 1},
       { field: 'info', headerName: '信息', resizable: true, flex: 1},
       { field: 'createdon', headerName: '记录时间', resizable: true, flex: 1},
     ],
     rowData: [ // data
-      // { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
     ]
   };
 
   private gridData = [];
-  
-  getetabledata(event?){
+  inttable(event?){
     var offset;
     var limit;
-    console.log("event------------------------------------------------", event);
     if (event != undefined){
       offset = event.offset;
       limit = event.limit;
     }else{
       offset = 0;
-      limit = 50;
+      limit = 20;
     }
-    // this.getsecurity('sys_security_log', 'get_sys_login_log', {offset:event.offset,limit:10});
+    var columns = {
+      offset: offset, 
+      limit: limit,
+    }
+    this.http.callRPC('sys_security_log', 'get_sys_login_log', columns).subscribe((res)=>{
+      var get_sys_login_log = res['result']['message'][0]
+      if (get_sys_login_log["code"]===1){
+        var message = get_sys_login_log['message'];
+        var totalpagenumbers = get_sys_login_log['numbers'][0]['numbers'];
+        this.tableDatas.totalPageNumbers = totalpagenumbers;
+        this.gridData.push(...message)
+        this.tableDatas.rowData = this.gridData;
+        this.agGrid.init_agGrid(this.tableDatas);
+        this.RecordOperation(1, '查看', "安全日志");
+      }else{
+        this.RecordOperation(0, '查看', "安全日志");
+
+      }
+    })
+  }
+  
+  // 更新table
+  update_agGrid(event?){
+    var offset;
+    var limit;
+    if (event != undefined){
+      offset = event.offset;
+      limit = event.limit;
+    }else{
+      offset = 0;
+      limit = 20;
+    }
+    var columns = {
+      offset: offset, 
+      limit: limit,
+    }
     // 得到员工信息！
-    this.http.callRPC('sys_security_log', 'get_sys_login_log', {offset: offset, limit: limit}).subscribe((res)=>{
+    this.http.callRPC('sys_security_log', 'get_sys_login_log', columns).subscribe((res)=>{
       console.log("get_sys_login_log", res)
       var get_sys_login_log = res['result']['message'][0]
       console.log("get_sys_login_log", get_sys_login_log);
       if (get_sys_login_log["code"]===1){
-        this.isloding = false;
-        // 发布组件，编辑用户的组件
-        // this.publicmethod.getcomponent(EditUserEmployeeComponent);
-  
         var message = get_sys_login_log["message"];
         var totalpagenumbers = get_sys_login_log['numbers'][0]['numbers'];
         this.gridData.push(...message)
@@ -216,9 +168,23 @@ ngOnDestroy(){
   // nzpageindexchange 页码改变的回调
   nzpageindexchange(event){
     console.log("页码改变的回调", event);
-    this.getetabledata(event);
+    this.inttable(event);
   }
 
+  // option_record
+  RecordOperation( result,option,infodata){
+    // option:操作类型, result:操作的结果, infodata:附加信息!
+    if(this.userinfo.getLoginName()){
+      var employeeid = this.userinfo.getEmployeeID();
+      var result = result; // 1:成功 0 失败
+      var transactiontype = option; // '新增用户';
+      var info = infodata;
+      var createdby = this.userinfo.getLoginName();
+      this.publicmethod.option_record(employeeid, result,transactiontype,info,createdby);
+    }
+
+  }
+  
 
   // =================================================agGrid
 

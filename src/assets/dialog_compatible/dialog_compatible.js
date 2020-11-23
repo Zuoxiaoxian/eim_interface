@@ -31,12 +31,11 @@ function safeDispatchEvent(target, event) {
  * @return {boolean} whether this el or its parents creates a stacking context
  */
 function createsStackingContext(el) {
+    var invalid = (k, ok) => {
+        return !(s[k] === undefined || s[k] === ok);
+    };
     while (el && el !== document.body) {
         var s = window.getComputedStyle(el);
-        var invalid = (k, ok) => {
-            return !(s[k] === undefined || s[k] === ok);
-        };
-
         if (s.opacity < 1 ||
             invalid('zIndex', 'auto') ||
             invalid('transform', 'none') ||

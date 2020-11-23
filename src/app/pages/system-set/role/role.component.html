@@ -1,36 +1,60 @@
-
-<nb-card>
-    <nb-card-body >
-        <div class="row" style="margin-bottom: 20px; padding: 0 15px;">
-            
-            
-            <div class="example-items-rows" style="margin-top: 5px; ">
-                <label for=""  style="margin-right: 20px;" >账号</label>
-                <input nbInput shape="rectangle" placeholder="Rectangle" status="success" type="text" id="employeenumber">
-            </div>
-            <div class="example-items-rows" style="text-align: right;margin-left: 27px; margin-top: 5px;margin-left: 15px;" *ngFor="let button of buttons2">
-                <button nbButton size="small" [status]="button.class" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
-            </div>
-        </div>
-
-        <div class="row" style="padding: 0 15px;">
-            <div class="example-items-rows" style="margin-bottom: 12px;margin-right: 27px;" *ngFor="let button of buttons">
-                <button nbButton [status]="button.class" size="small" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
-            </div>
-        </div>
-    </nb-card-body>
-</nb-card>
-
-
-
-
 <div class="row">
     <div class="col-md-8">
         <nb-card >
-            <nb-card-header>
+            <nb-card-header style="font-size: small;">
                 角色列表
             </nb-card-header>
-            <nb-card-body [nbSpinner]="isloding" nbSpinnerStatus="basic">
+            <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="basic">
+                <!-- buttons -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="example-items-rows button_item loginname" *ngIf="button?.query">
+                                <!-- <label for="employeenumber" >域账号</label> -->
+                                <input nbInput shape="rectangle" style="margin-left: 2px;" placeholder="角色名称" status="success" type="text" id="employeenumber"  [disabled]="button?.query.active == 0? true:false">
+                            </div>
+                
+                            <div class="example-items-rows button_item query" *ngIf="button?.query">
+                                <button nbButton [status]="button?.query.class" size="small" (click)="action(button?.query.permission)"  [disabled]="button?.query.active == 0? true:false"><nb-icon [icon]="button?.query.icon"></nb-icon>{{button?.query.title}}</button>
+                            </div>
+                            <!-- add、edit、del -->
+                            <div class="example-items-rows button_item add" *ngIf="button?.add">
+                                <button nbButton [status]="button?.add.class" size="small" (click)="action(button?.add.permission)"  [disabled]="button?.add.active == 0? true:false"><nb-icon [icon]="button?.add.icon"></nb-icon>{{button?.add.title}}</button>
+                            </div>
+                            <div class="example-items-rows button_item edit" *ngIf="button?.edit">
+                                <button nbButton [status]="button?.edit.class" size="small" (click)="action(button?.edit.permission)"  [disabled]="button?.edit.active == 0? true:false"><nb-icon [icon]="button?.edit.icon"></nb-icon>{{button?.edit.title}}</button>
+                            </div>
+                            <div class="example-items-rows button_item del" *ngIf="button?.del">
+                                <button nbButton [status]="button?.del.class" size="small" (click)="action(button?.del.permission)"  [disabled]="button?.del.active == 0? true:false"><nb-icon [icon]="button?.del.icon"></nb-icon>{{button?.del.title}}</button>
+                            </div>
+                
+                            
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 " style="display: flex;">
+                        <!-- 导入、导出 -->
+                        <div style="flex: auto;">
+                        </div>
+                        <div class=" button_item my_import " *ngIf="button?.import">
+                            <button nbButton [status]="button?.import.class" size="small" (click)="action(button?.import.permission)"  [disabled]="button?.import.active == 0? true:false"><nb-icon [icon]="button?.import.icon"></nb-icon>{{button?.import.title}}</button>
+                            <!-- <input type="file" class="import" id="import" (change)="onFileChange($event)" multiple="false" > -->
+                        </div>
+                        
+                        <div class=" button_item download" *ngIf="button?.download">
+                            <button nbButton [status]="button?.download.class" size="small" (click)="action(button?.download.permission)"  [disabled]="button?.download.active == 0? true:false"><nb-icon [icon]="button?.download.icon"></nb-icon>{{button?.download.title}}</button>
+                        </div>
+                        
+                        <div class="" style="text-align: right;">
+                            <!-- loader-outline -->
+                            <button nbButton [nbSpinner]="refresh" nbSpinnerStatus="success" size="small" (click)="refresh_table()">
+                                <nb-icon icon="sync-outline"></nb-icon>
+                            </button>
+                        </div>
+
+                    </div>
+                    
+                </div>
 
                 <div class="row">
                     <div class="col-md-12">
@@ -44,12 +68,10 @@
         <nb-card>
             <nb-card-header>
                 <div class="row">
-                    <div class="col-md-2" style="text-align: left;  padding-right: 0px;">菜单分配</div>
+                    <div class="col-md-2" style="text-align: left;  padding-right: 0px;font-size: small;">菜单分配</div>
                     <div class="col-md-6"></div>
                     <div class="col-md-4" style="text-align: right;">
-                        <!-- <button id="save" nbButton status='info' size="small" disabled (click)="saveTree()"><nb-icon icon="checkmark-outline"></nb-icon>保存</button> -->
                         <form class="layui-form" action="" lay-filter="tree">
-                            <!-- <button type="submit" id="save" lay-submit lay-filter="save" nbButton status='info' size="small" disabled><nb-icon icon="checkmark-outline"></nb-icon>保存</button> -->
                             <button type="submit" id="save" class="layui-btn layui-btn-disabled" lay-submit lay-filter="save"  ><nb-icon icon="checkmark-outline"></nb-icon>保存</button>
                         </form>
                           

@@ -156,16 +156,16 @@ export class EquipmentShockComponent implements OnInit {
 
   in(){
     
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature({value:55.33},myChart_5);
-
     let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    equipment_four_road.create_real_temperature({value:55.33},myChart_4);
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
+    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
+
     this.timer1 = setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
+      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
     },3000)
     this.timer2 = setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
+      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
     },3000)
   }
   

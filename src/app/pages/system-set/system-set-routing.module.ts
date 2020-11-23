@@ -12,6 +12,7 @@ import { UserEmployeeComponent } from './user-employee/user-employee.component';
 import { UserEmployeeGroupComponent } from './user-employee-group/user-employee-group.component';
 import { OperationLogComponent } from './operation-log/operation-log.component';
 import { GocronComponent } from './gocron/gocron.component';
+import { NewUserEmployeeComponent } from './new-user-employee/new-user-employee.component';
 
 const routes: Routes = [
   {
@@ -27,10 +28,10 @@ const routes: Routes = [
         path: 'menu',
         component: MenuComponent,
       },
-      {
-        path: 'employee',
-        component: UserEmployeeComponent,
-      },
+      // {
+      //   path: 'employee',
+      //   component: UserEmployeeComponent,
+      // },
       {
         path: 'user',
         component: EmployeeComponent,
@@ -38,6 +39,10 @@ const routes: Routes = [
       {
         path: 'employeegroup',
         component: UserEmployeeGroupComponent,
+      },
+      {
+        path: 'employee',
+        component: NewUserEmployeeComponent,
       },
       {
         path: 'security_log',

@@ -5,7 +5,6 @@ import { FacilityHealthDataCenterRoutingModule } from './facility-health-data-ce
 import { FacilityHealthDataCenterComponent } from './facility-health-data-center.component';
 import { MySelectComponent } from './components/my-select/my-select.component';
 import { MySelectGroupComponent } from './components/my-select-group/my-select-group.component';
-import { MyTableNg2Component } from './components/my-table-ng2/my-table-ng2.component';
 import { DateRangeComponent } from './components/date-range/date-range.component';
 
 
@@ -45,7 +44,7 @@ export const MY_CUSTOM_FORMATS = {
 };
 
 @NgModule({
-  declarations: [FacilityHealthDataCenterComponent, MySelectComponent, MySelectGroupComponent, MyTableNg2Component, DateRangeComponent, AlertGradeForTableComponent, OperationForTableComponent],
+  declarations: [FacilityHealthDataCenterComponent, MySelectComponent, MySelectGroupComponent, DateRangeComponent, AlertGradeForTableComponent, OperationForTableComponent],
   imports: [
     CommonModule,
     FacilityHealthDataCenterRoutingModule,

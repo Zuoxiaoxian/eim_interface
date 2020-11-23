@@ -59,18 +59,21 @@ export class EquipmentMastV3Component implements OnInit {
 
   //信号监控
   signalMonitoring = [
-    {top: '14%',left: '33%',value:1},//最上
-    {top: '81%',left: '3%',value:1},//左1
-    {top: '33%',left: '3%',value:1},//左2
-    {top: '81%',left: '80%',value:1},//右1
-    {top: '33%',left: '80%',value:2},//右2
+    {top: '0%',left: '74%',value:1,src:'camera.png',srcError:'camera.png'},//最上
+    {top: '81%',left: '3%',value:1,src:'leak.png',srcError:'leak_error.png'},//左1
+    {top: '33%',left: '3%',value:1,src:'leak.png',srcError:'leak_error.png'},//左2
+    {top: '81%',left: '80%',value:1,src:'leak.png',srcError:'leak_error.png'},//右1
+    {top: '33%',left: '80%',value:2,src:'leak.png',srcError:'leak_error.png'},//右2
   ]
 
   //AS34-EP2 计划&进度
   data_chart_3 = {
     xData:['A', 'B', 'C', 'D', 'E', 'F'],//x轴数据
     data_1:[502.84, 205.97, 332.79, 281.55, 398.35, 214.02, ],//线条1
+    title_1:'线1',
     data_2:[281.55, 398.35, 214.02, 179.55, 289.57, 356.14, ],//线条2
+    title_2:'线2',
+
   }
   //压力状态 表
   data_chart_2 = {
@@ -80,9 +83,6 @@ export class EquipmentMastV3Component implements OnInit {
   }
 //压力状态 饼
   data_chart_1 = [
-    // {name:'利用率',value:93.5+100+92.8+93.27+93.27+91.67+91.7+91.67+91.67+91.67+100+100+100},
-    // {name:'2019 运行',value:93.5+100+92.8+93.27+93.27+91.67+91.7+91.67+91.67+91.67+100+100+100},
-    // {name:'2019 准备',value:0},
     {name:'利用率',value:85.7},
     {name:'运行',value:71.4},
     {name:'1221',value:11},
@@ -92,6 +92,11 @@ export class EquipmentMastV3Component implements OnInit {
     {name:'5671',value:11},
     {name:'6781',value:6}
   ]
+
+  //两个仪表盘
+  dashboard_two = [
+    {title:'',value:0,unit:''},
+    {title:'',value:0,unit:''}]
 
   //设备介绍
   str = "Masttable动力总成多轴整栋实验在开发早期对<span class = 'font_big'>悬置系统、冷却模块系统</span>的耐久性能进行验证，相较短试"
@@ -133,6 +138,10 @@ export class EquipmentMastV3Component implements OnInit {
     this.timer_1 = setInterval(f=>{
       this.get_runState();
       this.get_pressureState();
+      this.change_powermonitor_value(["水压","温度","湿度"],[parseInt((Math.random()*1000).toString()),parseInt((Math.random()*1000).toString()),parseInt((Math.random()*1000).toString())],'buttom');
+      this.change_powermonitor_value(['right'],[parseInt((Math.random()*1000).toString())],'right');
+      this.change_powermonitor_value(['left'],[parseInt((Math.random()*1000).toString())],'left');
+
     },10000)
     
   }
@@ -156,35 +165,35 @@ export class EquipmentMastV3Component implements OnInit {
         staic.create_category(this.data_chart_3,echarts.init(chart_3));
 
     let data = [{
-      title:'名字1',
+      title:'',
       splitNumber:8,//有几个大刻度
       max:1000,//刻度最大值
-      value:1000,//到达的值
+      value:0,//到达的值
       YS:[
         [0.4, '#119eff'],
         [0.5, '#30da74'],
         [1, '#f3390d']
-    ],//是否显示刻度盘是否显示红色
+    ],
     },{
-      title:'名字1',
+      title:'',
       splitNumber:8,//有几个大刻度
       max:1000,//刻度最大值
-      value:1000,//到达的值
+      value:0,//到达的值
       YS:[
         [0.4, '#119eff'],
         [0.5, '#30da74'],
         [1, '#f3390d']
-    ],//是否显示刻度盘是否显示红色
+    ],
     },{
-      title:'名字1',
+      title:'',
       splitNumber:8,//有几个大刻度
       max:1000,//刻度最大值
-      value:1000,//到达的值
+      value:0,//到达的值
       YS:[
         [0.4, '#119eff'],
         [0.5, '#30da74'],
         [1, '#f3390d']
-    ],//是否显示刻度盘是否显示红色
+    ],
     }]
     let chart_4 = document.getElementById('chart_4');
     if(chart_4)
@@ -192,10 +201,7 @@ export class EquipmentMastV3Component implements OnInit {
 
     let chart_5 = document.getElementById('chart_5');
     if(chart_5)
-      staic.create_gauage_pie_2([
-        {title:'温度',value:30,unit:'℃',dangerous:false}
-        ,{title:'湿度',value:30,unit:'%',dangerous:false}]
-        ,echarts.init(chart_5));
+      staic.create_gauage_pie_2(this.dashboard_two,echarts.init(chart_5));
 
   }
 
@@ -224,6 +230,31 @@ export class EquipmentMastV3Component implements OnInit {
   }
   change_hpu_pressure(pressure) {
     this.now_pressureState.pressure = pressure;
+  }
+
+
+  change_powermonitor_value(title,value,location) {
+    let arr = title.map((m,i) => ({title:m,value:value[i]}));
+    if(location == 'buttom'){
+      let chart_4 = document.getElementById('chart_4');
+      if(chart_4)
+        staic.create_gauge_pie_3(arr.map(m =>(
+          //两个json进行合并
+          JSON.parse((JSON.stringify(m) + JSON.stringify({
+              splitNumber:8,//有几个大刻度
+              max:1000,//刻度最大值
+              YS:[
+                [0.4, '#119eff'],
+                [0.5, '#30da74'],
+                [1, '#f3390d']
+            ],})).replace(/}{/, ','))
+            )),echarts.init(chart_4));
+      return;
+    }
+    this.dashboard_two[location == 'left'?0:1] = {title:title[0],value:value[0],unit:''};
+    let chart_5 = document.getElementById('chart_5');
+    if(chart_5)
+      staic.create_gauage_pie_2(this.dashboard_two,echarts.init(chart_5));
   }
 
 

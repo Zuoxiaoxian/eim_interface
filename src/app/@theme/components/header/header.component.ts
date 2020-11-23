@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../setup/auth/auth.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
-import { localstorage, adminlocalstorage, ssotoken, loginurl, USERINFO, MULU, SYSMENU, SYSMENUEDIT, SSOUSERINFO, SYSROLE, SYSROLEMENU,menu_button_list,employee_action, LOGIN_INFO, ECHARTS_RESIZE } from '../../../appconfig'; 
+import { ssotoken,  loginurl, MULU, SYSMENU, SYSMENUEDIT, SSOUSERINFO, SYSROLE, SYSROLEMENU,menu_button_list,employee_action, LOGIN_INFO, ECHARTS_RESIZE } from '../../../appconfig'; 
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 
 import { HttpHeaders,HttpClient,  } from '@angular/common/http';
@@ -68,7 +68,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     },
   ];
 
-  userMenu = [ { title: '修改密码'}, { title: '注销用户'} ];
+  userMenu = [ { title: '退出登录'} ];
+  // userMenu = [ { title: '修改密码'}, { title: '注销用户'} ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -111,13 +112,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((users: any) => {
         // this.user = users.nick
-        var admintoken = this.localStorageService.get(adminlocalstorage)? this.localStorageService.get(adminlocalstorage): false;
         var token = this.localStorageService.get(ssotoken)? this.localStorageService.get(ssotoken): false;
-        if(admintoken){
-          this.user = {name: admintoken.name, picture: admintoken.picture};
-        }else{
-          // this.user = {name: admintoken.name, picture: admintoken.picture};
-          console.log("登录用户信息- header components")
+        if(token){
           this.user = {name: token.name, picture: token.picture};
         }
       });
@@ -182,14 +178,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.translate.use(langueName);
     // this.themeService.changeTheme(this.themeService.currentTheme);
     if (langueName == 'en-US'){
-      this.userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+      this.userMenu = [ { title: 'Log out' } ];
       console.log("您选择的语言是： 英文！",this.themes);
       
 
     }else{
       console.log("您选择的语言是： 中文！");
       
-      this.userMenu = [ { title: '修改密码'}, { title: '注销用户'} ];
+      this.userMenu = [ { title: '退出登录'} ];
 
     }
     console.log("this.currentTheme  ", this.currentTheme);
@@ -200,15 +196,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // 注销用户、修改密码
   alet_is_logout(title){
-    // 注销
-    if (title == this.userMenu[1]["title"]){
+    // 退出登录
+    if (title == this.userMenu[0]["title"]){
       this.authService.isLoggedIn = false;
       this.RecordLogin()
       localStorage.removeItem(MULU);
       localStorage.removeItem(SYSMENU);
 
       
-      // localStorage.removeItem(adminlocalstorage);
+      // localStorage.removeItem(ssotoken);
 
       // this.router.navigate([loginurl]);
       
@@ -216,15 +212,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       
       // 获取用户名
       var username = this.userinfoservice.getName();
-      // var admintoken = localStorage.getItem(adminlocalstorage);
       var login_info = localStorage.getItem(LOGIN_INFO);
       if (login_info && login_info["username"] === "admin"){
-        console.log("退出，获取用户名, 应该是admin")
+        console.log("退出，获取用户名")
         localStorage.removeItem(MULU);
         localStorage.removeItem(SYSMENU);
-        localStorage.removeItem(adminlocalstorage);
+        localStorage.removeItem(ssotoken);
 
-        localStorage.removeItem(USERINFO);
+        localStorage.removeItem(SSOUSERINFO);
         localStorage.removeItem(SYSROLE);
         localStorage.removeItem(SYSROLEMENU);
         
@@ -235,7 +230,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }else{
         // 这里是SSO登录需要调用 接口注销 token
         var ticket = this.localStorageService.get(ssotoken)? this.localStorageService.get(ssotoken): false;
-        console.log("退出，获取用户名, 应该是ticket");
+        console.log("退出，获取用户名, 应该是ticket",ticket);
         localStorage.removeItem(menu_button_list);
         localStorage.removeItem(employee_action);
         if (ticket){
@@ -262,9 +257,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
         localStorage.removeItem(MULU);
         localStorage.removeItem(SYSMENU);
-        localStorage.removeItem(adminlocalstorage);
+        localStorage.removeItem(ssotoken);
 
-        localStorage.removeItem(USERINFO);
+        localStorage.removeItem(SSOUSERINFO);
         localStorage.removeItem(SYSROLE);
         localStorage.removeItem(SYSROLEMENU);
       }
@@ -272,20 +267,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
       
 
     }
-    // 修改password
-    if (title == this.userMenu[0]["title"]){
-      this.authService.isLoggedIn = true;
-      // 跳转到改变密码的界面
-      // this.router.navigate(['/setup/changepassword'])
-      // this.dialogService.open(ChangepasswordComponent, {context: { title: "修改密码" }});
-    }
+
   }
 
    // 记录登出
    RecordLogin(){
 
     if(this.userinfoservice.getLoginName()){
-      const source = this.userinfoservice.getSourceid();        // 本机IP地址
+      // const source = this.userinfoservice.getSourceid();        // 本机IP地址
+      const source = this.userinfoservice.getClientip();        // 客户端IP地址,
       const employeeid = this.userinfoservice.getEmployeeID();  // employeeid
       // result 1
       // info 登录

@@ -191,7 +191,7 @@ let rtm3a = {
         //订单完成情况螺旋图
         var yearPlanData = data.yearPlanData;
         var yearOrderData = data.yearOrderData;
-        var differenceData = data.differenceData;
+        // var differenceData = data.differenceData;
         var visibityData = data.visibityData;
         var xAxisData = data.xAxisData;
 
@@ -214,10 +214,7 @@ let rtm3a = {
                 formatter: function(params) {
                     return params[0].name + '<br/>' +
                         params[0].seriesName + ' : ' + params[0].value + '<br/>' +
-                        params[1].seriesName + ' : ' + params[1].value + '<br/>' +
-                        '完成率：' +
-                        (params[0].value > 0 ? (params[1].value / params[0].value * 100).toFixed(2) + '%' : '-') +
-                        '<br/>'
+                        params[1].seriesName + ' : ' + params[1].value + '<br/>';
                 },
                 textStyle: {
                     color: '#FFF',
@@ -225,15 +222,6 @@ let rtm3a = {
                 }
             },
             toolbox: { show: false },
-            // legend: {
-            //     top: 'top',
-            //     textStyle: {
-            //         color: '#B7E2FF',
-            //         fontSize: 12,
-            //         fontFamily: '微软雅黑'
-            //     },
-            //     data: ['计划生产', '已接订单']
-            // },
             xAxis: {
                 data: xAxisData,
                 axisLabel: {
@@ -279,7 +267,7 @@ let rtm3a = {
                 width: '90%',
             },
             series: [{
-                    name: '计划生产',
+                    name: '温度',
                     type: 'line',
                     smooth: true,
                     symbol: 'circle',
@@ -289,7 +277,7 @@ let rtm3a = {
                     data: yearPlanData
                 },
                 {
-                    name: '已接订单',
+                    name: '湿度',
                     type: 'line',
                     smooth: true,
                     symbol: 'circle',
@@ -319,14 +307,6 @@ let rtm3a = {
                         }
                     },
                     data: visibityData
-                },
-                {
-                    name: '变化',
-                    type: 'bar',
-                    stack: '1',
-                    barWidth: 1,
-                    color: '#B7E1FF',
-                    data: differenceData
                 }
             ]
         }

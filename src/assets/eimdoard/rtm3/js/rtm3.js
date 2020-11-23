@@ -164,8 +164,8 @@ let rtm3 = {
         var plan_data2 = gauge_data.plan_data2;
         var plan_xAxis = gauge_data.plan_xAxis;
         var color = ['#F35331', '#2499F8', '#3DF098', '#33B734'];
-        plan_chart_1 = echarts.init(document.getElementById('line_chart_1'));
-        plan_chart_2 = echarts.init(document.getElementById('line_chart_2'));
+        let plan_chart_1 = echarts.init(document.getElementById('line_chart_1'));
+        let plan_chart_2 = echarts.init(document.getElementById('line_chart_2'));
         let plan_option = {
             xAxis: {
                 data: plan_xAxis,
@@ -480,7 +480,7 @@ let rtm3 = {
                         var newParamsName = ""; // 最终拼接成的字符串
                         var paramsNameNumber = params.length; // 实际标签的个数
                         var provideNumber = 4; // 每行能显示的字的个数
-                        var rowNumber = Math.ceil(paramsNameNumber / provideNumber); // 换行的话，需要显示几行，向上取整
+                        // var rowNumber = Math.ceil(paramsNameNumber / provideNumber); // 换行的话，需要显示几行，向上取整
                         /**
                          * 判断标签的个数是否大于规定的个数， 如果大于，则进行换行处理 如果不大于，即等于或小于，就返回原标签
                          */

@@ -51,14 +51,18 @@
             }
         }
     }
-    #chart_1,
-    #chart_2,
+    #chart_1 {
+        height: 60%;
+    }
+    #chart_2 {
+        height: 40%;
+    }
     #chart_4,
     #chart_5 {
         height: 50%;
     }
     #chart_3 {
-        height: 70%;
+        height: 79%;
     }
     img {
         width: 100%;
@@ -72,6 +76,7 @@
             height: 50px;
             padding: 13px;
             font-size: 22px;
+            // border-radius: 80px;
         }
     }
     .article {
@@ -98,5 +103,8 @@
     .bo_now {
         border-bottom: 2px solid rgb(0, 76, 119);
         height: 108%;
+    }
+    .leak {
+        background: url('/assets/eimdoard/equipment/images/leak.png') no-repeat;
     }
 }

@@ -49,7 +49,6 @@ export class EditDelTooltipComponent implements OnInit {
   commit(){
     var dialogRef = this.dialogRef;
     var rowData = this.rowData;
-    console.log("-----------------------?????????????", this.title, this.content)
 
     layui.use(['layer','form'], function(){
       console.log("单层----",rowData)
@@ -57,17 +56,11 @@ export class EditDelTooltipComponent implements OnInit {
       var form = layui.form;
       form.render();
       form.on('submit(tooltip)', function(data){
-        
         if (rowData){
-          // layer.alert(rowData, {
-          //   title: '目录'
-          // });
           dialogRef.close(true);
-          
         }else{
           dialogRef.close(false);
         }
-        
         return false;
       });
 

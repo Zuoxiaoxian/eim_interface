@@ -5,7 +5,7 @@ let first_level = {
         var myChart = echarts.init(document.querySelector('.key-index'));
 
         // 配置
-        option = {
+        let option_key_index = {
 
             tooltip: {
                 trigger: 'item',
@@ -76,7 +76,7 @@ let first_level = {
             }]
         };
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_key_index);
 
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {
@@ -123,7 +123,7 @@ let first_level = {
             // 实例化对象
         var myChart = echarts.init(document.querySelector('.chian_map'));
 
-        var option = {
+        var option_chian_map = {
             title: {
                 top: 10,
                 text: 'Geely 设备在线 设备全国分部',
@@ -288,18 +288,18 @@ let first_level = {
         };
 
         // 渲染
-        myChart.setOption(option);
+        myChart.setOption(option_chian_map);
 
         //echarts 设置地图外边框以及多个geo实现缩放拖曳同步
         myChart.on('georoam', function(params) {
-            var option = myChart.getOption(); //获得option对象
+            var option_chian_map_1 = myChart.getOption(); //获得option对象
             if (params.zoom !== null && params.zoom !== undefined) { //捕捉到缩放时
-                option.geo[0].zoom = option.series[2].zoom; //下层geo的缩放等级跟着上层的geo一起改变
-                option.geo[0].center = option.series[2].center; //下层的geo的中心位置随着上层geo一起改变
+                option_chian_map_1.geo[0].zoom = option_chian_map_1.series[2].zoom; //下层geo的缩放等级跟着上层的geo一起改变
+                option_chian_map_1.geo[0].center = option_chian_map_1.series[2].center; //下层的geo的中心位置随着上层geo一起改变
             } else { //捕捉到拖曳时
-                option.geo[0].center = option.series[2].center; //下层的geo的中心位置随着上层geo一起改变
+                option_chian_map_1.geo[0].center = option_chian_map_1.series[2].center; //下层的geo的中心位置随着上层geo一起改变
             }
-            myChart.setOption(option); //设置option
+            myChart.setOption(option_chian_map_1); //设置option
         });
 
         // 点击散点图上的点
@@ -348,7 +348,7 @@ let first_level = {
                 color: '#367bec' // 100% 处的颜色
             }]
         }
-        var option = {
+        var option_device_rate = {
             // backgroundColor:"#000",
             title: {
                 text: value + datas.company,
@@ -406,7 +406,7 @@ let first_level = {
             }]
         };
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_device_rate);
 
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {

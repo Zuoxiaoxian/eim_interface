@@ -3,7 +3,7 @@ let eim_board = {
     // 左侧第一个、bar
     left_bar() {
         var myChart = echarts.init(document.querySelector('.bar .chart'));
-        var option = {
+        var option_l_b = {
             // 颜色
             color: ['#2f89cf'],
             // 图表的提示框
@@ -107,7 +107,7 @@ let eim_board = {
             }]
         }
 
-        myChart.setOption(option);
+        myChart.setOption(option_l_b);
 
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {
@@ -118,7 +118,7 @@ let eim_board = {
     // 左侧第二个、line
     left_line() {
         var myChart = echarts.init(document.querySelector('.line .chart'));
-        option = {
+        let optio_left_line = {
             tooltip: {
                 trigger: 'axis',
                 // 鼠标放到坐标轴上触发，双轴显示
@@ -143,7 +143,7 @@ let eim_board = {
                 left: 0,
                 right: '4%',
                 bottom: '3%',
-                containLabel: true,
+                // containLabel: true,
                 containLabel: true, // 包含刻度线的文字在内
                 show: true, // 显示边框
                 borderColor: '#012f4a', // 边框颜色
@@ -290,7 +290,7 @@ let eim_board = {
         };
 
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(optio_left_line);
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {
             console.log("重置的屏幕大小！")
@@ -303,7 +303,7 @@ let eim_board = {
         var myChart = echarts.init(document.querySelector('.pei .chart'));
 
         // 配置
-        option = {
+        let option_left_pie = {
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -367,7 +367,7 @@ let eim_board = {
             }]
         };
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_left_pie);
 
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {
@@ -380,7 +380,7 @@ let eim_board = {
     right_bar() {
         var myChart = echarts.init(document.querySelector('.bar2 .chart'));
         var myColor = ['#1089E7', "#F57474", "#F88448", "#8878F6"]
-        option = {
+        let option_right_bar = {
 
             tooltip: {
                 trigger: 'axis',
@@ -491,7 +491,7 @@ let eim_board = {
             ]
         };
 
-        myChart.setOption(option);
+        myChart.setOption(option_right_bar);
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {
             console.log("重置的屏幕大小！")
@@ -502,7 +502,7 @@ let eim_board = {
     right_line() {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.line2 .chart'));
-        option = {
+        let option_right_line = {
             tooltip: {
                 trigger: 'axis',
                 // 鼠标放到坐标轴上触发，双轴显示
@@ -527,7 +527,7 @@ let eim_board = {
                 left: 0,
                 right: '4%',
                 bottom: '3%',
-                containLabel: true,
+                // containLabel: true,
                 containLabel: true, // 包含刻度线的文字在内
                 show: true, // 显示边框
                 borderColor: '#012f4a', // 边框颜色
@@ -674,7 +674,7 @@ let eim_board = {
         };
 
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_right_line);
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {
             console.log("重置的屏幕大小！")
@@ -687,7 +687,7 @@ let eim_board = {
         var myChart = echarts.init(document.querySelector('.pei2 .chart'));
 
         // 配置
-        option = {
+        let option_right_pie = {
 
             tooltip: {
                 trigger: 'item',
@@ -726,7 +726,7 @@ let eim_board = {
                 // 连接图形和文字的线
                 labelLine: {
                     // length连接图形的线， length2连接文字的线条！
-                    length: 10,
+                    // length: 10,
                     length: 5
                 },
                 data: [
@@ -742,7 +742,7 @@ let eim_board = {
             }]
         };
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_right_pie);
 
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {
@@ -758,7 +758,7 @@ let eim_board = {
         var mymap = echarts.init(document.querySelector('.map .map-chart'));
         // 配置
 
-        var option = {
+        var option_c_m2 = {
             title: {
                 text: 'iphone销量',
                 subtext: '纯属虚构',
@@ -906,7 +906,7 @@ let eim_board = {
             ]
         };
         // 渲染
-        mymap.setOption(option);
+        mymap.setOption(option_c_m2);
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', f => {
             console.log("重置的屏幕大小！")
@@ -1238,7 +1238,7 @@ let eim_board = {
                 })
             });
         });
-        var option = {
+        var option_center_map = {
 
             layoutCenter: ['60%', '55%'],
             layoutSize: 300,
@@ -1291,7 +1291,7 @@ let eim_board = {
             series: series
         };
         // 渲染
-        myChart.setOption(option);
+        myChart.setOption(option_center_map);
         // 单击
         myChart.on('click', function(params) {
             console.log("Params: ", params)

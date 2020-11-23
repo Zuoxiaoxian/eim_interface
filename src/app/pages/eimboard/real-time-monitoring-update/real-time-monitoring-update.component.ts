@@ -12,7 +12,6 @@ let rtmjs = require('../../../../assets/eimdoard/rtmv2/js/rtmv2');
 import * as screenfull from 'screenfull';
 import { Screenfull } from 'screenfull';
 import {NbDialogService, NbWindowService} from "@nebular/theme";
-import {EditRoleComponent} from "../../../pages-popups/system-set/edit-role/edit-role.component";
 import {HttpserviceService} from "../../../services/http/httpservice.service";
 import {Util} from "leaflet";
 import falseFn = Util.falseFn;

@@ -1,0 +1,111 @@
+<div id="mast-two-level">
+    <div class="row height_70" style="width: 100%;">
+        <div class="col-md-3">
+            <div class="tit_big">
+                <span>健康度</span>
+            </div>
+            <div class="height_40">
+                <div id="chart_1"></div>
+            </div>
+            <div class="tit_big">
+                <span>设备利用率</span>
+            </div>
+            <div class="height_40">
+                <div id="chart_2"></div>
+            </div>
+        </div>
+        <div class="col-md-9 model">
+            <img [src]="img.backsrc">
+            <div class="clock">
+                <span>倒计时</span>
+                <div id="my-clock-1"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row height_30" style="width: 100%;">
+        <div class="col-md-4 ">
+            <div class="bo">
+                <div class="title">实验信息</div>
+                <div class="dis_flex h_10_m_5">
+                    <div class="key">
+                        实验名称：
+                    </div>
+                    <div class="value">
+                        {{testInformation.name}}
+                    </div>
+                </div>
+                <div class="dis_flex h_10_m_5">
+                    <div class="key">
+                        计划时长：
+                    </div>
+                    <div class="value">
+                        {{testInformation.duration}}
+                    </div>
+                </div>
+                <div class="table">
+                    <div class="table_bo">
+                        <table>
+                            <tr class="header">
+                                <td *ngFor="let header of testInformation.headerData" [ngStyle]="{'width':header.s.w}">
+                                    {{header.t}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="table_bo" style="overflow: auto;" [ngStyle]="{'height':get_height()}">
+                        <table>
+                            <tr class="body" *ngFor="let items of testInformation.tableBodyList">
+                                <td *ngFor="let item of items;let i = index" [ngStyle]="{'width':testInformation.headerData[i].s.w}">
+                                    <div *ngIf="i == 1;else fontTemp" style="display:flex">
+                                        <div style="margin-left: 10%;">
+                                            {{item}}%
+                                        </div>
+                                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" [nzStrokeColor]="'#5cb85c'"></nz-progress>
+                                        <!--                                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" nzStatus="{{item<70?'active':'exception'}}"></nz-progress>-->
+                                    </div>
+                                    <ng-template #fontTemp>
+                                        <div class="font_tolong">{{item}}</div>
+                                    </ng-template>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="bo">
+                <div class="title">AS34-EP2 计划&进度</div>
+                <div id="chart_3"></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bo">
+                <div class="dis_flex height_21">
+                    <div *ngFor="let item of runState;let i=index" class="{{ now_timer.status == item.status ?'bo_green  bo_now':''}}" [ngStyle]="{'width':90/runState.length+'%','margin-right':10/runState.length+'%'}">
+                        <div class="height_100 undertone" style="width: 100%;" [ngStyle]="{'margin-right': i == runState.length-1?'0%':'10%','border-radius':now_timer.status == item.status?'0':''}">
+                            <div class="height_20" class="{{now_timer.status == item.status?'bright':'dark'}}" [ngStyle]="{'background': colors[i+1]}"></div>
+                            <div class=" height_80" style="font-size:24px;padding-top: 4px;" [ngStyle]="{'color':now_timer.status == item.status?'yellow':''}">{{item.title}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="undertone height_80 bo_green">
+                    <div class="dis_flex height_30">
+                        <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
+                        <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
+                        <span style="padding-top: 10px;width: 40%;text-align: left;">本次运行时长:</span>
+                        <span style="padding-top: 10px;">当前状态累计时长:</span>
+                    </div>
+                    <div class="dis_flex height_60">
+                        <div id="my-clock-2" style="margin-right: 0px;"></div>
+                        <div id='my-clock-3' style="margin-right: 0px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

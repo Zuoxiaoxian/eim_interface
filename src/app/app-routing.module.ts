@@ -10,6 +10,7 @@ import {
 } from '@nebular/auth';
 
 import { AuthGuard } from './setup/auth/auth.guard';
+import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -60,7 +61,27 @@ export const routes: Routes = [
     ],
   },
   { path: '', redirectTo: 'setup', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  // { path: '**', redirectTo: 'pages' },
+  // 404 界面
+  {
+    path: 'miscellaneous',
+    loadChildren: () => import('./miscellaneous/miscellaneous.module')
+      .then(m => m.MiscellaneousModule),
+  },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  
+  {
+    path: '**',
+    redirectTo: 'miscellaneous',
+    pathMatch: 'full'
+  },
+ 
+
+  
 ];
 
 const config: ExtraOptions = {

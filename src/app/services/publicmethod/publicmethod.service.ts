@@ -1,24 +1,26 @@
 import { Injectable } from '@angular/core';
 
-import { NbToastrService } from '@nebular/theme';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { Data } from '../../appconfig';
 
 import { PlatformLocation } from '@angular/common';
 import { Observable } from 'rxjs';
 import { HttpserviceService } from '../http/httpservice.service';
 import { HttpHeaders } from '@angular/common/http';
-import { loginurl,INFO_API,SYSMENU, adminlocalstorage,ssotoken, menu_button_list} from '../../appconfig';
+import { loginurl,INFO_API,SYSMENU, ssotoken, menu_button_list} from '../../appconfig';
 import {DatePipe} from '@angular/common';  
 
-import { map } from 'rxjs/operators';
 
 // ngx-toastr
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
+// token 过期提示
+import { ExpiredTokenComponent } from '../../pages-popups/token-diallog/expired-token/expired-token.component';
 
 // 订阅
 import { BehaviorSubject } from 'rxjs' 
+import { UserInfoService } from '../user-info/user-info.service';
 
 
 @Injectable({
@@ -27,7 +29,9 @@ import { BehaviorSubject } from 'rxjs'
 export class PublicmethodService {
 
   constructor(private toatrservice: NbToastrService, private location: PlatformLocation, private httpservice: HttpserviceService,
-    private ngxtoastrservice: ToastrService, private datepipe: DatePipe, private router: Router) { }
+    private ngxtoastrservice: ToastrService, private datepipe: DatePipe, private router: Router,
+    private dialogService: NbDialogService,
+    ) { }
 
   /**
    * 弹出提示
@@ -240,95 +244,49 @@ export class PublicmethodService {
   getMenu(){
     // ============= 存入登录日志并得到菜单
     /*
-    * 这个是管理员的路的，应该是根据用户名对应的roleid
+    * 应该是根据用户名对应的roleid
     */
-   var admintoken = JSON.parse(localStorage.getItem(adminlocalstorage))? JSON.parse(localStorage.getItem(adminlocalstorage)): false;
-   var token = JSON.parse(localStorage.getItem(ssotoken))? JSON.parse(localStorage.getItem(ssotoken)): false;
-   if (admintoken){
-     const opts = {
-       headers: new HttpHeaders({
-         // 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem(localstorage))['token'] // tslint:disable-line:object-literal-key-quotes
-         'Authorization': 'Bearer ' + admintoken.token  // tslint:disable-line:object-literal-key-quotes
-       })
-     };
-     console.log("damin  ", admintoken)
-     console.log("damin Token ", admintoken.token)
-     return new Observable((observe)=>{
-       this.httpservice.get(INFO_API, opts)
-       .subscribe(
-         userInfo=>{
-         var roles_list = [];
-         console.log("userInfo  =======================", userInfo)
-         if (userInfo["status"] === 401){
-           this.toastr({position: 'top-right', status: 'warning', conent:"token 过期了！需要重新登录"});
-           this.router.navigate([loginurl])
-           observe.next(roles_list);
-         }
-         else if (userInfo['userInfo']['roles']) {
-           const roles = userInfo['userInfo']["roles"];
-           roles.forEach(role => {
-             roles_list.push(role["roleid"]);
-           });
-           observe.next(roles_list)
-         } else {
-           this.toastr({position: 'top-right', status: 'danger', conent:"当前用户菜单权限不足，请联系管理员添加权限！"});
-           observe.next(roles_list)
-         }
-         
-       },error=>{
-         alert("err")
-        console.warn("userInfo 》》》》》》error",error)
-       }
-       )
- 
-     })
-   }else if (token){
-    console.log("public 得到getmenu-  返回的是用户角色！", token);
+    var token = JSON.parse(localStorage.getItem(ssotoken))? JSON.parse(localStorage.getItem(ssotoken)): false;
+    var opts;
+    if (token){
+      console.log("public 得到getmenu-  返回的是用户角色！", token);
+      opts = {
+        headers: new HttpHeaders({
+          'Authorization': 'Bearer ' + token.token  // tslint:disable-line:object-literal-key-quotes
+        })
+      };
+      return new Observable((observe)=>{
+        this.httpservice.get(INFO_API, opts)
+        .subscribe(
+          userInfo=>{
+          var roles_list = [];
+          console.log("userInfo  =======================", userInfo);
+          if (userInfo["result"]){
+            
+          }else{
+            if (userInfo['userInfo']['roles']) {
+              console.log("*********************\t\t\t",userInfo['userInfo'])
+              const roles = userInfo['userInfo']["roles"];
+              roles.forEach(role => {
+                roles_list.push(role["roleid"]);
+              });
+              observe.next(roles_list)
+            } else {
+              this.toastr({position: 'top-right', status: 'danger', conent:"当前用户菜单权限不足，请联系管理员添加权限！"});
+              observe.next(roles_list)
+            }
 
-    const opts = {
-      headers: new HttpHeaders({
-        // 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem(localstorage))['token'] // tslint:disable-line:object-literal-key-quotes
-        'Authorization': 'Bearer ' + token.token  // tslint:disable-line:object-literal-key-quotes
+          }
+          
+        },error=>{
+          alert("err")
+          console.warn("userInfo 》》》》》》error",error)
+        }
+        )
       })
-    };
-    console.log("token  ", token)
-    console.log("token Token ", token.token)
-    return new Observable((observe)=>{
-      this.httpservice.get(INFO_API, opts)
-      .subscribe(
-        userInfo=>{
-        var roles_list = [];
-        console.log("userInfo  =======================", userInfo)
-        if (userInfo["status"] === 401){
-          this.toastr({position: 'top-right', status: 'warning', conent:"token 过期了！需要重新登录"});
-          // 这里将token过期了，就跳转到登录界面
-          this.router.navigate([loginurl])
-          observe.next(roles_list);
-        }
-        else if (userInfo['userInfo']['roles']) {
-          const roles = userInfo['userInfo']["roles"];
-          roles.forEach(role => {
-            roles_list.push(role["roleid"]);
-          });
-          observe.next(roles_list)
-        } else {
-          this.toastr({position: 'top-right', status: 'danger', conent:"当前用户菜单权限不足，请联系管理员添加权限！"});
-          observe.next(roles_list)
-        }
-        
-      },error=>{
-        alert("err")
-       console.warn("userInfo 》》》》》》error",error)
-      }
-      )
-
-    })
-
-   }else{
-     return new Observable((observe)=>{
-       observe.next(false)
-     })
-   }
+    }else{
+      this.router.navigate([loginurl]);
+    }
   }
 
 
@@ -347,6 +305,8 @@ export class PublicmethodService {
     return [hour, minute, second]
 
   }
+
+  // 
 
   // 得到时间范围，默认 昨天---今天
 
@@ -368,18 +328,13 @@ export class PublicmethodService {
 
   // lauyi需要得到 header，
   getheader(){
-    var admintoken = JSON.parse(localStorage.getItem(adminlocalstorage))? JSON.parse(localStorage.getItem(adminlocalstorage)): false;
     var token = JSON.parse(localStorage.getItem(ssotoken))? JSON.parse(localStorage.getItem(ssotoken)): false;
-    if (admintoken){
+    if (token){
       const opts = {
-        headers: 'Authorization' + ':' + 'Bearer ' + admintoken.token  
+        headers: 'Authorization' + ':' +  'Bearer ' + token.token  // tslint:disable-line:object-literal-key-quotes
       }
       return opts
     }
-    const opts = {
-      headers: 'Authorization' + ':' +  'Bearer ' + token.token  // tslint:disable-line:object-literal-key-quotes
-    }
-    return opts
   }
 
 
@@ -414,7 +369,6 @@ export class PublicmethodService {
             languageid: this.httpservice.getLanguageID(),
             roles: data
           };
-          console.log("---colums--",colums)
           const table = "menu_item";
           const method = "get_menu_by_roles";
           this.httpservice.callRPC(table, method, colums).subscribe((result)=>{
@@ -448,16 +402,66 @@ export class PublicmethodService {
                 button_list.push(element);
               }
             });
-            console.log("按钮=====================", button_list)
             localStorage.setItem(menu_button_list, JSON.stringify(button_list));
             observale.next(button_list);
           })
+        }else{
+          
         }
       });
 
     })
   }
 
+  get_buttons_bypath(roleid){
+    // 得到pathname --在得到button
+    return new Observable((observe)=>{
+      this.get_current_pathname().subscribe(result=>{
+        var link = result["link"];
+        console.warn("pathname: ", result, "link: ", link);
+        // 更具link 得到button
+        var table = "menu_item";
+        var method = "get_button";
+        // var columns = {redirecturl: link}
+        var columns = {redirecturl: link, roleid: roleid}
+        this.httpservice.callRPC(table, method, columns).subscribe(result=>{
+          console.log("get_button: ", result);
+          if(result["result"]["message"][0]["code"] === 1){
+            console.log("--------->", result["result"]["message"][0]["message"])
+            var button = result["result"]["message"][0]["message"];
+            for(var k in button){
+              // this.button[k]["class"] = this.buttons[k]["class"];
+              switch (k) {
+                case 'add':
+                  button[k]["class"] =  "info";
+                  break;
+                case 'del':
+                  button[k]["class"] =  "danger";
+                  break;
+                case 'edit':
+                  button[k]["class"] =  "warning";
+                  break;
+                case 'query':
+                  button[k]["class"] =  "success";
+                  break;
+                case 'import':
+                  button[k]["class"] =  "info";
+                  break;
+                case 'download':
+                  button[k]["class"] =  "primary";
+                  break;
+              
+                default:
+                  button[k]["class"] =  "primary";
+                  break;
+              }
+            }
+            observe.next(button)
+          }
+        })
+      });
+    })
+  }
    
   // -----------------------------------------页面得到 权限buttons
 

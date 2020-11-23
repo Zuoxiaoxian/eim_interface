@@ -220,14 +220,15 @@ xData:[]
 
   in(){
     let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
     let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
-    equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
-    this.timer1= setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
+    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
+
+    this.timer1 = setInterval(f=>{
+      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
     },3000)
     this.timer2 = setInterval(f=>{
-      equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_5);
+      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
     },3000)
     // let arr = [this.chart_1,this.chart_2].forEach((f,i)=>{
     //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:[],index:1});
@@ -277,13 +278,14 @@ xData:[]
 
     if(document.getElementById('real_temperature_1')){
       let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-      equipment_four_road.create_real_temperature({value:55.33},myChart_4);
+      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
+
     }
 
     if(document.getElementById('real_temperature_2')){
 
       let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-      equipment_four_road.create_real_temperature({value:55.33},myChart_5);
+      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
     }
 
     // setInterval(f=>{

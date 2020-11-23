@@ -95,8 +95,8 @@
                 </div>
                 <div id="jk" class="height_90">
                     <img [src]="img.jkSrc">
-                    <div [ngStyle]="{'top':item.top,'left':item.left,background:item.value == 1?'green':'yellow'}" *ngFor="let item of signalMonitoring">
-                        <b>正常</b>
+                    <div *ngFor="let item of signalMonitoring" [ngStyle]="{'top':item.top,'left':item.left}">
+                        <img src="{{'/assets/eimdoard/equipment/images/'+(item.value != 1 ?item.srcError:item.src)}}" />
                     </div>
                 </div>
             </div>

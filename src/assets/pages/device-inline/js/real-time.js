@@ -2,7 +2,7 @@ let real_time = {
     // 实例1 参考 https://gallery.echartsjs.com/editor.html?c=xH1vxib94f
     gauge1(gauge1_data) {
         var myChart = echarts.init(document.querySelector('.gauge1'));
-        option = {
+        let option = {
             // backgroundColor: "#ffffff",
 
             color: ["#37A2DA", "#32C5E9", "#67E0E3"],
@@ -74,7 +74,7 @@ let real_time = {
     // 实例2 参考 https://gallery.echartsjs.com/editor.html?c=xH1vxib94f
     gauge2(gauge2_data) {
         var myChart = echarts.init(document.querySelector('.gauge2'));
-        option = {
+        let option_gauge2 = {
             // backgroundColor: "#ffffff",
             color: ["#37A2DA", "#32C5E9", "#67E0E3"],
             series: [{
@@ -127,13 +127,13 @@ let real_time = {
 
             }]
         };
-        myChart.setOption(option);
+        myChart.setOption(option_gauge2);
         window.addEventListener('resize', f => {
             console.log("重置的屏幕大小！")
             myChart.resize();
         })
-        option.series[0].data[0].value = gauge2_data;
-        myChart.setOption(option);
+        option_gauge2.series[0].data[0].value = gauge2_data;
+        myChart.setOption(option_gauge2);
         // 定时任务
         // timer = setInterval(function(){
         //     option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
@@ -146,7 +146,7 @@ let real_time = {
     line_date(line_date) {
         // 实例化对象
         var myChart = echarts.init(document.querySelector('.echart_line'));
-        option = {
+        let option_line_date = {
             tooltip: {
                 trigger: 'axis',
                 // 鼠标放到坐标轴上触发，双轴显示
@@ -177,7 +177,7 @@ let real_time = {
                 left: 10,
                 right: '4%',
                 bottom: '3%',
-                containLabel: true,
+                // containLabel: true,
                 containLabel: true, // 包含刻度线的文字在内
                 show: true, // 显示边框
                 borderColor: '#012f4a', // 边框颜色
@@ -326,7 +326,7 @@ let real_time = {
         };
 
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_line_date);
         // 让图标跟随屏幕自适应
         window.addEventListener('resize', function() {
             console.log("重置的屏幕大小！")

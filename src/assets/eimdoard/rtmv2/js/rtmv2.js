@@ -58,13 +58,13 @@ let rtmv2 = {
 
             }]
         };
-        myChart.setOption(option);
+        myChart.setOption(option_g1);
         window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         }
-        option.series[0].data[0].value = gauge1_data.value;
-        option.series[0].max = gauge1_data.maxValue;
+        option_g1.series[0].data[0].value = gauge1_data.value;
+        option_g1.series[0].max = gauge1_data.maxValue;
         myChart.setOption(option_g1);
         // 定时任务
         // timer = setInterval(function(){
@@ -136,8 +136,8 @@ let rtmv2 = {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         }
-        option.series[0].data[0].value = gauge2_data.value;
-        option.series[0].max = gauge2_data.maxValue;
+        option_g2.series[0].data[0].value = gauge2_data.value;
+        option_g2.series[0].max = gauge2_data.maxValue;
         myChart.setOption(option_g2);
         // 定时任务
         // timer = setInterval(function(){
@@ -185,7 +185,7 @@ let rtmv2 = {
                 left: '2%',
                 right: '4%',
                 bottom: '3%',
-                containLabel: true,
+                // containLabel: true,
                 containLabel: true, // 包含刻度线的文字在内
                 show: true, // 显示边框
                 borderColor: '#012f4a', // 边框颜色
@@ -281,17 +281,17 @@ let rtmv2 = {
         };
 
         // 配置给实例化对象
-        myChart.setOption(option);
+        myChart.setOption(option_l_d);
         // 让图标跟随屏幕自适应
         window.onresize = function() {
             this.console.log("重置的屏幕大小！")
             myChart.resize();
         }
 
-        option.series[0].name = data.name;
-        option.xAxis[0].data = data.xdata;
-        option.series[0].data = data.ydate;
-        console.log("option.xAxis[0].data.value ", option.series[0].data)
+        option_l_d.series[0].name = data.name;
+        option_l_d.xAxis[0].data = data.xdata;
+        option_l_d.series[0].data = data.ydate;
+        console.log("option.xAxis[0].data.value ", option_l_d.series[0].data)
         myChart.setOption(option_l_d);
         myChart.resize();
     },
