@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpserviceService} from '../../../services/http/httpservice.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {EditDelTooltipComponent} from "../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component";
 
 @Component({
   selector: 'ngx-gocron',
@@ -15,14 +16,18 @@ export class GocronComponent implements OnInit {
   listTaskNodeData = [] ;
   is_show_form = false;  // 控制是否显示form 表单
   formstatus = true;
+  loding = false;
+  attributeRow = {};
   ngOnInit(): void {
-    console.warn('初始化');
-    this.get_cron_token();
-
   }
+  ngAfterViewInit(): void {
+    console.warn('初始化ngAfterViewInit');
+    this.loding = true;
+    this.get_cron_token();
+}
     buttonName = '';
     rowData: any;    // 原始数据
-    attributeRow = {};
+
     formToggletask() {
     // 控制form表单是否显示
     this.is_show_form = !this.is_show_form;
@@ -32,7 +37,6 @@ export class GocronComponent implements OnInit {
       this.formstatus = !this.formstatus;
       this.datatask();
       this.datatasknode();
-
   }
       formToggletasknode() {
     // 控制form表单是否显示
@@ -43,6 +47,17 @@ export class GocronComponent implements OnInit {
       this.formstatus = !this.formstatus;
       this.datatask();
       this.datatasknode();
+
+  }
+
+  updatetask(data): void {
+    // 控制form表单是否显示
+    this.is_show_form = !this.is_show_form;
+    this.buttonName = 'attribute';
+    this.attributeRow = data;
+    this.formstatus = !this.formstatus;
+    this.datatask();
+    this.datatasknode();
 
   }
   dialogisVisible = false;
@@ -97,8 +112,8 @@ export class GocronComponent implements OnInit {
     };
       this.http.post(url, null, hearder).subscribe(res => {
         console.warn('res', res);
-        this.datatask();
-        this.datatasknode();
+          this.datatask();
+          this.datatasknode();
     });
   }
    deletetasknode(id): void {
@@ -119,12 +134,12 @@ export class GocronComponent implements OnInit {
 
   get_cron_token() {
       this.httpservice.get_gocron_token().subscribe(token_res => {
-      const go_cron_token = token_res['data']['token'];
-      console.warn('go_cron_token', go_cron_token);
+      console.warn('go_cron_token', token_res);
+      const go_cron_token = token_res['gocron_token'];
       localStorage.setItem('gocron_token', go_cron_token);
+      this.datatask();
+      this.datatasknode();
     });
-    this.datatask();
-    this.datatasknode();
   }
   results = [];
   datatask(): void {

@@ -9,6 +9,7 @@ import { SeoService } from './@core/utils/seo.service';
 import { mq_config } from './appconfig';
 import { EmqClientService } from './services/emq-client/emq-client.service';
 import { MqttBean } from './services/emq-client/mqtt';
+declare let $;
 
 @Component({
   selector: 'ngx-app',
@@ -22,6 +23,12 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.analytics.trackPageViews();
     this.seoService.trackCanonicalChanges();
+  }
+
+  // 取消angualr版本
+  
+  ngAfterViewInit(){
+    $('ngx-app').attr('ng-version', '');
   }
 
   mqConnect(){

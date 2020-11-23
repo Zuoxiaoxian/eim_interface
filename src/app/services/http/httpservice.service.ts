@@ -71,24 +71,21 @@ export class HttpserviceService {
             ]
           }
         }
+        console.log("result===>", result)
         if (error.status === 401){
-          console.log("result===>", result)
           var isdialg = localStorage.getItem("token_expired")? localStorage.getItem("token_expired"): 'true';
           if (JSON.parse(isdialg)){
           
             this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,} ).onClose.subscribe(
-            // this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,context: { title: '提示', content:   `您的登录已失效，请重新登录`}} ).onClose.subscribe(
               name=>{
                 console.log("token已过期，是否重新登录？",name)
                 if(name){
                   localStorage.removeItem(ssotoken);
                   location.href = loginurl;
-                  // localStorage.setItem("token_expired", 'false');
                   localStorage.removeItem('token_expired');
                   observe.next(result);
                 }else{
                   observe.next(result);
-                  // localStorage.setItem("token_expired", 'true');
                 }        
               });
               localStorage.setItem("token_expired", 'false');
@@ -154,14 +151,14 @@ export class HttpserviceService {
   }
 
   get_gocron_token() {
-    const url = `/api/user/login`;
-    const payload = 'username=admin&password=mabo1234';
+    const url = `http://localhost:5000/api/v1/gocron_token`;
+    console.warn('url', url);
     const hearder = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded',
-        }),
+          headers: new HttpHeaders({
+            'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+          }),
     };
-    return this.http.post(url, payload.toString(), hearder);
+    return this.http.get(url, hearder);
   }
 
 

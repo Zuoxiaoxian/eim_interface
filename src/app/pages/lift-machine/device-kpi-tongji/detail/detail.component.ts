@@ -1,12 +1,11 @@
 import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
-import { ViewCell } from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
-export class DetailComponent implements ViewCell, OnInit {
+export class DetailComponent implements  OnInit {
   @Output() save:EventEmitter<any> = new EventEmitter();
   value;
   @Input() rowData: any;

@@ -1,5 +1,4 @@
 import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
-import { ViewCell } from 'ng2-smart-table';
 
 
 @Component({
@@ -7,7 +6,7 @@ import { ViewCell } from 'ng2-smart-table';
   templateUrl: './task-progress-for-table.component.html',
   styleUrls: ['./task-progress-for-table.component.scss']
 })
-export class TaskProgressForTableComponent implements ViewCell, OnInit {
+export class TaskProgressForTableComponent implements  OnInit {
   @Output() save:EventEmitter<any> = new EventEmitter();
   value;
   @Input() rowData: any;

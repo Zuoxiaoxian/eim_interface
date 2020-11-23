@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 
-import { menu_button_list, device_action } from '../../../appconfig';
 
 import { DeviceManageComponent as Add_Edit_DeviceManageComponent } from '../../../pages-popups/tongji/device-manage/device-manage.component';
 import { EditDelTooltipComponent } from '../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component';
@@ -29,13 +28,14 @@ import { TranActiveComponent } from './tran-active/tran-active.component';
 })
 export class DeviceManageComponent implements OnInit {
 
-  @ViewChild("departmentselect") departmentselect:any;
-  @ViewChild("device_tpye") device_tpye:any;
-  @ViewChild("asset_number") asset_number:any;
+  @ViewChild("groups") groups_func:any;
+  @ViewChild("eimdevicetpye") eimdevicetpye:any;
   @ViewChild("ag_Grid") agGrid:any;
 
   constructor(private publicservice: PublicmethodService, private dialogService: NbDialogService, private http: HttpserviceService, private userinfo: UserInfoService) { 
-
+    // 初始化 科室/功能组(groups)，eim设备类型(eimdevicetpyedata)  dev_get_device_groups
+    
+    this.get_tree_selecetdata();
 
   }
 
@@ -45,20 +45,43 @@ export class DeviceManageComponent implements OnInit {
   // 导出文件名
   filename;
 
-  // 下拉框---部门
+  // 下拉框---科室/功能组
   departments = {
     name: "部门信息",
-    placeholder: '请选择部门',
+    placeholder: '科室/功能组',
     groups:[
       { title: '动力', datas: [{ name: '动力-1' },{ name: '动力-2' },{ name: '动力-3' },{ name: '动力-4' }] },
       { title: '资产', datas: [{ name: '资产-1' },{ name: '资产-2' },{ name: '资产-3' },{ name: '资产-4' }] },
       { title: '新能源', datas: [{ name: '新能源-1' },{ name: '新能源-2' },{ name: '新能源-3' },{ name: '新能源-4' }] },
     ]
   };
+  // 科室/功能组 groups
+  groups = {
+    placeholder: "请选择科室/功能组",
+    datas: [
+      {
+        id: 1,
+        label: "动力总成技术中心"
+      },
+      {
+        id: 2,
+        label: "新能源"
+      },
+      {
+        id: 3,
+        label: "nvh"
+      }
+    ]
+  }
 
-  // 下拉框---设备类型
-  devicetpye = {
-    placeholder: "请选择设备类型",
+  // groups_placeholder eimdevicetpye_placeholder
+  groups_placeholder = "请选择科室/功能组";
+  eimdevicetpye_placeholder = "请选择eim设备类别"
+
+
+  // 下拉框---设备类型 eimdevicetpye
+  eimdevicetpyedata = {
+    placeholder: "请选择eim设备类别",
     name: '设备类型',
     datas: [
       { name: 'GT-2030-123' },
@@ -83,15 +106,6 @@ export class DeviceManageComponent implements OnInit {
     ]
   }
 
-
-
-
-  // 前端要展示的button 主要是：增、删、改
-  buttons;
-
-  // 前端要展示的buttons 主要是：搜索、导入导出
-  buttons2;
-
   loading = false;  // 加载
   refresh = false; // 刷新tabel
 
@@ -113,8 +127,6 @@ export class DeviceManageComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.getbuttons();
-
     // agGrid
     var that = this;
     this.active = { field: 'action', headerName: '操作', cellRendererFramework: ActionComponent, pinned: 'right',resizable: true,flex: 1,
@@ -149,98 +161,13 @@ export class DeviceManageComponent implements OnInit {
   ngAfterViewInit(){
     this.tableDatas.columnDefs.push(
       this.active
-    )
+    );
+    
+
   }
 
   ngOnDestroy(){
     localStorage.removeItem("device_manage_agGrid");
-  }
-
-
-
-
-
-  // 得到buttons----------------------------------------------------------
-  getbuttons(){
-    // 根据menu_item_role得到 该页面对应的 button！
-    var button_list = localStorage.getItem(menu_button_list)? JSON.parse(localStorage.getItem(menu_button_list)): false;
-    if (button_list){
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      console.log(button_list)
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-      this.publicservice.get_current_pathname().subscribe(res=>{
-        console.log("get_current_pathname   ", res);
-        var currentmenuid = res["id"];
-        var buttons = [];
-        // 分离搜索、导入、导出
-        var buttons2 = [];
-        
-        button_list.forEach(button => {
-          if (currentmenuid === button["parentid"]){
-            var method = button["permission"].split(":")[1];
-            if ( method === "query" || method === "import" || method === "download" ){
-              buttons2.push(button)
-            }else{
-              buttons.push(button);
-            }
-          }
-        });
-
-        // 对button进行排序 根据 title(导入、导出), 或者是 permission(menu:import)
-        buttons2.forEach(b=>{
-          switch (b["permission"].split(":")[1]) {
-            case "query":
-              b["order_"] = 0;
-              break;
-            case "import":
-              b["order_"] = 1;
-              break;
-            case "download":
-              b["order_"] = 2;
-              break;
-
-          }
-        })
-
-        // -----排序
-        buttons2.sort(function(item1, item2){
-          return item1["order_"] - item2["order_"]
-        });
-
-        this.buttons = buttons;
-        this.buttons2 = buttons2;
-
-        console.log("-----------buttons2--------",buttons2);
-        console.log("-----------buttons--------",buttons);
-        
-
-        // ====================================================
-        var isactions = {};
-        buttons.forEach(button=>{
-          var mdthod = button["permission"].split(":")[1];
-          switch (mdthod) {
-            case "add":
-              break;
-            case "del":
-              isactions["del"] = true
-              break;
-            case "edit":
-              isactions["edit"] = true
-              break;
-            
-          }
-        })
-
-        if (!isactions["edit"]){
-          isactions["edit"] = false
-        }
-        if (!isactions["del"]){
-          isactions["del"] = false
-        }
-        localStorage.setItem(device_action, JSON.stringify(isactions));
-        console.log("_________________________________-isactions---------________________",isactions)
-      })
-    }
   }
 
 
@@ -412,6 +339,24 @@ export class DeviceManageComponent implements OnInit {
     this.refresh = false;
   }
 
+  // 得到下拉框的数据
+  get_tree_selecetdata(){
+    var columns = {
+      employeeid:this.userinfo.getEmployeeID(),
+    }
+    this.http.callRPC("deveice","dev_get_device_groups",columns).subscribe(result=>{
+      var res = result["result"]["message"][0]
+      console.log("得到下拉框的数据---------------->", res)
+      if (res["code"] === 1){
+        var groups = res["message"][0]["groups"];
+       
+        this.groups_func.init_select_tree(groups);
+        // var eimdevicetpyedata = res["message"][0]["type"];
+        // this.eimdevicetpye.init_select_tree(eimdevicetpyedata);
+      }
+    })
+  }
+
 
   // 导入文件
   importfile(){
@@ -422,10 +367,10 @@ export class DeviceManageComponent implements OnInit {
 
   // 搜索按钮
   query(){
-    var departmentselect_data = this.departmentselect.getselect();
-    var device_tpye_data = this.device_tpye.getselect();
-    var asset_number_data = this.asset_number.getselect();
-    console.log("<------------搜索----------->", departmentselect_data, device_tpye_data,asset_number_data)
+    var devicename = $("#employeenumber").val();// 设备名称
+    var groups = this.groups_func.getselect();// 科室/功能组
+    var eimdevicetpye = this.eimdevicetpye.getselect(); // eim设备类型
+    console.log("<------------搜索----------->", devicename, groups, eimdevicetpye)
     this.RecordOperation("搜索(eim台账)", 1, '');
   }
 
@@ -960,6 +905,14 @@ export class DeviceManageComponent implements OnInit {
     totalPageNumbers: 0, // 总页数
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
       { field: 'devicename', headerName: '设备名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true, pinned: 'left'},
+      { field: 'deviceno', headerName: 'EIM设备编号',  resizable: true, minWidth: 10},
+      { field: 'type', headerName: '设备类型', resizable: true},
+      { field: 'deviceid', headerName: '设备编号', resizable: true, minWidth: 10}, // 自定义设备编号！
+      { field: 'department', headerName: '使用部门', resizable: true, minWidth: 10},
+      { field: 'groups', headerName: '科室', resizable: true, minWidth: 10},
+      { field: 'belonged', headerName: '归属人', resizable: true, minWidth: 10},
+      { field: 'active', headerName: '是否启用', resizable: true, cellRendererFramework: TranActiveComponent,},
+      { field: 'assetno', headerName: '资产编号', resizable: true, minWidth: 10},
       { field: 'devicestatus', headerName: '资产状态', resizable: true,minWidth: 50,pinned: 'left',
         cellStyle: function(params){
           var value = params.value;
@@ -999,32 +952,15 @@ export class DeviceManageComponent implements OnInit {
         }
       
       },
-      { field: 'deviceno', headerName: 'EIM设备编号',  resizable: true, minWidth: 10},
-      { field: 'type', headerName: '设备类型', resizable: true},
-      // { field: 'active', headerName: '是否启用', resizable: true},TranActiveComponent
-      { field: 'active', headerName: '是否启用', resizable: true, cellRendererFramework: TranActiveComponent,},
-      { field: 'assetno', headerName: '资产编号', resizable: true, minWidth: 10},
-      
       { field: 'factoryno', headerName: '出厂编号', resizable: true, minWidth: 10},
-      { field: 'deviceid', headerName: '设备编号', resizable: true, minWidth: 10}, // 自定义设备编号！
       { field: 'purchaseon', headerName: '购置日期', resizable: true, minWidth: 10},
       { field: 'supplier', headerName: '供应商', resizable: true, flex: 1},
       { field: 'location', headerName: '存放地点', resizable: true, minWidth: 10},
-      { field: 'department', headerName: '使用部门', resizable: true, minWidth: 10},
-      { field: 'groups', headerName: '科室', resizable: true, minWidth: 10},
-      { field: 'belonged', headerName: '归属人', resizable: true, minWidth: 10},
-
       // =================
-
       { field: 'createdby', headerName: '创建人', resizable: true},
       { field: 'createdon', headerName: '创建时间', resizable: true},
-
-      // { field: 'options', headerName: '操作', resizable: true, flex: 1},
     ],
     rowData: [ // data
-      // { name: 'Toyota', loginname: 'Celica', role_name: 35000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020"},
-      // { name: 'Ford', loginname: 'Mondeo', role_name: 32000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" },
-      // { name: 'Porsche', loginname: 'Boxter', role_name: 72000, groups_name: 'add', active: 1, employeeno: "123", email:"123@qq.com", phoneno: "17344996821",pictureurl: null,department: "ZJX", lastsignondate:"2020" }
     ]
   };
 
@@ -1044,6 +980,9 @@ export class DeviceManageComponent implements OnInit {
     var columns = {
       offset: offset, 
       limit: limit,
+      employeeid: this.userinfo.getEmployeeID(),
+      eimdevicetype: [], // 设备类型，可选
+      grops: []          // 科室/功能组，可选
     }
     this.http.callRPC('device', 'dev_get_device_limit', columns).subscribe((result)=>{
       var tabledata = result['result']['message'][0]

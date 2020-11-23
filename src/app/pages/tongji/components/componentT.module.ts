@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 
 import { MySelectComponent } from '../components/my-select/my-select.component';
 import { MySelectGroupComponent } from '../components/my-select-group/my-select-group.component';
-import { MyTableNg2Component } from '../components/my-table-ng2/my-table-ng2.component';
 import { FormsModule } from '@angular/forms';
 import { NbIconModule, NbInputModule, NbSelectModule } from '@nebular/theme';
 
@@ -15,9 +14,10 @@ import { AgGridActionComponent } from './ag-table/ag-grid-action/ag-grid-action.
 
 import { AgGridModule } from 'ag-grid-angular';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { MySelectTreeComponent } from './my-select-tree/my-select-tree.component';
 @NgModule({
   declarations: [
-    MySelectComponent, MySelectGroupComponent,MyTableNg2Component, AgTableComponent, AgGridActionComponent,
+    MySelectComponent, MySelectGroupComponent, AgTableComponent, AgGridActionComponent, MySelectTreeComponent,
   ],
   imports: [
     CommonModule,
@@ -30,7 +30,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     NzPaginationModule,
   ],
   exports: [
-    MySelectComponent, MySelectGroupComponent,MyTableNg2Component, AgTableComponent,
+    MySelectComponent, MySelectGroupComponent, AgTableComponent,MySelectTreeComponent
   ]
 })
 export class ComponentTModule { }

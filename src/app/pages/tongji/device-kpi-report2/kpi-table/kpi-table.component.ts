@@ -105,7 +105,7 @@ export class KpiTableComponent implements OnInit {
       
       { field: 'avgtime', headerName: '平均运行时长(h)', resizable: true, minWidth: 10},
       { field: 'ratetime', headerName: '开动率(%)', resizable: true, minWidth: 10}, // 自定义设备编号！
-      { field: 'belonged', headerName: '实时安灯状态', resizable: true, minWidth: 10},
+      { field: 'andenstatus', headerName: '实时安灯状态', resizable: true, minWidth: 10},
       // 这个是跳转到详情kpi的 https://www.ag-grid.com/javascript-grid-cell-rendering-components/
       // { field: 'option', headerName: '详情', resizable: true, minWidth: 10, cellRenderer: 'optionCellRenderer'},
       {

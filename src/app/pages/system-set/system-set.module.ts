@@ -11,7 +11,6 @@ import { MenuComponent } from './menu/menu.component';
 
 import {Ng2SmartTableModule} from '@mykeels/ng2-smart-table';
 import { EmployeeComponent } from './employee/employee.component';
-import { MyTableNg2Component } from './components/my-table-ng2/my-table-ng2.component';
 import { SecurityLogComponent } from './security-log/security-log.component';
 import { UserEmployeeComponent } from './user-employee/user-employee.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,7 +31,7 @@ import { NewUserEmployeeComponent } from './new-user-employee/new-user-employee.
 import { ActionComponent as NewActionComponent } from './new-user-employee/action/action.component';
 import { TranActiveComponent } from './new-user-employee/tran-active/tran-active.component';
 @NgModule({
-  declarations: [SystemSetComponent, RoleComponent, MenuComponent, EmployeeComponent, MyTableNg2Component, SecurityLogComponent, UserEmployeeComponent, 
+  declarations: [SystemSetComponent, RoleComponent, MenuComponent, EmployeeComponent,  SecurityLogComponent, UserEmployeeComponent, 
     UserEmployeeGroupComponent, LayuiTableComponent, AgTableComponent,  OperationLogComponent, GocronComponent, GocronFormComponent, GocronFormNodeComponent, ActionComponent, NewUserEmployeeComponent, NewActionComponent, TranActiveComponent, ],
   imports: [
     CommonModule,

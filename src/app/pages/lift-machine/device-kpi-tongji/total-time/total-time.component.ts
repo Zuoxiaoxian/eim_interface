@@ -1,12 +1,11 @@
 import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
-import { ViewCell } from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-total-time',
   templateUrl: './total-time.component.html',
   styleUrls: ['./total-time.component.scss']
 })
-export class TotalTimeComponent implements ViewCell, OnInit {
+export class TotalTimeComponent implements  OnInit {
   @Output() save:EventEmitter<any> = new EventEmitter();
   value;
   @Input() rowData: any;

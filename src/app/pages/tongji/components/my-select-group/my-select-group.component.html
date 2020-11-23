@@ -1,8 +1,8 @@
 <div class="my-select">
     <span>{{ selectdatas.name }}</span>
-    <nb-select size="small" status="success" style="width: 60%;" [placeholder]="selectdatas.placeholder" [(ngModel)]="selectdata">
+    <nb-select  style="width: 100%;"  size="small" status="success"  [placeholder]="selectdatas.placeholder" [(ngModel)]="selectdata">
         <nb-option-group [title]="group.title" *ngFor="let group of selectdatas.groups">
             <nb-option [value]="item.name" *ngFor="let item of group.datas">{{item.name}}</nb-option>
-            </nb-option-group>
+        </nb-option-group>
     </nb-select>
 </div>

@@ -4,44 +4,35 @@
     <div class="col-md-12">
         <nb-card>
             <nb-card-body>
-                <div class="row" style="margin-bottom: 20px;">
-                    <div class="col-md-3 my-select" style="padding-left: 0px;">
-                        <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
-                    </div>
-                    <div class="col-md-3 my-select">
-                        <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
-                    </div>
-                    <div class="col-md-3 my-select">
-                        <ngx-my-select #asset_number [selectdatas]="assets"></ngx-my-select>
-                    </div>
                 
-                    <div class="col-md-3 my-select">
-                        <div class="row">
-                            
-                            <!-- <div class="col-md-4 my-button" *ngFor="let button of buttons2">
-                                <button nbButton size="small" [status]="button.class" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
-                                <input type="file" class="import" id="import" (change)="onFileChange($event)" multiple="false" >
-                            </div> -->
-                            <div class="example-items-rows button_item query" *ngIf="button?.query">
-                                <button nbButton [status]="button?.query.class" size="small" (click)="action(button?.query.permission)"  [disabled]="button?.query.active == 0? true:false"><nb-icon [icon]="button?.query.icon"></nb-icon>{{button?.query.title}}</button>
-                            </div>
-
-              
-                        </div>
-                    </div>
-                </div>
-                <!-- <div class="row">
-                    <div class="col-md-1" style="margin-bottom: 12px;" *ngFor="let button of buttons">
-                        <button nbButton [status]="button.class" size="small" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
-                    </div>
-                </div> -->
 
                 <!-- buttons -->
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                         <div class="row">
-                            
-                
+                            <!-- input 设备名称输入框 -->
+                            <div class="example-items-rows" style="margin-left: 16px;">
+                                <input nbInput  shape="rectangle"  style="margin-left: 2px;" placeholder="请输入设备名称" status="success" type="text" id="employeenumber">
+                            </div>
+
+                            <!-- 科室/功能组 --> 
+                            <div class="example-items-rows button_item " >
+                                <div class="gongneng_keshi">
+                                    <!-- <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group> -->
+                                    <ngx-my-select-tree #groups [placeholder]="groups_placeholder"></ngx-my-select-tree>
+                                </div>
+                            </div>
+                            <!-- eim设备类别下拉框 -->
+                            <div class="example-items-rows ">
+                                <div class="gongneng_keshi">
+                                    <ngx-my-select #eimdevicetpye [selectdatas]="eimdevicetpyedata"></ngx-my-select>
+                                    <!-- <ngx-my-select-tree #eimdevicetpye [placeholder]="eimdevicetpye_placeholder"></ngx-my-select-tree> -->
+                                </div>
+                            </div>
+                            <!-- 搜索 -->
+                            <div class="example-items-rows button_item query" *ngIf="button?.query">
+                                <button nbButton [status]="button?.query.class" size="small" (click)="action(button?.query.permission)"  [disabled]="button?.query.active == 0? true:false"><nb-icon [icon]="button?.query.icon"></nb-icon>{{button?.query.title}}</button>
+                            </div>
                             
                             <!-- add、edit、del -->
                             <div class="example-items-rows button_item add" *ngIf="button?.add" style="margin-left: 16px;">
@@ -58,7 +49,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4 " style="display: flex;">
+                    <div class="col-md-2 " style="display: flex;">
                         <!-- 导入、导出 -->
                         <div style="flex: auto;">
                         </div>

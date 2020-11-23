@@ -1,5 +1,4 @@
 import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
-import { ViewCell } from 'ng2-smart-table';
 
 
 @Component({
@@ -7,7 +6,7 @@ import { ViewCell } from 'ng2-smart-table';
   templateUrl: './operation-for-table.component.html',
   styleUrls: ['./operation-for-table.component.scss']
 })
-export class OperationForTableComponent implements ViewCell, OnInit {
+export class OperationForTableComponent implements  OnInit {
   @Output() save:EventEmitter<any> = new EventEmitter();
   value;
   @Input() rowData: any;

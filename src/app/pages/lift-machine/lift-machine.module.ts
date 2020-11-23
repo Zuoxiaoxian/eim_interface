@@ -5,7 +5,6 @@ import { LiftMachineRoutingModule } from './lift-machine-routing.module';
 import { LiftMachineComponent } from './lift-machine.component';
 import { StatusMonitorComponent } from './status-monitor/status-monitor.component';
 import { MySelectComponent } from './components/my-select/my-select.component';
-import { MyTableNg2Component } from './components/my-table-ng2/my-table-ng2.component';
 import { MySelectGroupComponent } from './components/my-select-group/my-select-group.component';
 import { NbSelectModule, NbCardModule, NbButtonModule } from '@nebular/theme';
 import { FormsModule } from '@angular/forms';
@@ -47,7 +46,7 @@ export const MY_CUSTOM_FORMATS = {
 };
 
 @NgModule({
-  declarations: [LiftMachineComponent, StatusMonitorComponent, MySelectComponent, MyTableNg2Component, MySelectGroupComponent, DateRangeComponent, DeviceKpiTongjiComponent, TotalTimeComponent, StatusComponent, DetailComponent],
+  declarations: [LiftMachineComponent, StatusMonitorComponent, MySelectComponent,  MySelectGroupComponent, DateRangeComponent, DeviceKpiTongjiComponent, TotalTimeComponent, StatusComponent, DetailComponent],
   imports: [
     CommonModule,
     LiftMachineRoutingModule,

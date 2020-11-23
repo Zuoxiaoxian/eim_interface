@@ -7,7 +7,7 @@ import { AddEmployee } from '../../../pages-popups/system-set/form_verification'
 
 declare let $;
 declare let layui;
-
+ 
 import * as XLSX from 'xlsx';
 import { TranActiveComponent } from './tran-active/tran-active.component';
 import { NbDialogService } from '@nebular/theme';

@@ -1,12 +1,11 @@
 import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
-import { ViewCell } from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-status',
   templateUrl: './status.component.html',
   styleUrls: ['./status.component.scss']
 })
-export class StatusComponent implements ViewCell, OnInit {
+export class StatusComponent implements  OnInit {
   @Output() save:EventEmitter<any> = new EventEmitter();
   value;
   icon_class; 

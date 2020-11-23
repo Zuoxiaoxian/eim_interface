@@ -1,5 +1,4 @@
 import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
-import { ViewCell } from 'ng2-smart-table';
 
 
 @Component({
@@ -7,7 +6,7 @@ import { ViewCell } from 'ng2-smart-table';
   templateUrl: './alert-grade-for-table.component.html',
   styleUrls: ['./alert-grade-for-table.component.scss']
 })
-export class AlertGradeForTableComponent implements ViewCell, OnInit {
+export class AlertGradeForTableComponent implements  OnInit {
   @Output() save:EventEmitter<any> = new EventEmitter();
   value;
   @Input() rowData: any;
