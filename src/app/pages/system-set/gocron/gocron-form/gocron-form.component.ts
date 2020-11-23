@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from 
 import {NbDialogService} from '@nebular/theme';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { HttpserviceService } from '../../../../services/http/httpservice.service';
+import {EditUserEmployeeGroupComponent} from '../../../../pages-popups/system-set/edit-user-employee-group/edit-user-employee-group.component';
 import {EditDelTooltipComponent} from "../../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component";
 
 
@@ -126,8 +127,24 @@ export class GocronFormComponent implements OnInit {
     };
     this.http.post(url, body.toString(), hearder).subscribe(res => {
       console.warn('res', res);
+       if (res['message'] === '保存成功') {
+              console.warn('添加成功', res);
+       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `添加成功！`}} ).onClose.subscribe(
+         name => {
+              console.warn( 'name', name);
+        },
+      );
       this.back();
-    });
+    } else {
+             console.warn('添加失败', res);
+ this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `添加失败！` + res['message'] }} ).onClose.subscribe(
+         name => {
+          console.warn( 'name', name);
+        },
+      );
+      }
+    },
+       );
   }
 
   update_task() {

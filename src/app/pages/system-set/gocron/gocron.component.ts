@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpserviceService} from '../../../services/http/httpservice.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EditDelTooltipComponent} from "../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component";
+import {NbDialogService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-gocron',
@@ -10,7 +11,9 @@ import {EditDelTooltipComponent} from "../../../pages-popups/prompt-diallog/edit
 })
 export class GocronComponent implements OnInit {
 
-  constructor( private httpservice: HttpserviceService, private http: HttpClient) { }
+  constructor( private httpservice: HttpserviceService,
+                private http: HttpClient,
+                private dialogService: NbDialogService) { }
   nzTabPosition = 'task'; // 默认进入任务定时
   listTaskData = [] ;
   listTaskNodeData = [] ;
@@ -81,8 +84,23 @@ export class GocronComponent implements OnInit {
     };
       this.http.post(url, null, hearder).subscribe(res => {
         console.warn('res', res);
+        if (res['message'] ===  '操作成功') {
+              console.warn('禁用成功', res);
+        this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `禁用成功！`}} ).onClose.subscribe(
+         name => {
+              console.warn( 'name', name);
+        },
+      );
         this.datatask();
         this.datatasknode();
+     } else {
+             console.warn('禁用失败', res);
+       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `禁用失败！`}} ).onClose.subscribe(
+         name => {
+          console.warn( 'name', name);
+        },
+      );
+           }
     });
   }
 
@@ -95,9 +113,25 @@ export class GocronComponent implements OnInit {
       }),
     };
       this.http.post(url, null, hearder).subscribe(res => {
-        console.warn('res', res);
+        console.warn('res启用', res);
+        if (res['message'] ===  '操作成功') {
+              console.warn('启用成功', res);
+        this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `启用成功！`}} ).onClose.subscribe(
+         name => {
+              console.warn( 'name', name);
+        },
+      );
         this.datatask();
         this.datatasknode();
+     } else {
+             console.warn('启用失败', res);
+       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `启用失败！`}} ).onClose.subscribe(
+         name => {
+          console.warn( 'name', name);
+        },
+      );
+           }
+
     });
   }
 
@@ -111,9 +145,24 @@ export class GocronComponent implements OnInit {
       }),
     };
       this.http.post(url, null, hearder).subscribe(res => {
-        console.warn('res', res);
+        console.warn('删除res', res);
+        if (res['message'] ===  '操作成功') {
+              console.warn('删除任务成功', res);
+        this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `删除任务成功！`}} ).onClose.subscribe(
+         name => {
+              console.warn( 'name', name);
+        },
+      );
           this.datatask();
           this.datatasknode();
+     } else {
+             console.warn('删除任务失败', res);
+       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `删除任务失败！`}} ).onClose.subscribe(
+         name => {
+          console.warn( 'name', name);
+        },
+      );
+           }
     });
   }
    deletetasknode(id): void {
@@ -127,8 +176,23 @@ export class GocronComponent implements OnInit {
     };
     this.http.post(url, null, hearder).subscribe(res => {
         console.warn('res', res);
+        if (res['message'] ===  '操作成功') {
+              console.warn('删除任务节点成功', res);
+        this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `删除任务节点成功！`}} ).onClose.subscribe(
+         name => {
+              console.warn( 'name', name);
+        },
+      );
         this.datatask();
         this.datatasknode();
+     } else {
+             console.warn('删除任务节点失败', res);
+       this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `删除任务节点失败！` + res['message']}} ).onClose.subscribe(
+         name => {
+          console.warn( 'name', name);
+        },
+      );
+           }
     });
   }
 

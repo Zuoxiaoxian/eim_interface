@@ -151,7 +151,7 @@ export class HttpserviceService {
   }
 
   get_gocron_token() {
-    const url = `http://localhost:5000/api/v1/gocron_token`;
+    const url = `/api/v1/gocron_token`;
     console.warn('url', url);
     const hearder = {
           headers: new HttpHeaders({
