@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { afterloginurl } from '../../appconfig';
 
 @Component({
   selector: 'ngx-error-page',
@@ -7,12 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ErrorPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
   goToHome() {
     // this.menuService.navigateHome();
+    this.router.navigate([afterloginurl])
   }
 }
