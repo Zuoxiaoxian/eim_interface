@@ -392,7 +392,7 @@ export class DeviceManageComponent implements OnInit {
         limit: 20,
         employeeid: this.userinfo.getEmployeeID(),
         devicename: devicename,
-        groups: grops_data,          // 科室/功能组，可选
+        group: grops_data,          // 科室/功能组，可选
         eimdevicetype: eimdevicetype, // 设备类型，可选
       }
       console.log("搜索------------>",columns);
@@ -498,7 +498,6 @@ export class DeviceManageComponent implements OnInit {
         var datas = this.option_table_before(rowData)
         console.log("插入数据库之前 处理数据---->", datas);
         // 将导入的数据存入数据库
-        // this.loading = true
         this.dev_insert_device(datas).subscribe(result=>{
           if (result){
             // 将导入的数据展示在table中
@@ -610,11 +609,12 @@ export class DeviceManageComponent implements OnInit {
           supplier:data.supplier,
           location:data.location,
           department:data.department,
-          groups:data.groups,
+          group:data.group,
           belonged:data.belonged,
           devicestatus:devicestatus,
           createdby:data.createdby,
-          createdon:data.createdon
+          createdon:data.createdon,
+          groupsid: data.groupsid
         }
         after_datas.push(after_data)
       });
@@ -669,7 +669,7 @@ export class DeviceManageComponent implements OnInit {
         devicename:data.devicename,
         deviceno:data.deviceno,
         type:type,
-        active:data.active === '是'? 1: 0,
+        active:data.active === '是'||data.active == 1? 1:0,
         assetno:data.assetno,
         factoryno:data.factoryno,
         deviceid:data.deviceid,
@@ -677,11 +677,12 @@ export class DeviceManageComponent implements OnInit {
         supplier:data.supplier,
         location:data.location,
         department:data.department,
-        groups:data.groups,
+        group:data.group,
         belonged:data.belonged,
         devicestatus:devicestatus,
         createdby:data.createdby,
-        createdon:data.createdon
+        createdon:data.createdon,
+        groupsid: data.groupsid
       }
       after_datas.push(after_data)
     });
@@ -705,7 +706,7 @@ export class DeviceManageComponent implements OnInit {
       var deviceno = rowdata["deviceno"];
       var devicestatus = rowdata["devicestatus"];
       var factoryno = rowdata["factoryno"];
-      var groups = rowdata["groups"];
+      var group = rowdata["group"];
       var location = rowdata["location"];
 
       // var purchaseon = rowdata["purchaseon"];
@@ -743,15 +744,15 @@ export class DeviceManageComponent implements OnInit {
       if (verify_location != 1){
         verify_err.push({err: verify_location})
       }
-      // 验证！ department
-      var verify_department = this.verify_department(department);
-      if (verify_department != 1){
-        verify_err.push({err: verify_department})
+      // 验证！ department // 修改为 自定义设备编号deviceid
+      var verify_deviceid = this.verify_deviceid(deviceid);
+      if (verify_deviceid != 1){
+        verify_err.push({err: verify_deviceid})
       }
-      // 验证！ groups
-      var verify_groups = this.verify_groups(groups);
-      if (verify_groups != 1){
-        verify_err.push({err: verify_groups})
+      // 验证！ groups 改为group
+      var verify_group = this.verify_group(group);
+      if (verify_group != 1){
+        verify_err.push({err: verify_group})
       }
       // 验证！ belonged
       var verify_belonged= this.verify_belonged(belonged);
@@ -863,26 +864,27 @@ export class DeviceManageComponent implements OnInit {
     }
     return 1 // 返回1，表示 通过验证！
   }
-  // 验证 department 使用部门
-  verify_department(department){
+  // 验证 department 使用部门 // 修改为自定义的设备编号：deviceid
+  verify_deviceid(deviceid){
     // sql注入和特殊字符 special_str
-    var verify_sql_str = this.verify_sql_str(department, '使用部门');
+    var verify_sql_str = this.verify_sql_str(deviceid, '使用部门');
     if (verify_sql_str != 1){
       return verify_sql_str
     }
-    if (department.length > 50){
+    if (deviceid.length > 50){
       return "使用部门最大长度不超过50！"
     }
     return 1 // 返回1，表示 通过验证！
   }
-  // 验证 groups 科室
-  verify_groups(groups){
+  // 验证 groups 科室  改为group
+  verify_group(group){
+    console.log("验证 groups 科室  改为group:", group)
     // sql注入和特殊字符 special_str
-    var verify_sql_str = this.verify_sql_str(groups, '科室');
+    var verify_sql_str = this.verify_sql_str(group, '科室');
     if (verify_sql_str != 1){
       return verify_sql_str
     }
-    if (groups.length > 50){
+    if (group.length > 50){
       return "科室最大长度不超过50！"
     }
     return 1 // 返回1，表示 通过验证！
@@ -950,8 +952,8 @@ export class DeviceManageComponent implements OnInit {
       { field: 'deviceno', headerName: 'EIM设备编号',  resizable: true, minWidth: 10},
       { field: 'type', headerName: '设备类型', resizable: true},
       { field: 'deviceid', headerName: '设备编号', resizable: true, minWidth: 10}, // 自定义设备编号！
-      { field: 'department', headerName: '使用部门', resizable: true, minWidth: 10},
-      { field: 'groups', headerName: '科室', resizable: true, minWidth: 10},
+      // { field: 'department', headerName: '使用部门', resizable: true, minWidth: 10},// 取消使用部门
+      { field: 'group', headerName: '科室', resizable: true, minWidth: 10},
       { field: 'belonged', headerName: '归属人', resizable: true, minWidth: 10},
       { field: 'active', headerName: '是否启用', resizable: true, cellRendererFramework: TranActiveComponent,},
       { field: 'assetno', headerName: '资产编号', resizable: true, minWidth: 10},
@@ -1025,7 +1027,7 @@ export class DeviceManageComponent implements OnInit {
       employeeid: this.userinfo.getEmployeeID(),
       devicename: '',
       eimdevicetype: [], // 设备类型，可选
-      groups: []          // 科室/功能组，可选
+      group: []          // 科室/功能组，可选
     }
     this.http.callRPC('device', 'dev_get_device_search', columns).subscribe((result)=>{
       var tabledata = result['result']['message'][0]
@@ -1061,7 +1063,7 @@ export class DeviceManageComponent implements OnInit {
       employeeid: this.userinfo.getEmployeeID(),
       devicename: '',
       eimdevicetype: [], // 设备类型，可选
-      groups: []          // 科室/功能组，可选
+      group: []          // 科室/功能组，可选
     }
     this.http.callRPC('device', 'dev_get_device_search', columns).subscribe((result)=>{
       var tabledata = result['result']['message'][0]
@@ -1123,11 +1125,12 @@ interface DeviceData {
   supplier:string,
   location:string,
   department:string,
-  groups:string,
+  group:string,
   belonged:string,
   devicestatus:string,
   createdby:string,
-  createdon:string
+  createdon:string,
+  groupsid: number
 }
 
 // table 中每行数据类型！ 这是将table中的数据改回原始数据
@@ -1144,9 +1147,10 @@ interface OptionDeviceData {
   supplier:string,
   location:string,
   department:string,
-  groups:string,
+  group:string,
   belonged:string,
   devicestatus:number,
   createdby:string,
-  createdon:string
+  createdon:string,
+  groupsid: number
 }

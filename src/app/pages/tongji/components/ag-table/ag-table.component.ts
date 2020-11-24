@@ -266,6 +266,7 @@ export class AgTableComponent implements OnInit {
 
 
         table_data.push(data_item);
+        
       });
       console.log("table_data=====", table_data);
       this.export(table_data);

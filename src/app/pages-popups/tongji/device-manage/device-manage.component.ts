@@ -28,21 +28,25 @@ export class DeviceManageComponent implements OnInit {
   loading;
   constructor(private dialogRef: NbDialogRef<DeviceManageComponent>, private http: HttpserviceService, private publicservice: PublicmethodService,
     private userinfo: UserInfoService) {
-      // 得到科室 sys_get_groups_limit
-      var columns = {
-        limit: 20,
-        offset: 0
-      }
-      this.http.callRPC('device',"sys_get_groups_limit", columns).subscribe(result=>{
-        var res = result["result"]["message"][0];
-        console.log("sys_get_groups_limit------------------------>>>", res);
-        if (res["code"] === 1){
-          this.groups = res["message"]
-          console.log("--*-*-*-*-*", res, "this.groups", this.groups)
-        }
-      })
+      // ====================================
+          // 得到科室 sys_get_groups_limit
+          var columns = {
+            limit: 20,
+            offset: 0
+          }
+          this.http.callRPC('device',"sys_get_groups_limit", columns).subscribe(result=>{
+            var res = result["result"]["message"][0];
+            console.log("sys_get_groups_limit------------------------>>>", res);
+            if (res["code"] === 1){
+              this.groups = res["message"];
+              localStorage.setItem("Device_Groups", JSON.stringify(res["message"]));
+            }
+          })
+        // ====================================
      }
   ngOnInit(): void {
+    // 科室用户组
+    this.get_groups();
   }
 
   // 科室/用户组
@@ -56,8 +60,21 @@ export class DeviceManageComponent implements OnInit {
   ngAfterViewInit(){
     console.log("编辑----添加",this.rowData)
     console.log("编辑----添加  content---",this.content)
+
+     
+
+
     // form 表单
     this.layuiform();
+
+    
+
+  }
+
+  // get groups
+  get_groups(){
+    var groups = JSON.parse(localStorage.getItem("Device_Groups"));
+    this.groups = groups
   }
 
   // form表单
@@ -71,6 +88,8 @@ export class DeviceManageComponent implements OnInit {
     var editdanger = this.editdanger;
     var addsuccess = this.addsuccess;
     var adddanger = this.adddanger;
+
+    
 
     var that = this;
     layui.use(['layer','form','layedit', 'laydate'], function(){
@@ -413,6 +432,8 @@ export class DeviceManageComponent implements OnInit {
               formdatar["devicestatus"] = "其它";
             break;
         }
+        // 科室/功能组的赋值，名称对应的id！
+        formdatar["groups"] = formdatar["groupsid"]
         // 初始化表单
         form.val("device", formdatar); 
         // 初始化createdon（创建时间）、purchaseon (购置日期)
@@ -422,6 +443,9 @@ export class DeviceManageComponent implements OnInit {
         var purchaseon = formdatar["purchaseon"];
         method = "dev_update_device";
       }else{ // false: 表示add
+        form.val("device", {groups: JSON.parse(localStorage.getItem("Device_Groups"))})
+
+       
         method = "dev_insert_device";
         success = addsuccess;
         danger = adddanger;
@@ -448,6 +472,18 @@ export class DeviceManageComponent implements OnInit {
         if (content){ // 表示编辑
           data.field.id = JSON.parse(rowData)[0].id;
           data.field.deviceid = JSON.parse(rowData)[0].deviceid;
+          // 指定科室/功能组！
+          var group = "";
+          var groupid = 0;
+          that.groups.forEach(item =>{
+            if (Number(data.field["groups"])===item["groupid"]){
+              groupid = item["groupid"];
+              group = item["group"];
+            }
+          })
+          data.field["group"] = group;
+          data.field["groupid"] = groupid;
+
         }else{// 表示添加
           // 添加 设备，需要 添加字段，group：科室/功能组， groupid： 科室/功能组 id
           var group = "";
@@ -465,7 +501,7 @@ export class DeviceManageComponent implements OnInit {
         // layer.alert(JSON.stringify(data.field), {
         //   title: '得到的编辑表单的数据'
         // })
-        console.log('data.field["active"]', data.field["active"])
+        console.log('data.field["active"]==================+++++++++++++++', data.field["active"])
         if (data.field["active"] != undefined){
           data.field["active"] = 1;
         }else{
@@ -504,7 +540,7 @@ export class DeviceManageComponent implements OnInit {
         const table = "device";
         http.callRPC(table, method, colums).subscribe((result)=>{
           console.log("更新设备数据：", result)
-          const status = result['result']['message'][0];
+          const status = result['result']['message'][0]["code"];
           if (status === 1){
             success(publicservice)
             if(content){
@@ -512,13 +548,14 @@ export class DeviceManageComponent implements OnInit {
             }else{
               that.RecordOperation('新增eim台账', 1,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
             }
-            dialogRef.close(colums);
+            dialogRef.close(true);
           }else{
             if(content){
               that.RecordOperation('编辑eim台账', 0,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
             }else{
               that.RecordOperation('新增eim台账', 0,"deviceno:"+colums["deviceno"] + ','+ "assetno:" + colums["assetno"]);
             }
+            dialogRef.close(false);
             danger(publicservice);
           }
         })
