@@ -1,11 +1,5 @@
-nb-card{
-    margin: 0px;
-    padding: 0px;
-}
-
 .my-select{
     height: 40px;
-    // top: 8px;
     // border: 1px greenyellow solid;
 }
 .my-button{
@@ -22,51 +16,28 @@ nb-card{
 .device_manage_table{
     margin-top: 20px;
 }
-
+.button_item{
+  margin: 0px 10px 10px;
+}
 
 // 导入---导出
-.my-button{
+.my_import{
   text-align: center;
   height: 40px;
-  padding-top: 3px;
   // 导入文件
   .import{
       display:none
   }
   
 }
-
-// .smart-table-container{
-//   overflow-x: scroll;
-// }
-
-div{
-    .layui-form-label{
-        padding-left: 0px;
-    }
-    font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
-
-    input{
-        border-color: #00d68f;
-        line-height: 1.5rem;
-        border-radius: 0.25rem;
-        width: 160px;
-    }
-    input:hover{
-        border-color: #00d68f;
-        border-radius: 0.25rem;
-        line-height: 1.5rem;
-        cursor: pointer;
-        background-color: #edf1f7;
-        
-    }
+#employeenumber{
+  line-height: 16px;
 }
-
 
 // 科室/功能组
 .gongneng_keshi{
-    width: 206px;
-    line-height: 29px;
-    // border: 1px pink solid;
-    
-  }
+  width: 168px;
+  line-height: 29px;
+  // border: 1px pink solid;
+  
+}
