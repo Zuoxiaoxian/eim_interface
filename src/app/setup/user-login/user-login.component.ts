@@ -211,7 +211,12 @@ export class UserLoginComponent implements OnInit {
             
 
             ssouserinfo["token"] = response["data"]["token"];
-            ssouserinfo["loginname"] = response["data"]["account"]; // 当前登录的用户名
+            var loginname = response["data"]["domainAccountList"][0].split("@")[0];
+            
+            ssouserinfo["loginname"] = loginname; // 当前登录的用户名, 可能是 邮箱，sdfsf@sss.xx
+            // ssouserinfo["loginname"] = response["data"]["account"]; // 当前登录的用户名, 可能是 邮箱，sdfsf@sss.xx
+
+
             ssouserinfo["employeeno"] = response["data"]["empNo"];     //工号
             ssouserinfo["name"] = response["data"]["nickName"]; // 姓名
             ssouserinfo["phoneno"] = response["data"]["phone"];      // 手机号

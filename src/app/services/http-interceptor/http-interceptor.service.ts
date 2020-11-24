@@ -11,6 +11,7 @@ import { loginurl }from '../../appconfig';
 import { Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { ExpiredTokenComponent } from '../../pages-popups/token-diallog/expired-token/expired-token.component';
+import { PublicmethodService } from '../publicmethod/publicmethod.service';
 
 /* 将未受影响的请求传递给下一个请求处理程序。*/
 
@@ -19,7 +20,7 @@ import { ExpiredTokenComponent } from '../../pages-popups/token-diallog/expired-
 })
 export class HttpInterceptorService implements HttpInterceptor {
 
-  constructor(private router: Router, private dialogService: NbDialogService) { }
+  constructor(private router: Router, private dialogService: NbDialogService, private publicservice: PublicmethodService) { }
 
   // intercept(req: HttpRequest<any>, next: HttpHandler):
   //   Observable<HttpEvent<any>> {
@@ -59,6 +60,12 @@ export class HttpInterceptorService implements HttpInterceptor {
     if (status_code.indexOf(status) != -1){
       this.router.navigate(['/miscellaneous/500'])
     }else if(status === 401){ // ExpiredTokenComponent
+      var isdialg = localStorage.getItem("token_expired")? localStorage.getItem("token_expired"): 'true';
+      if (JSON.parse(isdialg)){
+        localStorage.setItem("token_expired", 'true');
+      }else{
+        localStorage.setItem("token_expired", 'true');
+      }
       // this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,} ).onClose.subscribe(
       //   name=>{
       //     console.log("token已过期，是否重新登录？",name)
@@ -67,8 +74,13 @@ export class HttpInterceptorService implements HttpInterceptor {
       //     }else{
       //     }        
       //   });
+    }else{
+      this.danger()
     }
   }
 
+  danger(){
+    this.publicservice.showngxtoastr({position: 'toast-top-right', status: 'danger', conent:"网络异常"});
+  }
 
 }

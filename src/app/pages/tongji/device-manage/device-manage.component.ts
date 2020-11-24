@@ -337,6 +337,11 @@ export class DeviceManageComponent implements OnInit {
     this.gridData = [];
     this.inttable();
     this.refresh = false;
+
+    // 取消选择的数据 delselect
+    $("#employeenumber").val("");
+    this.groups_func.delselect();
+    this.eimdevicetpye.delselect();
   }
 
   // 得到下拉框的数据
@@ -351,8 +356,8 @@ export class DeviceManageComponent implements OnInit {
         var groups = res["message"][0]["groups"];
        
         this.groups_func.init_select_tree(groups);
-        // var eimdevicetpyedata = res["message"][0]["type"];
-        // this.eimdevicetpye.init_select_tree(eimdevicetpyedata);
+        var eimdevicetpyedata = res["message"][0]["type"];
+        this.eimdevicetpye.init_select_trees(eimdevicetpyedata);
       }
     })
   }
@@ -367,11 +372,48 @@ export class DeviceManageComponent implements OnInit {
 
   // 搜索按钮
   query(){
-    var devicename = $("#employeenumber").val();// 设备名称
+    var devicename = $("#employeenumber").val()?$("#employeenumber").val(): "";// 设备名称
     var groups = this.groups_func.getselect();// 科室/功能组
-    var eimdevicetpye = this.eimdevicetpye.getselect(); // eim设备类型
-    console.log("<------------搜索----------->", devicename, groups, eimdevicetpye)
-    this.RecordOperation("搜索(eim台账)", 1, '');
+    var eimdevicetype = this.eimdevicetpye.getselect()?this.eimdevicetpye.getselect():[]; // eim设备类型
+    var grops_data = groups != ""? groups.split(";"): [];
+    console.log("<------------搜索-----------devicename>", devicename);
+    console.log("<------------搜索-----------groups>", groups);
+    console.log("<------------搜索-----------eimdevicetpye>", eimdevicetype);
+    if (devicename == "" && eimdevicetype.length < 1 && grops_data.length < 1){
+      // 未选中
+      this.dialogService.open(EditDelTooltipComponent, { closeOnBackdropClick: false, context: { title: '提示', content:   `请选择要搜索的数据！`}} ).onClose.subscribe(
+        name=>{
+          console.log("----name-----", name);
+        }
+      );
+    }else{
+      var columns = {
+        offset: 0, 
+        limit: 20,
+        employeeid: this.userinfo.getEmployeeID(),
+        devicename: devicename,
+        groups: grops_data,          // 科室/功能组，可选
+        eimdevicetype: eimdevicetype, // 设备类型，可选
+      }
+      console.log("搜索------------>",columns);
+      // dev_get_device_search 搜索的
+      this.http.callRPC('device', 'dev_get_device_search', columns).subscribe((result)=>{
+        var tabledata = result['result']['message'][0]
+        console.log("dev_get_device---------------------------->>>", tabledata);
+        this.loading = false;
+        if (tabledata["code"]===1){
+          var message = result["result"]["message"][0]["message"];
+          var after_datas = this.show_table_before(message);
+          this.gridData = [];
+          this.gridData.push(...after_datas);
+          this.tableDatas.rowData = this.gridData;
+          var totalpagenumbers = tabledata['numbers']? tabledata['numbers'][0]['numbers']: '未得到总条数';
+          this.tableDatas.totalPageNumbers = totalpagenumbers;
+          this.agGrid.update_agGrid(this.tableDatas); // 告诉组件刷新！
+          this.RecordOperation('搜索', 1,  "eim台账")
+        }else{this.RecordOperation('搜索', 0,  "eim台账")}
+      })
+    }
   }
 
   // 导出文件
@@ -981,10 +1023,11 @@ export class DeviceManageComponent implements OnInit {
       offset: offset, 
       limit: limit,
       employeeid: this.userinfo.getEmployeeID(),
+      devicename: '',
       eimdevicetype: [], // 设备类型，可选
-      grops: []          // 科室/功能组，可选
+      groups: []          // 科室/功能组，可选
     }
-    this.http.callRPC('device', 'dev_get_device_limit', columns).subscribe((result)=>{
+    this.http.callRPC('device', 'dev_get_device_search', columns).subscribe((result)=>{
       var tabledata = result['result']['message'][0]
       console.log("dev_get_device---------------------------->>>", tabledata);
       this.loading = false;
@@ -1015,8 +1058,12 @@ export class DeviceManageComponent implements OnInit {
     var columns = {
       offset: offset, 
       limit: limit,
+      employeeid: this.userinfo.getEmployeeID(),
+      devicename: '',
+      eimdevicetype: [], // 设备类型，可选
+      groups: []          // 科室/功能组，可选
     }
-    this.http.callRPC('device', 'dev_get_device_limit', columns).subscribe((result)=>{
+    this.http.callRPC('device', 'dev_get_device_search', columns).subscribe((result)=>{
       var tabledata = result['result']['message'][0]
       console.log("device---", tabledata);
       this.loading = false;

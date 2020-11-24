@@ -32,7 +32,8 @@ export class KpiTableComponent implements OnInit {
 
   // =============================agGrid
   constructor(private publicservice: PublicmethodService, private http: HttpserviceService, 
-    private deviceservice: DeviceKpiReport2Service, private router: Router) { 
+    private deviceservice: DeviceKpiReport2Service, private router: Router,
+    private userinfo: UserInfoService) { 
     
   }
 
@@ -146,6 +147,7 @@ export class KpiTableComponent implements OnInit {
       end: '2020-11-21',
       offset: offset,
       limit: limit,
+      employeeid: this.userinfo.getEmployeeID()
     }
     // 得到设备信息！
     this.http.callRPC('device', 'dev_get_kpi_device_limit', colmun).subscribe((res)=>{

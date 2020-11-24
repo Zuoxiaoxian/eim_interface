@@ -11,6 +11,7 @@ export class MySelectTreeComponent implements OnInit {
   @Input("placeholder")placeholder:any;
 
   placeholder_title;
+  select_type = [];
 
   constructor() { 
     
@@ -117,6 +118,7 @@ export class MySelectTreeComponent implements OnInit {
   
   // 下拉树示例
   init_select_tree(data){
+    var that = this;
     console.log("====data=========",data);
     var el5;
     layui.use(['eleTree',],function(){
@@ -150,6 +152,13 @@ export class MySelectTreeComponent implements OnInit {
         if (d.isChecked){
           select_data.push(d.data.currentData);// {id: 3, label: "nvh"}
           select_label_list.push(d.data.currentData.label);
+          that.select_type.push(d.data.currentData.id);
+        }else{
+          var index = select_label_list.indexOf(d.data.currentData.label);
+          if( index != -1){
+            select_label_list.splice(index, 1); // 删除取消的
+            that.select_type.splice(index, 1);
+          }
         }
         $("[name='title']").val(select_label_list.join(';'));
 
@@ -164,6 +173,11 @@ export class MySelectTreeComponent implements OnInit {
 
   getselect(){
     return $("[name='title']").val();
+  }
+  // 删除选择的
+  delselect(){
+    $("[name='title']").val("");
+    this.select_type = [];
   }
 
 }

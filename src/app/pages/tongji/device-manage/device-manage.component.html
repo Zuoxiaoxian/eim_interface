@@ -3,9 +3,10 @@
 <div class="row device_manage_table">
     <div class="col-md-12">
         <nb-card>
+            <nb-card-header>
+                eim台账
+            </nb-card-header>
             <nb-card-body>
-                
-
                 <!-- buttons -->
                 <div class="row">
                     <div class="col-md-10">
@@ -25,9 +26,10 @@
                             <!-- eim设备类别下拉框 -->
                             <div class="example-items-rows ">
                                 <div class="gongneng_keshi">
-                                    <ngx-my-select #eimdevicetpye [selectdatas]="eimdevicetpyedata"></ngx-my-select>
-                                    <!-- <ngx-my-select-tree #eimdevicetpye [placeholder]="eimdevicetpye_placeholder"></ngx-my-select-tree> -->
+                                    <!-- <ngx-my-select #eimdevicetpye [selectdatas]="eimdevicetpyedata"></ngx-my-select> -->
+                                    <ngx-my-select-tree-type #eimdevicetpye [placeholder]="eimdevicetpye_placeholder"></ngx-my-select-tree-type>
                                 </div>
+
                             </div>
                             <!-- 搜索 -->
                             <div class="example-items-rows button_item query" *ngIf="button?.query">

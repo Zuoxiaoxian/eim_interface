@@ -3,7 +3,6 @@ import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from 
 import {NbDialogService} from '@nebular/theme';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { HttpserviceService } from '../../../../services/http/httpservice.service';
-import {EditUserEmployeeGroupComponent} from '../../../../pages-popups/system-set/edit-user-employee-group/edit-user-employee-group.component';
 import {EditDelTooltipComponent} from "../../../../pages-popups/prompt-diallog/edit-del-tooltip/edit-del-tooltip.component";
 
 

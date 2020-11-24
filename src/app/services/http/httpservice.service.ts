@@ -58,6 +58,7 @@ export class HttpserviceService {
     }
     return new Observable((observe)=>{
       this.http.post(url, data, headers).subscribe((response)=>{
+        console.warn("http: 输出,req: ",response);
         observe.next(response)
       },
       error=>{
@@ -73,16 +74,15 @@ export class HttpserviceService {
         }
         console.log("result===>", result)
         if (error.status === 401){
-          var isdialg = localStorage.getItem("token_expired")? localStorage.getItem("token_expired"): 'true';
+          var isdialg = localStorage.getItem("token_expired");
           if (JSON.parse(isdialg)){
-          
             this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,} ).onClose.subscribe(
               name=>{
                 console.log("token已过期，是否重新登录？",name)
                 if(name){
                   localStorage.removeItem(ssotoken);
                   location.href = loginurl;
-                  localStorage.removeItem('token_expired');
+                  // localStorage.removeItem('token_expired');
                   observe.next(result);
                 }else{
                   observe.next(result);

@@ -24,13 +24,16 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
   // 下拉框---部门
   departments = {
     name: "部门信息",
-    placeholder: '请选择部门',
+    placeholder: '请选择科室',
     groups:[
       { title: '动力', datas: [{ name: '动力-1' },{ name: '动力-2' },{ name: '动力-3' },{ name: '动力-4' }] },
       { title: '资产', datas: [{ name: '资产-1' },{ name: '资产-2' },{ name: '资产-3' },{ name: '资产-4' }] },
       { title: '新能源', datas: [{ name: '新能源-1' },{ name: '新能源-2' },{ name: '新能源-3' },{ name: '新能源-4' }] },
     ]
   };
+  // 科室/功能组 
+  groups_placeholder = "请选择科室/功能组";
+
 
   // 下拉框---设备类型
   devicetpye = {
@@ -66,6 +69,12 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
   // 前端要展示的buttons 主要是：搜索、导入导出
   buttons2;
 
+  loading = false;  // 加载
+  refresh = false; // 刷新tabel
+  button; // 权限button
+  active;  // aggrid 操作
+
+
   // 发送给 日期
   divice_kpi_report = {
     divice_kpi_report: true,
@@ -88,6 +97,12 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getbuttons();
     this.initdate();
+    // 得到pathname --在得到button
+    var roleid = this.userinfo.getEmployeeRoleID();
+    this.publicservice.get_buttons_bypath(roleid).subscribe(result=>{
+      this.button = result;
+      localStorage.setItem("buttons_list", JSON.stringify(result));
+    })
   }
 
   ngOnDestroy(){
@@ -207,6 +222,20 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
   };
 
 
+  // 刷新tabel
+  refresh_table(){
+    $("#employeenumber").val('')
+    this.refresh = true;
+    this.loading = true;
+    // this.gridData = [];
+    // this.inttable();
+    this.refresh = false;
+
+    // 取消选择的数据 delselect
+    $("#employeenumber").val("");
+    // this.groups_func.delselect();
+    // this.eimdevicetpye.delselect();
+  }
 
 
   // button按钮

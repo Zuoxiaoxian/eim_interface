@@ -11,7 +11,87 @@
         </div> -->
 
         <div class="row"  style="margin-bottom: 20px;">
-            <div class="col-md-3 my-select" style="padding: 0px;">
+            <div class="col-md-10">
+                <div class="row">
+                    <!-- 科室 -->
+                    <div class="example-items-rows button_item" style="margin-left: 16px;">
+                        <div class="gongneng_keshi">
+                            <ngx-my-select-tree #groups [placeholder]="groups_placeholder"></ngx-my-select-tree>
+                        </div>
+                    </div>
+                    <!-- 设备类型 -->
+                    <div class="example-items-rows button_item" style="margin-left: 16px;">
+                        <div class="gongneng_keshi">
+                            <ngx-my-select #device_tpye [selectdatas]="devicetpye"></ngx-my-select>
+                        </div>
+                    </div>
+        
+                    <!-- 设备编号 -->
+                    <div class="example-items-rows" style="margin-left: 16px;">
+                        <div class="gongneng_keshi">
+                            <ngx-my-select #asset_number [selectdatas]="assetsnumber"></ngx-my-select>
+                        </div>
+                    </div>
+        
+                    <!-- 日期 -->
+                    <div class="example-items-rows" style="margin-left: 16px;">
+                        <div class="gongneng_keshi">
+                            <div class="layui-form " >
+                                <!-- example-items-rows -->
+                                <div class="layui-form-item " >
+                                    <label class="layui-form-label" style="margin-bottom: 0px; padding-bottom: 0px;">日期范围</label>
+                                    <div class="layui-input-block" style="margin: 0px;">
+                                        <input style="height: 31px;" type="text" name='date-range' class="layui-input" id="divice_kpi_report" placeholder=" - ">
+                                    </div>
+                                </div>
+                            </div>
+        
+                        </div>
+                    </div>
+    
+                    <!-- 搜索 -->
+                    <div class="example-items-rows button_item query" *ngIf="button?.query">
+                        <button nbButton [status]="button?.query.class" size="small" (click)="action(button?.query.permission)"  [disabled]="button?.query.active == 0? true:false"><nb-icon [icon]="button?.query.icon"></nb-icon>{{button?.query.title}}</button>
+                    </div>
+                    
+                    <!-- add、edit、del -->
+                    <div class="example-items-rows button_item add" *ngIf="button?.add" style="margin-left: 16px;">
+                        <button nbButton [status]="button?.add.class" size="small" (click)="action(button?.add.permission)"  [disabled]="button?.add.active == 0? true:false"><nb-icon [icon]="button?.add.icon"></nb-icon>{{button?.add.title}}</button>
+                    </div>
+                    <div class="example-items-rows button_item edit" *ngIf="button?.edit">
+                        <button nbButton [status]="button?.edit.class" size="small" (click)="action(button?.edit.permission)"  [disabled]="button?.edit.active == 0? true:false"><nb-icon [icon]="button?.edit.icon"></nb-icon>{{button?.edit.title}}</button>
+                    </div>
+                    <div class="example-items-rows button_item del" *ngIf="button?.del">
+                        <button nbButton [status]="button?.del.class" size="small" (click)="action(button?.del.permission)"  [disabled]="button?.del.active == 0? true:false"><nb-icon [icon]="button?.del.icon"></nb-icon>{{button?.del.title}}</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-2 " style="display: flex;">
+                <!-- 导入、导出 -->
+                <div style="flex: auto;">
+                </div>
+                <div class=" button_item my_import " *ngIf="button?.import">
+                    <button nbButton [status]="button?.import.class" size="small" (click)="action(button?.import.permission)"  [disabled]="button?.import.active == 0? true:false"><nb-icon [icon]="button?.import.icon"></nb-icon>{{button?.import.title}}</button>
+                    <!-- <input type="file" class="import" id="import" (change)="onFileChange($event)" multiple="false" > -->
+                </div>
+                
+                <div class=" button_item download" *ngIf="button?.download">
+                    <button nbButton [status]="button?.download.class" size="small" (click)="action(button?.download.permission)"  [disabled]="button?.download.active == 0? true:false"><nb-icon [icon]="button?.download.icon"></nb-icon>{{button?.download.title}}</button>
+                </div>
+                
+                <div class="" style="text-align: right;">
+                    <!-- loader-outline -->
+                    <button nbButton [nbSpinner]="refresh" nbSpinnerStatus="success" size="small" (click)="refresh_table()">
+                        <nb-icon icon="sync-outline"></nb-icon>
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- <div class="col-md-3 my-select" style="padding: 0px;">
                 <ngx-my-select-group #departmentselect [selectdatas]="departments"></ngx-my-select-group>
             </div>
             <div class="col-md-3 my-select" style="padding: 0px;">
@@ -23,7 +103,6 @@
         
             <div class="col-md-3" style="padding: 0px;">
                 <div class="layui-form " >
-                    <!-- example-items-rows -->
                     <div class="layui-form-item " >
                         <label class="layui-form-label" style="margin-bottom: 0px; padding-bottom: 0px;">日期范围</label>
                         <div class="layui-input-block" style="margin: 0px;">
@@ -31,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             
             <div class="col-md-1 my-button" *ngFor="let button of buttons2"  style="padding: 0px;">
                 <button nbButton size="small" [status]="button.class" (click)="action(button.permission)"  [disabled]="button.active == 0? true:false"><nb-icon [icon]="button.icon"></nb-icon>{{button.title}}</button>
