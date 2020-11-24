@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   styleUrls: ['pages.component.scss'],
   template: `
     <ngx-one-column-layout>
-      <nb-menu [items]="menu" tag="menu"></nb-menu>
+      <nb-menu [items]="menu" tag="menu" autoCollapse="true"></nb-menu>
       <router-outlet></router-outlet>
     </ngx-one-column-layout>
   `,

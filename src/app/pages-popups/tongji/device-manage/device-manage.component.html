@@ -97,9 +97,9 @@
             </div>
 
             <div class="layui-inline" style="width: 46%;">
-                <label class="layui-form-label mylabel mulu_title">使用部门</label>
+                <label class="layui-form-label mylabel mulu_title">eim设备编号</label>
                 <div class="layui-input-block">
-                <input type="text" name="department" required  lay-verify="required|department" placeholder="使用部门" autocomplete="off" class="layui-input">
+                <input type="text" name="deviceid" required  lay-verify="required|deviceid" placeholder="eim设备编号" autocomplete="off" class="layui-input">
                 </div>
             </div>
         </div>
@@ -108,7 +108,19 @@
             <div class="layui-inline" style="width: 46%;">
                 <label class="layui-form-label mylabel mulu_title">科室</label>
                 <div class="layui-input-block">
-                    <input type="text" name="groups" required  lay-verify="required|groups" placeholder="科室" autocomplete="off" class="layui-input">
+                    <!-- <input type="text" name="groups" required  lay-verify="required|groups" placeholder="科室" autocomplete="off" class="layui-input"> -->
+                    <!-- 单选！ --> 
+                    <!-- <select id="parenttitle" name="parenttitle" lay-verify="" class="caidantype">
+                        <option *ngFor="let item of muluselects" [value]="item.id">{{item.title}}</option>
+                    </select>  -->
+
+                    <select name="devicestatus" lay-verify="" >
+                        <option value="">请选择一个资产状态</option>
+                        <option value=1>在用</option>
+                        <option value=2>封存</option>
+                        <option value=3>停用</option>
+                        <option value=4>闲置</option>
+                    </select> 
                 </div>
             </div>
 

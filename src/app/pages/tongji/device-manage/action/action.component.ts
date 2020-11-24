@@ -33,9 +33,8 @@ export class ActionComponent implements OnInit, ICellRendererAngularComp {
 
   // 调用父方法
   public device_info(item) {
-    console.log("-----------------item-------------------", item)
     var rowData = this.params.node.data
-    console.log("-----------------params-------------------", this.params)
+    // console.log("-----------------params-------------------", this.params)
     switch (item) {
       case "edit":
         this.edit(rowData);
@@ -46,13 +45,14 @@ export class ActionComponent implements OnInit, ICellRendererAngularComp {
     }
 
     
-    console.log("解析值：《《《《《《《《《《《《《《《《《《《《《《", this.params.context)
+    // console.log("解析值：《《《《《《《《《《《《《《《《《《《《《《", this.params.context)
     
   }
 
   // 是否禁用button
   isactive(){
     var button_lists = JSON.parse(localStorage.getItem("buttons_list"));
+    // console.log("是否禁用button----------->", button_lists)
     var button_list = {}
     if(button_lists["edit"]){
       button_list["edit"] = button_lists["edit"]["active"] === 1?  true: false;
