@@ -27,9 +27,31 @@ export class DeviceManageComponent implements OnInit {
   // 加载
   loading;
   constructor(private dialogRef: NbDialogRef<DeviceManageComponent>, private http: HttpserviceService, private publicservice: PublicmethodService,
-    private userinfo: UserInfoService) { }
+    private userinfo: UserInfoService) {
+      // 得到科室 sys_get_groups_limit
+      var columns = {
+        limit: 20,
+        offset: 0
+      }
+      this.http.callRPC('device',"sys_get_groups_limit", columns).subscribe(result=>{
+        var res = result["result"]["message"][0];
+        console.log("sys_get_groups_limit------------------------>>>", res);
+        if (res["code"] === 1){
+          this.groups = res["message"]
+          console.log("--*-*-*-*-*", res, "this.groups", this.groups)
+        }
+      })
+     }
   ngOnInit(): void {
   }
+
+  // 科室/用户组
+  groups = [
+    // { id: 1, group: "环境试验室11", groupid: 1},
+    // { id: 2, group: "结构试验室2", groupid: 2},
+    // { id: 3, group: "能源试验室1", groupid: 3},
+    // { id: 4, group: "测试用户组", groupid: 5},
+  ]
   
   ngAfterViewInit(){
     console.log("编辑----添加",this.rowData)
@@ -224,8 +246,8 @@ export class DeviceManageComponent implements OnInit {
           
 
         },
-        // 使用部门 验证：department character(50)
-        department: function(value, item){
+        // 使用部门 验证：department character(50)--修改为 deviceid eim设备编号
+        deviceid: function(value, item){
           // sql注入和特殊字符 special_str
           var special_sql = Device['special_sql']["special_sql"];
           var special_str = Device['special_sql']["special_str"];
@@ -236,10 +258,14 @@ export class DeviceManageComponent implements OnInit {
             return "防止SQL注入，请不要输入关于sql语句的特殊字符！"
           }
           if (! str){
-            return "使用部门不能有特殊字符！"
+            return "eim设备编号不能有特殊字符！"
           }
           if (value.length > 50){
-            return "使用部门最大长度不超过50！"
+            return "eim设备编号最大长度不超过50！"
+          }
+          // 不为中文！
+          if (new RegExp(Device["deviceid"]).test(value)){
+            return "eim设备编号不能为中文"
           }
 
           // if (! new RegExp(Device["department"]).test(value)){
@@ -419,9 +445,22 @@ export class DeviceManageComponent implements OnInit {
 
       //监听提交
       form.on('submit(device)', function(data){
-        if (content){
+        if (content){ // 表示编辑
           data.field.id = JSON.parse(rowData)[0].id;
           data.field.deviceid = JSON.parse(rowData)[0].deviceid;
+        }else{// 表示添加
+          // 添加 设备，需要 添加字段，group：科室/功能组， groupid： 科室/功能组 id
+          var group = "";
+          var groupid = 0;
+          that.groups.forEach(item =>{
+            if (Number(data.field["groups"])===item["groupid"]){
+              groupid = item["groupid"];
+              group = item["group"];
+            }
+          })
+          data.field["group"] = group;
+          data.field["groupid"] = groupid;
+
         }
         // layer.alert(JSON.stringify(data.field), {
         //   title: '得到的编辑表单的数据'
@@ -459,7 +498,9 @@ export class DeviceManageComponent implements OnInit {
 
         console.log("---data.field--",data.field)
         
-        console.log("---colums--",colums, method)
+        console.log("---colums--",colums, method);
+        
+
         const table = "device";
         http.callRPC(table, method, colums).subscribe((result)=>{
           console.log("更新设备数据：", result)

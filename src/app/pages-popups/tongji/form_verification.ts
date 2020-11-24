@@ -38,7 +38,8 @@ export const Device =  {
 
     supplier: "^[a-zA-Z_\u4e00-\u9fa5\\s·]{1,50}$",       // 可中文
     // location: "^[a-zA-Z0-9_]{1,50}$",       // 可中文
-    department: "^[a-zA-Z\u4e00-\u9fa5\\s·]{1,50}$",       // 可中文
+    department: "^[a-zA-Z\u4e00-\u9fa5\\s·]{1,50}$",       // 可中文  部门改为 deviceid eim设备编号
+    deviceid: "^[\u4e00-\u9fa5\\s·]{1,50}",                // 不能为中文！
     groups: "^[a-zA-Z\u4e00-\u9fa5\\s·]{1,50}$",       // 可中文
     belonged: "^[a-zA-Z\u4e00-\u9fa5\\s·]{1,50}$",       // 可中文
     devicestatus: "^[1-4]{1,4}$",       //数字

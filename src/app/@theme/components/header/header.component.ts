@@ -149,6 +149,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.themeService.changeTheme(themeName);
   }
 
+  default_icon = "arrowhead-left-outline"; // arrowhead-left-outline <<  arrowhead-right-outline >>
+
   toggleSidebar(): boolean {
     var echarts_resize = localStorage.getItem(ECHARTS_RESIZE) === null ?  false: JSON.parse(localStorage.getItem(ECHARTS_RESIZE));
     localStorage.setItem(ECHARTS_RESIZE, String(!echarts_resize));
@@ -160,6 +162,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // ---------------------------
     this.sidebarService.toggle(false, 'menu-sidebar');
     this.layoutService.changeLayoutSize();
+    if (this.default_icon === "arrowhead-left-outline"){
+      this.default_icon = "arrowhead-right-outline"
+    }else{
+      this.default_icon = "arrowhead-left-outline"
+    }
 
     return false;
   }

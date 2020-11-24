@@ -1,7 +1,8 @@
 <div class="header-container">
   <div class="logo-container">
     <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
-      <nb-icon icon="menu-2-outline"></nb-icon>
+      <nb-icon [icon]="default_icon"></nb-icon>
+      <!-- <nb-icon icon="menu-2-outline"></nb-icon> -->
     </a>
     <a class="logo" href="#" (click)="navigateHome()"><span id='title'>{{ 'TITLE' | translate  }}</span></a>
   </div>
