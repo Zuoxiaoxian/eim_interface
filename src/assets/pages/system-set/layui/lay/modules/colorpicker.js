@@ -41,7 +41,7 @@ layui.define("jquery", function(e) {
             return i.b = r, i.s = 0 != r ? 255 * t / r : 0, 0 != i.s ? e.r == r ? i.h = (e.g - e.b) / t : e.g == r ? i.h = 2 + (e.b - e.r) / t : i.h = 4 + (e.r - e.g) / t : i.h = -1, r == o && (i.h = 0), i.h *= 60, i.h < 0 && (i.h += 360), i.s *= 100 / 255, i.b *= 100 / 255, i
         },
         y = function(e) {
-            var e = e.indexOf("#") > -1 ? e.substring(1) : e;
+            e = e.indexOf("#") > -1 ? e.substring(1) : e;
             if (3 == e.length) {
                 var i = e.split("");
                 e = i[0] + i[0] + i[1] + i[1] + i[2] + i[2]
