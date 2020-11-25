@@ -88,49 +88,48 @@ export class PublicmethodService {
   public get_current_pathname(){
     return new Observable((observe)=>{
       var sysmenu = localStorage.getItem(SYSMENU) == null ? [] : JSON.parse(localStorage.getItem(SYSMENU));
-      if (sysmenu.length == 0){
-        this.getMenu().subscribe((data)=>{
-          const colums = {
-            languageid: this.httpservice.getLanguageID(),
-            roles: data
-          };
-          console.log("---colums--",colums)
-          const table = "menu_item";
-          const method = "get_systemset_menu_all";
-          console.log("***********************************8-sysmenu",sysmenu, sysmenu.length)
-          this.httpservice.callRPC(table, method, colums).subscribe((result)=>{
-            const baseData = result['result']['message'][0];
-            if (baseData != "T"){
-              var menu = this.dataTranslation(baseData);
-              localStorage.setItem(SYSMENU, JSON.stringify(menu));
-              for (const i in this.location){
-                if (i === 'location'){
-                  menu.forEach(element => {
-                    
-                    if (element["link"] === this.location[i].pathname){
-                      observe.next(element)
-                    }
-                  })
-                
-                }
+      this.getMenu().subscribe((data)=>{
+        const colums = {
+          languageid: this.httpservice.getLanguageID(),
+          roles: data
+        };
+        console.log("---colums--",colums)
+        const table = "menu_item";
+        const method = "get_systemset_menu_all";
+        this.httpservice.callRPC(table, method, colums).subscribe((result)=>{
+          const baseData = result['result']['message'][0];
+          if (baseData != "T"){
+            var menu = this.dataTranslation(baseData);
+            localStorage.setItem(SYSMENU, JSON.stringify(menu));
+            for (const i in this.location){
+              if (i === 'location'){
+                menu.forEach(element => {
+                  
+                  if (element["link"] === this.location[i].pathname){
+                    observe.next(element)
+                  }
+                })
+              
               }
             }
-          })
-        });
-      }else{
-        
-        for (const i in this.location){
-          if (i === 'location'){
-            sysmenu.forEach(element => {
-              
-              if (element["link"] === this.location[i].pathname){
-                observe.next(element)
-              }
-            })
-            
           }
-        }
-      }
+        })
+      });
+      // if (sysmenu.length == 0){
+      // }else{
+        
+      //   for (const i in this.location){
+      //     if (i === 'location'){
+      //       sysmenu.forEach(element => {
+              
+      //         if (element["link"] === this.location[i].pathname){
+      //           observe.next(element)
+      //         }
+      //       })
+            
+      //     }
+      //   }
+      // }
 
 
     });
@@ -139,7 +138,6 @@ export class PublicmethodService {
 
   dataTranslation(baseMenu) {
     // 生成父子数据结构
-    console.log("-=-=-=-=-=public-=baseMenu-=-=-=-=",baseMenu)
     let nodeData = [];
     baseMenu.forEach(item => {
       let map = {};

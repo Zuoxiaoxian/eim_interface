@@ -1,21 +1,22 @@
-import { Component, OnInit,Input, Output,EventEmitter } from '@angular/core';
-
+import { Component, OnInit} from '@angular/core';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
 @Component({
   selector: 'ngx-status-for-table',
   templateUrl: './status-for-table.component.html',
   styleUrls: ['./status-for-table.component.scss']
 })
-export class StatusForTableComponent implements  OnInit {
-  @Output() save:EventEmitter<any> = new EventEmitter();
-  value;
-  @Input() rowData: any;
+export class StatusForTableComponent implements  OnInit,ICellRendererAngularComp {
 
+  private params: any;
+
+  value;
   statusClass;
 
   constructor() { }
 
   ngOnInit(): void {
-    // console.log("------------------------------", this.value);
+    this.value = this.params.node.data.active;
+    console.log("------------------------------", this.value);
     switch (this.value) {
       case '停用':
         this.statusClass = 'stop';
@@ -33,6 +34,15 @@ export class StatusForTableComponent implements  OnInit {
         this.statusClass = 'other';
         break;
     }
+  }
+
+
+  agInit(params: any): void {
+    this.params = params;
+  }
+
+  refresh(): boolean {
+    return false;
   }
 
 }

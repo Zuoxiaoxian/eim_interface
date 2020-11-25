@@ -21,6 +21,7 @@ import { Device } from '../../../pages-popups/tongji/form_verification';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
 import { ActionComponent } from './action/action.component';
 import { TranActiveComponent } from './tran-active/tran-active.component';
+import { StatusForTableComponent } from './status-for-table/status-for-table.component';
 @Component({
   selector: 'ngx-device-manage',
   templateUrl: './device-manage.component.html',
@@ -957,6 +958,7 @@ export class DeviceManageComponent implements OnInit {
       { field: 'belonged', headerName: '归属人', resizable: true, minWidth: 10},
       { field: 'active', headerName: '是否启用', resizable: true, cellRendererFramework: TranActiveComponent,},
       { field: 'assetno', headerName: '资产编号', resizable: true, minWidth: 10},
+      // { field: 'devicestatus', headerName: '资产状态', resizable: true, minWidth: 10, cellRendererFramework: StatusForTableComponent},
       { field: 'devicestatus', headerName: '资产状态', resizable: true,minWidth: 50,pinned: 'left',
         cellStyle: function(params){
           var value = params.value;

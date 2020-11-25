@@ -58,7 +58,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     var status_code = [500,501,502,503,504,505,506,507,508,509]
     var status = req.status;
     if (status_code.indexOf(status) != -1){
-      this.router.navigate(['/miscellaneous/500'])
+      this.router.navigate(['/miscellaneous/500']);
     }else if(status === 401){ // ExpiredTokenComponent
       var isdialg = localStorage.getItem("token_expired")? localStorage.getItem("token_expired"): 'true';
       if (JSON.parse(isdialg)){
@@ -74,6 +74,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       //     }else{
       //     }        
       //   });
+      return 0;
     }else{
       this.danger()
     }

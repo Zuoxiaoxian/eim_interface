@@ -23,6 +23,11 @@ export class DeviceKpiReport2Service {
     changeData(message: Object): void {
         this.currentData.next(message);
     }
+    // 是否 刷新表格，设备报表模块中通信
+    public is_refresh = new BehaviorSubject<boolean>(false);
+    changeRefresh(message: boolean):void {
+        this.is_refresh.next(message);
+    }
 
 }
 

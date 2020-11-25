@@ -76,6 +76,7 @@ export class HttpserviceService {
         if (error.status === 401){
           var isdialg = localStorage.getItem("token_expired");
           if (JSON.parse(isdialg)){
+            localStorage.setItem("token_expired", 'false');
             this.dialogService.open(ExpiredTokenComponent, { closeOnBackdropClick: false,} ).onClose.subscribe(
               name=>{
                 console.log("token已过期，是否重新登录？",name)
@@ -88,7 +89,8 @@ export class HttpserviceService {
                   observe.next(result);
                 }        
               });
-              localStorage.setItem("token_expired", 'false');
+          }else{
+            return
           }
         }
         observe.next(result)

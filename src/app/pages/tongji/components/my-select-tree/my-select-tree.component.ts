@@ -170,6 +170,7 @@ export class MySelectTreeComponent implements OnInit {
       })
     })
   }
+  
 
   getselect(){
     return $("[name='title']").val();

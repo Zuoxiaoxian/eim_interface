@@ -1,13 +1,13 @@
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" [nbSpinner]="loading" nbSpinnerStatus="info" nbSpinnerSize="large">
                             
-    <label class="label" for="input-username">用户名</label>
+    <label class="label" for="input-username">域账号</label>
     <nb-form-field>
         <nb-icon nbPrefix icon="person-outline" pack="eva"></nb-icon>
-        <input type="text"  fullWidth formControlName="username" required  placeholder="用户名" nbInput fieldSize="small">
+        <input type="text"  fullWidth formControlName="username" required  placeholder="域账号" nbInput fieldSize="small">
     </nb-form-field>
     <div *ngIf="profileForm.get('username').invalid && profileForm.get('username').touched"
     class="alert alert-danger">
-    邮件不能为空
+    域账号不能为空
     </div>
 
     <label class="label" for="input-password">密码</label>

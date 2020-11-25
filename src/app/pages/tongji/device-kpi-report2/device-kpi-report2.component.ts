@@ -10,29 +10,25 @@ declare let $;
 import { DeviceKpiReport2Service } from './device-kpi-report2-service';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
 import { UserInfoService } from '../../../services/user-info/user-info.service';
+import { min } from 'rxjs/operators';
 @Component({
   selector: 'ngx-device-kpi-report2',
   templateUrl: './device-kpi-report2.component.html',
   styleUrls: ['./device-kpi-report2.component.scss']
 })
 export class DeviceKpiReport2Component implements OnInit, OnDestroy {
-  @ViewChild("departmentselect") departmentselect:any;
-  @ViewChild("device_tpye") device_tpye:any;
-  @ViewChild("asset_number") asset_number:any;
+  @ViewChild("groups") groups_func:any;
+  @ViewChild("eimdevicetpye") eimdevicetpye:any;
+
   @ViewChild("daterange") daterange:any;
 
-  // 下拉框---部门
-  departments = {
-    name: "部门信息",
-    placeholder: '请选择科室',
-    groups:[
-      { title: '动力', datas: [{ name: '动力-1' },{ name: '动力-2' },{ name: '动力-3' },{ name: '动力-4' }] },
-      { title: '资产', datas: [{ name: '资产-1' },{ name: '资产-2' },{ name: '资产-3' },{ name: '资产-4' }] },
-      { title: '新能源', datas: [{ name: '新能源-1' },{ name: '新能源-2' },{ name: '新能源-3' },{ name: '新能源-4' }] },
-    ]
-  };
+  @ViewChild("kpitable") kpitable:any;
+
+ 
   // 科室/功能组 
   groups_placeholder = "请选择科室/功能组";
+  // eim 设备类型
+  eimdevicetpye_placeholder = "请选择设备类型";
 
 
   // 下拉框---设备类型
@@ -49,19 +45,7 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
   }
 
 
-  // 下拉框---设备编号！
-  assetsnumber = {
-    placeholder: "请选择设备编号",
-    name: '设备编号',
-    datas: [
-      { name: 'GT1918-1720TM' },
-      { name: 'GT1917-1819TM' },
-      { name: 'GT1916-1919TM' },
-      { name: 'GT1915-2018TM' },
-      { name: 'GT1914-2117TM' },
-      { name: 'GT1913-2216TM' },
-    ]
-  }
+  
 
   // 前端要展示的button 主要是：增、删、改
   buttons;
@@ -91,6 +75,8 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
     private deviceservice: DeviceKpiReport2Service, private http: HttpserviceService,
     private userinfo: UserInfoService) { 
     
+      // 选择框
+      this.get_tree_selecetdata();
 
   }
 
@@ -98,9 +84,11 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
     this.getbuttons();
     this.initdate();
     // 得到pathname --在得到button
+    console.log("得到pathname --在得到button\t\t")
     var roleid = this.userinfo.getEmployeeRoleID();
     this.publicservice.get_buttons_bypath(roleid).subscribe(result=>{
       this.button = result;
+      console.log("得到pathname --在得到button\t\t", result)
       localStorage.setItem("buttons_list", JSON.stringify(result));
     })
   }
@@ -109,24 +97,33 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
     // 删除 man-hour-kpi-report2-buttons
     localStorage.removeItem("device-kpi-report2-buttons");
     localStorage.removeItem("kpi_for_detail");
+    localStorage.removeItem(this.date_ranges)
   }
 
   // 初始化日期范围
   initdate(){
     var date_ranges = this.date_ranges
+    var init_value = "2010-10-01 - 2020-11-21"
+    localStorage.setItem(date_ranges, JSON.stringify(init_value))
     layui.use('laydate', function(){
       var laydate = layui.laydate;
-      //日期范围
+      //日期范围 2010-10-01 2020-11-21
       laydate.render({
         elem: '#divice_kpi_report'
         ,range: true
-        // ,trigger: 'click'//呼出事件改成click
+        // 初始化日期范围 
+        ,value: init_value
+        // 控件初始打开回调
+        
+        // ,trigger: 'click'//呼出事件改成click  控件选择完毕回调
         ,done: function(value, date, endDate){
+          
           localStorage.setItem(date_ranges, JSON.stringify(value))
           console.log(value); //得到日期生成的值，如：2017-08-18
           console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
           console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
         }
+        
       });
 
 
@@ -139,8 +136,8 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
     if (date_range){
       var date = JSON.parse(date_range).split(' - ');
       console.log("date--->", date)
-      var date_list = date;
-      localStorage.removeItem(this.date_ranges)
+      var date_list = date[0]===""?[]:date;
+      
       return date_list
     }
     // var date_list = [this.datepipe.transform(this.selectedMoments[0],'yyyy-MM-dd'), this.datepipe.transform(this.selectedMoments[1],'yyyy-MM-dd')];
@@ -224,17 +221,13 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
 
   // 刷新tabel
   refresh_table(){
-    $("#employeenumber").val('')
+    $("#devicename").val('')
     this.refresh = true;
     this.loading = true;
     // this.gridData = [];
     // this.inttable();
     this.refresh = false;
-
-    // 取消选择的数据 delselect
-    $("#employeenumber").val("");
-    // this.groups_func.delselect();
-    // this.eimdevicetpye.delselect();
+    this.deviceservice.changeRefresh(true);
   }
 
 
@@ -267,24 +260,54 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
 
   }
 
+  // 得到下拉框的数据
+  get_tree_selecetdata(){
+    var columns = {
+      employeeid:this.userinfo.getEmployeeID(),
+    }
+    this.http.callRPC("deveice","dev_get_device_groups",columns).subscribe(result=>{
+      var res = result["result"]["message"][0]
+      console.log("得到下拉框的数据---------------->", res)
+      if (res["code"] === 1){
+        var groups = res["message"][0]["groups"];
+       
+        this.groups_func.init_select_tree(groups);
+        var eimdevicetpyedata = res["message"][0]["type"];
+        this.eimdevicetpye.init_select_trees(eimdevicetpyedata);
+      }
+    })
+  }
+
   // 搜索按钮
   query(){
-    var departmentselect_data = this.departmentselect.getselect();
-    var device_tpye_data = this.device_tpye.getselect();
-    var asset_number_data = this.asset_number.getselect();
+    // 设备名称 devicename
+    var devicename = $("#devicename").val();
+    // 科室/功能组
+    var groups_data = this.groups_func.getselect();
+    // 设备类型
+    var device_tpye_data = this.eimdevicetpye.getselect();
+    // 日期范围
     var daterange_data = this.getselect()
-    console.log("<------------搜索----------->", departmentselect_data, device_tpye_data,asset_number_data, daterange_data);
-    // 将搜索的值发布！
-    this.deviceservice.changeData(
-      {
-        department:departmentselect_data, 
-        device_tpye:device_tpye_data,
-        asset_number: asset_number_data,
-        daterange:daterange_data
-      }
-    )
-    var data = "department:" + String(departmentselect_data) + "," + 'device_tpye:' + String(device_tpye_data) +','+ 'asset_number:' + String(asset_number_data) +',' +'daterange:' + String(daterange_data);
-    this.RecordOperation("搜索设备", 1, data);
+    console.log("<------------搜索----------->", devicename, groups_data, device_tpye_data, daterange_data);
+    // 将科室/功能组，转为列表
+    var groups_data_ = groups_data ===""?[] :groups_data.split(";");
+    // 搜索的 时间范围 daterange 必选，修改为 start end
+    if(daterange_data.length > 1){
+      // 将搜索的值发布！
+      this.deviceservice.changeData(
+        {
+          devicename:[devicename],
+          eimdevicetype:device_tpye_data,
+          groups:groups_data_, 
+          daterange:daterange_data,
+          start:daterange_data[0],
+          end:daterange_data[1],
+        }
+      )
+
+    }
+    // var data = "department:" + String(groups_data) + "," + 'device_tpye:' + String(device_tpye_data) +',' +',' +'daterange:' + String(daterange_data);
+    // this.RecordOperation("搜索设备", 1, data);
     // this.test_task_table_data.source = null;
   }
 
@@ -298,21 +321,24 @@ export class DeviceKpiReport2Component implements OnInit, OnDestroy {
   };
 
 
-// option_record
-RecordOperation(option, result,infodata){
-  console.warn("==============>", this.userinfo.getLoginName())
-  console.warn("infodata==============>", infodata)
-  console.warn("==============>")
-  if(this.userinfo.getLoginName()){
-    var employeeid = this.userinfo.getEmployeeID();
-    var result = result; // 1:成功 0 失败
-    var transactiontype = option; // '新增用户';
-    var info = infodata;
-    var createdby = this.userinfo.getLoginName();
-    this.publicservice.option_record(employeeid, result,transactiontype,info,createdby);
-  }
 
-}
+
+
+  // option_record
+  RecordOperation(option, result,infodata){
+    console.warn("==============>", this.userinfo.getLoginName())
+    console.warn("infodata==============>", infodata)
+    console.warn("==============>")
+    if(this.userinfo.getLoginName()){
+      var employeeid = this.userinfo.getEmployeeID();
+      var result = result; // 1:成功 0 失败
+      var transactiontype = option; // '新增用户';
+      var info = infodata;
+      var createdby = this.userinfo.getLoginName();
+      this.publicservice.option_record(employeeid, result,transactiontype,info,createdby);
+    }
+
+  }
   
 
 

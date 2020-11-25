@@ -238,8 +238,9 @@ export class AgTableComponent implements OnInit {
       }
     }
 
-    console.log(">>>>>>>>>>>>>>>>>>>导出的table-title",table_header);
-    console.log(">>>>>>>>>>>>>>>>>>>导出的keys",keys);
+    // console.log(">>>>>>>>>>>>>>>>>>>导出的table-title",table_header);
+    // console.log(">>>>>>>>>>>>>>>>>>>导出的keys",keys);
+    // console.log(">>>>>>>>>>>>>>>>>>>选中的数据",select_data);
     if (select_data.length != 0){
       console.log("table_header----", table_header);
       table_data.push(table_header);
