@@ -251,6 +251,8 @@ layui.define("jquery", function(e) {
                 var e, o = this.style.backgroundColor,
                     r = k(P(o)),
                     t = o.slice(o.lastIndexOf(",") + 1, o.length - 1);
+                // zxx 2020 11 26
+                console.log(e);
                 D = r.h, H = r.s, E = r.b, 3 == (o.match(/[0-9]{1,3}/g) || []).length && (t = 1), W = t, e = 280 * t, L(r.h, r.s, r.b, t)
             })
         })
@@ -278,6 +280,8 @@ layui.define("jquery", function(e) {
                     var l = t.val(),
                         c = l,
                         f = {};
+                    // zxx 2020 11 26 
+                    console.log(c);
                     if (l.indexOf(",") > -1) {
                         if (f = k(P(l)), e.select(f.h, f.s, f.b), r[0].style.background = c = "#" + C(f), (l.match(/[0-9]{1,3}/g) || []).length > 3 && "rgba" === r.attr("lay-type")) {
                             var u = 280 * l.slice(l.lastIndexOf(",") + 1, l.length - 1);

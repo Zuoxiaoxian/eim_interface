@@ -8,6 +8,9 @@ declare let layui;
 })
 export class MySelectTreeTypeComponent implements OnInit {
   @Input("placeholder")placeholder:any;
+
+  // 下拉 icon
+  xialaicon = "arrow-ios-downward-outline"
   constructor() { }
 
   placeholder_title_type;
@@ -30,6 +33,13 @@ export class MySelectTreeTypeComponent implements OnInit {
     layui.use(['eleTree',],function(){
       var eleTree = layui.eleTree;
       $("[name='title_type']").on("click",function (e) {
+
+        if (that.xialaicon === "arrow-ios-upward-outline"){
+          that.xialaicon = "arrow-ios-downward-outline"
+        }else{
+          that.xialaicon = "arrow-ios-upward-outline";
+        }
+
         e.stopPropagation();
         if(!el5){
           el5=eleTree.render({
@@ -74,6 +84,7 @@ export class MySelectTreeTypeComponent implements OnInit {
     })
       $(document).on("click",function() {
           $(".eletype").hide();
+          that.xialaicon = "arrow-ios-downward-outline";
       })
     })
   }

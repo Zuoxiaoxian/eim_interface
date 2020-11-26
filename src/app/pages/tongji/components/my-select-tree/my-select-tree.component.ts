@@ -10,6 +10,8 @@ declare let layui;
 export class MySelectTreeComponent implements OnInit {
   @Input("placeholder")placeholder:any;
 
+  // 下拉 icon
+  xialaicon = "arrow-ios-downward-outline"
   placeholder_title;
   select_type = [];
 
@@ -124,6 +126,13 @@ export class MySelectTreeComponent implements OnInit {
     layui.use(['eleTree',],function(){
       var eleTree = layui.eleTree;
       $("[name='title']").on("click",function (e) {
+        
+        if (that.xialaicon === "arrow-ios-upward-outline"){
+          that.xialaicon = "arrow-ios-downward-outline"
+        }else{
+          that.xialaicon = "arrow-ios-upward-outline";
+        }
+
         e.stopPropagation();
         if(!el5){
           el5=eleTree.render({
@@ -142,6 +151,7 @@ export class MySelectTreeComponent implements OnInit {
       //     $("[name='title']").val(d.data.currentData.label)
       //     $(".ele5").hide();
       // });
+      
       // 节点被选择
       var select_data = []; //[{id: 3, label: "nvh"},]
       var select_label_list = [];
@@ -167,6 +177,7 @@ export class MySelectTreeComponent implements OnInit {
     })
       $(document).on("click",function() {
           $(".ele5").hide();
+          that.xialaicon = "arrow-ios-downward-outline";
       })
     })
   }

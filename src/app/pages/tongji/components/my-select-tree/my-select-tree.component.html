@@ -1,5 +1,9 @@
 <!-- 对应的html -->
 <!-- <input type="text" name="title" required="" lay-verify="required" placeholder="请选择科室/功能组" readonly="" autocomplete="off" class="layui-input"> -->
-<input nbInput name="title" shape="rectangle"  style="margin-left: 2px;width: 98%;line-height: 16px;" placeholder="placeholder_title" status="success" type="text" class="employeenumber">
+<!-- 测试多选 动态-->
+<div style="position: relative;">
+    <input nbInput name="title" shape="rectangle"  style="margin-left: 2px;width: 98%;line-height: 16px;" placeholder="placeholder_title" status="success" type="text" class="employeenumber">
+    <nb-icon class="xiala" [icon]="xialaicon"></nb-icon>
+    <div class="eleTree ele5" lay-filter="data5"></div>
 
-<div class="eleTree ele5" lay-filter="data5"></div>
+</div>

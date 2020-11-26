@@ -948,50 +948,52 @@ export class DeviceManageComponent implements OnInit {
 
   tableDatas = {
     totalPageNumbers: 0, // 总页数
-    columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
-      { field: 'devicename', headerName: '设备名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true, pinned: 'left'},
+    columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度  pinned: 'left' 固定在左侧！
+      { field: 'devicename', headerName: '设备名称', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true,},
       { field: 'deviceno', headerName: 'EIM设备编号',  resizable: true, minWidth: 10},
-      { field: 'type', headerName: '设备类型', resizable: true},
       { field: 'deviceid', headerName: '设备编号', resizable: true, minWidth: 10}, // 自定义设备编号！
+      { field: 'assetno', headerName: '资产编号', resizable: true, minWidth: 10},
+      { field: 'type', headerName: '设备类型', resizable: true},
       // { field: 'department', headerName: '使用部门', resizable: true, minWidth: 10},// 取消使用部门
       { field: 'group', headerName: '科室', resizable: true, minWidth: 10},
       { field: 'belonged', headerName: '归属人', resizable: true, minWidth: 10},
       { field: 'active', headerName: '是否启用', resizable: true, cellRendererFramework: TranActiveComponent,},
-      { field: 'assetno', headerName: '资产编号', resizable: true, minWidth: 10},
+      { field: 'supplier', headerName: '供应商', resizable: true, minWidth: 10,flex: 1},
+      { field: 'location', headerName: '存放地点', resizable: true, minWidth: 10},
       // { field: 'devicestatus', headerName: '资产状态', resizable: true, minWidth: 10, cellRendererFramework: StatusForTableComponent},
-      { field: 'devicestatus', headerName: '资产状态', resizable: true,minWidth: 50,pinned: 'left',
+      { field: 'devicestatus', headerName: '资产状态', resizable: true,minWidth: 50,
         cellStyle: function(params){
           var value = params.value;
           switch (value) {
             case '停用':
               return {
-                border: 'rgb(238, 240, 238) 1px solid',
-                background: 'rgb(199, 199, 199)',
+                // border: 'rgb(238, 240, 238) 1px solid',
+                // background: 'rgb(199, 199, 199)',
               }
               break;
             case '闲置':
               return {
-                border: 'rgb(216, 236, 162) 1px solid',
-                background: 'rgb(171, 250, 92)',
+                // border: 'rgb(216, 236, 162) 1px solid',
+                // background: 'rgb(171, 250, 92)',
               }
             
               break;
             case '封存':
               return {
-                border: 'rgb(228, 144, 129) 1px solid',
-                background: 'rgb(247, 115, 39)',
+                // border: 'rgb(228, 144, 129) 1px solid',
+                // background: 'rgb(247, 115, 39)',
               }
               break;
             case '在用':
               return {
-                border: 'green 1px solid',
-                background: 'rgb(48, 248, 48)'
+                // border: 'green 1px solid',
+                // background: 'rgb(48, 248, 48)'
               }
               break;
             default:
               return {
-                border: 'rgb(203, 238, 164) 1px solid',
-                background: 'rgb(203, 238, 164)',
+                // border: 'rgb(203, 238, 164) 1px solid',
+                // background: 'rgb(203, 238, 164)',
               }
               break;
           }
@@ -999,11 +1001,10 @@ export class DeviceManageComponent implements OnInit {
       
       },
       { field: 'factoryno', headerName: '出厂编号', resizable: true, minWidth: 10},
-      { field: 'purchaseon', headerName: '购置日期', resizable: true, minWidth: 10},
-      { field: 'supplier', headerName: '供应商', resizable: true, flex: 1},
-      { field: 'location', headerName: '存放地点', resizable: true, minWidth: 10},
+      
       // =================
       { field: 'createdby', headerName: '创建人', resizable: true},
+      { field: 'purchaseon', headerName: '购置日期', resizable: true, minWidth: 10},
       { field: 'createdon', headerName: '创建时间', resizable: true},
     ],
     rowData: [ // data

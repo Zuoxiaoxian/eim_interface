@@ -88,6 +88,7 @@ export class SecurityLogComponent implements OnInit {
   tableDatas = {
     action: false,
     totalPageNumbers: 0, // 总页数
+    PageSize: 10, // 每页 10条数据
     columnDefs:[ // 列字段 多选：headerCheckboxSelection checkboxSelection , flex: 1 自动填充宽度
       // { field: 'application', headerName: '应用', headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, minWidth: 50,resizable: true},
       { field: 'createdby', headerName: '域账号',headerCheckboxSelection: true, checkboxSelection: true, autoHeight: true, fullWidth: true, resizable: true, flex: 1},
@@ -104,12 +105,15 @@ export class SecurityLogComponent implements OnInit {
   inttable(event?){
     var offset;
     var limit;
+    var PageSize;
     if (event != undefined){
       offset = event.offset;
       limit = event.limit;
+      PageSize = event.PageSize? Number(event.PageSize):10;
     }else{
       offset = 0;
       limit = 20;
+      PageSize = 10;
     }
     var columns = {
       offset: offset, 
@@ -121,8 +125,10 @@ export class SecurityLogComponent implements OnInit {
         var message = get_sys_login_log['message'];
         var totalpagenumbers = get_sys_login_log['numbers'][0]['numbers'];
         this.tableDatas.totalPageNumbers = totalpagenumbers;
+        this.tableDatas.PageSize = PageSize;
         this.gridData.push(...message)
         this.tableDatas.rowData = this.gridData;
+        this.tableDatas.PageSize = PageSize;
         this.agGrid.init_agGrid(this.tableDatas);
         this.RecordOperation(1, '查看', "安全日志");
       }else{

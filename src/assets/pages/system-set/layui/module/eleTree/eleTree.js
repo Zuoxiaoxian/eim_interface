@@ -114,12 +114,13 @@ layui.define(["jquery", "laytpl"], function(exports) {
             function() {
                 // 是否显示连线
                 if (!options.showLine) return '';
+                var s = new String();
                 if (floor !== 0) {
-                    var s = '<i class="eleTree-node-verticalline" style="left: ' + (9 + options.indent * (floor - 1)) + 'px;"></i>' +
+                    s = '<i class="eleTree-node-verticalline" style="left: ' + (9 + options.indent * (floor - 1)) + 'px;"></i>' +
                         '<i class="eleTree-node-horizontalline" style="width: ' + (options.indent - 4) + 'px;left: ' + (9 + options.indent * (floor - 1)) + 'px;"></i>';
                     return s;
                 } else {
-                    var s = '<i class="eleTree-node-verticalline" style="left: ' + (9 + options.indent * (floor - 1)) + 'px;display: none;"></i>' +
+                    s = '<i class="eleTree-node-verticalline" style="left: ' + (9 + options.indent * (floor - 1)) + 'px;display: none;"></i>' +
                         '<i class="eleTree-node-horizontalline" style="width: ' + (options.indent - 4) + 'px;left: ' + (9 + options.indent * (floor - 1)) + 'px;display: none;"></i>';
                     return s;
                 }
@@ -582,6 +583,7 @@ layui.define(["jquery", "laytpl"], function(exports) {
                 eleNode = parentNode;
                 inp = parentCheckbox;
                 siblingNode = parentSiblingNode;
+                console.log(siblingNode);
             }
         },
         // 初始展开所有

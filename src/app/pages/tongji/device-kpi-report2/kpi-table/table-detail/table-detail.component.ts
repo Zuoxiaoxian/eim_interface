@@ -14,7 +14,7 @@ export class TableDetailComponent implements OnInit,ICellRendererAngularComp {
 
   ngOnInit(): void {
     this.url = this.params.node.data.option;
-    console.log("===============================\n")
+    
     console.log("==============设备详情！=================", this.url)
     console.log("===============================\n")
   }
@@ -22,7 +22,9 @@ export class TableDetailComponent implements OnInit,ICellRendererAngularComp {
 
   // kpi 详情
   kpidetail(){
-    // this.router.navigate(['/pages/tongji/deviceKpiReport/kpidetail'])
+    // this.router.navigate(['/pages/tongji/deviceKpiReport/kpidetail']);
+    console.log("======================this.params.node.data=========\n",this.params.node.data);
+    localStorage.setItem('kpi_for_detail', JSON.stringify(this.params.node.data))
     this.router.navigate([this.url])
   }
 

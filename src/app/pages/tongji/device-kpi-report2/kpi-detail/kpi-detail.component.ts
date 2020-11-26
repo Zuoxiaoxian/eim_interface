@@ -37,18 +37,18 @@ export class KpiDetailComponent implements OnInit {
 
     console.log("kpi_detail----", this.kpi_for_detail);
 
-    // // 这是 左侧第一个柱状图
-    // this.init_left_one();
+    // 这是 左侧第一个柱状图
+    this.init_left_one();
     
-    // // 这是 右侧第一个饼图 right-one
-    // this.init_right_ong();
+    // 这是 右侧第一个饼图 right-one
+    this.init_right_ong();
 
     
-    // // 这是左侧第二个饼图 left_two
-    // this.init_left_two();
+    // 这是左侧第二个饼图 left_two
+    this.init_left_two();
 
-    // // 这是 右侧第二个 柱状图 right-two
-    // this.init_right_two();
+    // 这是 右侧第二个 柱状图 right-two
+    this.init_right_two();
     
 
   };
