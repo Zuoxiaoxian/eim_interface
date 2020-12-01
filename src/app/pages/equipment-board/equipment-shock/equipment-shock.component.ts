@@ -1,12 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LayoutService } from '../../../@core/utils/layout.service';
-import { colors, rgb_del_red,list_jion,list_copy,create_third_chart_line } from '../equipment-board';
+import { colors, rgb_del_red,list_jion,list_copy,shock_htmlStr } from '../equipment-board';
 
-let equipment_four_road = require('../../../../assets/eimdoard/equipment/js/equipment-four-road');
-let rtm3a = require('../../../../assets/eimdoard/rtm3/js/rtm3a');
-
-let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
 
 @Component({
   selector: 'ngx-equipment-shock',
@@ -78,14 +74,15 @@ export class EquipmentShockComponent implements OnInit {
 
   timer:any;//定时器
   language = '';//语言 空为zh-CN中文
-  //设备介绍
-  str = `试验原理：--------------------------------------------------<br>
-  设备构成：-------，-------，-------，--------<br>
-  试验能力：------------------------------------------------<br>
-   标准试验：-------------------------------------------------<br>
-                    -----------------------------------------------<br>
-                    --------------------------------------------<br>
-   非标试验：---------------------------------------<br>`;
+
+   //设备介绍
+  equipIntroduceList = [
+    {htmlstr:shock_htmlStr[0],title:'',type:'span_class'},
+    {htmlstr:shock_htmlStr[1],title:'设备构成及参数',type:'table_class'},
+    {htmlstr:shock_htmlStr[2],title:'设备构成及参数',type:'table_class'}
+  ];
+  //当前的页数
+  eqIntShow = 0;
 
   constructor(private layoutService: LayoutService,private activateInfo:ActivatedRoute) { }
 
@@ -124,6 +121,7 @@ export class EquipmentShockComponent implements OnInit {
 
     //获取数据
     this.getData();
+
   }
 
   getData(){
@@ -146,47 +144,30 @@ export class EquipmentShockComponent implements OnInit {
     },1000)
     setTimeout(() => {
       this.initChart();
-      this.in();
     }, 1000);
   }
 
  
-  timer1 ;
-  timer2 ;
 
-  in(){
-    
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-
-    this.timer1 = setInterval(f=>{
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    },3000)
-    this.timer2 = setInterval(f=>{
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    },3000)
-  }
   
   //初始化图表
   initChart(){
 
-    let data = {
-      title:['一级警告','二级警告'],
-      yAxis:['周一','周二','周三','周四','周五','周六','周日'],
-      firstData:[120, 132, 101, 134, 90, 230, 210],
-      secondData:[220, 182, 191, 234, 290, 330, 310]
-    }
-    if(this.language){
-      data.title = ['LV1Warn','LV2Warn'];
-      data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-    }
-    if(document.getElementById('warning')){
+    // let data = {
+    //   title:['一级警告','二级警告'],
+    //   yAxis:['周一','周二','周三','周四','周五','周六','周日'],
+    //   firstData:[120, 132, 101, 134, 90, 230, 210],
+    //   secondData:[220, 182, 191, 234, 290, 330, 310]
+    // }
+    // if(this.language){
+    //   data.title = ['LV1Warn','LV2Warn'];
+    //   data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    // }
+    // if(document.getElementById('warning')){
 
-      let myChart_3 = echarts.init(document.getElementById('warning'));
-      equipment_four_road.create_warning_chart(data,myChart_3);
-    }
+    //   let myChart_3 = echarts.init(document.getElementById('warning'));
+    //   equipment_four_road.create_warning_chart(data,myChart_3);
+    // }
 
     // let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
     // equipment_four_road.create_real_temperature({value:55.33},myChart_4);
@@ -204,7 +185,7 @@ export class EquipmentShockComponent implements OnInit {
     //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.list[0]],xData:this.xData});
     // })
 
-    create_third_chart_line(rtm3a,this);
+    // create_third_chart_line(rtm3a,this);
 
   }
 

@@ -186,6 +186,7 @@ let rtm3a = {
     },
 
     create_third_chart_line(data, id) {
+        if (!document.getElementById(id)) return;
         var myChart = echarts.init(document.getElementById(id));
         var color = ['#F35331', '#2499F8', '#3DF098', '#33B734'];
         //订单完成情况螺旋图

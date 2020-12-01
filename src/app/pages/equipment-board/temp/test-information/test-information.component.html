@@ -28,7 +28,7 @@
             <tr class="body" *ngFor="let items of experiment.data">
                 <td *ngFor="let item of items;let i = index" style="width: 20%;">
                     <div *ngIf="i == 4;else fontTemp" class="progres_1">
-                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" nzStatus="{{item<70?'active':'exception'}}"></nz-progress>
+                        <nz-progress [nzPercent]="item" nzSize="small" [nzShowInfo]="false" nzStatus="{{true?'active':'exception'}}"></nz-progress>
                         <div class="progres_2" [ngStyle]="{'left':getleft(item)}">
                             {{item}}%
                         </div>

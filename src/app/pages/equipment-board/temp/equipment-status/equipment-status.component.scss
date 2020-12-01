@@ -50,42 +50,41 @@
             width: 33%;
             height: 100%;
         }
-        #device_status,
-        #operatingRate {
+        #device_status {
             // height: 45%;
             width: 95%;
             box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
             // min-height: 50%;
+        }
+        #operatingRate {
+            height: 77%;
         }
     }
 }
 
 .blue {
     background-color: #006ced;
-    color: white;
-    height: 100%;
-    padding-top: 13%;
 }
 
 .red {
     background-color: #d71345;
-    color: white;
-    height: 100%;
-    padding-top: 13%;
 }
 
 .green {
     background-color: rgb(74, 181, 107);
-    color: white;
-    height: 100%;
-    padding-top: 13%;
 }
 
 .yellow {
     background-color: #faa755;
+    // background-image: radial-gradient(rgba(250, 167, 85, 1), rgba(250, 167, 85, 0.75));
+    // box-shadow: 0 0 2px rgba(250, 167, 85, 1) inset
+}
+
+.font_li {
     color: white;
     height: 100%;
-    padding-top: 13%;
+    padding-top: 24%;
+    font-weight: bold;
 }
 
 nb-icon {

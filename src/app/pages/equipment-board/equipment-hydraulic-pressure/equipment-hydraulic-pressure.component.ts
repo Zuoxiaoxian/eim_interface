@@ -2,11 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LayoutService } from '../../../@core/utils/layout.service';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
-import { colors, rgb_del_red,getMessage,painting_time,create_third_chart_line } from '../equipment-board';
-let equipment_four_road = require('../../../../assets/eimdoard/equipment/js/equipment-four-road')
-let rtm3a = require('../../../../assets/eimdoard/rtm3/js/rtm3a');
-
-let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
+import { colors, dateformat, rgb_del_red,painting_time,hydraulic_htmlstr } from '../equipment-board';
 
 // 引入jquery
 declare var $:any;
@@ -21,94 +17,94 @@ export class EquipmentHydraulicPressureComponent implements OnInit {
   xData = [];
 
   attrs_1:any = {
-    'equipment.road.LeftRear.Params':[{ 
+    'equipment.road.LeftRear.Params':[{
       name: "左后输出",nameEn :'LeftRearOutput', unit: "V",value: [],show:true
       ,color:["", ""]
-    },{ 
+    },{
         name: "左后位移",nameEn :'LeftRearDisplacement', unit: "V",value: [],show:true,
         color:["", ""]
-    },{ 
+    },{
       name: "左后活动Fdbk",nameEn :'LeftRearActiveFdbk', unit: "V",value: [],show:true,
       color:["", ""]
-    },{ 
+    },{
       name: "左后指令频率",nameEn :'LeftRearCommandFrequency', unit: "V",value: [],
       color:["", ""]
-  },{ 
+  },{
     name: "左后位移绝对误差",nameEn :'LeftRearDisplacementAbs.Error', unit: "V",value: [],
     color:["", ""]
-  },{ 
+  },{
     name: "左后位移误差",nameEn :'LeftRearDisplacementError', unit: "V",value: [],
     color:["", ""]
-  },{ 
+  },{
     name: "左后DeltaP",nameEn :'LeftRearDeltaP', unit: "V",value: [],
     color:["", ""]
 }],
-    'equipment.road.RightRear.Params':[{ 
+    'equipment.road.RightRear.Params':[{
       name: "右后输出",nameEn :'RightRearOutput', unit: "V",value: [],show:true
       ,color:["", ""]
-    },{ 
+    },{
         name: "右后位移",nameEn :'RightRearDisplacement', unit: "V",value: [],show:true,
         color:["", ""]
-    },{ 
+    },{
       name: "右后活动Fdbk",nameEn :'RightRearActiveFdbk', unit: "V",value: [],show:true,
       color:["", ""]
-    },{ 
+    },{
       name: "右后指令频率",nameEn :'RightRearCommandFrequency', unit: "V",value: [],
       color:["", ""]
-  },{ 
+  },{
     name: "右后位移绝对误差",nameEn :'RightRearDisplacementAbs.Error', unit: "V",value: [],
     color:["", ""]
-  },{ 
+  },{
     name: "右后位移误差",nameEn :'RightRearDisplacementError', unit: "V",value: [],
     color:["", ""]
-  },{ 
+  },{
     name: "右后DeltaP",nameEn :'RightRearDeltaP', unit: "V",value: [],
     color:["", ""]
 }],
 xData:[]
   };
   attrs_2:any = {
-    'equipment.road.LeftFront.Params':[{ 
+    'equipment.road.LeftFront.Params':[{
       name: "左前输出",nameEn :'LeftFrontOutput', unit: "V",value: [],show:true
       ,color:["", ""]
-    },{ 
+    },{
         name: "左前位移",nameEn :'LeftFrontDisplacement', unit: "V",value: [],show:true,
         color:["", ""]
-    },{ 
+    },{
       name: "左前活动Fdbk",nameEn :'LeftFrontActiveFdbk', unit: "V",value: [],show:true,
       color:["", ""]
-    },{ 
+    },{
       name: "左前指令频率",nameEn :'LeftFrontCommandFrequency', unit: "V",value: [],
       color:["", ""]
-  },{ 
+  },{
     name: "左前位移绝对误差",nameEn :'LeftFrontDisplacementAbs.Error', unit: "V",value: [],
     color:["", ""]
-  },{ 
+  },{
     name: "左前位移误差",nameEn :'LeftFrontDisplacementError', unit: "V",value: [],
     color:["", ""]
-  },{ 
+  },{
     name: "左前DeltaP",nameEn :'LeftFrontDeltaP', unit: "V",value: [],
     color:["", ""]
 }],
-    'equipment.road.RightFront.Params':[{ 
+    'equipment.road.RightFront.Params':[{
       name: "右前输出",nameEn :'RightFrontOutput', unit: "V",value: [],show:true
       ,color:["", ""]
-    },{ 
+    },{
         name: "右前位移",nameEn :'RightFrontDisplacement', unit: "V",value: [],show:true,
         color:["", ""]
-    },{ 
+    },{
       name: "右前活动Fdbk",nameEn :'RightFrontActiveFdbk', unit: "V",value: [],show:true,
       color:["", ""]
-    },{ 
+    },{
       name: "右前指令频率",nameEn :'RightFrontCommandFrequency', unit: "V",value: [],
       color:["", ""]
-  },{ 
+  },{
     name: "右前位移绝对误差",nameEn :'RightFrontDisplacementAbs.Error', unit: "V",value: [],
     color:["", ""]
-  },{ 
+  },{
     name: "右前位移误差",nameEn :'RightFrontDisplacementError', unit: "V",value: [],
     color:["", ""]
-  },{ 
+  },{
     name: "右前DeltaP",nameEn :'RightFrontDeltaP', unit: "V",value: [],
     color:["", ""]
 }],
@@ -125,7 +121,7 @@ xData:[]
     {name:'2',color:'yellow',status:0},
     {name:'1',color:'red',status:0},
   ];
- 
+
   //实验实时状态
   switchStatus: any ={
     title:[`stationNameCGF`,'OnOff','InternalLock','Programlock'],
@@ -162,20 +158,39 @@ xData:[]
   img = {
     url:'assets/eimdoard/equipment/images/car_2.png',//中间图片
     name:''
-  } 
+  }
 
   // ngx-chart-curve-v3有哪些tag
   list_2 = ['equipment.road.LeftFront.Params','equipment.road.RightFront.Params'];
   list_1 = ['equipment.road.LeftRear.Params','equipment.road.RightRear.Params'];
-
+  equipIntroduceList = [
+    {htmlstr:hydraulic_htmlstr[0],title:'',type:'table_class'},
+  ]
   //设备介绍
-  str = `试验原理：--------------------------------------------------<br>
-  设备构成：-------，-------，-------，--------<br>
-  试验能力：------------------------------------------------<br>
-   标准试验：-------------------------------------------------<br>
-                    -----------------------------------------------<br>
-                    --------------------------------------------<br>
-   非标试验：---------------------------------------<br>`;
+  str = `1.主要功能用途：底盘结构件台架试验如：副车架、摆臂、稳定杆、后桥等<br>
+  2.使用标准\规范 <br>
+  &emsp;Q/JLY J7110489B-2016  乘用车前、后副车架总成技术条件 <br>
+  &emsp;Q/JLY J7110439D-2016 J05204 悬架摆臂总成类技术条件 <br>
+  &emsp;Q/JLY J7110490B-2016 J05204 后桥总成（扭力梁）技术条件<br>
+  &emsp;Q/JLY J7110371C-2016 J05204 前、后稳定杆总成技术条件等<br>
+  <div class="equipments_table">
+    <div class="equipments_table_title" style="padding-right: 10px">3.设备构成及参数</div>
+    <div  class="column_20 border_1px">
+      <div>名称</div>
+      <div class="border_top_1px">MTS直线缸</div>
+    </div>
+    <div  class="column_42 border_1px">
+      <div>基本参数</div>
+      <div class="border_top_1px">载荷：±25kN；位移：±125mm</div>
+      <div class="border_top_1px">载荷：±50kN；位移：±125mm</div>
+    </div>
+    <div  class="column_20 border_1px">
+      <div>数量</div>
+      <div class="border_top_1px">4</div>
+      <div class="border_top_1px">2</div>
+    </div>
+  </div>
+  `;
 
   click_list = [];//当前选中的tag
   deviceid: any;//设备编号
@@ -197,7 +212,6 @@ xData:[]
     })
     //路由参数  标题
     this.activateInfo.params.subscribe(f =>{
-      console.log(f);
       if(document.getElementById('head_title'))
         document.getElementById('head_title').innerText = f.title;
     })
@@ -210,33 +224,10 @@ xData:[]
     this.getData();
     setTimeout(() => {
       this.initChart();
-      this.in();
-        
       }, 1000);
-    
+
   }
-  timer1;
-  timer2;
 
-  in(){
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-
-    this.timer1 = setInterval(f=>{
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    },3000)
-    this.timer2 = setInterval(f=>{
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-    },3000)
-    // let arr = [this.chart_1,this.chart_2].forEach((f,i)=>{
-    //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:[],index:1});
-
-    // })
-   
-    
-  }
 
   getData(){
      // 定时添加数据
@@ -254,39 +245,27 @@ xData:[]
         table = 'get_device_mts_timerangedata',method = 'device_monitor.get_device_mts_timerangedata';
         this.get_device_mts_time(table,method,param);
       }
-      
+
     },1000)
 
   }
-  
+
   //初始化表格
   initChart(){
 
-    let data = {
-      title:['一级警告','二级警告'],
-      yAxis:['周一','周二','周三','周四','周五','周六','周日'],
-      firstData:[120, 132, 101, 134, 90, 230, 210],
-      secondData:[220, 182, 191, 234, 290, 330, 310]
+    // let data = {
+    //   title:['一级警告','二级警告'],
+    //   yAxis:['周一','周二','周三','周四','周五','周六','周日'],
+    //   firstData:[120, 132, 101, 134, 90, 230, 210],
+    //   secondData:[220, 182, 191, 234, 290, 330, 310]
 
-    }
-    if(this.language){
-      data.title = ['LV1Warn','LV2Warn'];
-      data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-    }
-    let myChart_3 = echarts.init(document.getElementById('warning'));
-    equipment_four_road.create_warning_chart(data,myChart_3);
-
-    if(document.getElementById('real_temperature_1')){
-      let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-
-    }
-
-    if(document.getElementById('real_temperature_2')){
-
-      let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-    }
+    // }
+    // if(this.language){
+    //   data.title = ['LV1Warn','LV2Warn'];
+    //   data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    // }
+    // let myChart_3 = echarts.init(document.getElementById('warning'));
+    // equipment_four_road.create_warning_chart(data,myChart_3);
 
     // setInterval(f=>{
     //   equipment_four_road.create_real_temperature({value:Math.floor(Math.random() * 101)},myChart_4);
@@ -296,14 +275,14 @@ xData:[]
     // },3000)
 
 
-    create_third_chart_line(rtm3a,this);
+    // create_third_chart_line(rtm3a,this);
 
   }
 
    //重新画
    clicEvent(e,i){
      //记录选定
-    this.click_list[i-1] = e;  
+    this.click_list[i-1] = e;
     this[`list_${i}`].forEach(f=>{
       if(e!=f)this[`attrs_${i}`][f].forEach(el => {
         el.value = [];
@@ -314,7 +293,7 @@ xData:[]
 
   //颜色的赋值
   color(){
-    
+
     let rgb = '';
     ['attrs_1','attrs_2'].forEach(element => {
       for(let item in this[element]){
@@ -336,9 +315,10 @@ xData:[]
     let arr1s = [];
     this.click_list.forEach((f,i)=>{
       this[`attrs_${i+1}`][f].forEach(el => {
-        if(el.value){
-          el.value.length <= 0?arr10s.push(el.nameEn.replace(".","").toLocaleLowerCase()):arr1s.push(el.nameEn.replace(".","").toLocaleLowerCase());
-        }
+        if(el.value &&  el.value.length <= 0)
+          if( arr10s.findIndex(g=> g==el.value) == -1)arr10s.push(el.nameEn.replace(".","").toLocaleLowerCase());
+        if(el.value &&  el.value.length > 0)
+          arr1s.push(el.nameEn.replace(".","").toLocaleLowerCase());
       });
     })
     return [arr10s,arr1s];
@@ -367,25 +347,28 @@ xData:[]
         f[3].value =  g.result.message[0][0].programinterlock;
         f[3].color =  f[3].value == 1?'white':'orange';
       });
-      
+
     })
   }
 
 
 /**
    * 获取一段时间
-   * @param table 
-   * @param method 
-   * @param param 
+   * @param table
+   * @param method
+   * @param param
    */
   get_device_mts_time(table,method,param){
     // let datestr = dateformat(new Date(),'yyyy-MM-dd hh:mm');
     // let datestr_ = dateformat(new Date(),'yyyy-MM-dd hh:mm');
-    this.http.callRPC(table,method,{"start":"2020-11-09 14:02:00","end":"2020-11-10 20:20:00","device":"device_mts_01",
+    let now = new Date();
+    this.http.callRPC(table,method,{"start":dateformat(new Date(now.getTime()-10000),'yyyy-MM-dd hh:mm:ss'),"end": dateformat(now,'yyyy-MM-dd hh:mm:ss'),"device":"device_mts_01",
+
+    // this.http.callRPC(table,method,{"start":"2020-11-09 14:02:00","end":"2020-11-10 20:20:00","device":"device_mts_01",
     arr:param[0].join(',')}).subscribe((f:any) =>{
       if(f.result.error || f.result.message[0].code == 0)return;
       painting_time(f,10,this,['chart_1','chart_2']);
-      
+
     })
   }
 
@@ -399,7 +382,7 @@ xData:[]
       console.log(f);
       let _key = "";//请求到的数据字段前面部分固定的
       let o = -1;//real_time数据的下标
-      if(f.result.error || f.result.message[0].code == 0)return;
+      if(f.result.error || f.result.message[0].code == 0 || !f.result.message[0].message || f.result.message[0].message[0].error)return;
       f.result.message[0].message.forEach(el => {
         for(let key in el){
           switch(true){
@@ -438,9 +421,9 @@ xData:[]
 
   /**
    * 获取一秒
-   * @param table 
-   * @param method 
-   * @param param 
+   * @param table
+   * @param method
+   * @param param
    */
   get_device_mts_realtimedata(table,method,param){
     this.http.callRPC(table,method,{"device":"device_mts_01",
@@ -451,7 +434,7 @@ xData:[]
   }
 
 
-   
+
 
   // 分油器的按钮显示
   getbtnStatus(item,i){
@@ -474,8 +457,6 @@ xData:[]
 
   ngOnDestroy(){
     clearInterval(this.timer);
-    clearInterval(this.timer1)
-    clearInterval(this.timer2)
 
   }
 

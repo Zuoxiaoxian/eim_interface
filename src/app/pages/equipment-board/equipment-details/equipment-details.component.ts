@@ -129,7 +129,6 @@ export class EquipmentDetailsComponent implements OnInit {
     this.getData();
     setTimeout(() => {
       this.initChart();
-      this.in();
     }, 1000);
 
     
@@ -155,45 +154,14 @@ export class EquipmentDetailsComponent implements OnInit {
     },1000)
     
   }
-timer1;
-timer2;
-  in(){
-    let myChart_4 = echarts.init(document.getElementById('real_temperature_1'));
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    let myChart_5 = echarts.init(document.getElementById('real_temperature_2'));
-    equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-
-    this.timer1 = setInterval(f=>{
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_4);
-    },3000)
-    this.timer2 = setInterval(f=>{
-      equipment_four_road.create_real_temperature_v2({value:Math.floor(Math.random() * 101),title:'温度',max:100,setValue:80},myChart_5);
-    },3000)
-  }
 
   initChart(){
-
-
-    let data = {
-      title:['一级警告','二级警告'],
-      yAxis:['周一','周二','周三','周四','周五','周六','周日'],
-      firstData:[120, 132, 101, 134, 90, 230, 210],
-      secondData:[220, 182, 191, 234, 290, 330, 310]
-      
-    }
-    if(this.language){
-      data.title = ['LV1Warn','LV2Warn'];
-      data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-    }
-    let myChart_3 = echarts.init(document.getElementById('warning'));
-    equipment_four_road.create_warning_chart(data,myChart_3);
     
     
     // this.list.forEach((f,i)=>{
     //   this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.list[0]],xData:this.xData});
     // })
-    
-    create_third_chart_line(rtm3a,this);
+
 
     
 
@@ -215,8 +183,6 @@ timer2;
 
   ngOnDestroy(){
     clearInterval(this.timer)
-    clearInterval(this.timer1)
-    clearInterval(this.timer2)
   }
 
 }

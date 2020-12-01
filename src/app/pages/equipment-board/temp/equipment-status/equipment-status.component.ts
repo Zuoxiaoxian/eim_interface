@@ -26,7 +26,7 @@ export class EquipmentStatusComponent implements OnInit {
   ];
   andon_now = 1;
   language;
-  
+
   constructor(private layoutService:LayoutService,private http:HttpserviceService) { }
 
 
@@ -34,13 +34,20 @@ export class EquipmentStatusComponent implements OnInit {
     let language = localStorage.getItem('currentLanguage');
     if(language!='zh-CN')this.language = language;
     this.layoutService.onInitLayoutSize().subscribe(f=>{
-      this.initChart();
+      if(document.getElementById('device_status'))echarts.init(document.getElementById('device_status')).resize();
+      if(document.getElementById('operatingRate'))echarts.init(document.getElementById('operatingRate')).resize();
     })
+    this.get_andon_status();
     setTimeout(() => {
       this.initChart();
       this.get_andon_data();
       this.get_andon_data_year();
     }, 1000);
+
+    window.addEventListener('resize',f=>{
+      if(document.getElementById('device_status'))echarts.init(document.getElementById('device_status')).resize();
+    });
+
   }
 
   initChart(){
@@ -53,48 +60,67 @@ export class EquipmentStatusComponent implements OnInit {
     //   let myChart_2 = echarts.init(document.getElementById('device_circular_2'));
     //   equipment_four_road.create_device_circular(
     //     {title:this.language?'SafetyLampStatus':'安灯状态',message:this.language?'LastMonth':'上个月',value:[]},myChart_2);
-  
+
     // }
     // if(document.getElementById('device_circular_3')){
     //   let myChart_3 = echarts.init(document.getElementById('device_circular_3'));
     //   equipment_four_road.create_device_circular(
     //     {title:this.language?'LastYearAverage':'上年均值',message:'',value:[]},myChart_3);
-  
+
     // }
     this.initOperatingRate(undefined);
     let myChart = echarts.init(document.getElementById('device_status'));
-    equipment_four_road.create_device_status(undefined,myChart);
+    equipment_four_road.create_device_status(undefined,myChart,undefined,this.language?"AnnualReportOfSafetyLamp":'安灯年度表');
+
+  }
+
+  get_andon_status(){
+    this.http.callRPC('get_device_mts_realtimedata','device_monitor.get_device_mts_realtimedata',{"device":this.device,"arr":"status"})
+    .subscribe((f:any)=>{
+      if(f.result.error || f.result.message[0].code == 0)return;
+      if( f.result.message[0].message && f.result.message[0].message[0].status[0][0] == 0)this.andon_now = 2;
+    })
 
   }
 
   //获取安灯数据
   get_andon_data(){
     let arr = [];
+    let unit = '时';
+    if(this.language )unit = "H";
+    let xAxisData = [];
     this.http.callRPC('get_device_andon_status','device_monitor.get_device_andon_status',{"device":this.device,"status":1}).subscribe((f:any)=>{
       if(f.result.error || f.result.message[0].code == 0)return;
       // this.andon_now = f.result.message[0].message[0].status;//灯亮哪个
       for(let i = 0;i<24;i++){
-        arr.push(f.result.message[0].message[0][`hour${i}`])
+        arr.push(f.result.message[0].message[0][`hour${i}`]);
+        xAxisData.push(i+unit);
       }
       this.initOperatingRate({
-          xAxisData:['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17'
-            ,'18','19','20','21','22','23'],
+          xAxisData:xAxisData,
           seriesData:arr,
       })
     })
-   
+
   }
 
   //获取年度统计
   get_andon_data_year(){
     let arr = [[],[],[],[]];
+    let percentage = [];
     this.http.callRPC('get_device_andon_anual_status','device_monitor.get_device_andon_anual_status',{"device":this.device,"newyearsday":new Date().getFullYear()+"-01-01"}).subscribe((f:any)=>{
       console.log(f)
       if(f.result.error || f.result.message[0].code == 0)return;
       f.result.message[0].message.forEach(ele => {
         arr[ele.status-1] = this._conversion(ele);
       });
-      this.initDeviceStatus(arr);
+      let s = 0;
+      percentage = arr[0].map((m,i) =>{
+         s= m+arr[1][i]+arr[2][i]+arr[3][i];
+         if(s == 0)return 0;
+         return ((m/s)*100).toFixed(2);
+      });
+      this.initDeviceStatus([arr[0],arr[1],arr[2],arr[3],percentage]);
       let i = new Date().getMonth();//本月月份
       let  sum = arr[0][i]+arr[1][i]+arr[2][i]+arr[3][i];//总和
       let status = [{
@@ -167,9 +193,11 @@ export class EquipmentStatusComponent implements OnInit {
   }
   //渲染年表格
   initDeviceStatus(data){
+    let xData = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    if(this.language)xData = ['Jan','Feb','Mar','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
     let data_1 = {
-      d_arr:[[],[],[],[]],
-      title_arr:["运行", "占位","等待", "维护"],
+      d_arr:[[],[],[],[],[]],
+      title_arr:["运行", "占位","等待", "维护","运行比例"],
       color_arr:[{
         start: "rgb(74, 181, 107)",
         end: "rgb(74, 181, 107)"
@@ -183,14 +211,18 @@ export class EquipmentStatusComponent implements OnInit {
         end: "#006ced"
     },
     {
-        color: " #d71345"
+      start: "#d71345",
+      end: "#d71345"
+    },
+    {
+        color: " rgb(74, 181, 107)"
     }
   ],
-    xData:['1','2','3','4','5','6','7','8','9','10','11','12']
+    xData:xData
     };
     data_1.d_arr = data;
     let myChart = echarts.init(document.getElementById('device_status'));
-    equipment_four_road.create_device_status(data_1,myChart);
+    equipment_four_road.create_device_status(data_1,myChart,null,this.language?"AnnualReportOfSafetyLamp":'安灯年度表');
   }
   //渲染圆盘
   initDeviceCircula(data,id){
@@ -199,7 +231,7 @@ export class EquipmentStatusComponent implements OnInit {
       equipment_four_road.create_device_circular(data,myChart);
     }
   }
-  
+
 }
 
 

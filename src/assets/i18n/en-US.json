@@ -26,8 +26,11 @@
         "realime": "Real",
         "ExperimentNum": "ExperimentNum",
         "StartTime": "StartTime",
+        "PlanStart": "PlanStart",
         "PlannedRound": "PlannedRound",
         "PLanDuration": "PLanDuration",
+        "PLanTimeRound": "PLanTime/Round",
+        "ActualTimeRound": "ActualTime/Round",
         "schedule": "Schedule",
         "NextExperiment": "NextExperiment",
         "contact": "Contact",
@@ -59,6 +62,7 @@
         "AVLSpeed": "AVLSpeed",
         "param1": "param1",
         "param2": "param2",
+        "TestProgress": "TestProgress",
         "road": {
             "LeftFront": {
                 "Params": "LeftFrontParams",

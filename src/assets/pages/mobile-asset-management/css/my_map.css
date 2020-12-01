@@ -151,8 +151,8 @@
     /* 亮度变亮 */
     
     .bright {
-        -webkit-filter: brightness(1.7);
-        filter: brightness(1.7);
+        -webkit-filter: brightness(1.5);
+        filter: brightness(1.5);
     }
     
     .ant-progress-bg {
@@ -190,6 +190,72 @@
     
     .flip-clock-dot.bottom {
         bottom: 44px !important;
+    }
+    /* 看板设备介绍 */
+    
+    .equipments_table {
+        display: flex;
+        text-align: center;
+        font-size: 0.4vh;
+        width: 99%;
+    }
+    
+    .column_20 {
+        width: 20%;
+    }
+    
+    .column_27 {
+        width: 27%;
+    }
+    
+    .column_31 {
+        width: 31%;
+    }
+    
+    .column_35 {
+        width: 35%;
+    }
+    
+    .column_42 {
+        width: 42%;
+    }
+    
+    .column_65 {
+        width: 65%;
+    }
+    
+    .column_69 {
+        width: 69%;
+    }
+    
+    .border_1px {
+        border: 1px solid;
+    }
+    
+    .border_top_1px {
+        border-top: 1px solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .equipments_table_title {
+        padding-right: 10px;
+    }
+    
+    .flip {
+        transform: rotateY(0deg);
+        animation: flip_animation 1.5s;
+        animation-fill-mode: forwards;
+    }
+    
+    @keyframes flip_animation {
+        0% {
+            transform: rotateY(90deg)
+        }
+        50% {
+            transform: rotateY(0deg)
+        }
     }
     /* 高度百分比 */
     

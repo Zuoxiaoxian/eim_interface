@@ -34,7 +34,8 @@ export class EquipmentBoardComponent implements OnInit {
     // window.addEventListener('resize',d=>{
     //   console.log(d)
     // })
-
+    document.getElementsByTagName('ngx-equipment-board')[0].setAttribute('style','height:100%');
+    
   }
 
   checkFull() {

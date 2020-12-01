@@ -16,10 +16,9 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="sceond_fisrt height_24" style="position: relative;">
+            <div class="sceond_fisrt height_24" style="position: relative;padding-top: 0px;display: inherit;min-height: 220px;">
                 <div class="part_title">{{ 'equipment.equipIntroduce'|translate}}</div>
-                <div style="padding: 20px;text-align: left;font-size: 12px;overflow: auto;" [innerHTML]="str">
-                </div>
+                <ngx-equip-introduce [equipIntroduceList]="equipIntroduceList"></ngx-equip-introduce>
             </div>
             <div class="center_img">
                 <div class="part_title">{{'equipment.OnlineVideo'|translate}}</div>
@@ -72,32 +71,7 @@
 
             <div class="thrid">
                 <div class="part_title">{{'equipment.experimentParams'|translate}}</div>
-                <div class="height_100">
-                    <div style="display: flex;max-height: 100px;margin-top: 10px;" class="height_50">
-                        <div class="width_50 ">
-                            <div>
-                                {{'equipment.realime' |translate}}{{'equipment.ambient' |translate}}{{'equipment.temperature' |translate}}
-                            </div>
-                            <div id="real_temperature_1"></div>
-                        </div>
-
-                        <div class="width_50 ">
-                            <div>
-                                {{'equipment.realime' |translate}}{{'equipment.ambient' |translate}}{{'equipment.humidity' |translate}}
-                            </div>
-                            <div id="real_temperature_2"></div>
-                        </div>
-                        <!-- <div class="width_33" style="margin-top: 3%;">
-                            <p class="p_backgroud_blue">
-                                {{'equipment.setup' |translate}}{{'equipment.temperature' |translate}}:<span style="color: green;">22℃</span></p>
-                            <p class="p_backgroud_blue">
-                                {{'equipment.setup' |translate}}{{'equipment.humidity' |translate}}:<span>22℃</span></p>
-                        </div> -->
-                    </div>
-                    <div id="third_second" class="height_50">
-                    </div>
-                </div>
-
+                <ngx-experiment-params device='device_weiss_01' style="width: 100%;"></ngx-experiment-params>
             </div>
 
             <div class="height_29 bo" style="padding: 0%;margin-top: 10px;">

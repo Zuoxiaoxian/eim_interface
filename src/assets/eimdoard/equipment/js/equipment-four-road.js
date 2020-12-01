@@ -2,7 +2,7 @@ const img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAYAAACJm/9dA
 
 let equipment_four_road = {
     //设备状态
-    create_device_status(data, myChart, config) {
+    create_device_status(data, myChart, config, title) {
         if (!data) {
             myChart.resize();
             return;
@@ -15,8 +15,25 @@ let equipment_four_road = {
         let seriesData = [];
         this.create_device_status_fun(data, seriesData, legend, borderData, borderHeight);
         // console.log(seriesData);
-        let option_s = this.getoption(xData, borderData, legend, borderHeight, normalColor, seriesData);
-
+        let option_s = this.getoption(xData, 'fun', legend, borderHeight, normalColor, seriesData);
+        option_s.grid = {
+            left: "3%",
+            top: "30%",
+            right: "3%",
+            bottom: 0,
+            containLabel: true
+        }
+        option_s.yAxis[0].name = '小时';
+        option_s.yAxis[1].name = '%';
+        option_s.title = {
+            show: true,
+            text: title,
+            left: 'center',
+            textStyle: {
+                color: 'white',
+                fontSize: 12,
+            }
+        }
         window.onresize = function() {
             myChart.setOption(option_s, config ? config : {});
         }
@@ -36,15 +53,15 @@ let equipment_four_road = {
         if (seriesData.length == 0)
             seriesData.push({ name: '', type: "line", data: [] });
         // console.log(seriesData);
-        let option_q = this.getoption(xData, borderData, legend, borderHeight, normalColor, seriesData);
+        let option_q = this.getoption(xData, 'real', legend, borderHeight, normalColor, seriesData);
         // console.log(JSON.stringify(option_s))
         window.onresize = function() {
             myChart.resize();
         }
-        myChart.setOption(option_q);
-        myChart.resize();
+        myChart.setOption(option_q, config);
+        // myChart.resize();
     },
-    getoption(xData, borderData, legend, borderHeight, normalColor, seriesData) {
+    getoption(xData, n_name, legend, borderHeight, normalColor, seriesData) {
         return {
             // backgroundColor: "#000",
             grid: {
@@ -77,6 +94,7 @@ let equipment_four_road = {
                                 ":" +
                                 params[i].seriesName +
                                 params[i].value +
+                                (params.length - 1 == i && n_name == 'fun' ? '%' : '') +
                                 "<br/>";
                         }
                     }
@@ -103,31 +121,31 @@ let equipment_four_road = {
                 axisTick: {
                     show: false
                 },
-                splitLine: {
-                    show: true,
-                    width: 0.08,
-                    lineStyle: {
-                        type: "solid",
-                        color: "white"
-                    }
-                }
+                // splitLine: {
+                //     show: true,
+                //     width: 0.08,
+                //     lineStyle: {
+                //         type: "solid",
+                //         color: "white"
+                //     }
+                // }
             }],
-            dataZoom: [{
-                    show: false,
-                    realtime: true,
-                    start: 100 - ((10 / (seriesData[0].data.length)) * 100),
-                    end: 100,
-                },
-                {
-                    type: 'inside',
-                    realtime: true,
-                    start: 100 - ((10 / (seriesData[0].data.length)) * 100),
-                    end: 100,
-                }
-            ],
+            // dataZoom: [{
+            //         show: false,
+            //         realtime: true,
+            //         start: 100 - ((10 / (seriesData[0].data.length)) * 100),
+            //         end: 100,
+            //     },
+            //     {
+            //         type: 'inside',
+            //         realtime: true,
+            //         start: 100 - ((10 / (seriesData[0].data.length)) * 100),
+            //         end: 100,
+            //     }
+            // ],
             yAxis: [{
                     type: "value",
-                    name: "%",
+                    name: "",
                     nameTextStyle: {
                         color: normalColor,
                         fontSize: 12
@@ -158,19 +176,10 @@ let equipment_four_road = {
                 },
                 {
                     type: "value",
-                    name: "%",
+                    name: "",
                     nameTextStyle: {
                         color: normalColor,
                         fontSize: 12
-                    },
-                    // min: -100,
-                    // max: 100,
-                    axisLabel: {
-                        formatter: "{value}",
-                        textStyle: {
-                            color: normalColor,
-                            fontSize: 12
-                        }
                     },
                     axisLine: {
                         lineStyle: {

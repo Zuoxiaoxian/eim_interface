@@ -45,8 +45,13 @@
         width: 100%;
         // box-shadow: 0 0px 1px 3px rgba(50, 84, 129, 1) inset;
         // padding: 2%;
-        position: relative;
+        background: url('/assets/eimdoard/equipment/images/blue_beijing.png') center center;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+        padding: 2%;
         color: white;
+        position: relative;
     }
     .part_title {
         position: absolute;

@@ -54,6 +54,8 @@ export class ChartCurveV3Component implements OnInit {
         this.layoutService.onInitLayoutSize().subscribe(f=>{
             if(this.myChart)
             this.myChart.resize();
+            let dom = document.getElementById(this.dashboardName);
+            if(dom)echarts.init(dom).resize();
         })
 
         //tag默认选中
@@ -66,6 +68,12 @@ export class ChartCurveV3Component implements OnInit {
         }
   }
   ngAfterViewInit (){
+    //   let  isthis = this;
+    //   window.addEventListener('resize',f=>{
+    //     if(isthis.myChart)isthis.myChart.resize();
+    //     let dom = document.getElementById(this.dashboardName);
+    //     if(dom)echarts.init(dom).resize();
+    //   })
   }
 
 
@@ -321,9 +329,7 @@ export class ChartCurveV3Component implements OnInit {
         option.legend = this.myChart.getOption().legend
         // option.dataZoom = this.myChart.getOption().dataZoom
     }
-    window.onresize = function() {
-        if(isthis.myChart)isthis.myChart.setOption(option,echartConfig);
-    }
+    
     this.myChart.setOption(option,echartConfig);
 
   }

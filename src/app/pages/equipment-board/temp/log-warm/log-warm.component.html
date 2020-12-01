@@ -1,7 +1,7 @@
 <div class="part_title">{{'equipment.LogWarm' | translate}}</div>
 <div class="h_46_w_30">
     <div style="width: 10%;">{{'equipment.LV1Warm'|translate}}</div>
-    <div id="circular"></div>
+    <div id="circular" [ngStyle]="{'backgroud':errorC?'red':'black'}"></div>
 </div>
 <div class="h_46_w_70" id="warning"></div>
 <div class="table height_50">

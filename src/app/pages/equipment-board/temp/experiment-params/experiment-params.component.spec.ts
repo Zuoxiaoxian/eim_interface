@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EquipmentMastV2Component } from './equipment-mast-v2.component';
+import { ExperimentParamsComponent } from './experiment-params.component';
 
-describe('EquipmentMastV2Component', () => {
-  let component: EquipmentMastV2Component;
-  let fixture: ComponentFixture<EquipmentMastV2Component>;
+describe('ExperimentParamsComponent', () => {
+  let component: ExperimentParamsComponent;
+  let fixture: ComponentFixture<ExperimentParamsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EquipmentMastV2Component ]
+      declarations: [ ExperimentParamsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EquipmentMastV2Component);
+    fixture = TestBed.createComponent(ExperimentParamsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

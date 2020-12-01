@@ -3,25 +3,27 @@ import { HttpserviceService } from '../../../../services/http/httpservice.servic
 import {dateformat} from '../../equipment-board';
 
 @Component({
-  selector: 'ngx-test-information',
-  templateUrl: './test-information.component.html',
-  styleUrls: ['./test-information.component.scss']
+  selector: 'ngx-test-information-v2',
+  templateUrl: './test-information-v2.component.html',
+  styleUrls: ['./test-information-v2.component.scss']
 })
-export class TestInformationComponent implements OnInit {
+export class TestInformationV2Component implements OnInit {
   @Input()device;
   experiment ={
     user:'新工',
     phone:'13499998888',
     nexttest:'Geely001',
     nextdate:'20/11/01-20/11/30',
-    // '实验名称','开始时间','计划时长','计划轮次','进度'
-    title:['stationName','StartTime','PLanDuration','PlannedRound','schedule'],
-    data:[
-      // ['WSN-100010','','20/10/01-20/11/01','',70],
-      // ['WSN-100010','','20/10/01-20/11/01','',70],
-      // ['WSN-100010','','20/10/01-20/11/01','',70],
-      // ['WSN-100010','','20/10/01-20/11/01','',70],
-      // ['WSN-100010','','20/10/01-20/11/01','',70],
+    //试验编号	开始时间	计划时长/轮次	实际时长/轮次
+    title:['ExperimentNum','StartTime','PLanTimeRound','ActualTimeRound'],
+    now:[
+      {table:['WT0001-202011',	'20/11/05',	'100小时/30次',	'70小时/21次'],progres:70},
+      // {table:['WT0001-202011',	'20/11/05',	'100小时/30次',	'70小时/21次'],progres:70},
+    ],
+    // 试验编号	计划开始	计划时长	计划轮次
+    lastTitle:['ExperimentNum','PlanStart','PLanDuration','PlannedRound'],
+    last:[
+      {table:['WT0001-202011',	'20/11/05',	'100小时/30次',	'70小时/21次'],progres:0},
     ]
   }
   timer60s;
@@ -44,14 +46,14 @@ export class TestInformationComponent implements OnInit {
     }).subscribe((f:any) =>{
     console.log(f);
     if(f.result.error || f.result.message[0].code == 0)return;
-      this.experiment.data = f.result.message[0].message.map(m =>
-        ([m[1],'——',dateformat(new Date(m[0]),'yy/mm/dd'),'——',parseInt((m[2]*100).toString())])
+      this.experiment.now = f.result.message[0].message.map(m =>
+        ({table:[m[1],'——','——','——'],progres:parseInt((m[2]*100).toString())})
         );
     })
   }
 
   get_height(){
-    return this.experiment.data.length <= 2?'75px':'120px';
+    return this.experiment.now.length <= 2?'75px':'120px';
   }
 
   getleft(item){

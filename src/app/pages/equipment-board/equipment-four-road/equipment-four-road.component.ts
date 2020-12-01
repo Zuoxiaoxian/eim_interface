@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { async } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import {  TranslateService } from '@ngx-translate/core';
 import { LayoutService } from '../../../@core/utils/layout.service';
 import { HttpserviceService } from '../../../services/http/httpservice.service';
-import { colors, dateformat, rgb_del_red,getMessage,painting_time,create_third_chart_line } from '../equipment-board';
+import { colors, dateformat, rgb_del_red,painting_time,four_road_htmlstr } from '../equipment-board';
 
-let equipment_four_road = require('../../../../assets/eimdoard/equipment/js/equipment-four-road');
-let rtm3a = require('../../../../assets/eimdoard/rtm3/js/rtm3a');
 // echart
 let rtm3 = require('../../../../assets/eimdoard/rtm3/js/rtm3');
 
@@ -130,14 +127,7 @@ export class EquipmentFourRoadComponent implements OnInit {
     {name:'1',color:'red',status:0},
   ];
  
-  //设备介绍
-  str = `试验原理：--------------------------------------------------<br>
-  设备构成：-------，-------，-------，--------<br>
-  试验能力：------------------------------------------------<br>
-   标准试验：-------------------------------------------------<br>
-                    -----------------------------------------------<br>
-                    --------------------------------------------<br>
-   非标试验：---------------------------------------<br>`;
+
   
   //实验实时数据
   switchStatus:any ={
@@ -170,6 +160,15 @@ export class EquipmentFourRoadComponent implements OnInit {
   timer:any;//定时器
   timer60s:any;//定时器60s
   language = '';//语言 空为zh-CN中文
+
+  //设备介绍
+  equipIntroduceList = [
+    {htmlstr:four_road_htmlstr[0],title:'',type:'span_class'},
+    {htmlstr:four_road_htmlstr[1],title:'四立柱参数',type:'table_class'},
+    // {htmlstr:four_road_htmlstr[2],title:'环境仓及光照参数',type:'table_class'}
+  ];
+  //当前的页数
+  eqIntShow = 0;
 
   constructor(private layoutService: LayoutService,private activateInfo:ActivatedRoute
     ,private http:HttpserviceService,private translate:TranslateService) { }
@@ -207,10 +206,8 @@ export class EquipmentFourRoadComponent implements OnInit {
     
     //获取数据
     this.getData();
-
-    this.get_device_mts_timerangedata();
-
     
+   
   }
 
   getData(){
@@ -219,15 +216,15 @@ export class EquipmentFourRoadComponent implements OnInit {
     this.timer = setInterval(f =>{
       let param = this.create_param();
       this.get_device_mts_01_status();
-      if(param[1].length > 0){
-        table = 'get_device_mts_realtimedata',method = 'device_monitor.get_device_mts_realtimedata';
-        this.get_device_mts_realtimedata(table,method,param);
-      }
       if(param[0].length > 0){
         table = 'get_device_mts_time',method = 'device_monitor.get_device_mts_timerangedata';
         this.get_device_mts_time(table,method,param);
       }
-      this.get_device_mts_weiss();
+      if(param[1].length > 0){
+        table = 'get_device_mts_realtimedata',method = 'device_monitor.get_device_mts_realtimedata';
+        this.get_device_mts_realtimedata(table,method,param);
+      }
+      
     },1000)
     
 
@@ -240,25 +237,12 @@ export class EquipmentFourRoadComponent implements OnInit {
   //初始化表格
   initChart(){
     
-    let data = {
-      title:['一级警告','二级警告'],
-      yAxis:['周一','周二','周三','周四','周五','周六','周日'],
-      firstData:[120, 132, 101, 134, 90, 230, 210],
-      secondData:[220, 182, 191, 234, 290, 330, 310]
-    }
-    if(this.language){
-      data.title = ['LV1Warn','LV2Warn'];
-      data.yAxis = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-    }
-    if(document.getElementById('warning')){
-      let myChart_3 = echarts.init(document.getElementById('warning'));
-      equipment_four_road.create_warning_chart(data,myChart_3);
-    }
+    
 
-    let array = ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
-      if(this[`chart_${i+1}`])this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:[],index:1});
-    })
-    create_third_chart_line(rtm3a,this);
+    // let array = ['chart_1','chart_2','chart_3'].forEach((f,i)=>{
+    //   if(this[`chart_${i+1}`])this[`chart_${i+1}`].painting({attrs:this[`attrs_${i+1}`][this.click_list[i]],xData:[],index:1});
+    // })
+    // create_third_chart_line(rtm3a,this);
 
   }
 
@@ -297,12 +281,14 @@ export class EquipmentFourRoadComponent implements OnInit {
     let arr1s = [];
     this.click_list.forEach((f,i)=>{
       this[`attrs_${i+1}`][f].forEach(el => {
-        if(el.value){
-          el.value.length <= 0?arr10s.push(el.nameEn.replace(".","").toLocaleLowerCase()):arr1s.push(el.nameEn.replace(".","").toLocaleLowerCase());
-        }
+        if(el.value &&  el.value.length <= 0)
+          if( arr10s.findIndex(g=> g==el.value) == -1)arr10s.push(el.nameEn.replace(".","").toLocaleLowerCase());
+        if(el.value &&  el.value.length > 0)
+          arr1s.push(el.nameEn.replace(".","").toLocaleLowerCase());
       });
     })
     return [arr10s,arr1s];
+
   }
 
   /**
@@ -344,7 +330,8 @@ export class EquipmentFourRoadComponent implements OnInit {
   get_device_mts_time(table,method,param){
     // let datestr = dateformat(new Date(),'yyyy-MM-dd hh:mm');
     // let datestr_ = dateformat(new Date(),'yyyy-MM-dd hh:mm');
-    this.http.callRPC(table,method,{"start":"2020-11-09 14:02:00","end":"2020-11-10 20:20:00","device":"device_mts_01",
+    let now = new Date();
+    this.http.callRPC(table,method,{"start":dateformat(new Date(now.getTime()-10000),'yyyy-MM-dd hh:mm:ss'),"end": dateformat(now,'yyyy-MM-dd hh:mm:ss'),"device":"device_mts_01",
     arr:param[0].join(',')}).subscribe((f:any) =>{
       if(f.result.error || f.result.message[0].code == 0)return;
       painting_time(f,10,this,['chart_1','chart_2','chart_3']);
@@ -366,63 +353,7 @@ export class EquipmentFourRoadComponent implements OnInit {
     })
   }
 
-  //环境实时信息
-  get_device_mts_weiss(){
-    // temp温度
-    //  humi湿度
-    this.http.callRPC('get_device_mts_realtimedata','device_monitor.get_device_mts_realtimedata'
-    ,{device:"device_weiss_01",arr:"tempreal,tempset,humireal,humiset"}).subscribe((g:any) =>{
-      if(g.result.error || g.result.message[0].code == 0)return;
-      let obj = this.temp_humi_change(g.result.message[0].message);
-      //渲染温度
-      if(document.getElementById('real_temperature_1'))
-        equipment_four_road.create_real_temperature_v2(
-          {value:obj.tempreal[0][0],title:'温度',max:70,setValue:obj.tempset[0][0]},
-          echarts.init(document.getElementById('real_temperature_1')));
-      //渲染湿度
-      if(document.getElementById('real_temperature_2'))
-        equipment_four_road.create_real_temperature_v2(
-          {value:obj.humireal[0][0],title:'湿度',max:100,setValue:obj.humireal[0][0]},
-          echarts.init(document.getElementById('real_temperature_2')));
-    })
-  }
-
-  //环境历史信息
-  get_device_mts_timerangedata(){
-    this.http.callRPC('get_device_mts_realtimedata','device_monitor.get_device_mts_realtimedata'
-    ,{start:"2020-01-01 14:02:00",end:"2020-11-21 20:20:00",device:"device_weiss_01",arr:"tempreal,humireal"}).subscribe((g:any) =>{
-      if(g.result.error || g.result.message[0].code == 0)return;
-      console.log(this.temp_humi_change(g.result.message[0].message));
-      let arrj = this.temp_humi_change(g.result.message[0].message)
-      let yearPlanData,yearOrderData,differenceData=[],visibityData=[],xAxisData=[];
-      yearPlanData = arrj.tempreal.map(m => (m[0]));//温度
-      yearOrderData = arrj.humireal.map(m => (m[0]));;//湿度度
-      xAxisData = arrj.humireal.map(m => (dateformat(new Date(m[1]),'MM-dd hh:mm:ss')))
-      // create_third_chart_line(rtm3a,this);
-      rtm3a.create_third_chart_line({
-        yearPlanData:yearPlanData,
-        yearOrderData:yearOrderData,
-        differenceData:differenceData,
-        visibityData:visibityData,
-        xAxisData:xAxisData,
-        title:this.language?'MonthlyChartOfTemperatureAndHumidity':'温湿度月度图线'
-      }, 'third_second');
-    })
-  }
-
-  //环境转换
-  temp_humi_change(data){
-    let obj = {
-      tempset:[],//温度设定值
-      tempreal:[],// 温度
-      humiset:[],//湿度设定值
-      humireal:[],// 湿度
-    }
-    data.forEach(el => {
-      for(let key in el)obj[key].push(el[key][0]);
-    });
-    return obj
-  }
+  
 
 
 
@@ -435,7 +366,8 @@ export class EquipmentFourRoadComponent implements OnInit {
   //组件销毁  
   ngOnDestroy(){
     clearInterval(this.timer)
-    clearInterval(this.timer60s)
+    clearInterval(this.timer60s);
+    
     // clearInterval(this.timer1)
     // clearInterval(this.timer2)
   }
